@@ -3,13 +3,14 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.JSInterop.Implementation;
 using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using DAL.DBContext;
 
 namespace BLL.Services
 {
     public class ChangePasswordService : IChangePasswordService
     {
-        private readonly PizzashopContext _context;
-        public ChangePasswordService(PizzashopContext context)
+        private readonly PizzaShopContext _context;
+        public ChangePasswordService(PizzaShopContext context)
         {
             _context = context;
         }

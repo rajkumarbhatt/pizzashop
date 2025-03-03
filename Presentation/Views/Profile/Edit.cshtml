@@ -17,15 +17,23 @@
                             : $"/images/profile-images/{@Model.ProfileImageURL}";
                         }
                     <img src=@profileImagePath class="object-fit-cover my-profile-image profile-image-border" class="" alt="">
+
+                    <div class="file upload position-relative overflow-hidden btn-custom2">
+                        <input asp-for=@Model.UserProfileImage name="UserProfileImage" type="file" class="position-absolute top-0 start-0 opacity-0" id="file-upload" />
+                        <label for="file-upload" class="d-flex flex-column justify-content-center align-items-center my-3">
+                            <img src="~/images/icons/cloud.svg" class="small-image" alt="">
+                        </label>
+                    </div>
+
                     <div class="my-profile-heading-name">
                         <h3>@Model.FirstName @Model.LastName</h3>
-                        <h6>@Model.Role</h6>
+                        <h6>@Model.Role</h6> 
                     </div>
                 </div>
                 <div>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 p-2 form-floating">
-                            <input type="text" class="form-control" name="FirstName" id="first-name"
+                            <input type="text" class="form-control" name="FirstName" id="first-name" asp
                                 placeholder="first-name" value=@Model?.FirstName asp-for="FirstName">
                             <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
                             <label for="first-name" class="mx-2 mt-2">First Name</label>

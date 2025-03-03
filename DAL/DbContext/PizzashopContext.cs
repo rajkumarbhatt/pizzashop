@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Models;
+namespace DAL.DBContext;
 
-public partial class PizzashopContext : DbContext
+public partial class PizzaShopContext : DbContext
 {
-    public PizzashopContext()
+    public PizzaShopContext()
     {
     }
 
-    public PizzashopContext(DbContextOptions<PizzashopContext> options)
+    public PizzaShopContext(DbContextOptions<PizzaShopContext> options)
         : base(options)
     {
     }
@@ -60,8 +61,10 @@ public partial class PizzashopContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<WaitingList> WaitingLists { get; set; }
-// take connection string from appsettings.json
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=pizzashop;Username=postgres;Password=Tatva@123");
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=pizzashop;Username=postgres;Password=Tatva@123");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -639,6 +642,9 @@ public partial class PizzashopContext : DbContext
 
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.PermissionId).HasColumnName("permission_id");
+            entity.Property(e => e.CanDelete).HasColumnName("can_delete");
+            entity.Property(e => e.CanEdit).HasColumnName("can_edit");
+            entity.Property(e => e.CanView).HasColumnName("can_view");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
@@ -665,7 +671,6 @@ public partial class PizzashopContext : DbContext
 
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.RolePermissionUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("role_permissions_updated_by_fkey");
         });
 

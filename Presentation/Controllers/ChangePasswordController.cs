@@ -26,17 +26,7 @@ namespace Presentaion.Controllers
             {
                 return BadRequest("Token is missing.");
             }
-            var userId = _jwtService.GetUserIdFromJwtToken(token);
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var profileImageUrl = _navBarService.GetProfileImageUrlFromUserId(userId);
-            var roleId = _navBarService.GetRoleIdFromUserId(userId);
-            ChangePasswordViewModel changePasswordViewModel = new ChangePasswordViewModel
-            {
-                Username = username,
-                ProfileImageURL = profileImageUrl,
-                RoleId = roleId
-            };
-            return View(changePasswordViewModel);
+            return View();
         }
 
         [HttpPost]

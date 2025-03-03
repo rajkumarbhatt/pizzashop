@@ -2,20 +2,24 @@ using DAL.Models;
 using DAL.ViewModels;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using DAL.DBContext;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services
 {
     public class UserListService : IUserListService
     {
-        private readonly PizzashopContext _context;
+        private readonly PizzaShopContext _context;
         private readonly IJwtService _jwtService;
         private readonly INavBarService _navBarService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserListService(PizzashopContext context, IJwtService jwtService, INavBarService navBarService)
+        public UserListService(PizzaShopContext context, IJwtService jwtService, INavBarService navBarService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _jwtService = jwtService;
             _navBarService = navBarService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public List<User> GetUsers()
@@ -100,6 +104,7 @@ namespace BLL.Services
             user.Address = userViewModel.Address;
             user.ZipCode = userViewModel.ZipCode;
             user.Status = userViewModel.Status;
+            user.Username = userViewModel.UsernameRequestedUSer;
             user.RoleId = (int)userViewModel.RoleIdRequestedUser;
             user.CountryId = userViewModel.CountryId;
             user.StateId = userViewModel.StateId;
@@ -116,6 +121,12 @@ namespace BLL.Services
                     userViewModel.ProfileImage.CopyTo(fileStream);
                 }
                 user.ProfileImage = fileName;
+            }
+            if (userViewModel.Id == userIdLoggedIn)
+            {
+                _httpContextAccessor.HttpContext.Session.SetString("Username", user.Username);
+                _httpContextAccessor.HttpContext.Session.SetString("ProfileImageURL", user.ProfileImage);
+                _httpContextAccessor.HttpContext.Session.SetInt32("RoleId", user.RoleId);
             }
             _context.SaveChanges();
             return new JsonResult(new { success = true, message = "User updated successfully" });

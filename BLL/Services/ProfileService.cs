@@ -2,16 +2,20 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
 using DAL.ViewModels;
 using BLL.Interfaces;
+using DAL.DBContext;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services
 {
     public class ProfileService : IProfileService
     {
-        private readonly PizzashopContext _context;
+        private readonly PizzaShopContext _context;
+        private readonly IHttpContextAccessor _httpContentAccessor;
 
-        public ProfileService(PizzashopContext context)
+        public ProfileService(PizzaShopContext context, IHttpContextAccessor httpContentAccessor)
         {
             _context = context;
+            _httpContentAccessor = httpContentAccessor;
         }
 
         public ProfileViewModel GetUserDataFromUserId(int userId)
@@ -57,10 +61,27 @@ namespace BLL.Services
             user.Phone = ProfileViewModel.PhoneNumber;
             user.Address = ProfileViewModel.Address;
             user.ZipCode = ProfileViewModel.ZipCode;
-            // user.ProfileImage = ProfileViewModel.UserProfileImage.FileName;
+            user.Username = ProfileViewModel.Username;
             user.CountryId = ProfileViewModel.CountryId;
             user.StateId = ProfileViewModel.StateId;
             user.CityId = ProfileViewModel.CityId;
+            user.UpdatedBy = userId;
+
+            if (ProfileViewModel.UserProfileImage != null)
+            {
+                // store filename in db and save image in wwwroot/profile-images
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileViewModel.UserProfileImage.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    ProfileViewModel.UserProfileImage.CopyTo(fileStream);
+                }
+                user.ProfileImage = fileName;
+            }
+            
+            _httpContentAccessor.HttpContext.Session.SetString("Username", user.Username);
+            _httpContentAccessor.HttpContext.Session.SetString("ProfileImageURL", user.ProfileImage);
+
             _context.Users.Update(user);
             _context.SaveChanges();
 

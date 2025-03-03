@@ -1,4 +1,5 @@
 using BLL.Interfaces;
+using DAL.DBContext;
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,8 +7,8 @@ namespace BLL.Services
 {
     public class ResetPasswordService : IResetPasswordService
     {
-        private readonly PizzashopContext _context;
-        public ResetPasswordService(PizzashopContext context)
+        private readonly PizzaShopContext _context;
+        public ResetPasswordService(PizzaShopContext context)
         {
             _context = context;
         }

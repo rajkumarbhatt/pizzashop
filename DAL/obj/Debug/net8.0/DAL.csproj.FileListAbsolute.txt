@@ -70,3 +70,4 @@ C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\DAL\obj\Deb
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\DAL\obj\Debug\net8.0\DAL.pdb
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\DAL\obj\Debug\net8.0\DAL.sourcelink.json

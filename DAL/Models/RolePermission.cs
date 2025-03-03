@@ -15,7 +15,13 @@ public partial class RolePermission
 
     public int CreatedBy { get; set; }
 
-    public int UpdatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+
+    public bool? CanView { get; set; }
+
+    public bool? CanEdit { get; set; }
+
+    public bool? CanDelete { get; set; }
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 
@@ -23,5 +29,5 @@ public partial class RolePermission
 
     public virtual Role Role { get; set; } = null!;
 
-    public virtual User UpdatedByNavigation { get; set; } = null!;
+    public virtual User? UpdatedByNavigation { get; set; }
 }

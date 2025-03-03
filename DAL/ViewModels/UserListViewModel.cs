@@ -11,6 +11,7 @@ namespace DAL.ViewModels
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
-        public int TotalUsers { get; set; } // Add this line
+        public int TotalUsers { get; set; } 
+        public List<PermissionModel> Permissions { get; set; }
     }
 }

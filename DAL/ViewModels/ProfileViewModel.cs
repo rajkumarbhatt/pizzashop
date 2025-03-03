@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 namespace DAL.ViewModels
 {
     public class ProfileViewModel
@@ -20,6 +21,6 @@ namespace DAL.ViewModels
         public int? CountryId { get; set; }
         public int? StateId { get; set; }
         public string? ProfileImageURL { get; set; }
-        // public IFormFile UserProfileImage { get; set; }
+        public IFormFile? UserProfileImage { get; set; }
     }
 }

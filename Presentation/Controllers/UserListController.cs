@@ -25,22 +25,19 @@ namespace Presentaion.Controllers
         public IActionResult Index(int pageIndex = 1, int pageSize = 5)
         {
             var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
             var (users, totalUsers) = _userListService.GetUsers(pageIndex, pageSize);
+            var rolePermissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
             int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
 
             var userListViewModel = new UserListViewModel
             {
                 Users = users,
-                Username = username,
-                ProfileImageURL = profileImageURL,
-                RoleId = roleId,
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalPages = totalPages,
-                TotalUsers = totalUsers
+                TotalUsers = totalUsers,
+                Permissions = rolePermissions
             };
 
             return View(userListViewModel);

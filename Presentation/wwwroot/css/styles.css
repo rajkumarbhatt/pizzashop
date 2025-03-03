@@ -398,3 +398,8 @@ td{
         padding-bottom: 20px;
     }
 }
+
+
+.cursor-none {
+    cursor: not-allowed;
+  }

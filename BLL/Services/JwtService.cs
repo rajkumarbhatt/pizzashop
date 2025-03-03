@@ -9,7 +9,7 @@ namespace BLL.Services
 {
     public class JwtService : IJwtService
     {
-        public string GenerateJwtToken(User user, string role)
+        public string GenerateJwtToken(User user, string role, List<Permission> permissions)
         {
 
             List<Claim> claims = new List<Claim>
@@ -22,7 +22,8 @@ namespace BLL.Services
                 new Claim(ClaimTypes.Name, user.Username),
                 // Email claim with the user's email
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, role)
+                new Claim(ClaimTypes.Role, role),
+                new Claim("permissions", string.Join(",", permissions.Select(p => p.Name)))
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"));
@@ -79,6 +80,25 @@ namespace BLL.Services
             }
 
             return usernameClaim.Value;
+        }
+
+        public List<string> GetPermissionsFromJwtToken(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
+
+            if (jwtToken == null)
+            {
+                throw new ArgumentException("Invalid JWT token");
+            }
+
+            var permissionsClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "permissions");
+            if (permissionsClaim == null)
+            {
+                throw new ArgumentException("JWT token does not contain permissions");
+            }
+
+            return permissionsClaim.Value.Split(',').ToList();
         }
     }
 }

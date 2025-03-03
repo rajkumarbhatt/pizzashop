@@ -1,5 +1,4 @@
 function openModel(id) {
-    console.log(id);
     $("#deleteButton").click(function () {
         $.ajax({
             type: "DELETE",

@@ -28,12 +28,14 @@ namespace Presentaion.Controllers
             var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
             var roles = _roleAndPermissionService.GetRoles();
+            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
             RoleAndPermissionViewModel roleAndPermissionViewModel = new RoleAndPermissionViewModel
             {
                 Username = username,
                 ProfileImageURL = profileImageURL,
                 RoleId = roleId,
-                Roles = roles
+                Roles = roles,
+                Permissions = permissions
             };
             return View(roleAndPermissionViewModel);
         }
@@ -44,20 +46,17 @@ namespace Presentaion.Controllers
         public IActionResult EditPermissions(int roleIdRequested)
         {
             var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
-            var permissions = _roleAndPermissionService.GetPermissions();
+            var permission = _roleAndPermissionService.GetPermissions();
             var roleRequested = _roleAndPermissionService.GetRole(roleIdRequested);
             var rolePermissions = _roleAndPermissionService.GetRolePermissions(roleIdRequested);
+            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
             EditPermissionsViewModel editPermissionsViewModel = new EditPermissionsViewModel
             {
-                Username = username,
-                ProfileImageURL = profileImageURL,
-                Permissions = permissions,
+                Permission = permission,
                 RolePermissions = rolePermissions,
-                RoleId = roleId,
-                RequestedRole = roleRequested
+                RequestedRole = roleRequested,
+                Permissions = permissions
             };
             return View(editPermissionsViewModel);
         }

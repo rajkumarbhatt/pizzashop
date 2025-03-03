@@ -1,6 +1,15 @@
+@using DAL.ViewModels
 @model DAL.ViewModels.UserListViewModel
 
+@{
+    var permissionList = new List<PermissionModel>();
 
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 
   <div class="d-flex justify-content-between align-items-center">
   
@@ -15,9 +24,18 @@
                             <img src="./images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
                         </a>
                     </p>
-                    <button class="d-none d-md-block button-styles py-1 py-sm-2">
+                    @if(permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                    {
+                        <button class="d-none d-md-block button-styles py-1 py-sm-2">
                         <a asp-controller="UserList" asp-action="CreateUser" class="text-decoration-none text-white add-user-link">+
                             Add User</a></button>
+                    }
+                    else
+                    {
+                        <button class="d-none d-md-block button-styles py-1 py-sm-2  cursor-none" disabled>
+                        <a asp-controller="UserList" asp-action="CreateUser" class="text-decoration-none cursor-none text-white add-user-link">+
+                            Add User</a></button>
+                    }
                 </div>
             </div>
 

@@ -15,6 +15,9 @@
   border: 1px solid #9e9696;
   width: 98%;
 }
+.btn-custom2 {
+  width: 2%;
+}
 .file-input-btn {
   width: 100%;
   cursor: pointer;
@@ -433,4 +436,8 @@ td{
   position: relative;
   left: 41px;
   top: -12px;
+}
+
+.cursor-none {
+  cursor: not-allowed;
 }

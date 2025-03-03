@@ -85,3 +85,4 @@ C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\BLL\obj\Deb
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\BLL\obj\Debug\net8.0\BLL.pdb
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\BLL\obj\Debug\net8.0\BLL.genruntimeconfig.cache
 C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\BLL\obj\Debug\net8.0\ref\BLL.dll
+C:\Users\pci88\Downloads\pizzashop-backend-validations-commit - Copy\BLL\obj\Debug\net8.0\BLL.sourcelink.json

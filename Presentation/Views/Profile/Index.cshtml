@@ -25,22 +25,22 @@
                 <div>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 p-2 form-floating">
-                            <input disabled type="text" class="form-control" name="first-name" id="first-name"
+                            <input disabled type="text" asp-for="@Model.FirstName" class="form-control" name="first-name" id="first-name"
                                 placeholder="first-name" value=@Model?.FirstName>
                             <label for="first-name" class="mx-2 mt-2">First Name</label>
                         </div>
                         <div class="col-12 col-sm-6 p-2 form-floating">
-                            <input disabled type="text" class="form-control" name="last-name" id="last-name"
+                            <input disabled type="text" class="form-control" asp-for="@Model.LastName" name="last-name" id="last-name"
                                 placeholder="last-name" value=@Model?.LastName>
                             <label for="last-name" class="mx-2 mt-2">Last Name</label>
                         </div>
                         <div class="col-12 col-sm-6 p-2 form-floating">
                             <input disabled type="text" class="form-control" name="user-name" id="user-name"
-                                placeholder="user-name" value=@Model.Username>
+                                placeholder="user-name" asp-for="@Model.Username" value=@Model.Username>
                             <label for="user-name" class="mx-2 mt-2">User Name</label>
                         </div>
                         <div class="col-12 col-sm-6 p-2 form-floating">
-                            <input disabled type="text" class="form-control" name="phone-number" id="phone-number"
+                            <input asp-for="@Model.PhoneNumber" disabled type="text" class="form-control" name="phone-number" id="phone-number"
                                 placeholder="phone-number" value=@Model.PhoneNumber>
                             <label for="phone-number" class="mx-2 mt-2">Phone</label>
                         </div>
@@ -64,7 +64,7 @@
                             <label for="select-city" class="mx-2 mt-2">City</label>
                         </div>
                         <div class="col-12 col-sm-8 p-2 form-floating">
-                            <input disabled value=@Model.Address type="text" class="form-control" name="address" id="address" placeholder="Address">
+                            <input disabled value=@Model.Address type="text" asp-for="@Model.Address" class="form-control" name="address" id="address" placeholder="Address">
                             <label for="address" class="mx-2 mt-2">Address</label>
                         </div>
                         <div class="col-12 col-sm-4 p-2 form-floating">

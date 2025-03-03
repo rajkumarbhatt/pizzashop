@@ -64,3 +64,81 @@ window.addEventListener('mouseup',function(event){
         document.getElementById("search-icon").classList.remove("d-none");
     }
 });  
+
+$(document).ready(function() {
+    $("#AddCategoryModal").click(function() {
+        var Name = $("#CategoryName").val();
+        var Description = $("#CategoryDescription").val();
+        $.ajax({
+            url: '/Menu/AddCategory',
+            type: 'POST',
+            data: { categoryName: Name, categoryDescription: Description },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function() {
+                        window.location.href = "/Menu"; 
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+
+    $("#EditCategoryModal").click(function() {
+        var Id = $("#EditCategoryId").val();
+        var Name = $("#EditCategoryName").val();
+        var Description = $("#EditCategoryDescription").val();
+        $.ajax({
+            url: '/Menu/UpdateCategory',
+            type: 'PUT',
+            data: { categoryId: Id, categoryName: Name, categoryDescription: Description },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function() {
+                        window.location.href = "/Menu"; 
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+});
+
+function editCategory (categoryId, categoryName, categoryDescription) {
+    $("#EditCategoryName").val(categoryName);
+    $("#EditCategoryDescription").val(categoryDescription);
+    $("#EditCategoryId").val(categoryId);
+}
+
+function openModal (categoryId) {
+    $("#deleteCategoryButton").click(function () {
+        $.ajax({
+            url: '/Menu/DeleteCategory',
+            type: 'DELETE',
+            data: { categoryId: categoryId},
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function() {
+                        window.location.href = "/Menu"; 
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        });
+    });
+}  

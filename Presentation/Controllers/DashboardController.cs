@@ -29,20 +29,19 @@ namespace Presentaion.Controllers
                 return RedirectToAction("NewPassword","ResetPassword");
             }
             var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
-            NavbarViewModel navbarViewModel = new NavbarViewModel
-            {
-                Username = username,
-                ProfileImageURL = profileImageURL,
-                RoleId = roleId
-            };
-            return View(navbarViewModel);
+            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
+            var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
+            HttpContext.Session.Set("permissions", permissionsBytes);
+            HttpContext.Session.SetString("Username", username);
+            HttpContext.Session.SetString("ProfileImageURL", profileImageURL);
+            HttpContext.Session.SetInt32("RoleId", roleId);
+            return View();
         }
 
-        // logout method
         public IActionResult Logout()
         {
-            // clear the cookie
             Response.Cookies.Delete("token");
+            Response.Cookies.Delete("email");
             return RedirectToAction("Index", "Home");
         }
     }

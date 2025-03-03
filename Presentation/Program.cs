@@ -9,12 +9,14 @@ using BLL.Interfaces;
 using DAL.ViewModels;
 using DAL.DBContext;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession();
+builder.Services.AddSession(opt=>{
+    opt.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+builder.Services.AddHttpContextAccessor(); // Register IHttpContextAccessor here
 builder.Services.AddDbContext<PizzaShopContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
@@ -25,7 +27,7 @@ builder.Services.AddScoped<INavBarService, NavBarService>();
 builder.Services.AddScoped<IUserListService, UserListService>();
 builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<IRoleAndPermissionService, RoleAndPermissionService>();
-
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;
@@ -44,7 +46,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = "http://localhost:5125",
             ValidAudience = "http://localhost:5125",
-
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"))
         };
         options.Events = new JwtBearerEvents
@@ -85,6 +86,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-
-// dotnet ef dbcontext scaffold "Host=localhost;Port=5433;Database=pizzashop;Username=postgres;Password=Tatva@123" Npgsql.EntityFrameworkCore.PostgreSQL -o ../DAL/Models --context PizzaShopDbContext --context-dir ../DAL/DbContext -f 
