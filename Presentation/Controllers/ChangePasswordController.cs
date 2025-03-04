@@ -7,7 +7,7 @@ using BLL.Interfaces;
 
 namespace Presentaion.Controllers
 {
-    [Authorize(Roles = "Super Admin, Account Manager")]
+    [CustomAuth]
     public class ChangePasswordController : Controller
     {
         private readonly IChangePasswordService _changePasswordService;

@@ -78,5 +78,39 @@ namespace BLL.Services
             _context.SaveChanges();
             return new JsonResult(new {success = true, message = "Category deleted successfully"});
         }
+
+        public List<Item> GetItemsBasedOnSearch(int categoryId, string searchValue)
+        {
+            if (searchValue == null)
+            {
+                return _context.Items.Where(i => i.CategoryId == categoryId && i.IsDeleted == false).OrderBy(i => i.Id).ToList();
+            }
+            return _context.Items.Where(i => i.CategoryId == categoryId && i.Name.ToLower().Contains(searchValue) && i.IsDeleted == false).OrderBy(i => i.Id).ToList();
+        }
+
+        public void UpdateItemAvailability(int itemId, bool isAvailable, int userId)
+        {
+            var item = _context.Items.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return;
+            }
+            item.IsAvailable = isAvailable;
+            item.UpdatedBy = userId;
+            _context.SaveChanges();
+        }
+
+        public IActionResult DeleteItem(int itemId, int userId)
+        {
+            var item = _context.Items.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return new JsonResult(new {success = false, message = "Item not found"});
+            }
+            item.IsDeleted = true;
+            item.UpdatedBy = userId;
+            _context.SaveChanges();
+            return new JsonResult(new {success = true, message = "Item deleted successfully"});
+        }
     }
 }

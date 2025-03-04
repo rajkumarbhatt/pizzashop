@@ -46,6 +46,10 @@ namespace BLL.Services
 
         public IActionResult UpdateRolePermissions(List<PermissionChangeModel> changedPermissions)
         {
+            if (changedPermissions.Count == 0)
+            {
+                return new JsonResult(new { success = false, message = "No permissions to update" });
+            }
             foreach (var permissionChange in changedPermissions)
             {
                 RolePermission rolePermission = _context.RolePermissions.FirstOrDefault(rp =>

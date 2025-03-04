@@ -19,11 +19,11 @@ public partial class Category
 
     public int CreatedBy { get; set; }
 
-    public int UpdatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 
-    public virtual User UpdatedByNavigation { get; set; } = null!;
+    public virtual User? UpdatedByNavigation { get; set; }
 }

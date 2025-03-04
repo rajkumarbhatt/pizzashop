@@ -64,7 +64,7 @@ public partial class PizzaShopContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=localhost;Port=5433;Database=pizzashop;Username=postgres;Password=Tatva@123");
+        => optionsBuilder.UseNpgsql("Host=localhost:5433;Database=pizzashop;Username=postgres;Password=Tatva@123");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,7 +106,6 @@ public partial class PizzaShopContext : DbContext
 
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.CategoryUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("categories_updated_by_fkey");
         });
 
@@ -290,7 +289,7 @@ public partial class PizzaShopContext : DbContext
                 .HasMaxLength(10)
                 .HasColumnName("short_code");
             entity.Property(e => e.TaxPercentage)
-                .HasPrecision(2, 2)
+                .HasPrecision(5, 2)
                 .HasColumnName("tax_percentage");
             entity.Property(e => e.Unit)
                 .HasMaxLength(50)

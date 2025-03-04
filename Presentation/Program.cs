@@ -86,3 +86,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+// dotnet ef dbcontext scaffold "Host=localhost:5433;Database=pizzashop;Username=postgres;Password=Tatva@123" Npgsql.EntityFrameworkCore.PostgreSQL -o ../DAL/Models --context PizzaShopContext --context-dir ../DAL/DBContext -f

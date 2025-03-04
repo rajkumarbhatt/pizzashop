@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Differencing;
 
 namespace Presentaion.Controllers
 {
-    [Authorize (Roles = "Super Admin")]
+    [CustomAuth]
     public class RoleAndPermission : Controller
     {
         private readonly IJwtService _jwtService;
@@ -42,8 +42,8 @@ namespace Presentaion.Controllers
 
 
         [HttpGet]
-        [Route("/RoleAndPermission/EditPermissions/{roleIdRequested}")]
-        public IActionResult EditPermissions(int roleIdRequested)
+        [Route("/RoleAndPermission/ViewPermissions/{roleIdRequested}")]
+        public IActionResult ViewPermissions(int roleIdRequested)
         {
             var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
@@ -62,7 +62,7 @@ namespace Presentaion.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdatePermissions ([FromBody] List<PermissionChangeModel> changedPermissions) {
+        public IActionResult EditPermissions ([FromBody] List<PermissionChangeModel> changedPermissions) {
             return _roleAndPermissionService.UpdateRolePermissions(changedPermissions);
         }
     }

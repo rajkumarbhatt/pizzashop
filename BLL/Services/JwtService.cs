@@ -16,14 +16,10 @@ namespace BLL.Services
             {
                 // Subject (sub) claim with the user's ID
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                // JWT ID (jti) claim with a unique identifier for the token
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                // Name claim with the user's first name
                 new Claim(ClaimTypes.Name, user.Username),
-                // Email claim with the user's email
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, role),
-                new Claim("permissions", string.Join(",", permissions.Select(p => p.Name)))
+                new Claim (ClaimTypes.Role, user.RoleId.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"));

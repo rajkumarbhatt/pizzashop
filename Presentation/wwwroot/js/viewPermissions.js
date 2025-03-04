@@ -49,9 +49,9 @@ function savePermissions() {
     
     $.ajax({
         type: 'POST',
-        url: '/RoleAndPermission/UpdatePermissions',
-        contentType: 'application/json', // Specify the content type
-        data: JSON.stringify(changedPermissions), // Stringify the array
+        url: '/RoleAndPermission/EditPermissions',
+        contentType: 'application/json',
+        data: JSON.stringify(changedPermissions),
         success: function (response) {
             if (response.success) {
                 toastr.success(response.message);

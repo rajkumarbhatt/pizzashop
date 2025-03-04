@@ -1,0 +1,86 @@
+@model DAL.ViewModels.MenuViewModel
+
+<div class=" form-bg p-2 my-1 row mx-4 ">
+    <div class="d-none d-md-block col-md-4 col-lg-3 col-xxl-2 bg-menu-category height-main-container">
+        <div class="d-flex justify-content-between p-3">
+            <h4 class="font-blue">Category</h4>
+            <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                <a href="#"> <img src="./images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+            </button>
+        </div>
+        <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
+            @foreach (var category in Model.Categories)
+            {
+                <div onclick="changeItems(@category.Id)" class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                    <div>
+                        <img src="./images/icons/gray-six-dots.svg" id="sandwich-black-dots" class="small-image " alt="">
+                        <img src="./images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots" class="small-image"
+                            alt="">
+                        <span class="menu-category-navigation-items" id="sandwich-span">@category.Name</span>
+                    </div>
+                    <div>
+                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                            data-bs-target="#editCategoryModal">
+                            <a href="#"> <img src="./images/icons/edit.svg" class="small-image " alt=""
+                                    onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                        </button>
+                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                            data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
+                            <a href="#"> <img src="./images/icons/delete.svg" class="small-image" alt=""
+                                    id="sandwich-delete-icon"></a>
+                        </button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div id="items-content" class="col-12 col-md-8 col-lg-9">
+        <div class="d-flex menu-mobile-header-div justify-content-between pt-3 pt-sm-2 align-items-center">
+            <h4 class="px-sm-4 py-2">Items</h4>
+            <div class="d-flex justify-content-center gap-2 align-items-center mx-3">
+                <div class="input-group search-box d-none d-md-block">
+                    <input type="text" id="searchInput" onchange="" class="form-control search-input py-1 py-sm-2"
+                        placeholder="Search">
+                    <img src="./images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+                </div>
+                <p class="delete-styles d-bloack d-md-none" id="search-icon" onclick="showSearchBar()">
+                    <a href="#" class="text-decoration-none text-black add-user-link">
+                        <img src="./images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
+                    </a>
+                </p>
+                <div id="mobile-search-bar" class="input-group search-box d-none d-md-none">
+                    <input type="text" class="form-control search-input py-1 py-sm-2" placeholder="Search">
+                    <img src="./images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+                </div>
+                <p class="delete-styles ">
+                    <a href="#" class="text-decoration-none text-black   add-user-link">
+                        <img src="./images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                    </a>
+                </p>
+                <p class="delete-styles d-block d-md-none">
+                    <a href="" class="text-decoration-none text-black   add-user-link">
+                        <img src="./images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                    </a>
+                </p>
+                <button class="d-none d-md-block button-styles-header w-100 add-item-button">
+                    <a href="#"
+                        class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                        <p>+</p>
+                        <p class="d-none d-sm-block">Add Item</p>
+                    </a>
+                </button>
+            </div>
+        </div>
+
+
+        <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+           
+                <div id="partialViewStartingInner" class="">
+
+                <partial name="_ItemTable" model="@Model" />
+        </div>
+        
+    </div>
+</div>
+
+

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentaion.Controllers
 {
+    [CustomAuth]
     public class MenuController : Controller
     { 
         private readonly ICategoryService _categoryService;
@@ -13,12 +14,19 @@ namespace Presentaion.Controllers
             _categoryService = categoryService;
             _jwtService = jwtService;
         }
-        public IActionResult Index()
+        public IActionResult Index(int pageIndex = 1, int pageSize = 5, string searchValue = null)
         {
             var categories = _categoryService.GetCategories();
+            int categoryId = categories.FirstOrDefault().Id;
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
             var menuViewModel = new MenuViewModel
             {
-                Categories = categories
+                Categories = categories,
+                Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
+                TotalItems = items.Count
             };
             return View(menuViewModel);
         }
@@ -42,6 +50,54 @@ namespace Presentaion.Controllers
         {
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
             return _categoryService.DeleteCategory(categoryId, userId);
+        }
+
+        [HttpGet]
+        public IActionResult ItemsFilter(int pageIndex, int pageSize, int categoryId, string searchValue = null)
+        {
+            var categories = _categoryService.GetCategories();
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            var menuViewModel = new MenuViewModel
+            {
+                Categories = categories,
+                Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
+                TotalItems = items.Count
+            };
+            return PartialView("_MenuPartial", menuViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ItemsSearch(int pageIndex, int pageSize, int categoryId, string searchValue = null)
+        {
+            var categories = _categoryService.GetCategories();
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            var menuViewModel = new MenuViewModel
+            {
+                Categories = categories,
+                Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
+                TotalItems = items.Count
+            };
+            return PartialView("_ItemTable", menuViewModel);
+        }
+
+        [HttpPost]
+        public void UpdateItemAvailability(int itemId, bool isAvailable)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            _categoryService.UpdateItemAvailability(itemId, isAvailable, userId);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteItem(int itemId)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            return _categoryService.DeleteItem(itemId, userId);
         }
     }
 }

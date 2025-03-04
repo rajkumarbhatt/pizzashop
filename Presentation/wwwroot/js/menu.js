@@ -80,7 +80,9 @@ $(document).ready(function() {
                         window.location.href = "/Menu"; 
                     }, 1000);
                 } else {
-                    toastr.error(data.message);
+                    if (!data.success) {
+                        toastr.error("Not Authorized");
+                    }
                 }
             },
             error: function (data) {
@@ -104,7 +106,9 @@ $(document).ready(function() {
                         window.location.href = "/Menu"; 
                     }, 1000);
                 } else {
-                    toastr.error(data.message);
+                    if (!data.success) {
+                        toastr.error("Not Authorized");
+                    }
                 }
             },
             error: function (data) {
@@ -133,7 +137,9 @@ function openModal (categoryId) {
                         window.location.href = "/Menu"; 
                     }, 1000);
                 } else {
-                    toastr.error(data.message);
+                    if (!data.success) {
+                        toastr.error("Not Authorized");
+                    }
                 }
             },
             error: function (data) {

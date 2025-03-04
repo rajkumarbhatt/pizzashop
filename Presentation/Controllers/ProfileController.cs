@@ -6,7 +6,7 @@ using BLL.Interfaces;
 
 namespace Presentaion.Controllers
 {
-    [Authorize (Roles = "Super Admin, Account Manager")]
+    [CustomAuth]
     public class ProfileController : Controller
     {
         private readonly IProfileService _ProfileService;   

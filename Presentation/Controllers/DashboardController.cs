@@ -6,7 +6,7 @@ using BLL.Interfaces;
 
 namespace Presentaion.Controllers
 {
-    [Authorize(Roles = "Super Admin, Account Manager")]
+    [CustomAuth]
     public class DashboardController : Controller
     {
         private readonly IJwtService _jwtService;
