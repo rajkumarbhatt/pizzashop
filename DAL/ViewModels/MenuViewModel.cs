@@ -6,6 +6,8 @@ namespace DAL.ViewModels
     {
         public List<Category> Categories { get; set; }
         public List<Item> Items { get; set; }
+        public List<ModifierGroup> ModifierGroups { get; set; }
+        public List<Modifier> Modifiers { get; set; }
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }

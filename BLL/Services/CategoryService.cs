@@ -18,6 +18,16 @@ namespace BLL.Services
             return _context.Categories.Where(c => c.IsDeleted == false).OrderBy(c => c.Id).ToList();
         }
 
+        public List<ModifierGroup> GetModifierGroups()
+        {
+            return _context.ModifierGroups.Where(m => m.IsDeleted == false).OrderBy(m => m.Id).ToList();
+        }
+
+        public List<Modifier> GetModifiers()
+        {
+            return _context.Modifiers.Where(m => m.IsDeleted == false).OrderBy(m => m.Id).ToList();
+        }
+
         public JsonResult AddCategory(string categoryName, string categoryDescription, int userId)
         {
             if (userId == null)

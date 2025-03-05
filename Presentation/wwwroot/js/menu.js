@@ -80,7 +80,9 @@ $(document).ready(function() {
                         window.location.href = "/Menu"; 
                     }, 1000);
                 } else {
-                    if (!data.success) {
+                    if(data.message != null) {
+                        toastr.error(data.message);
+                    } else {
                         toastr.error("Not Authorized");
                     }
                 }
@@ -106,7 +108,9 @@ $(document).ready(function() {
                         window.location.href = "/Menu"; 
                     }, 1000);
                 } else {
-                    if (!data.success) {
+                    if(data.message != null) {
+                        toastr.error(data.message);
+                    } else {
                         toastr.error("Not Authorized");
                     }
                 }
@@ -138,7 +142,11 @@ function openModal (categoryId) {
                     }, 1000);
                 } else {
                     if (!data.success) {
-                        toastr.error("Not Authorized");
+                        if(data.message != null) {
+                            toastr.error(data.message);
+                        } else {
+                            toastr.error("Not Authorized");
+                        }
                     }
                 }
             },
@@ -148,3 +156,14 @@ function openModal (categoryId) {
         });
     });
 }  
+
+function changeDefaultTax() {
+    var value = document.getElementById("defaultTax").checked;
+    if (value) {
+        $("#tax-percentage").prop("disabled", false);
+        $("#short-code").prop("disabled", false);
+    } else {
+        $("#tax-percentage").prop("disabled", true);
+        $("#short-code").prop("disabled", true);
+    }
+}

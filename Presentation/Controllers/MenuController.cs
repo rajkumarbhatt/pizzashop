@@ -19,6 +19,8 @@ namespace Presentaion.Controllers
             var categories = _categoryService.GetCategories();
             int categoryId = categories.FirstOrDefault().Id;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            var modifierGroups = _categoryService.GetModifierGroups();
+            var modifiers = _categoryService.GetModifiers();
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -26,7 +28,8 @@ namespace Presentaion.Controllers
                 PageIndex = pageIndex,
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
-                TotalItems = items.Count
+                TotalItems = items.Count,
+                ModifierGroups = modifierGroups
             };
             return View(menuViewModel);
         }

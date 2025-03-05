@@ -324,6 +324,8 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.ModifiergroupId).HasColumnName("modifiergroup_id");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.MaxValue).HasColumnName("maxValue");
+            entity.Property(e => e.MinValue).HasColumnName("minValue");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.ItemModifiergroupCreatedByNavigations)
@@ -393,7 +395,7 @@ public partial class PizzaShopContext : DbContext
 
             entity.HasMany(d => d.Modifiergroups).WithMany(p => p.Modifiers)
                 .UsingEntity<Dictionary<string, object>>(
-                    "ModifierModifiergroup",
+                    "ModifierGroupMapping",
                     r => r.HasOne<ModifierGroup>().WithMany()
                         .HasForeignKey("ModifiergroupId")
                         .HasConstraintName("modifier_modifiergroups_modifiergroup_id_fkey"),
@@ -403,7 +405,7 @@ public partial class PizzaShopContext : DbContext
                     j =>
                     {
                         j.HasKey("ModifierId", "ModifiergroupId").HasName("modifier_modifiergroups_pkey");
-                        j.ToTable("modifier_modifiergroups");
+                        j.ToTable("modifier_group_mapping");
                         j.IndexerProperty<int>("ModifierId").HasColumnName("modifier_id");
                         j.IndexerProperty<int>("ModifiergroupId").HasColumnName("modifiergroup_id");
                     });

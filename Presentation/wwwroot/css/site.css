@@ -441,3 +441,34 @@ td{
 .cursor-none {
   cursor: not-allowed;
 }
+
+/* add items styles */
+
+@media (min-width: 768px) {
+  .modal-add-item {
+      max-width: 70%;
+  }
+}
+@media (min-width: 576px) {
+  .modal-add-item {
+      max-width: 80%;
+  }
+}
+
+.form-flex-switch {
+  width: 4.1em !important;
+  height: 2.5em;
+}
+
+.bg-light-green {
+  background: #FDF5E6;
+}
+
+.add-item-font {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.add-item-image {
+  width: 25px;
+}

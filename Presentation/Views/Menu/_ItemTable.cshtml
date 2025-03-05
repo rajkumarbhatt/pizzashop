@@ -158,6 +158,24 @@
         }, 300));
     });
 
+    $("#searchInput2").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
     function saveChangesOfSwitch(itemId) {
         var idCustom = "flexSwitchCheckChecked" + itemId;
         var isAvailable = document.getElementById(idCustom).checked;
