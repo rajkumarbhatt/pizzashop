@@ -8,7 +8,7 @@ namespace BLL.Interfaces
         public List<Category> GetCategories();
         public List<Item> GetItemsBasedOnSearch(int categoryId, string searchValue);
         public List<ModifierGroup> GetModifierGroups();
-        public List<Modifier> GetModifiers();
+        public ModifierGroup GetModifierGroup(int modifierGroupId);
         public JsonResult AddCategory(string categoryName, string categoryDescription, int userId);
         public JsonResult UpdateCategory(int categoryId, string categoryName, string categoryDescription, int userId);
         public JsonResult DeleteCategory(int categoryId, int userId);

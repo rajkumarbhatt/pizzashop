@@ -1,57 +1,3 @@
-function changeLine (item) {
-    if (item == "modifiers-div") {
-        document.getElementById("underline-para").style.marginLeft = "120px";
-        document.getElementById("underline-para").style.width = "90px";
-        document.getElementById("modifiers-div").classList.add("active-menu-item");
-        document.getElementById("items-div").classList.remove("active-menu-item");
-        document.getElementById("black-menu").classList.remove("d-none");
-        document.getElementById("blue-menu").classList.add("d-none");
-        document.getElementById("blue-modifier").classList.remove("d-none");
-        document.getElementById("black-modifier").classList.add("d-none");
-        document.getElementById("items-content").classList.add("d-none");
-        document.getElementById("modifiers-content").classList.remove("d-none");
-    } else {
-        document.getElementById("underline-para").style.marginLeft = "30px";
-        document.getElementById("underline-para").style.width = "70px";
-        document.getElementById("items-div").classList.add("active-menu-item");
-        document.getElementById("modifiers-div").classList.remove("active-menu-item");
-        document.getElementById("black-menu").classList.add("d-none");
-        document.getElementById("blue-menu").classList.remove("d-none");
-        document.getElementById("black-modifier").classList.remove("d-none");
-        document.getElementById("blue-modifier").classList.add("d-none");
-        document.getElementById("items-content").classList.remove("d-none");
-        document.getElementById("modifiers-content").classList.add("d-none");
-    }
-}
-
-function changeCategory(item, suffix) {
-    const categories = ["sandwich", "pasta", "sides", "salads", "dips", "pizza", "desserts", "burger"];
-    const activeClass = "active-nav-item";
-    const dNoneClass = "d-none";
-
-    categories.forEach(cat => {
-        document.getElementById(`${cat}-span${suffix}`).classList.remove(activeClass);
-        document.getElementById(`${cat}-blue-dots${suffix}`).classList.add(dNoneClass);
-        document.getElementById(`${cat}-black-dots${suffix}`).classList.remove(dNoneClass);
-    });
-
-    document.getElementById(`${item}-span${suffix}`).classList.add(activeClass);
-    document.getElementById(`${item}-blue-dots${suffix}`).classList.remove(dNoneClass);
-    document.getElementById(`${item}-black-dots${suffix}`).classList.add(dNoneClass);
-}
-
-function addEditAndDeleteOptionsOnMouseOver (item, suffix) {
-    document.getElementById(`${item}${suffix}`).classList.add("active-category-div")
-    document.getElementById(`${item}${suffix}-edit-icon`).classList.remove("d-none")
-    document.getElementById(`${item}${suffix}-delete-icon`).classList.remove("d-none")
-}
-
-function removeEditAndDeleteOptionsOnMouseOut (item, suffix) {
-    document.getElementById(`${item}${suffix}`).classList.remove("active-category-div")
-    document.getElementById(`${item}${suffix}-edit-icon`).classList.add("d-none")
-    document.getElementById(`${item}${suffix}-delete-icon`).classList.add("d-none")
-}
-
 function showSearchBar () {
     document.getElementById("mobile-search-bar").classList.remove("d-none");
     document.getElementById("search-icon").classList.add("d-none");
@@ -167,3 +113,110 @@ function changeDefaultTax() {
         $("#short-code").prop("disabled", true);
     }
 }
+
+function addModifierGroupToList () {
+    var modifierGroup = $("#selectModifierGroups").val;
+}
+
+// multiselect js
+  document.addEventListener('DOMContentLoaded', function () {
+  const selectElement = document.getElementById('SelectModifierGroup');
+  const customMultiSelect = document.querySelector('.custom-multi-select');
+  const dropdownOptions = customMultiSelect.querySelector('.dropdown-options');
+  const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+  const searchInput = customMultiSelect.querySelector('.search-input');
+  const clearAllButton = customMultiSelect.querySelector('.clear-all');
+  const dropdownToggle = customMultiSelect.querySelector('.dropdown-toggle');
+
+  // Build the custom dropdown options from the <select> element
+  selectElement.querySelectorAll('option').forEach(option => {
+    const value = option.value;
+    const text = option.textContent;
+
+    // Create a custom option
+    const customOption = document.createElement('div');
+    customOption.className = 'option';
+    customOption.setAttribute('data-value', value);
+    customOption.innerHTML = `
+      <input type="checkbox" id=${value} onchange="addModifierGroupToList(id)">
+      <label for="custom-option-${value}">${text}</label>
+    `;
+
+    // Add the custom option to the dropdown
+    dropdownOptions.appendChild(customOption);
+
+    // Sync the selected state with the <select> element
+    const checkbox = customOption.querySelector('input[type="checkbox"]');
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        option.selected = true; // Sync with <select>
+        addTag(value, text); // Add tag
+      } else {
+        option.selected = false; // Sync with <select>
+        removeTag(value); // Remove tag
+      }
+    });
+  });
+
+  // Function to add a tag
+  function addTag(value, text) {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.setAttribute('data-value', value);
+    tag.innerHTML = `
+      ${text}
+      <span class="tag-delete">×</span>
+    `;
+
+    // Add tag to the selected tags container
+    selectedTagsContainer.appendChild(tag);
+
+    // Remove tag when delete button is clicked
+    tag.querySelector('.tag-delete').addEventListener('click', () => {
+      tag.remove();
+      const option = selectElement.querySelector(`option[value="${value}"]`);
+      if (option) {
+        option.selected = false; // Sync with <select>
+      }
+      const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
+      if (checkbox)
+ {
+        checkbox.checked = false; // Uncheck the checkbox
+      }
+    });
+  }
+
+  // Function to remove a tag
+  function removeTag(value) {
+    const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
+    if (tag) {
+      tag.remove();
+    }
+  }
+
+  // Clear all selected tags
+  clearAllButton.addEventListener('click', () => {
+    selectedTagsContainer.innerHTML = '';
+    selectElement.querySelectorAll('option').forEach(option => {
+      option.selected = false; // Unselect all options in <select>
+    });
+    dropdownOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+      checkbox.checked = false; // Uncheck all checkboxes
+    });
+  });
+
+  // Toggle dropdown visibility
+  searchInput.addEventListener('focus', () => {
+    dropdownOptions.style.display = 'block';
+  });
+
+  searchInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      dropdownOptions.style.display = 'none';
+    }, 200);
+  });
+
+  dropdownToggle.addEventListener('click', () => {
+    dropdownOptions.style.display = dropdownOptions.style.display === 'block' ? 'none' : 'block';
+  });
+});

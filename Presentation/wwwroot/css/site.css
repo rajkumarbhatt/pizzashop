@@ -472,3 +472,105 @@ td{
 .add-item-image {
   width: 25px;
 }
+
+ /* multiselect dropdown css */
+
+ :root {
+  --primary-color: #007bff;
+  --hover-color: #0056b3;
+  --border-color: #ccc;
+  --background-color: #fff;
+  --tag-background: #e0e0e0;
+  --tag-delete-color: #999;
+  --tag-delete-hover-color: #333;
+}
+
+.custom-multi-select {
+  position: relative;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+.selection-area {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--background-color);
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--tag-background);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.tag-delete {
+  cursor: pointer;
+  color: var(--tag-delete-color);
+}
+
+.tag-delete:hover {
+  color: var(--tag-delete-hover-color);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+
+.clear-all,
+.dropdown-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 0.25rem;
+  background: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.option:hover {
+  background: #f0f0f0;
+}
+
+.option input[type="checkbox"] {
+  margin: 0;
+}

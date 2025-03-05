@@ -130,8 +130,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button id="EditCategoryModal" type="button" class="btn btn-primary px-3"
-                    >Save</button>
+                <button id="EditCategoryModal" type="button" class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
@@ -210,7 +209,8 @@
                 <p>Are you sure you want to delete this item?</p>
             </div>
             <div class="modal-footer">
-                <button id="deleteItemButton" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal">Yes</button>
+                <button id="deleteItemButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
                 <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
@@ -218,185 +218,196 @@
 </div>
 
 @* add item modal *@
-<div class="modal fade" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-add-item modal-dialog-centered" >
+<div class="modal fade" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-add-item modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Update Menu Item
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="">
                     <div class="row">
                         <div class="col-12 col-md-8">
-                            
-                    <div class="row align-items-center">
-                        <div class="col-12 row">
-                            <div class="col-12 col-md-6 p-2 form-floating">
-                                <select name="select-country" id="select-country" class="form-select"
-                                    aria-label="Select Country">
-                                    <option value="" disabled selected hidden>Select Category</option>
-                                    @foreach (var category in Model.Categories)
-                                    {
-                                        <option value="@category.Id">@category.Name</option>
-                                    }
-                                </select>
-                                <label for="select-country" class="mx-2 mt-2">Category*</label>
-                            </div>
-                            <div class="form-floating my-auto col-12 col-md-6">
-                                <input type="text" class="form-control" name="category-name"
-                                    id="category-name" required placeholder="name">
-                                <label for="category-name" class="">Name*</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-12  row">
-                            <div class="col-12 col-md-3 p-2 form-floating">
-                                <select name="select-country" id="select-country" class="form-select"
-                                    aria-label="Select Country">
-                                    <option value="" disabled selected hidden>Select Type</option>
-                                    <option value="Vegetarian">Vegetarian</option>
-                                    <option value="Non-Vegetarian">Non-Vegetarian</option>
-                                    <option value="Vegan">Vegan</option>
-                                </select>
-                                <label for="select-country" class="mx-2 mt-2">Type*</label>
-                            </div>
-                            <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                <input type="text" class="form-control" name="category-name"
-                                    id="category-name" required placeholder="name">
-                                <label for="category-name" class="">Rate*</label>
-                            </div>
-                            <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                <input type="text" class="form-control" name="category-name"
-                                    id="category-name" required placeholder="name">
-                                <label for="category-name" class="">Quantity*</label>
-                            </div>
-                            <div class="col-12 col-md-3 p-2 form-floating">
-                                <select name="select-country" id="select-country" class="form-select"
-                                    aria-label="Select Country">
-                                    <option value="" disabled selected hidden>Select Units</option>
-                                    <option value="pcs">Pcs</option>
-                                    <option value="plate">Plate</option>
-                                    <option value="gm">Gm</option>
-                                    <option value="ml">Ml</option>
-                                </select>
-                                <label for="select-country" class="mx-2 mt-2">Unit*</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-12  row">
-                            <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                <input class="form-flex-switch form-check-input " type="checkbox" id="available"
-                                    checked>
-                                <label for="available" class="my-auto ps-2">Available</label>
-                            </div>
-                            <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                <input onchange="changeDefaultTax()" class="form-flex-switch form-check-input " type="checkbox" id="defaultTax">
-                                <label for="available" class="my-auto ps-2">Default Tax</label>
-                            </div>
-                            <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                <input type="text" class="form-control" name="tax-percentage"
-                                    id="tax-percentage" required placeholder="name" disabled>
-                                <label for="tax-percentage" class="">Tax Percentage</label>
-                            </div>
-                            <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                <input type="text" class="form-control" name="short-code"
-                                    id="short-code" required placeholder="name" disabled>
-                                <label for="short-code" class="">Short Code</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-12  row">
-                            <!-- description -->
-                            <div class="form-floating my-auto col-12 pt-2">
-                                <textarea class="form-control" placeholder="Leave a comment here"
-                                    id="floatingTextarea2" style="height: 100px"></textarea>
-                                <label for="floatingTextarea2">Description</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row align-items-center">
-                        <div class="col-12  row">
-                            <label for="upload-btn">Upload Image</label>
-                            <div class="file upload position-relative overflow-hidden btn-custom">
-                                <div class="d-flex gap-2 justify-content-center align-items-center" style="height: 100px;">
-                                    <img src="./images/icons/cloud.svg" class="small-image" alt="">
-                                    <span>Drag and Drop or Browse files</span>
-                                    <p id="file-name"></p>
+
+                            <div class="row align-items-center">
+                                <div class="col-12 row">
+                                    <div class="col-12 col-md-6 p-2 form-floating">
+                                        <select name="select-country" id="select-country" class="form-select"
+                                            aria-label="Select Country">
+                                            <option value="" disabled selected hidden>Select Category</option>
+                                            @foreach (var category in Model.Categories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
+                                        </select>
+                                        <label for="select-country" class="mx-2 mt-2">Category*</label>
+                                    </div>
+                                    <div class="form-floating my-auto col-12 col-md-6">
+                                        <input type="text" class="form-control" name="category-name" id="category-name"
+                                            required placeholder="name">
+                                        <label for="category-name" class="">Name*</label>
+                                    </div>
                                 </div>
-                                <input type="file" id="upload-btn" class="position-absolute file-input-btn" name="file" accept="image/*"/>
                             </div>
-                        </div>
-                    </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <div class="col-12 col-md-3 p-2 form-floating">
+                                        <select name="select-country" id="select-country" class="form-select"
+                                            aria-label="Select Country">
+                                            <option value="" disabled selected hidden>Select Type</option>
+                                            <option value="Vegetarian">Vegetarian</option>
+                                            <option value="Non-Vegetarian">Non-Vegetarian</option>
+                                            <option value="Vegan">Vegan</option>
+                                        </select>
+                                        <label for="select-country" class="mx-2 mt-2">Type*</label>
+                                    </div>
+                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                        <input type="text" class="form-control" name="category-name" id="category-name"
+                                            required placeholder="name">
+                                        <label for="category-name" class="">Rate*</label>
+                                    </div>
+                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                        <input type="text" class="form-control" name="category-name" id="category-name"
+                                            required placeholder="name">
+                                        <label for="category-name" class="">Quantity*</label>
+                                    </div>
+                                    <div class="col-12 col-md-3 p-2 form-floating">
+                                        <select name="select-country" id="select-country" class="form-select"
+                                            aria-label="Select Country">
+                                            <option value="" disabled selected hidden>Select Units</option>
+                                            <option value="pcs">Pcs</option>
+                                            <option value="plate">Plate</option>
+                                            <option value="gm">Gm</option>
+                                            <option value="ml">Ml</option>
+                                        </select>
+                                        <label for="select-country" class="mx-2 mt-2">Unit*</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                        <input class="form-flex-switch form-check-input " type="checkbox" id="available"
+                                            checked>
+                                        <label for="available" class="my-auto ps-2">Available</label>
+                                    </div>
+                                    <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                        <input onchange="changeDefaultTax()" class="form-flex-switch form-check-input "
+                                            type="checkbox" id="defaultTax">
+                                        <label for="available" class="my-auto ps-2">Default Tax</label>
+                                    </div>
+                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                        <input type="text" class="form-control" name="tax-percentage"
+                                            id="tax-percentage" required placeholder="name" disabled>
+                                        <label for="tax-percentage" class="">Tax Percentage</label>
+                                    </div>
+                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                        <input type="text" class="form-control" name="short-code" id="short-code"
+                                            required placeholder="name" disabled>
+                                        <label for="short-code" class="">Short Code</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <!-- description -->
+                                    <div class="form-floating my-auto col-12 pt-2">
+                                        <textarea class="form-control" placeholder="Leave a comment here"
+                                            id="floatingTextarea2" style="height: 100px"></textarea>
+                                        <label for="floatingTextarea2">Description</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <label for="upload-btn">Upload Image</label>
+                                    <div class="file upload position-relative overflow-hidden btn-custom">
+                                        <div class="d-flex gap-2 justify-content-center align-items-center"
+                                            style="height: 100px;">
+                                            <img src="./images/icons/cloud.svg" class="small-image" alt="">
+                                            <span>Drag and Drop or Browse files</span>
+                                            <p id="file-name"></p>
+                                        </div>
+                                        <input type="file" id="upload-btn" class="position-absolute file-input-btn"
+                                            name="file" accept="image/*" />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-md-4 bg-light-green">
-                            <div class="col-12 p-2 form-floating">
-                                <select name="selectModifierGroups" id="selectModifierGroups" class="form-select"
-                                    aria-label="selectModifierGroups">
-                                    <option value="" disabled selected hidden>Select Modifier Group(s)</option>
-                                    @foreach(var modifierGroup in Model.ModifierGroups)
-                                    {
-                                        <option value="@modifierGroup.Id">@modifierGroup.Name</option>
-                                    }
-                                </select>
-                                <label for="selectModifierGroups" class="mx-2 mt-2">Unit*</label>
+                            <div class="col-12 p-2">
+                                <div class="custom-multi-select">
+                                    <div class="selection-area">
+                                        <div class="selected-tags">
+                                        </div>
+                                        <input type="text" class="search-input" placeholder="Select Modifier Group(s)">
+                                        <button class="clear-all">×</button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        <select class="form-select d-none" id="SelectModifierGroup" multiple>
+                                            @foreach (var modifier in Model.ModifierGroups)
+                                            {
+                                                <option value="@modifier.Id">@modifier.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-10 mx-auto ">
+                            <div id="modifierGroupdata">
+                                <div class="col-10 mx-auto ">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h5 class="add-item-font">Size Options</h5>
                                     <div>
-                                        <button class="btn"><img src="./images/icons//delete.svg" class="add-item-image" alt=""></button>
+                                        <button class="btn"><img src="./images/icons//delete.svg" class="add-item-image"
+                                                alt=""></button>
                                     </div>
                                 </div>
-                                <!-- empty dropdown -->
                                 <div class="row">
                                     <div class="col-6 p-2 ">
                                         <select name="select-country" id="select-country" class="form-select"
                                             aria-label="Select Country">
-                                            <option value="" disabled selected hidden>0</option>
-                                            <option value="admin">Admin</option>
-                                            <option value="manager">Manager</option>
-                                            <option value="chef">Chef</option>
+                                            <option value="0" selected>0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
                                         </select>
                                     </div>
                                     <div class="col-6 p-2 ">
                                         <select name="select-country" id="select-country" class="form-select"
                                             aria-label="Select Country">
-                                            <option value="" disabled selected hidden>0</option>
-                                            <option value="admin">Admin</option>
-                                            <option value="manager">Manager</option>
-                                            <option value="chef">Chef</option>
+                                            <option value="0" selected>0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
                                         </select>
                                     </div>
                                 </div>
                                 <ul class="list-group list-group-flush">
                                     <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022  Regular</p>
+                                        <p>&#x2022 Regular</p>
                                         <p>110</p>
                                     </li>
                                     <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022  Regular</p>
+                                        <p>&#x2022 Regular</p>
                                         <p>110</p>
                                     </li>
                                     <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022  Regular</p>
+                                        <p>&#x2022 Regular</p>
                                         <p>110</p>
                                     </li>
                                 </ul>
                             </div>
+                            </div>
                         </div>
                     </div>
-                </form>               
+                </form>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Save</button>
-                <a href="./menu.html"><button type="button"
+                <button type="button" class="btn btn-primary px-3" data-bs-dismiss="modal">Save</button>
+                <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
@@ -405,5 +416,28 @@
 
 <script src="~/js/menu.js" asp-append-version="true"></script>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<script>
+    var selectModifierGroups = [];
+    function addModifierGroupToList(id) {
+        var isChecked = document.getElementById(id).checked;
+        if (isChecked) {
+            selectModifierGroups.push(parseInt(id));
+        } else {
+            selectModifierGroups = selectModifierGroups.filter((value) => value !== parseInt(id));
+        }
+        console.log(selectModifierGroups);
+        @* $.ajax({
+            type: "POST",
+            url: "/Menu/GetModifierGroup",
+            data: { modifierGroupIds: selectModifierGroups },
+            success: function (response) {
+                $("#modifierGroupdata").html(response);
+            }
+        }); *@
+    }
+</script>

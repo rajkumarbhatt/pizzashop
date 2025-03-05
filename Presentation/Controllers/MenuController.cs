@@ -20,7 +20,6 @@ namespace Presentaion.Controllers
             int categoryId = categories.FirstOrDefault().Id;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
             var modifierGroups = _categoryService.GetModifierGroups();
-            var modifiers = _categoryService.GetModifiers();
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -102,5 +101,15 @@ namespace Presentaion.Controllers
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
             return _categoryService.DeleteItem(itemId, userId);
         }
+
+        // [HttpPost]
+        // public IActionResult GetModifierGroup(int[] modifierGroupIds)
+        // {
+        //     var modifierGroups = new List<ModifierGroup>();
+        //     foreach (var modifierGroupId in modifierGroupIds)
+        //     {
+        //         modifierGroups.Add(_categoryService.GetModifierGroup(modifierGroupId));
+        //     }
+        //     return new JsonResult(modifierGroups);
     }
 }

@@ -23,9 +23,9 @@ namespace BLL.Services
             return _context.ModifierGroups.Where(m => m.IsDeleted == false).OrderBy(m => m.Id).ToList();
         }
 
-        public List<Modifier> GetModifiers()
+        public ModifierGroup GetModifierGroup(int modifierGroupId)
         {
-            return _context.Modifiers.Where(m => m.IsDeleted == false).OrderBy(m => m.Id).ToList();
+            return _context.ModifierGroups.FirstOrDefault(m => m.Id == modifierGroupId);
         }
 
         public JsonResult AddCategory(string categoryName, string categoryDescription, int userId)
