@@ -1,0 +1,56 @@
+@model DAL.ViewModels.MenuViewModel
+
+<div class="col-10 mx-auto ">
+    @if(Model.SelectedModifierGroups != null)
+    {
+        @foreach(var selectedModifierGroup in Model.SelectedModifierGroups)
+        {
+            <div class="mt-2 d-flex justify-content-between align-items-center">
+                <h5 class="add-item-font">@selectedModifierGroup.Name</h5>
+                <div>
+                    <button type="button" class="btn"><img src="./images/icons/delete.svg" onclick="deleteSelectedModifierGroup(@selectedModifierGroup.Id)" class="add-item-image"
+                            alt="">
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 p-2 ">
+                    <select onchange="addMinimum(@selectedModifierGroup.Id, this.value)" name="" id="select-country" class="form-select"
+                        aria-label="Select Country">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="col-6 p-2">
+                    <select onchange="addMaximum(@selectedModifierGroup.Id, this.value)" name="select-country" id="select-country" class="form-select"
+                        aria-label="Select Country">
+                        <option value="0" selected>0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </div>
+            <ul class="list-group list-group-flush">
+                @{
+                    var selectedModifiers = Model.SelectedModifierModifierGroupMappings.Where(x => x.ModifiergroupId == selectedModifierGroup.Id).Select(x => x.Modifier).ToList();
+                }
+                @foreach(var selectedModifier in selectedModifiers)
+                {
+                    <li class="d-flex justify-content-between align-items-center">
+                        <p>&#x2022 @selectedModifier.Name</p>
+                        <p>@selectedModifier.Price</p>
+                    </li>
+                }
+            </ul>
+            
+            <input asp-for="@Model.AddItemViewModel.ModifierGroupIds" name="AddItemViewModel.ModifierGroupIds" id="ModifierGroupIds" type="hidden" value="" />
+
+            <input asp-for="@Model.AddItemViewModel.MinimumQuantity" name="AddItemViewModel.MinimumQuantity" id="MinimumQuantity" type="hidden" value="" />
+
+            <input asp-for="@Model.AddItemViewModel.MaximumQuantity" name="AddItemViewModel.MaximumQuantity" id="MaximumQuantity" type="hidden" value="" />
+        }
+    }
+</div>

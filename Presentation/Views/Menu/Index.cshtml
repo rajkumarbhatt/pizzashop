@@ -223,91 +223,92 @@
     <div class="modal-dialog modal-add-item modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Update Menu Item
+                <h5 class="modal-title" id="staticBackdropLabel">Add Item
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="">
+                <form id="AddItemForm" action="">
                     <div class="row">
                         <div class="col-12 col-md-8">
 
                             <div class="row align-items-center">
                                 <div class="col-12 row">
                                     <div class="col-12 col-md-6 p-2 form-floating">
-                                        <select name="select-country" id="select-country" class="form-select"
-                                            aria-label="Select Country">
+                                        <select asp-for="@Model.AddItemViewModel.CategoryId" name="AddItemViewModel.CategoryId" id="CategoryId" class="form-select"
+                                            aria-label="CategoryId">
                                             <option value="" disabled selected hidden>Select Category</option>
                                             @foreach (var category in Model.Categories)
                                             {
                                                 <option value="@category.Id">@category.Name</option>
                                             }
                                         </select>
-                                        <label for="select-country" class="mx-2 mt-2">Category*</label>
+                                        <label for="CategoryId" class="mx-2 mt-2">Category*</label>
                                     </div>
                                     <div class="form-floating my-auto col-12 col-md-6">
-                                        <input type="text" class="form-control" name="category-name" id="category-name"
-                                            required placeholder="name">
-                                        <label for="category-name" class="">Name*</label>
+                                        <input asp-for="@Model.AddItemViewModel.ItemName" type="text" class="form-control" name="AddItemViewModel.ItemName" id="ItemName"
+                                            required placeholder="ItemName">
+                                            <span asp-validation-for="AddItemViewModel.ItemName" class="text-danger"></span>
+                                        <label for="ItemName" class="">Name*</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-12  row">
                                     <div class="col-12 col-md-3 p-2 form-floating">
-                                        <select name="select-country" id="select-country" class="form-select"
-                                            aria-label="Select Country">
+                                        <select asp-for="@Model.AddItemViewModel.Type" name="AddItemViewModel.Type" id="Type" class="form-select"
+                                            aria-label="Type">
                                             <option value="" disabled selected hidden>Select Type</option>
                                             <option value="Vegetarian">Vegetarian</option>
                                             <option value="Non-Vegetarian">Non-Vegetarian</option>
                                             <option value="Vegan">Vegan</option>
                                         </select>
-                                        <label for="select-country" class="mx-2 mt-2">Type*</label>
+                                        <label for="Type" class="mx-2 mt-2">Type*</label>
                                     </div>
                                     <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input type="text" class="form-control" name="category-name" id="category-name"
-                                            required placeholder="name">
-                                        <label for="category-name" class="">Rate*</label>
+                                        <input asp-for="@Model.AddItemViewModel.Rate" type="text" class="form-control" name="AddItemViewModel.Rate" id="Rate"
+                                            required placeholder="Rate">
+                                        <label for="Rate" class="">Rate*</label>
                                     </div>
                                     <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input type="text" class="form-control" name="category-name" id="category-name"
-                                            required placeholder="name">
-                                        <label for="category-name" class="">Quantity*</label>
+                                        <input asp-for="@Model.AddItemViewModel.Quantity" type="text" class="form-control" name="AddItemViewModel.Quantity" id="Quantity"
+                                            required placeholder="Quantity">
+                                        <label for="Quantity" class="">Quantity*</label>
                                     </div>
                                     <div class="col-12 col-md-3 p-2 form-floating">
-                                        <select name="select-country" id="select-country" class="form-select"
-                                            aria-label="Select Country">
+                                        <select asp-for="@Model.AddItemViewModel.Unit" name="AddItemViewModel.Unit" id="Unit" class="form-select"
+                                            aria-label="Unit">
                                             <option value="" disabled selected hidden>Select Units</option>
                                             <option value="pcs">Pcs</option>
                                             <option value="plate">Plate</option>
                                             <option value="gm">Gm</option>
                                             <option value="ml">Ml</option>
                                         </select>
-                                        <label for="select-country" class="mx-2 mt-2">Unit*</label>
+                                        <label for="Unit" class="mx-2 mt-2">Unit*</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-12  row">
                                     <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                        <input class="form-flex-switch form-check-input " type="checkbox" id="available"
+                                        <input asp-for="@Model.AddItemViewModel.IsAvailable"  name="AddItemViewModel.IsAvailable" class="form-flex-switch form-check-input " type="checkbox" id="IsAvailable"
                                             checked>
-                                        <label for="available" class="my-auto ps-2">Available</label>
+                                        <label for="IsAvailable" class="my-auto ps-2">Available</label>
                                     </div>
                                     <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                        <input onchange="changeDefaultTax()" class="form-flex-switch form-check-input "
-                                            type="checkbox" id="defaultTax">
-                                        <label for="available" class="my-auto ps-2">Default Tax</label>
+                                        <input asp-for="@Model.AddItemViewModel.IsDefaultTaxable" name="AddItemViewModel.IsDefaultTaxable"  onchange="changeDefaultTax()" class="form-flex-switch form-check-input "
+                                            type="checkbox" id="IsDefaultTaxable">
+                                        <label for="IsDefaultTaxable" class="my-auto ps-2">Default Tax</label>
                                     </div>
                                     <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input type="text" class="form-control" name="tax-percentage"
-                                            id="tax-percentage" required placeholder="name" disabled>
-                                        <label for="tax-percentage" class="">Tax Percentage</label>
+                                        <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage"
+                                            id="TaxPercentage" required placeholder="name" disabled>
+                                        <label for="TaxPercentage" class="">Tax Percentage</label>
                                     </div>
                                     <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input type="text" class="form-control" name="short-code" id="short-code"
+                                        <input asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" name="AddItemViewModel.ShortCode" id="ShortCode"
                                             required placeholder="name" disabled>
-                                        <label for="short-code" class="">Short Code</label>
+                                        <label for="ShortCode" class="">Short Code</label>
                                     </div>
                                 </div>
                             </div>
@@ -315,15 +316,15 @@
                                 <div class="col-12  row">
                                     <!-- description -->
                                     <div class="form-floating my-auto col-12 pt-2">
-                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                            id="floatingTextarea2" style="height: 100px"></textarea>
-                                        <label for="floatingTextarea2">Description</label>
+                                        <input asp-for="@Model.AddItemViewModel.Description" class="form-control" placeholder="Leave a comment here" name="AddItemViewModel.Description"
+                                            id="Description" style="height: 100px"></input>
+                                        <label for="Description">Description</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="row align-items-center">
                                 <div class="col-12  row">
-                                    <label for="upload-btn">Upload Image</label>
+                                    <label for="Image">Upload Image</label>
                                     <div class="file upload position-relative overflow-hidden btn-custom">
                                         <div class="d-flex gap-2 justify-content-center align-items-center"
                                             style="height: 100px;">
@@ -331,8 +332,8 @@
                                             <span>Drag and Drop or Browse files</span>
                                             <p id="file-name"></p>
                                         </div>
-                                        <input type="file" id="upload-btn" class="position-absolute file-input-btn"
-                                            name="file" accept="image/*" />
+                                        <input name="AddItemViewModel.Image" asp-for="@Model.AddItemViewModel.Image" type="file" id="Image" class="position-absolute file-input-btn"
+                                            accept="image/*" />
                                     </div>
                                 </div>
                             </div>
@@ -344,7 +345,7 @@
                                         <div class="selected-tags">
                                         </div>
                                         <input type="text" class="search-input" placeholder="Select Modifier Group(s)">
-                                        <button class="clear-all">×</button>
+                                        <button class="clear-all"></button>
                                     </div>
                                     <div class="dropdown-options">
                                         <select class="form-select d-none" id="SelectModifierGroup" multiple>
@@ -357,58 +358,16 @@
                                 </div>
                             </div>
                             <div id="modifierGroupdata">
-                                <div class="col-10 mx-auto ">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="add-item-font">Size Options</h5>
-                                    <div>
-                                        <button class="btn"><img src="./images/icons//delete.svg" class="add-item-image"
-                                                alt=""></button>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-6 p-2 ">
-                                        <select name="select-country" id="select-country" class="form-select"
-                                            aria-label="Select Country">
-                                            <option value="0" selected>0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-6 p-2 ">
-                                        <select name="select-country" id="select-country" class="form-select"
-                                            aria-label="Select Country">
-                                            <option value="0" selected>0</option>
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                            <option value="3">3</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022 Regular</p>
-                                        <p>110</p>
-                                    </li>
-                                    <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022 Regular</p>
-                                        <p>110</p>
-                                    </li>
-                                    <li class="d-flex justify-content-between align-items-center">
-                                        <p>&#x2022 Regular</p>
-                                        <p>110</p>
-                                    </li>
-                                </ul>
-                            </div>
+                                <partial name="_AddItemModifierGroupPartial" model="@Model" />
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-primary px-3" data-bs-dismiss="modal">Save</button>
+                <button type="submit" id="AddItemButton" class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+                </form>
             </div>
         </div>
     </div>
@@ -423,21 +382,143 @@
 
 <script>
     var selectModifierGroups = [];
+    var maximumValue = [];
+    var minimumValue = [];
+
+    function addMinimum(id, value) {
+        if (minimumValue.some(x => x.Id === id)) {
+            minimumValue = minimumValue.filter((value) => value.Id !== id);
+            addMinimum(id, value);
+        } else {
+            minimumValue.push({ Id: id, Value: value });
+            var minimumValueJson = JSON.stringify(minimumValue);
+            $("#MinimumQuantity").val(minimumValueJson);
+        }
+    }
+
+
+    function addMinimum(id, value) {
+        console.log("Adding minimum value for ID:", id, "with value:", value);
+        if (minimumValue.some(x => x.Id === id)) {
+            minimumValue = minimumValue.filter((value) => value.Id !== id);
+            addMinimum(id, value);
+        } else {
+            minimumValue.push({ Id: id, Value: value });
+            var minimumValueJson = JSON.stringify(minimumValue);
+            console.log("Minimum values:", minimumValue);
+        }
+    }
+
+    function addMaximum(id, value) {
+        console.log("Adding maximum value for ID:", id, "with value:", value);
+        if (maximumValue.some(x => x.Id === id)) {
+            maximumValue = maximumValue.filter((value) => value.Id !== id);
+            addMaximum(id, value);
+        } else {
+            maximumValue.push({ Id: id, Value: value });
+            var maximumValueJson = JSON.stringify(maximumValue);
+            console.log("Maximum values:", maximumValue);
+        }
+    }
+
     function addModifierGroupToList(id) {
         var isChecked = document.getElementById(id).checked;
+        var idInt = parseInt(id);
+        console.log("Modifier group ID:", idInt, "is checked:", isChecked);
         if (isChecked) {
-            selectModifierGroups.push(parseInt(id));
+            selectModifierGroups.push(idInt);
+            addMaximum(idInt, 0);
+            addMinimum(idInt, 0);
         } else {
-            selectModifierGroups = selectModifierGroups.filter((value) => value !== parseInt(id));
+            selectModifierGroups = selectModifierGroups.filter((value) => value !== idInt);
+            maximumValue = maximumValue.filter((value) => value.Id !== idInt);
+            minimumValue = minimumValue.filter((value) => value.Id !== idInt);
         }
-        console.log(selectModifierGroups);
-        @* $.ajax({
-            type: "POST",
-            url: "/Menu/GetModifierGroup",
-            data: { modifierGroupIds: selectModifierGroups },
+        console.log("Select modifier groups:", selectModifierGroups);
+        console.log("Minimum values:", minimumValue);
+        console.log("Maximum values:", maximumValue);
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
             success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
                 $("#modifierGroupdata").html(response);
             }
-        }); *@
+        });
     }
+    
+
+    document.getElementById('Image').addEventListener('change', (e) => {
+       const file = e.target.files[0];
+       if (file) {
+           const file = e.target.files[0];
+           document.getElementById('file-name').textContent = file.name;
+       }
+   });
+
+    function removeTag(value) {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+        const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
+        if (tag) {
+            tag.remove();
+        }
+    }
+    function deleteSelectedModifierGroup(id) {
+        document.getElementById(id).checked = false;
+        selectModifierGroups = selectModifierGroups.filter((value) => value !== id);
+        minimumValue = minimumValue.filter((value) => value.Id !== id);
+        maximumValue = maximumValue.filter((value) => value.Id !== id);
+        $("#MinimumQuantity").val(JSON.stringify(minimumValue));
+        $("#MaximumQuantity").val(JSON.stringify(maximumValue));
+        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        removeTag(id);
+        console.log(selectModifierGroupsString);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
+            success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
+                $("#modifierGroupdata").html(response);
+            }
+        });
+    }
+
+    $("#AddItemForm").submit(function (e) {
+        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+        $("#MinimumQuantity").val(JSON.stringify(minimumValue));
+        $("#MaximumQuantity").val(JSON.stringify(maximumValue));
+        e.preventDefault();
+        console.log($("#ModifierGroupIds").val());
+        var form = $(this)[0]; 
+        var formData = new FormData(form);
+        console.log(formData);
+
+        $.ajax({
+            type: "POST",
+            url: "/Menu/AddItem",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        window.location.href = "/Menu";
+                    }, 1500);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (response) {
+                toastr.error(response.message);
+            }
+        });
+    });
 </script>

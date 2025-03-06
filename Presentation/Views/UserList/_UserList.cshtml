@@ -146,7 +146,7 @@
             type: 'GET',
             data: { pageIndex: currentPageIndex, pageSize: pageSize,  searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
             success: function (data) {
-                $("#partialViewStarting").html(data);
+                $("#partialViewStartingInner").html(data);
             }
         });
     }

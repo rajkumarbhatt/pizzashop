@@ -103,7 +103,7 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
             success: function (data) {
                 console.log(data);
-                $("#partialViewStarting").html(data);
+                $("#partialViewStartingInner").html(data);
             }
         });
     });
@@ -120,7 +120,7 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
             success: function (data) {
                 console.log(data);
-                $("#partialViewStarting").html(data);
+                $("#partialViewStartingInner").html(data);
             }
         });
     });
@@ -135,7 +135,7 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
             success: function (data) {
                 console.log(data);
-                $("#partialViewStarting").html(data);
+                $("#partialViewStartingInner").html(data);
             }
         });
     }
@@ -196,7 +196,7 @@
             data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
             success: function (data) {
                 console.log(data);
-                $("#partialViewStarting").html(data);
+                $("#partialViewStartingInner").html(data);
             }
         });
     }

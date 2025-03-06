@@ -51,6 +51,7 @@ $(document).ready(function () {
        
        var form = $(this)[0]; 
        var formData = new FormData(form);
+       
        var userId = $('#userid').val();
        $.ajax({
            url: '/UserList/CreateUser',

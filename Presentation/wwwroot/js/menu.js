@@ -104,18 +104,14 @@ function openModal (categoryId) {
 }  
 
 function changeDefaultTax() {
-    var value = document.getElementById("defaultTax").checked;
+    var value = document.getElementById("IsDefaultTaxable").checked;
     if (value) {
-        $("#tax-percentage").prop("disabled", false);
-        $("#short-code").prop("disabled", false);
+        $("#TaxPercentage").prop("disabled", false);
+        $("#ShortCode").prop("disabled", false);
     } else {
-        $("#tax-percentage").prop("disabled", true);
-        $("#short-code").prop("disabled", true);
+        $("#TaxPercentage").prop("disabled", true);
+        $("#ShortCode").prop("disabled", true);
     }
-}
-
-function addModifierGroupToList () {
-    var modifierGroup = $("#selectModifierGroups").val;
 }
 
 // multiselect js
@@ -165,7 +161,7 @@ function addModifierGroupToList () {
     tag.setAttribute('data-value', value);
     tag.innerHTML = `
       ${text}
-      <span class="tag-delete">×</span>
+      <span class="tag-delete"></span>
     `;
 
     // Add tag to the selected tags container

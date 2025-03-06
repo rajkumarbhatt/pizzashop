@@ -574,3 +574,10 @@ td{
 .option input[type="checkbox"] {
   margin: 0;
 }
+
+@media (min-width: 768px) {
+  .bg-light-green {
+      height: 440px;
+      overflow-y: scroll;
+  }
+}

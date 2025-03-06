@@ -1,6 +1,7 @@
 using BLL.Interfaces;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace Presentaion.Controllers
 {
@@ -68,7 +69,7 @@ namespace Presentaion.Controllers
                 TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
                 TotalItems = items.Count
             };
-            return PartialView("_MenuPartial", menuViewModel);
+            return PartialView("_ItemTable", menuViewModel);
         }
 
         [HttpGet]
@@ -102,14 +103,34 @@ namespace Presentaion.Controllers
             return _categoryService.DeleteItem(itemId, userId);
         }
 
-        // [HttpPost]
-        // public IActionResult GetModifierGroup(int[] modifierGroupIds)
-        // {
-        //     var modifierGroups = new List<ModifierGroup>();
-        //     foreach (var modifierGroupId in modifierGroupIds)
-        //     {
-        //         modifierGroups.Add(_categoryService.GetModifierGroup(modifierGroupId));
-        //     }
-        //     return new JsonResult(modifierGroups);
+        [HttpGet]
+        public IActionResult GetModifierGroupData (string modifierGroupIds)
+        {
+            if (modifierGroupIds == "[]")
+            {
+                return PartialView("_AddItemModifierGroupPartial", new MenuViewModel());
+            }
+            modifierGroupIds = modifierGroupIds.Substring(1, modifierGroupIds.Length - 2);
+            modifierGroupIds = modifierGroupIds.Replace(" ", "");
+            List<int> modifierGroupIdsList = modifierGroupIds.Split(',').Select(int.Parse).ToList();
+            var selectedModifierGroups = _categoryService.GetModifierGroupsFromList(modifierGroupIdsList);
+            var selectedModifiers = _categoryService.GetModifiersFromList(modifierGroupIdsList);
+            var selectedModifierModifierGroupMapping = _categoryService.GetModifierModifierGroupMappings(modifierGroupIdsList);
+            MenuViewModel menuViewModel = new MenuViewModel
+            {
+                SelectedModifierGroups = selectedModifierGroups,
+                SelectedModifiers = selectedModifiers,
+                SelectedModifierModifierGroupMappings = selectedModifierModifierGroupMapping
+            };
+            return PartialView("_AddItemModifierGroupPartial", menuViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddItem([FromForm]AddItemViewModel addItemViewModel)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var itemName = _categoryService.AddItem(addItemViewModel, userId);
+            return _categoryService.UpdateItemModifierGroup(addItemViewModel, itemName, userId);
+        }
     }
 }
