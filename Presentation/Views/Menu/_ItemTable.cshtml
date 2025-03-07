@@ -54,8 +54,9 @@
                                 }
                             </td>
                             <td>
-                                <a href="./editUser.html"> <img src="./images/icons/edit.svg" class="small-image"
-                                        alt=""></a>
+                                <button onclick="editItem(@item.Id)"  type="button" class="edit-btn btn" >
+                                    <a href="#"> <img src="./images/icons/edit.svg" class="small-image"
+                                            alt=""></a></button>
                                 <button onclick="deleteItem(@item.Id)" type="button" class="delete-btn" data-bs-toggle="modal"
                                     data-bs-target="#deleteItem">
                                     <a href="#"> <img src="./images/icons/delete.svg" class="small-image"
@@ -102,7 +103,6 @@
             type: 'GET',
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
             success: function (data) {
-                console.log(data);
                 $("#partialViewStartingInner").html(data);
             }
         });
@@ -119,7 +119,6 @@
             type: 'GET',
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
             success: function (data) {
-                console.log(data);
                 $("#partialViewStartingInner").html(data);
             }
         });
@@ -134,7 +133,6 @@
             type: 'GET',
             data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
             success: function (data) {
-                console.log(data);
                 $("#partialViewStartingInner").html(data);
             }
         });
@@ -195,7 +193,6 @@
             type: 'GET',
             data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
             success: function (data) {
-                console.log(data);
                 $("#partialViewStartingInner").html(data);
             }
         });

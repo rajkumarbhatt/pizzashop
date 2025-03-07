@@ -7,9 +7,14 @@ namespace DAL.ViewModels
         public List<Category> Categories { get; set; }
         public List<Item> Items { get; set; }
         public List<ModifierGroup> ModifierGroups { get; set; }
+        public List<ModifierGroup> SelectedModifierGroups { get; set; }
+        public List<Modifier> SelectedModifiers { get; set; }
+        public List<ModifierModifiergroupMapping> SelectedModifierModifierGroupMappings { get; set; }
+        public List<ModifierGroupData> ModifierGroupData { get; set; }
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int TotalItems { get; set; } 
+        public AddItemViewModel AddItemViewModel { get; set; }
     }
 }

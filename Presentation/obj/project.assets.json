@@ -12314,11 +12314,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\Presentation.csproj",
+      "projectUniqueName": "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\Presentation.csproj",
       "projectName": "Presentation",
-      "projectPath": "c:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\Presentation.csproj",
+      "projectPath": "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\Presentation.csproj",
       "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\obj\\",
+      "outputPath": "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\Presentation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -12336,8 +12336,8 @@
             "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\BLL\\BLL.csproj": {
               "projectPath": "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\BLL\\BLL.csproj"
             },
-            "c:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\DAL\\DAL.csproj": {
-              "projectPath": "c:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\DAL\\DAL.csproj"
+            "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Users\\pci88\\Downloads\\pizzashop-backend-validations-commit - Copy\\DAL\\DAL.csproj"
             }
           }
         }

@@ -1,5 +1,5 @@
+@using Newtonsoft.Json
 @model DAL.ViewModels.MenuViewModel
-
 <div class="col-10 mx-auto ">
     @if(Model.SelectedModifierGroups != null)
     {
@@ -15,18 +15,22 @@
             </div>
             <div class="row">
                 <div class="col-6 p-2 ">
-                    <select onchange="addMinimum(@selectedModifierGroup.Id, this.value)" name="" id="select-country" class="form-select"
+                    @{
+                        var minimumId = @selectedModifierGroup.Id + "min";
+                        var maximumId = @selectedModifierGroup.Id + "max";
+                    }
+                    <select onchange="addMinimum(@selectedModifierGroup.Id, this.value)" name="" id=@minimumId class="form-select"
                         aria-label="Select Country">
-                        <option value="0" selected>0</option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
                     </select>
                 </div>
                 <div class="col-6 p-2">
-                    <select onchange="addMaximum(@selectedModifierGroup.Id, this.value)" name="select-country" id="select-country" class="form-select"
+                    <select onchange="addMaximum(@selectedModifierGroup.Id, this.value)" name="select-country" id=@maximumId class="form-select"
                         aria-label="Select Country">
-                        <option value="0" selected>0</option>
+                        <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -47,10 +51,21 @@
             </ul>
             
             <input asp-for="@Model.AddItemViewModel.ModifierGroupIds" name="AddItemViewModel.ModifierGroupIds" id="ModifierGroupIds" type="hidden" value="" />
-
-            <input asp-for="@Model.AddItemViewModel.MinimumQuantity" name="AddItemViewModel.MinimumQuantity" id="MinimumQuantity" type="hidden" value="" />
-
-            <input asp-for="@Model.AddItemViewModel.MaximumQuantity" name="AddItemViewModel.MaximumQuantity" id="MaximumQuantity" type="hidden" value="" />
         }
     }
 </div>
+
+
+@* select min and max values *@
+@if(Model.ModifierGroupData != null)
+{
+    @foreach(var selectedModifierGroup in Model.ModifierGroupData)
+    {
+        var minimumId = selectedModifierGroup.Id + "min";
+        var maximumId = selectedModifierGroup.Id + "max";
+        <script>
+            document.getElementById("@minimumId").value = @selectedModifierGroup.MinimumQuantity;
+            document.getElementById("@maximumId").value = @selectedModifierGroup.MaximumQuantity;
+        </script>
+    }
+}

@@ -1,0 +1,279 @@
+@model DAL.ViewModels.MenuViewModel
+@* add item modal *@
+<div class="modal fade" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-add-item modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Item
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="AddItemForm" action="">
+                    <div class="row">
+                        <div class="col-12 col-md-8">
+
+                            <div class="row align-items-center">
+                                <div class="col-12 row">
+                                    <div class="col-12 col-md-6 p-2 form-floating">
+                                        <select asp-for="@Model.AddItemViewModel.CategoryId" name="AddItemViewModel.CategoryId" id="CategoryId" class="form-select"
+                                            aria-label="CategoryId">
+                                            <option value="" disabled selected hidden>Select Category</option>
+                                            @foreach (var category in Model.Categories)
+                                            {
+                                                <option value="@category.Id">@category.Name</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="AddItemViewModel.CategoryId" class="text-danger"></span>
+                                        <label for="CategoryId" class="mx-2 mt-2">Category*</label>
+                                    </div>
+                                    @if (Model.AddItemViewModel != null && Model.AddItemViewModel.ItemName != null)
+                                    {
+                                        <div class="form-floating my-auto col-12 col-md-6">
+                                            <input asp-for="@Model.AddItemViewModel.ItemName" type="text" class="form-control" name="AddItemViewModel.ItemName" id="ItemName"
+                                                required placeholder="ItemName" value="@Model.AddItemViewModel.ItemName">
+                                            <span asp-validation-for="AddItemViewModel.ItemName" class="text-danger"></span>
+                                            <label for="ItemName" class="">Name*</label>
+                                        </div>
+                                    } else {
+                                        <div class="form-floating my-auto col-12 col-md-6">
+                                            <input asp-for="@Model.AddItemViewModel.ItemName" type="text" class="form-control" name="AddItemViewModel.ItemName" id="ItemName"
+                                                required placeholder="ItemName" >
+                                            <span asp-validation-for="AddItemViewModel.ItemName" class="text-danger"></span>
+                                            <label for="ItemName" class="">Name*</label>
+                                        </div>
+                                    }
+
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <div class="col-12 col-md-3 p-2 form-floating">
+                                        <select asp-for="@Model.AddItemViewModel.Type" name="AddItemViewModel.Type" id="Type" class="form-select"
+                                            aria-label="Type">
+                                            <option value="" disabled selected hidden>Select Type</option>
+                                            <option value="Vegetarian">Vegetarian</option>
+                                            <option value="Non-Vegetarian">Non-Vegetarian</option>
+                                            <option value="Vegan">Vegan</option>
+                                        </select>
+                                        <span asp-validation-for="AddItemViewModel.Type" class="text-danger"></span>
+                                        <label for="Type" class="mx-2 mt-2">Type*</label>
+                                    </div>
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.Rate >= 0)
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.Rate" type="text" value="@Model.AddItemViewModel.Rate" class="form-control" name="AddItemViewModel.Rate" id="Rate"
+                                                required placeholder="Rate">
+                                            <span asp-validation-for="AddItemViewModel.Rate" class="text-danger"></span>
+                                            <label for="Rate" class="">Rate*</label>
+                                        </div>
+                                    } else {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.Rate" type="text" class="form-control" name="AddItemViewModel.Rate" id="Rate" 
+                                                required placeholder="Rate">
+                                            <span asp-validation-for="AddItemViewModel.Rate" class="text-danger"></span>
+                                            <label for="Rate" class="">Rate*</label>
+                                        </div>
+                                    }
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.Quantity > 0)
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.Quantity" value="@Model.AddItemViewModel.Quantity" type="text" class="form-control" name="AddItemViewModel.Quantity" id="Quantity" required placeholder="Quantity">
+                                            <span asp-validation-for="AddItemViewModel.Quantity" class="text-danger"></span>
+                                            <label for="Quantity" class="">Quantity*</label>
+                                        </div>
+                                    } else 
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.Quantity" type="text" class="form-control" name="AddItemViewModel.Quantity" id="Quantity" required placeholder="Quantity" >
+                                            <span asp-validation-for="AddItemViewModel.Quantity" class="text-danger"></span>
+                                            <label for="Quantity" class="">Quantity*</label>
+                                        </div>
+                                    }
+                                    <div class="col-12 col-md-3 p-2 form-floating">
+                                        <select asp-for="@Model.AddItemViewModel.Unit" name="AddItemViewModel.Unit" id="Unit" class="form-select"
+                                            aria-label="Unit">
+                                            <option value="" disabled selected hidden>Select Units</option>
+                                            <option value="pcs">Pcs</option>
+                                            <option value="plate">Plate</option>
+                                            <option value="gm">Gm</option>
+                                            <option value="ml">Ml</option>
+                                        </select>
+                                        <span asp-validation-for="AddItemViewModel.Unit" class="text-danger"></span>
+                                        <label for="Unit" class="mx-2 mt-2">Unit*</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.IsAvailable)
+                                    {
+                                        <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                        <input asp-for="@Model.AddItemViewModel.IsAvailable"  name="AddItemViewModel.IsAvailable" class="form-flex-switch form-check-input " type="checkbox" id="IsAvailable" value="@Model.AddItemViewModel.IsAvailable"
+                                            checked>
+                                        <label for="IsAvailable" class="my-auto ps-2">Available</label>
+                                    </div>
+                                    } else {
+                                        <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                            <input asp-for="@Model.AddItemViewModel.IsAvailable"  name="AddItemViewModel.IsAvailable" class="form-flex-switch form-check-input " type="checkbox" id="IsAvailable"
+                                                >
+                                            <label for="IsAvailable" class="my-auto ps-2">Available</label>
+                                        </div>
+                                    }
+                                   @if(Model.AddItemViewModel != null && Model.AddItemViewModel.IsDefaultTaxable)
+                                    {
+                                         <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                            <input asp-for="@Model.AddItemViewModel.IsDefaultTaxable" name="AddItemViewModel.IsDefaultTaxable"  onchange="changeDefaultTax()" class="form-flex-switch form-check-input " type="checkbox" checked id="IsDefaultTaxable" value="@Model.AddItemViewModel.IsDefaultTaxable">
+                                            <label for="IsDefaultTaxable" class="my-auto ps-2">Default Tax</label>
+                                        </div>
+                                    } else
+                                    {
+                                        <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
+                                            <input asp-for="@Model.AddItemViewModel.IsDefaultTaxable" name="AddItemViewModel.IsDefaultTaxable"  onchange="changeDefaultTax()" class="form-flex-switch form-check-input " type="checkbox" id="IsDefaultTaxable" >
+                                            <label for="IsDefaultTaxable" class="my-auto ps-2">Default Tax</label>
+                                        </div>
+                                    }
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.TaxPercentage >= 0)
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" value="@Model.AddItemViewModel.TaxPercentage"
+                                                id="TaxPercentage" required placeholder="name" disabled>
+                                            <label for="TaxPercentage" class="">Tax Percentage</label>
+                                        </div>
+                                    } else
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" id="TaxPercentage" required placeholder="name" disabled>
+                                            <label for="TaxPercentage" class="">Tax Percentage</label>
+                                        </div>
+                                    }
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.ShortCode != null)
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" value="@Model.AddItemViewModel.ShortCode" name="AddItemViewModel.ShortCode" id="ShortCode"
+                                                required placeholder="name" disabled>
+                                            <label for="ShortCode" class="">Short Code</label>
+                                        </div>
+                                    } else
+                                    {
+                                        <div class="form-floating pe-2 my-auto col-12 col-md-3">
+                                            <input asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" name="AddItemViewModel.ShortCode" id="ShortCode"
+                                                required placeholder="name" disabled>
+                                            <label for="ShortCode" class="">Short Code</label>
+                                        </div>
+                                    }
+                                    
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    @if(Model.AddItemViewModel != null && Model.AddItemViewModel.Description != null)
+                                    {
+                                        <div class="form-floating my-auto col-12 pt-2">
+                                            <input asp-for="@Model.AddItemViewModel.Description" value="@Model.AddItemViewModel.Description" class="form-control" placeholder="Leave a comment here" name="AddItemViewModel.Description"
+                                                id="Description" style="height: 100px"></input>
+                                            <label for="Description">Description</label>
+                                        </div>
+                                    } else
+                                    {
+                                        <div class="form-floating my-auto col-12 pt-2">
+                                            <input asp-for="@Model.AddItemViewModel.Description" class="form-control" placeholder="Leave a comment here" name="AddItemViewModel.Description"
+                                                id="Description" style="height: 100px"></input>
+                                            <label for="Description">Description</label>
+                                        </div>
+                                    }
+                                    
+                                </div>
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="col-12  row">
+                                    <label for="Image">Upload Image</label>
+                                    <div class="file upload position-relative overflow-hidden btn-custom">
+                                        <div class="d-flex gap-2 justify-content-center align-items-center"
+                                            style="height: 100px;">
+                                            <img src="./images/icons/cloud.svg" class="small-image" alt="">
+                                            <span>Drag and Drop or Browse files</span>
+                                            <p id="file-name"></p>
+                                        </div>
+                                        <input name="AddItemViewModel.Image" asp-for="@Model.AddItemViewModel.Image" type="file" id="Image" class="position-absolute file-input-btn"
+                                            accept="image/*" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if(Model.AddItemViewModel != null && Model.AddItemViewModel.ModifierGroupIds != null)
+                        {
+                            <input type="hidden" id="ModifierGroupIdsEdit" name="ModifierGroupIds" value="@Model.AddItemViewModel.ModifierGroupIds">
+                        }
+                        </div>
+                        <div class="col-12 col-md-4 bg-light-green">
+                            <div class="col-12 p-2">
+                                <div class="custom-multi-select">
+                                    <div class="selection-area">
+                                        <div class="selected-tags">
+                                        </div>
+                                        <input type="text" class="search-input" placeholder="Select Modifier Group(s)">
+                                        <button type="button" class="clear-all"></button>
+                                    </div>
+                                    <div class="dropdown-options">
+                                        <select class="form-select d-none" id="SelectModifierGroup" multiple>
+                                            @foreach (var modifier in Model.ModifierGroups)
+                                            {
+                                                <option value="@modifier.Id">@modifier.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="modifierGroupdata">
+                                <partial name="_AddItemModifierGroupPartial" model="@Model" />
+                                
+                            </div>
+                        </div>
+                    </div>
+            <div class="modal-footer d-flex justify-content-end">
+                <button type="submit" id="AddItemButton" class="btn btn-primary px-3">Save</button>
+                <a onclick="closeModal('addItemModal')"><button type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function closeModal(modalId) {
+        $('#' + modalId).modal('hide');
+    }
+
+    var parentCheckbox = document.getElementById('flexCheckIndeterminate');
+    parentCheckbox.addEventListener('change', e => {
+        document.querySelectorAll('.permission-checkbox').forEach(checkbox => {
+            checkbox.checked = e.target.checked;
+        });
+    });
+
+    document.querySelectorAll('.permission-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            var tbodyCheckbox = document.querySelectorAll('.permission-checkbox').length;
+            var tbodyCheckedbox = document.querySelectorAll('.permission-checkbox:checked').length;
+            if (tbodyCheckbox === tbodyCheckedbox) {
+                // All selected
+                parentCheckbox.indeterminate = false;
+                parentCheckbox.checked = true;
+            } else if (tbodyCheckedbox > 0) {
+                // Some selected
+                parentCheckbox.indeterminate = true;
+                parentCheckbox.checked = false;
+            } else {
+                // None selected
+                parentCheckbox.indeterminate = false;
+                parentCheckbox.checked = false;
+            }
+        });
+    });
+
+    
+
+</script>

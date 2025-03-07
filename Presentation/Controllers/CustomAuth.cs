@@ -29,7 +29,8 @@ namespace Presentaion.Controllers
                 { "Profile", "Dashboard" },
                 { "ChangePassword", "Dashboard" },
                 { "RoleAndPermission", "RoleAndPermission" },
-                { "Menu", "Menu" }
+                { "Menu", "Menu" },
+                { "account", "Dashboard"}
             };
             PizzaShopContext db = new PizzaShopContext();
             var roleId = int.Parse(user.Claims.ElementAt(4).Value);

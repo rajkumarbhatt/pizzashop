@@ -90,7 +90,7 @@
                             <label for="select-city" class="mx-2 mt-2">City</label>
                         </div>
                         <div class="col-12 col-sm-8 p-2 form-floating">
-                            <input value=@Model.Address type="text" class="form-control" name="Address" id="address"
+                            <input value=@Model.Address type="text" asp-for="@Model.Address" class="form-control" name="Address" id="address"
                                 placeholder="Address">
                             <label for="address" class="mx-2 mt-2">Address</label>
                         </div>

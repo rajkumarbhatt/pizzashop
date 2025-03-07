@@ -9,7 +9,7 @@ namespace BLL.Services
 {
     public class JwtService : IJwtService
     {
-        public string GenerateJwtToken(User user, string role, List<Permission> permissions)
+        public string GenerateJwtToken(User user, string role)
         {
 
             List<Claim> claims = new List<Claim>
@@ -76,25 +76,6 @@ namespace BLL.Services
             }
 
             return usernameClaim.Value;
-        }
-
-        public List<string> GetPermissionsFromJwtToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
-
-            if (jwtToken == null)
-            {
-                throw new ArgumentException("Invalid JWT token");
-            }
-
-            var permissionsClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type == "permissions");
-            if (permissionsClaim == null)
-            {
-                throw new ArgumentException("JWT token does not contain permissions");
-            }
-
-            return permissionsClaim.Value.Split(',').ToList();
         }
     }
 }

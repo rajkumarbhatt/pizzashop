@@ -217,161 +217,10 @@
     </div>
 </div>
 
-@* add item modal *@
-<div class="modal fade" id="addItemModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-add-item modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Item
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="AddItemForm" action="">
-                    <div class="row">
-                        <div class="col-12 col-md-8">
-
-                            <div class="row align-items-center">
-                                <div class="col-12 row">
-                                    <div class="col-12 col-md-6 p-2 form-floating">
-                                        <select asp-for="@Model.AddItemViewModel.CategoryId" name="AddItemViewModel.CategoryId" id="CategoryId" class="form-select"
-                                            aria-label="CategoryId">
-                                            <option value="" disabled selected hidden>Select Category</option>
-                                            @foreach (var category in Model.Categories)
-                                            {
-                                                <option value="@category.Id">@category.Name</option>
-                                            }
-                                        </select>
-                                        <label for="CategoryId" class="mx-2 mt-2">Category*</label>
-                                    </div>
-                                    <div class="form-floating my-auto col-12 col-md-6">
-                                        <input asp-for="@Model.AddItemViewModel.ItemName" type="text" class="form-control" name="AddItemViewModel.ItemName" id="ItemName"
-                                            required placeholder="ItemName">
-                                            <span asp-validation-for="AddItemViewModel.ItemName" class="text-danger"></span>
-                                        <label for="ItemName" class="">Name*</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-12  row">
-                                    <div class="col-12 col-md-3 p-2 form-floating">
-                                        <select asp-for="@Model.AddItemViewModel.Type" name="AddItemViewModel.Type" id="Type" class="form-select"
-                                            aria-label="Type">
-                                            <option value="" disabled selected hidden>Select Type</option>
-                                            <option value="Vegetarian">Vegetarian</option>
-                                            <option value="Non-Vegetarian">Non-Vegetarian</option>
-                                            <option value="Vegan">Vegan</option>
-                                        </select>
-                                        <label for="Type" class="mx-2 mt-2">Type*</label>
-                                    </div>
-                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input asp-for="@Model.AddItemViewModel.Rate" type="text" class="form-control" name="AddItemViewModel.Rate" id="Rate"
-                                            required placeholder="Rate">
-                                        <label for="Rate" class="">Rate*</label>
-                                    </div>
-                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input asp-for="@Model.AddItemViewModel.Quantity" type="text" class="form-control" name="AddItemViewModel.Quantity" id="Quantity"
-                                            required placeholder="Quantity">
-                                        <label for="Quantity" class="">Quantity*</label>
-                                    </div>
-                                    <div class="col-12 col-md-3 p-2 form-floating">
-                                        <select asp-for="@Model.AddItemViewModel.Unit" name="AddItemViewModel.Unit" id="Unit" class="form-select"
-                                            aria-label="Unit">
-                                            <option value="" disabled selected hidden>Select Units</option>
-                                            <option value="pcs">Pcs</option>
-                                            <option value="plate">Plate</option>
-                                            <option value="gm">Gm</option>
-                                            <option value="ml">Ml</option>
-                                        </select>
-                                        <label for="Unit" class="mx-2 mt-2">Unit*</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-12  row">
-                                    <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                        <input asp-for="@Model.AddItemViewModel.IsAvailable"  name="AddItemViewModel.IsAvailable" class="form-flex-switch form-check-input " type="checkbox" id="IsAvailable"
-                                            checked>
-                                        <label for="IsAvailable" class="my-auto ps-2">Available</label>
-                                    </div>
-                                    <div class="form-check form-switch d-flex mx-auto pe-2 my-auto col-6 col-md-3 ">
-                                        <input asp-for="@Model.AddItemViewModel.IsDefaultTaxable" name="AddItemViewModel.IsDefaultTaxable"  onchange="changeDefaultTax()" class="form-flex-switch form-check-input "
-                                            type="checkbox" id="IsDefaultTaxable">
-                                        <label for="IsDefaultTaxable" class="my-auto ps-2">Default Tax</label>
-                                    </div>
-                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage"
-                                            id="TaxPercentage" required placeholder="name" disabled>
-                                        <label for="TaxPercentage" class="">Tax Percentage</label>
-                                    </div>
-                                    <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                        <input asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" name="AddItemViewModel.ShortCode" id="ShortCode"
-                                            required placeholder="name" disabled>
-                                        <label for="ShortCode" class="">Short Code</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-12  row">
-                                    <!-- description -->
-                                    <div class="form-floating my-auto col-12 pt-2">
-                                        <input asp-for="@Model.AddItemViewModel.Description" class="form-control" placeholder="Leave a comment here" name="AddItemViewModel.Description"
-                                            id="Description" style="height: 100px"></input>
-                                        <label for="Description">Description</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-12  row">
-                                    <label for="Image">Upload Image</label>
-                                    <div class="file upload position-relative overflow-hidden btn-custom">
-                                        <div class="d-flex gap-2 justify-content-center align-items-center"
-                                            style="height: 100px;">
-                                            <img src="./images/icons/cloud.svg" class="small-image" alt="">
-                                            <span>Drag and Drop or Browse files</span>
-                                            <p id="file-name"></p>
-                                        </div>
-                                        <input name="AddItemViewModel.Image" asp-for="@Model.AddItemViewModel.Image" type="file" id="Image" class="position-absolute file-input-btn"
-                                            accept="image/*" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-4 bg-light-green">
-                            <div class="col-12 p-2">
-                                <div class="custom-multi-select">
-                                    <div class="selection-area">
-                                        <div class="selected-tags">
-                                        </div>
-                                        <input type="text" class="search-input" placeholder="Select Modifier Group(s)">
-                                        <button class="clear-all"></button>
-                                    </div>
-                                    <div class="dropdown-options">
-                                        <select class="form-select d-none" id="SelectModifierGroup" multiple>
-                                            @foreach (var modifier in Model.ModifierGroups)
-                                            {
-                                                <option value="@modifier.Id">@modifier.Name</option>
-                                            }
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="modifierGroupdata">
-                                <partial name="_AddItemModifierGroupPartial" model="@Model" />
-                            </div>
-                        </div>
-                    </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button type="submit" id="AddItemButton" class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-                </form>
-            </div>
-        </div>
-    </div>
+<div id="AddItemModalPartial">
+    <partial name="_AddItemPartial" model="@Model" />
 </div>
+
 
 <script src="~/js/menu.js" asp-append-version="true"></script>
 @section Scripts {
@@ -382,61 +231,19 @@
 
 <script>
     var selectModifierGroups = [];
-    var maximumValue = [];
-    var minimumValue = [];
-
-    function addMinimum(id, value) {
-        if (minimumValue.some(x => x.Id === id)) {
-            minimumValue = minimumValue.filter((value) => value.Id !== id);
-            addMinimum(id, value);
-        } else {
-            minimumValue.push({ Id: id, Value: value });
-            var minimumValueJson = JSON.stringify(minimumValue);
-            $("#MinimumQuantity").val(minimumValueJson);
-        }
-    }
-
-
-    function addMinimum(id, value) {
-        console.log("Adding minimum value for ID:", id, "with value:", value);
-        if (minimumValue.some(x => x.Id === id)) {
-            minimumValue = minimumValue.filter((value) => value.Id !== id);
-            addMinimum(id, value);
-        } else {
-            minimumValue.push({ Id: id, Value: value });
-            var minimumValueJson = JSON.stringify(minimumValue);
-            console.log("Minimum values:", minimumValue);
-        }
-    }
-
-    function addMaximum(id, value) {
-        console.log("Adding maximum value for ID:", id, "with value:", value);
-        if (maximumValue.some(x => x.Id === id)) {
-            maximumValue = maximumValue.filter((value) => value.Id !== id);
-            addMaximum(id, value);
-        } else {
-            maximumValue.push({ Id: id, Value: value });
-            var maximumValueJson = JSON.stringify(maximumValue);
-            console.log("Maximum values:", maximumValue);
-        }
-    }
 
     function addModifierGroupToList(id) {
         var isChecked = document.getElementById(id).checked;
         var idInt = parseInt(id);
-        console.log("Modifier group ID:", idInt, "is checked:", isChecked);
         if (isChecked) {
-            selectModifierGroups.push(idInt);
-            addMaximum(idInt, 0);
-            addMinimum(idInt, 0);
+            selectModifierGroups.push({
+                Id: idInt,
+                MinimumQuantity: 0,
+                MaximumQuantity: 0
+            });
         } else {
-            selectModifierGroups = selectModifierGroups.filter((value) => value !== idInt);
-            maximumValue = maximumValue.filter((value) => value.Id !== idInt);
-            minimumValue = minimumValue.filter((value) => value.Id !== idInt);
+            selectModifierGroups = selectModifierGroups.filter((value) => value.Id !== idInt);
         }
-        console.log("Select modifier groups:", selectModifierGroups);
-        console.log("Minimum values:", minimumValue);
-        console.log("Maximum values:", maximumValue);
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
 
         $.ajax({
@@ -449,15 +256,27 @@
             }
         });
     }
-    
+
+    function addMinimum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MinimumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
+    function addMaximum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MaximumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
 
     document.getElementById('Image').addEventListener('change', (e) => {
-       const file = e.target.files[0];
-       if (file) {
-           const file = e.target.files[0];
-           document.getElementById('file-name').textContent = file.name;
-       }
-   });
+        const file = e.target.files[0];
+        if (file) {
+            const file = e.target.files[0];
+            document.getElementById('file-name').textContent = file.name;
+        }
+    });
 
     function removeTag(value) {
         const customMultiSelect = document.querySelector('.custom-multi-select');
@@ -467,17 +286,13 @@
             tag.remove();
         }
     }
+
     function deleteSelectedModifierGroup(id) {
-        document.getElementById(id).checked = false;
-        selectModifierGroups = selectModifierGroups.filter((value) => value !== id);
-        minimumValue = minimumValue.filter((value) => value.Id !== id);
-        maximumValue = maximumValue.filter((value) => value.Id !== id);
-        $("#MinimumQuantity").val(JSON.stringify(minimumValue));
-        $("#MaximumQuantity").val(JSON.stringify(maximumValue));
-        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups.splice(index, 1);
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        document.getElementById(id).checked = false;
         removeTag(id);
-        console.log(selectModifierGroupsString);
 
         $.ajax({
             type: "GET",
@@ -489,17 +304,18 @@
             }
         });
     }
-
+    var isMinMaxDataValid = true;
     $("#AddItemForm").submit(function (e) {
-        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
-        $("#MinimumQuantity").val(JSON.stringify(minimumValue));
-        $("#MaximumQuantity").val(JSON.stringify(maximumValue));
         e.preventDefault();
-        console.log($("#ModifierGroupIds").val());
-        var form = $(this)[0]; 
+        checkMinMaxData();
+        if (!isMinMaxDataValid) {
+            toastr.error("Please enter valid minimum and maximum values");
+            return;
+        }
+        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+        var form = $(this)[0];
         var formData = new FormData(form);
-        console.log(formData);
-
+        console.log($("#ModifierGroupIds").val());
         $.ajax({
             type: "POST",
             url: "/Menu/AddItem",
@@ -521,4 +337,119 @@
             }
         });
     });
-</script>
+
+    function checkMinMaxData() {
+        isMinMaxDataValid = true;
+        selectModifierGroups.forEach(function (modifierGroup) {
+            if (modifierGroup.MinimumQuantity > modifierGroup.MaximumQuantity) {
+                isMinMaxDataValid = false;
+            }
+        });
+    }
+
+    triggerMultiSelect()
+
+    function editItem(id) {
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetItemData",
+            data: { itemId: id },
+            success: function (response) {
+                $("#AddItemModalPartial").html(response);
+                $("#addItemModal").modal("show");
+                triggerMultiSelect();
+                SyncEditChanges();
+            },
+            error: function (response) {
+                toastr.error(response.message);
+            }
+        });
+    }
+
+       function addTag(value, text) {
+            const customMultiSelect = document.querySelector('.custom-multi-select');
+            const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+
+            const tag = document.createElement('div');
+            tag.className = 'tag';
+            tag.setAttribute('data-value', value);
+            tag.innerHTML = `
+      ${text}
+      <span class="tag-delete"></span>
+    `;
+
+            // Add tag to the selected tags container
+            selectedTagsContainer.appendChild(tag);
+
+            // Remove tag when delete button is clicked
+            tag.querySelector('.tag-delete').addEventListener('click', () => {
+                tag.remove();
+                const option = selectElement.querySelector(`option[value="${value}"]`);
+                if (option) {
+                    option.selected = false; // Sync with <select>
+                }
+                const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
+                if (checkbox) {
+                    checkbox.checked = false; // Uncheck the checkbox
+                }
+            });
+        }
+
+    function SyncEditChanges() {
+        console.log($("#ModifierGroupIdsEdit").val());
+        selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
+        console.log(selectModifierGroups);
+        selectModifierGroups.forEach(function (modifierGroup) {
+            document.getElementById(modifierGroup.Id).checked = true;
+            addTag(modifierGroup.Id, modifierGroup.Name);
+        });
+    }
+
+    function editCategory(categoryId, categoryName, categoryDescription) {
+        $("#EditCategoryName").val(categoryName);
+        $("#EditCategoryDescription").val(categoryDescription);
+        $("#EditCategoryId").val(categoryId);
+    }
+
+    function openModal(categoryId) {
+        $("#deleteCategoryButton").click(function () {
+            $.ajax({
+                url: '/Menu/DeleteCategory',
+                type: 'DELETE',
+                data: { categoryId: categoryId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            window.location.href = "/Menu";
+                        }, 1000);
+                    } else {
+                        if (!data.success) {
+                            if (data.message != null) {
+                                toastr.error(data.message);
+                            } else {
+                                toastr.error("Not Authorized");
+                            }
+                        }
+                    }
+                },
+                error: function (data) {
+                    toastr.error(data.message);
+                }
+            });
+        });
+    }
+
+    function changeDefaultTax() {
+        var value = document.getElementById("IsDefaultTaxable").checked;
+        if (value) {
+            $("#TaxPercentage").prop("disabled", false);
+            $("#ShortCode").prop("disabled", false);
+        } else {
+            $("#TaxPercentage").prop("disabled", true);
+            $("#ShortCode").prop("disabled", true);
+        }
+    }
+
+    // multiselect js
+    </script>
