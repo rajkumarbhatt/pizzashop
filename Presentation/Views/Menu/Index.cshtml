@@ -1,0 +1,439 @@
+@model DAL.ViewModels.MenuViewModel
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">Menu</h1>
+</div>
+
+<!-- table -->
+<div class="d-none d-md-block form-bg p-2 my mx-4 ">
+    <div class="d-flex mb-2 items-div ">
+        <div class="d-flex cursor-pointer active-menu-item" id="items-div" onclick="changeLine('items-div')">
+            <img src="~/images/icons/menu.svg" id="blue-menu" class="extra-small-image mx-1" alt="">
+            <img src="~/images/icons/menu-black.svg" id="black-menu" class="extra-small-image mx-1 d-none" alt="">
+            <p>Items</p>
+        </div>
+        <div class="d-flex mx-4 modifiers-div cursor-pointer" id="modifiers-div" onclick="changeLine('modifiers-div')">
+            <img src="~/images/icons/black-modifier.svg" id="black-modifier" class="extra-small-image mx-1" alt="">
+            <img src="~/images/icons/blue-modifier.svg" id="blue-modifier" class="extra-small-image mx-1 d-none" alt="">
+            <p>Modifiers</p>
+        </div>
+    </div>
+</div>
+<p class="underline-para" id="underline-para"></p>
+
+<div id="partialViewStarting" class="">
+
+    <partial name="_MenuPartial" model="@Model" />
+
+
+    <div id="modifiers-content" class="d-none col-md-8 col-12 col-lg-9 col-xl-10">
+        <h4 class="px-4 py-2">Modifiers</h4>
+
+
+        <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+            <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
+                <thead class="color-head">
+                    <tr class="text-center">
+                        <th class="text-start mx-2"> <input class="form-check-input intermediate-checkbox"
+                                type="checkbox" value="" id="flexCheckIndeterminate">
+                            <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
+                        </th>
+                        <th>Item type</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Available</th>
+                        <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr class="text-center">
+                        <td class="text-start mx-2 d-flex align-items-center table-checkbox-gap"><input
+                                class="form-check-input permission-checkbox" type="checkbox" value=""
+                                id="defaultCheck1">
+                            <img src="~/images/dining-menu.png" style="width: 35px;" alt="">
+                            <label class="form-check-label" for="defaultCheck1">Punjabi Tadka Sandwich
+                        </td>
+                        <td>
+                            <img src="~/images/icons/non-veg-icon.svg" class="small-image" alt="">
+                        </td>
+                        <td>200</td>
+                        <td>10</td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="./editUser.html"> <img src="~/images/icons/edit.svg" class="small-image"
+                                    alt=""></a>
+                            <button type="button" class="delete-btn" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                <a href="#"> <img src="~/images/icons/delete.svg" class="small-image"
+                                        alt=""></a></button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+@* edit category *@
+<div class="modal fade" id="editCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit Category
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input id="EditCategoryId" class="d-none">
+                    <input type="text" class="form-control" name="CategoryName" id="EditCategoryName" required
+                        placeholder="name">
+                    <label for="category-name" class="">Name</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control" name="category-description" id="EditCategoryDescription"
+                        required placeholder="category-description">
+                    <label for="category-description" class="">Description</label>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+                <button id="EditCategoryModal" type="button" class="btn btn-primary px-3">Save</button>
+                <a asp-controller="Menu" asp-action="Index"><button type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* add category *@
+<div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Category
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="category-name" id="CategoryName" required
+                        placeholder="name">
+                    <label for="category-name" class="">Name</label>
+                </div>
+                <div class="form-floating">
+                    <input type="text" class="form-control" name="category-description" id="CategoryDescription"
+                        required placeholder="category-description">
+                    <label for="category-description" class="">Description</label>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+                <button id="AddCategoryModal" type="submit" class="btn btn-primary px-3">Save</button>
+                <a asp-controller="Menu" asp-action="Index"><button type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* delete category *@
+<div class="modal fade" id="categoryDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex align-items-center flex-column">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete this category?</p>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button id="deleteCategoryButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a asp-controller="Menu" asp-action="Index"><button type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* delete item *@
+<div class="modal fade" id="deleteItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete
+                    Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteItemButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* add and edit item *@
+<div id="AddItemModalPartial">
+    <partial name="_AddItemPartial" model="@Model" />
+</div>
+
+
+<script src="~/js/menu.js" asp-append-version="true"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    var selectModifierGroups = [];
+
+    function addModifierGroupToList(id) {
+        var isChecked = document.getElementById(id).checked;
+        var idInt = parseInt(id);
+        if (isChecked) {
+            selectModifierGroups.push({
+                Id: idInt,
+                MinimumQuantity: 0,
+                MaximumQuantity: 0
+            });
+        } else {
+            selectModifierGroups = selectModifierGroups.filter((value) => value.Id !== idInt);
+        }
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
+            success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
+                $("#modifierGroupdata").html(response);
+            }
+        });
+    }
+
+    function addMinimum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MinimumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
+    function addMaximum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MaximumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
+
+    document.getElementById('Image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const file = e.target.files[0];
+            document.getElementById('file-name').textContent = file.name;
+        }
+    });
+
+    function removeTag(value) {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+        const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
+        if (tag) {
+            tag.remove();
+        }
+    }
+
+    function deleteSelectedModifierGroup(id) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups.splice(index, 1);
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        document.getElementById(id).checked = false;
+        removeTag(id);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
+            success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
+                $("#modifierGroupdata").html(response);
+            }
+        });
+    }
+    
+    function initializeFormSubmit() {
+    $("#AddItemForm").submit(function (e) {
+        e.preventDefault();
+        if (!checkMinMaxData()) {
+            toastr.error("Please enter valid minimum and maximum values");
+            return;
+        }
+        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+        var form = $(this)[0];
+        var formData = new FormData(form);
+        console.log($("#ModifierGroupIds").val());
+        $.ajax({
+            type: "POST",
+            url: "/Menu/AddItem",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        window.location.href = "/Menu";
+                    }, 1500);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (response) {
+                toastr.error(response.message);
+            }
+        });
+    });}
+
+    function checkMinMaxData() {
+        let isMinMaxDataValid = true;
+        selectModifierGroups.forEach(function (modifierGroup) {
+            if (modifierGroup.MinimumQuantity > modifierGroup.MaximumQuantity) {
+                isMinMaxDataValid = false;
+            }
+        });
+
+        return isMinMaxDataValid;
+    }
+
+    triggerMultiSelect()
+
+    function editItem(id) {
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetItemData",
+            data: { itemId: id },
+            success: function (response) {
+                $("#AddItemModalPartial").html(response);
+                $("#AddItemModalHeading").text("Edit Item");
+                $("#AddItemButton").text("Update");
+                triggerMultiSelect();
+                SyncEditChanges();
+                initializeFormSubmit();
+                $("#addItemModal").modal("show");
+                $("IdItemEdit").val(id);
+            },
+            error: function (response) {
+                toastr.error(response.message);
+            }
+        });
+    }
+
+    function addTag(value, text) {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.setAttribute('data-value', value);
+        tag.innerHTML = `
+        ${text}
+        <span class="tag-delete"></span>
+        `;
+        selectedTagsContainer.appendChild(tag);
+        tag.querySelector('.tag-delete').addEventListener('click', () => {
+            tag.remove();
+            const option = selectElement.querySelector(`option[value="${value}"]`);
+            if (option) {
+                option.selected = false; 
+            }
+            const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        });
+    }
+
+    function SyncEditChanges() {
+        selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
+        console.log(selectModifierGroups);
+        selectModifierGroups.forEach(function (modifierGroup) {
+            document.getElementById(modifierGroup.Id).checked = true;
+            addTag(modifierGroup.Id, modifierGroup.Name);
+        });
+    }
+
+    function UnSyncEditChanges() {
+        @* uncheck all *@
+        selectModifierGroups.forEach(function (modifierGroup) {
+            document.getElementById(modifierGroup.Id).checked = false;
+        });
+    }
+
+    //edit category
+    function editCategory(categoryId, categoryName, categoryDescription) {
+        $("#EditCategoryName").val(categoryName);
+        $("#EditCategoryDescription").val(categoryDescription);
+        $("#EditCategoryId").val(categoryId);
+    }
+
+    //delete category
+    function openModal(categoryId) {
+        $("#deleteCategoryButton").click(function () {
+            $.ajax({
+                url: '/Menu/DeleteCategory',
+                type: 'DELETE',
+                data: { categoryId: categoryId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            window.location.href = "/Menu";
+                        }, 1000);
+                    } else {
+                        if (!data.success) {
+                            if (data.message != null) {
+                                toastr.error(data.message);
+                            } else {
+                                toastr.error("Not Authorized");
+                            }
+                        }
+                    }
+                },
+                error: function (data) {
+                    toastr.error(data.message);
+                }
+            });
+        });
+    }
+
+    function changeDefaultTax() {
+        var value = document.getElementById("IsDefaultTaxable").checked;
+        if (value) {
+            $("#TaxPercentage").prop("disabled", false);
+            $("#ShortCode").prop("disabled", false);
+        } else {
+            $("#TaxPercentage").prop("disabled", true);
+            $("#ShortCode").prop("disabled", true);
+        }
+    }
+
+    </script>

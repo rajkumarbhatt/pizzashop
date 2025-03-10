@@ -1,0 +1,85 @@
+@model DAL.ViewModels.ProfileViewModel
+
+
+        <!-- user heading and search box and add user button -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="main-page-heading">My Profile</h1>
+        </div>
+
+        <!-- form -->
+        <div class="form-bg mx-4 p-3 shadow my-3">
+            <form action="">
+                <div class="image-bg-div py-4 bg"></div>
+                <div class="d-flex">
+                     @{
+                            string profileImagePath = string.IsNullOrEmpty(@Model.ProfileImageURL)
+                            ? "/images/default-profile.png"
+                            : $"/images/profile-images/{@Model.ProfileImageURL}";
+                        }
+                    <img src=@profileImagePath class="object-fit-cover my-profile-image profile-image-border" class="" alt="">
+                    <div class="my-profile-heading-name">
+                        <h3>@Model.FirstName @Model.LastName</h3>
+                        <h6>@Model.Role</h6>
+                    </div>
+                </div>
+                <div>
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input disabled type="text" asp-for="@Model.FirstName" class="form-control" name="first-name" id="first-name"
+                                placeholder="first-name" value=@Model?.FirstName>
+                            <label for="first-name" class="mx-2 mt-2">First Name</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input disabled type="text" class="form-control" asp-for="@Model.LastName" name="last-name" id="last-name"
+                                placeholder="last-name" value=@Model?.LastName>
+                            <label for="last-name" class="mx-2 mt-2">Last Name</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input disabled type="text" class="form-control" name="user-name" id="user-name"
+                                placeholder="user-name" asp-for="@Model.Username" value=@Model.Username>
+                            <label for="user-name" class="mx-2 mt-2">User Name</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input asp-for="@Model.PhoneNumber" disabled type="text" class="form-control" name="phone-number" id="phone-number"
+                                placeholder="phone-number" value=@Model.PhoneNumber>
+                            <label for="phone-number" class="mx-2 mt-2">Phone</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select disabled name="select-country" id="select-country" class="form-select"
+                                aria-label="Select Country">
+                                <option value="" selected >@ViewBag.Country</option>
+                            </select>
+                            <label for="select-country" class="mx-2 mt-2">Country</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select disabled name="select-state" id="select-state" class="form-select" aria-label="Select State">
+                                <option value="" selected>@ViewBag.State</option>
+                            </select>
+                            <label for="select-state" class="mx-2 mt-2">State</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select disabled name="select-city" id="select-city" class="form-select" aria-label="Select City">
+                                <option value="" selected>@ViewBag.City</option>
+                            </select>
+                            <label for="select-city" class="mx-2 mt-2">City</label>
+                        </div>
+                        <div class="col-12 col-sm-8 p-2 form-floating">
+                            <input disabled value=@Model.Address type="text" asp-for="@Model.Address" class="form-control" name="address" id="address" placeholder="Address">
+                            <label for="address" class="mx-2 mt-2">Address</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <input disabled type="text" value=@Model.ZipCode class="form-control" name="zipcode" id="zipcode" placeholder="Zipcode">
+                            <label for="first-name" class="mx-2 mt-2">Zipcode</label>
+                        </div>
+                        <div class="my-3 mx-2 d-flex justify-content-end gap-2">
+                            <button class="btn btn-primary"><a asp-action="Edit" class="text-decoration-none link-body-emphasis text-white px-2">Upate</a></button>
+                            <button class="btn btn-contrast me-3">
+                                <a asp-controller="Dashboard" class="text-decoration-none position p-1 ">
+                                    Cancel</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>

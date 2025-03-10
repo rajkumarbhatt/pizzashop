@@ -1,0 +1,222 @@
+@model DAL.ViewModels.MenuViewModel
+ <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
+                <thead class="color-head">
+                    <tr class="text-center">
+                        <th class="text-start mx-2">
+                            <input class="form-check-input intermediate-checkbox" type="checkbox" value=""
+                                id="flexCheckIndeterminate">
+                            <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
+                        </th>
+                        <th>Item type</th>
+                        <th>Rate</th>
+                        <th>Quantity</th>
+                        <th>Available</th>
+                        <th>Action</th>
+                </thead>
+<tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <input class="d-none" id="categoryId" value="@item.CategoryId">
+                        <tr class="text-center">
+                            <td class="text-start mx-2 d-flex align-items-center table-checkbox-gap"><input
+                                    class="form-check-input permission-checkbox" type="checkbox" value=""
+                                    id="defaultCheck1">
+                                <img src="~/images/dining-menu.png" style="width: 35px;" alt="">
+                                <label class="form-check-label" for="defaultCheck1">@item.Name
+                            </td>
+                            <td>
+                                @if (item.ItemType == "Vegetarian")
+                                {
+                                    <img src="~/images/icons/veg-icon.svg" class="small-image" alt="">
+                                }
+                                else
+                                {
+                                    <img src="~/images/icons/non-veg-icon.svg" class="small-image" alt="">
+                                }
+                            </td>
+                            <td>@item.Price</td>
+                            <td>@item.Quantity</td>
+                            <td>
+                                @{
+                                    var idCustom = "flexSwitchCheckChecked" + item.Id;
+                                }
+                                @if (item.IsAvailable ?? false)
+                                {
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)" type="checkbox" checked id="@idCustom">
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)" type="checkbox" id="@idCustom">
+                                    </div>
+                                }
+                            </td>
+                            <td>
+                                <button onclick="editItem(@item.Id)"  type="button" class="edit-btn btn" >
+                                    <a href="#"> <img src="~/images/icons/edit.svg" class="small-image"
+                                            alt=""></a></button>
+                                <button onclick="deleteItem(@item.Id)" type="button" class="delete-btn" data-bs-toggle="modal"
+                                    data-bs-target="#deleteItem">
+                                    <a href="#"> <img src="~/images/icons/delete.svg" class="small-image"
+                                            alt=""></a></button>
+                            </td>
+                            <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="ItemId" type="hidden" value="@item.Id" />
+                        </tr>
+                    }
+                </tbody>
+ </table>
+ <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
+            <p>Items per page: </p>
+            <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+                onchange="changePageSize(this.value)">
+                <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+                <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+                <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
+            </select>
+            <p class="px-1">
+                Showing @((Model.PageIndex - 1) * Model.PageSize + 1) -
+                @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalItems)) of
+                @Model.TotalItems
+            </p>
+
+
+            <div>
+            </div>
+            <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
+
+            <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndex ==
+                Model.TotalPages ? "disabled" : "")> &gt;</ button >
+        </div>
+
+        <script>
+
+
+    $("#nextButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex + 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    $("#previousButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex - 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    function changePageSize(pageSize) {
+        const nextPageIndex = 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    $("#searchInput").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    $("#searchInput2").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    function saveChangesOfSwitch(itemId) {
+        var idCustom = "flexSwitchCheckChecked" + itemId;
+        var isAvailable = document.getElementById(idCustom).checked;
+        console.log(isAvailable);
+        $.ajax({
+            url: '@Url.Action("UpdateItemAvailability", "Menu")',
+            type: 'POST',
+            data: { itemId: itemId, isAvailable: isAvailable },
+            success: function (data) {
+            }
+        });
+    }
+
+    function changeItems(categoryId) {
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    function deleteItem(itemId) {
+        $("#deleteItemButton").click(function () {
+            $.ajax({
+                url: '@Url.Action("DeleteItem", "Menu")',
+                type: 'DELETE',
+                data: { itemId: itemId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+</script>

@@ -1,0 +1,283 @@
+﻿@using DAL.ViewModels
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PizzaShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    
+</head>
+
+<body>
+    <!-- main div -->
+    <div class="container-fluid row w-100">
+        <!-- sidebar -->
+        <div class="d-none d-md-flex flex-column  col-md-3 col-xl-2">
+
+            <!-- logo and heading of sidebar -->
+            <div class="d-flex  align-items-center gap-2 justify-content-center my-3">
+                <img src="~/images/logos/pizzashop_logo.png" class="sidebar-image" alt="">
+                <h3 class="sidebar-heading">PIZZASHOP</h3>
+            </div>
+
+            @{
+                var permissionList = new List<PermissionModel>();
+
+                if (Context.Session.Get("permissions") != null)
+                {
+                    permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+                }
+
+            }
+
+            <!-- page links -->
+            <div class="d-flex flex-column gap-2  mt-5">
+                <a asp-controller="Dashboard" asp-action="Index" id="Dashboard"
+                        class="text-decoration-none color inherit-color  d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                        <img src="~/images/sidebar-icons/dashboard.svg" class="sidebar-icons" id="Dashboard-svg" alt="">
+                        <span class="fw-bold sidebar-font " id="Dashboard-span">Dashboard</span>
+                </a>
+                @foreach(var permission in permissionList) 
+                {
+
+                    @if(permission.Name == "Users" && permission.CanView)
+                    {
+                        <a asp-controller="UserList" asp-action="Index" id="UserList"
+                            class="text-decoration-none color inherit-color  d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/users.svg" class="sidebar-icons" alt="" id="UserList-svg">
+                            <span class="fw-bold sidebar-font " id="UserList-span">Users</span>
+                        </a>
+                    }
+                    var RoleId = Context.Session.GetInt32("RoleId");
+
+                    @if(permission.Name == "RoleAndPermission" && permission.CanView && @RoleId == 1)
+                    {
+                        <a asp-controller="RoleAndPermission" asp-action="Index" id="RoleAndPermission"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/role-and-permission.svg" class="sidebar-icons" id="RoleAndPermission-svg" alt="">
+                            <span class="fw-bold sidebar-font" id="RoleAndPermission-span">Roles and Permissions</span>
+                        </a>
+                    }
+
+                    @if(permission.Name == "Menu" && permission.CanView)
+                    {
+                        <a asp-controller="Menu" asp-action="Index" id="Menu"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/menu.svg" class="sidebar-icons" alt="" id="Menu-svg">
+                            <span class="fw-bold sidebar-font" id="Menu-span">Menu</span>
+                        </a>
+                    }
+
+                    @if(permission.Name == "TableAndSection" && permission.CanView)
+                    {
+                        <a asp-controller="TableAndSection" asp-action="Index" id="TableAndSection"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/table-and-section.svg" class="sidebar-icons" alt="" id="TableAndSection-svg">
+                            <span class="fw-bold sidebar-font" id="TableAndSection-span">Table and Section</span>
+                        </a>
+                    }
+
+                    @if(permission.Name == "TaxAndFee" && permission.CanView)
+                    {
+                        <a asp-controller="TaxAndFee" asp-action="Index" id="TaxAndFee"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/taxes-and-fees.svg" class="sidebar-icons" alt="" id="TaxAndFee-svg">
+                            <span class="fw-bold sidebar-font" id="TaxAndFee-span">Taxes and Fees</span>
+                        </a>
+                    }
+
+                    @if(permission.Name == "Order" && permission.CanView)
+                    {
+                        <a asp-controller="Order" asp-action="Index" id="Order"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/orders.svg" class="sidebar-icons" alt="" id="Order-svg">
+                            <span class="fw-bold sidebar-font" id="Order-span">Orders</span>
+                        </a>
+                    }
+
+                    @if(permission.Name == "Customers" && permission.CanView)
+                    {
+                        <a asp-controller="Customer" asp-action="Index" id="Customer"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/customers.svg" class="sidebar-icons" alt="" id="Customer-svg">
+                            <span class="fw-bold sidebar-font" id="Customer-span">Customers</span>
+                        </a>
+                    }
+                    
+                }
+
+            </div>
+        </div>
+
+        <!-- main content -->
+        <div class="col-12 col-md-9 col-xl-10  main-content-background">
+
+            <!-- navbar -->
+            <nav class="navbar d-flex  justify-content-md-end align-items-center">
+                <!-- offcanvas content -->
+                <div class="offcanvas offcanvas-start" id="demo">
+                    <!-- logo and heading of sidebar -->
+                    <div class="d-flex  align-items-center gap-2 justify-content-center my-3">
+                        <img src="~/images/logos/pizzashop_logo.png" class="sidebar-image" alt="">
+                        <h3 class="sidebar-heading">PIZZASHOP</h3>
+                    </div>
+
+                    <!-- page links -->
+                    <div class="d-flex flex-column gap-2  mt-5">
+                        <a asp-controller="Dashboard" asp-action="Index" id="Dashboard-mobile"
+                            class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                            <img src="~/images/sidebar-icons/dashboard.svg" class="sidebar-icons" id="Dashboard-svg-mobile" alt="">
+                            <span class="fw-bold sidebar-font " id="Dashboard-span-mobile">Dashboard</span>
+                        </a>
+                        @foreach(var permission in permissionList) 
+                        {
+
+                            @if(permission.Name == "Users" && permission.CanView)
+                            {
+                                <a asp-controller="UserList" asp-action="Index" id="UserList-mobile"
+                                    class="text-decoration-none color inherit-color  d-flex align-items-center gap-3 py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/users.svg" class="sidebar-icons" alt="" id="UserList-svg-mobile">
+                                    <span class="fw-bold sidebar-font " id="UserList-span-mobile">Users</span>
+                                </a>
+                            }
+                            var RoleId = Context.Session.GetInt32("RoleId");
+
+                            @if(permission.Name == "RoleAndPermission" && permission.CanView && @RoleId == 1)
+                            {
+                                <a asp-controller="RoleAndPermission" asp-action="Index" id="RoleAndPermission-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/role-and-permission.svg" class="sidebar-icons" id="RoleAndPermission-svg-mobile" alt="">
+                                    <span class="fw-bold sidebar-font" id="RoleAndPermission-span-mobile">Roles and Permissions</span>
+                                </a>
+                            }
+
+                            @if(permission.Name == "Menu" && permission.CanView)
+                            {
+                                <a asp-controller="Menu" asp-action="Index" id="Menu-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/menu.svg" class="sidebar-icons" alt="" id="Menu-svg-mobile">
+                                    <span class="fw-bold sidebar-font" id="Menu-span-mobile">Menu</span>
+                                </a>
+                            }
+
+                            @if(permission.Name == "TableAndSection" && permission.CanView)
+                            {
+                                <a asp-controller="TableAndSection" asp-action="Index" id="TableAndSection-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/table-and-section.svg" class="sidebar-icons" alt="" id="TableAndSection-svg-mobile">
+                                    <span class="fw-bold sidebar-font" id="TableAndSection-span-mobile
+                                    ">Table and Section</span>
+                                </a>
+                            }
+                            @if(permission.Name == "TaxAndFee" && permission.CanView)
+                            {
+                                <a asp-controller="TaxAndFee" asp-action="Index" id="TaxAndFee-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/taxes-and-fees.svg" class="sidebar-icons" alt="" id="TaxAndFee-svg-mobile">
+                                    <span class="fw-bold sidebar-font" id="TaxAndFee-span-mobile">Taxes and Fees</span>
+                                </a>
+                            }
+                            @if(permission.Name == "Order" && permission.CanView)
+                            {
+                                <a asp-controller="Order" asp-action="Index" id="Order-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/orders.svg" class="sidebar-icons" alt="" id="Order-svg-mobile">
+                                    <span class="fw-bold sidebar-font" id="Order-span-mobile">Orders</span>
+                                </a>
+                            }
+                            @if(permission.Name == "Customers" && permission.CanView)
+                            {
+                                <a asp-controller="Customer" asp-action="Index" id="Customer-mobile"
+                                    class="text-decoration-none color inherit-color d-flex align-items-center gap-3  py-1 margin-left-sidebar-element ">
+                                    <img src="~/images/sidebar-icons/customers.svg" class="sidebar-icons" alt="" id="Customer-svg-mobile">
+                                    <span class="fw-bold sidebar-font" id="Customer-span-mobile">Customers</span>
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="d-block d-md-none p-2 ">
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
+                        <img src="~/images/icons/hamburger.svg" alt="" class=" hamburger-image">
+                    </button>
+                </div>
+                <div class="dropdown">
+                    <button class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        @{
+                            var profileImageUrl = Context.Session.GetString("ProfileImageURL");
+                            string profileImagePath = string.IsNullOrEmpty(@profileImageUrl)
+                            ? "/images/default-profile.png"
+                            : $"/images/profile-images/{@profileImageUrl}";
+                        }
+                        <img src="@profileImagePath" class="object-fit-cover navbar-image profile-image-border" alt="">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a href=""
+                                class="dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-center align-items-center gap-1 pb-2">
+                                <img src="@profileImagePath" class="profile-image-border navbar-image object-fit-cover"
+                                    alt="">
+                                <p>@Context.Session.GetString("Username")</p>
+                            </a></li>
+                        <p class="border border-1 border-light-subtle"></p>
+                        <li><a asp-controller="Profile" asp-action="Index"
+                                class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                <img src="~/images/default-profile.png" class="small-image" style="margin-left: -12px;"
+                                    alt="">
+                                <p style="margin-right: 38px;">My Profile</p>
+                            </a></li>
+                        <li><a asp-controller="ChangePassword" asp-action="Index"
+                                class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                <img src="~/images/icons/change-password.svg" style="margin-right: 2px;"
+                                    class="small-image" alt="">
+                                <p style="margin-left: 16px;">Change Password</p>
+                            </a></li>
+                        <li><a data-bs-toggle="modal" data-bs-target="#logoutModal"
+                                class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                <img src="~/images/icons/logout.svg" class="small-image" style="margin-left: -8px;"
+                                    alt="">
+                                <p style="margin-right: 58px;">Logout</p>
+                            </a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            @RenderBody()
+
+        </div>
+        <!-- logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body d-flex flex-column gap-3 align-items-center">
+                        <img src="~/images/icons/warning.svg" class="medium-image align-self-center" alt="">
+                        <p>Are you sure you want to logout?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
+                        <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/layout.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
