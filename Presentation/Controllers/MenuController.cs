@@ -22,6 +22,13 @@ namespace Presentaion.Controllers
             int categoryId = categories.FirstOrDefault().Id;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
             var modifierGroups = _categoryService.GetModifierGroups();
+            var modifierId = modifierGroups.FirstOrDefault().Id;
+            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue);
+            var pageIndexModifier = 1;
+            var pageSizeModifier = 5;
+            var totalModifiers = modifiers.Count;
+            var allModifiers = _categoryService.GetAllModifiers(searchValue);
+            var TotalPagesModifier = (int)Math.Ceiling(totalModifiers / (double)pageSizeModifier);
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -30,7 +37,17 @@ namespace Presentaion.Controllers
                 PageSize = pageSize,
                 TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
                 TotalItems = items.Count,
-                ModifierGroups = modifierGroups
+                ModifierGroups = modifierGroups,
+                Modifiers = modifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndexModifier = pageIndexModifier,
+                PageSizeModifier = pageSizeModifier,
+                TotalPagesModifier = TotalPagesModifier,
+                TotalModifiers = totalModifiers,
+                PageIndexAllModifiers = 1,
+                PageSizeAllModifiers = 5,
+                TotalPagesAllModifiers = (int)Math.Ceiling(allModifiers.Count / (double)pageSize),
+                TotalAllModifiers = allModifiers.Count,
+                AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList()
             };
             return View(menuViewModel);
         }
@@ -148,6 +165,79 @@ namespace Presentaion.Controllers
         {
             MenuViewModel menuViewModel = _categoryService.GetItemData(itemId);
             return PartialView("_AddItemPartial", menuViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ModifiersFilter(int pageIndex, int pageSize, int modifierId, int modifierGroupId, string searchValue = null)
+        {
+            var modifierGroups = _categoryService.GetModifierGroups();
+            if (modifierGroupId == 0)
+            {
+                modifierGroupId = _categoryService.GetModifierGroupId(modifierId);
+            }
+            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierGroupId, searchValue);
+            var menuViewModel = new MenuViewModel
+            {
+                ModifierGroups = modifierGroups,
+                Modifiers = modifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndexModifier = pageIndex,
+                PageSizeModifier = pageSize,
+                TotalPagesModifier = (int)Math.Ceiling(modifiers.Count / (double)pageSize),
+                TotalModifiers = modifiers.Count
+            };
+            return PartialView("_ModifiersTable", menuViewModel);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteModifier(int modifierId)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            return _categoryService.DeleteModifier(modifierId, userId);
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteModifierGroup(int modifierGroupId)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            return _categoryService.DeleteModifierGroup(modifierGroupId, userId);
+        }
+
+        [HttpGet]
+        public IActionResult AllModifiersFilter(int pageIndex, int pageSize, string searchValue = null)
+        {
+            var allModifiers = _categoryService.GetAllModifiers(searchValue);
+            var menuViewModel = new MenuViewModel
+            {
+                AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndexAllModifiers = pageIndex,
+                PageSizeAllModifiers = pageSize,
+                TotalPagesAllModifiers = (int)Math.Ceiling(allModifiers.Count / (double)pageSize),
+                TotalAllModifiers = allModifiers.Count
+            };
+            return PartialView("_AllModifiersPartial", menuViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddModifierGroup([FromBody]CreateModifierGroupViewModel createModifierGroupViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                }
+                return new JsonResult(new { success = false, message = "Invalid input" });
+            }
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            return _categoryService.AddModifierGroup(createModifierGroupViewModel, userId);
+        }
+
+        [HttpGet]
+        public IActionResult EditModifierGroup(int modifierGroupId)
+        {
+            MenuViewModel menuViewModel = _categoryService.GetModifierGroupDetails(modifierGroupId);
+            return PartialView("_ModifiersPartial", menuViewModel);
         }
     }
 }

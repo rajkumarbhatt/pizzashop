@@ -596,3 +596,20 @@ td{
   position: relative;
   top: -16px;
 }
+
+/* add modifier group modal styles */
+.modal-add-modifier-group {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (min-width: 768px) {
+  .modal-add-modifier-group {
+      max-width: 70%;
+  }
+}
+@media (min-width: 768px) {
+  .modal-add-modifier-group {
+      max-width: 50%;
+  }
+}

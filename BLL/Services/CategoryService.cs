@@ -144,7 +144,8 @@ namespace BLL.Services
 
         public string AddItem(AddItemViewModel addItemViewModel, int userId)
         {
-            if(addItemViewModel.Id == null) {
+            if (addItemViewModel.Id == null)
+            {
                 var item = new Item
                 {
                     CategoryId = addItemViewModel.CategoryId,
@@ -175,7 +176,9 @@ namespace BLL.Services
                 _context.Items.Add(item);
                 _context.SaveChanges();
                 return item.Name;
-            } else {
+            }
+            else
+            {
                 var item = _context.Items.FirstOrDefault(i => i.Id == addItemViewModel.Id);
                 if (item == null)
                 {
@@ -207,7 +210,7 @@ namespace BLL.Services
                 return item.Name;
             }
         }
-            
+
 
         public IActionResult UpdateItemModifierGroup(AddItemViewModel addItemViewModel, string itemName, int userId)
         {
@@ -243,7 +246,9 @@ namespace BLL.Services
                     _context.SaveChanges();
                 }
                 return new JsonResult(new { success = true, message = "Item added successfully" });
-            } else {
+            }
+            else
+            {
                 if (addItemViewModel.ModifierGroupIds == null)
                 {
                     return new JsonResult(new { success = true, message = "Item updated suceccefully" });
@@ -285,7 +290,7 @@ namespace BLL.Services
                 }
                 return new JsonResult(new { success = true, message = "Item updated successfully" });
             }
-            
+
         }
 
         public MenuViewModel GetItemData(int itemId)
@@ -341,6 +346,168 @@ namespace BLL.Services
                 ModifierGroupData = modifierGroupData,
                 ModifierGroups = modifierGroups,
                 Categories = categories
+            };
+            return menuViewModel;
+        }
+
+        public List<Modifier> GetModifiersBasedOnSearch(int modifierGroupId, string searchValue)
+        {
+            if (searchValue == null)
+            {
+                return _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).Select(m => m.Modifier).Where(m => m.IsDeleted == false).ToList();
+            }
+            return _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId && m.Modifier.Name.ToLower().Contains(searchValue)).Select(m => m.Modifier).Where(m => m.IsDeleted == false).ToList();
+        }
+
+        public int GetModifierGroupId(int itemId)
+        {
+            return _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == itemId).ModifiergroupId;
+        }
+
+        public IActionResult DeleteModifier(int modifierId, int userId)
+        {
+            var modifier = _context.Modifiers.FirstOrDefault(m => m.Id == modifierId);
+            if (modifier == null)
+            {
+                return new JsonResult(new { success = false, message = "Modifier not found" });
+            }
+            modifier.IsDeleted = true;
+            modifier.UpdatedBy = userId;
+            modifier.UpdatedAt = DateTime.Now;
+            _context.SaveChanges();
+            return new JsonResult(new { success = true, message = "Modifier deleted successfully" });
+        }
+
+        public IActionResult DeleteModifierGroup(int modifierGroupId, int userId)
+        {
+            var modifierGroup = _context.ModifierGroups.FirstOrDefault(m => m.Id == modifierGroupId);
+            if (modifierGroup == null)
+            {
+                return new JsonResult(new { success = false, message = "Modifier group not found" });
+            }
+            modifierGroup.IsDeleted = true;
+            modifierGroup.UpdatedBy = userId;
+            modifierGroup.UpdatedAt = DateTime.Now;
+            _context.SaveChanges();
+            return new JsonResult(new { success = true, message = "Modifier group deleted successfully" });
+        }
+
+        public List<Modifier> GetAllModifiers(string searchValue)
+        {
+            if (searchValue == null)
+            {
+                return _context.Modifiers.Where(m => m.IsDeleted == false).ToList();
+            }
+            return _context.Modifiers.Where(m => m.Name.ToLower().Contains(searchValue) && m.IsDeleted == false).ToList();
+        }
+
+        public JsonResult AddModifierGroup(CreateModifierGroupViewModel createModifierGroupViewModel, int userId)
+        {
+            if (createModifierGroupViewModel.ModifierGroupId == 0)
+            {
+                if (userId == null)
+                {
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                if (_context.ModifierGroups.Any(m => m.Name == createModifierGroupViewModel.ModifierGroupName))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier group already exists" });
+                }
+                var modifierGroup = new ModifierGroup
+                {
+                    Name = createModifierGroupViewModel.ModifierGroupName,
+                    Description = createModifierGroupViewModel.ModifierGroupDescription,
+                    CreatedBy = userId,
+                    UpdatedBy = userId
+                };
+                _context.ModifierGroups.Add(modifierGroup);
+                _context.SaveChanges();
+                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds;
+                foreach (var modifierId in modifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifierId,
+                        ModifiergroupId = modifierGroup.Id
+                    };
+                    _context.ModifierModifiergroupMappings.Add(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                return new JsonResult(new { success = true, message = "Modifier group added successfully" });
+            } else {
+                if (userId == null)
+                {
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                var modifierGroup = _context.ModifierGroups.FirstOrDefault(m => m.Id == createModifierGroupViewModel.ModifierGroupId);
+                if (modifierGroup == null)
+                {
+                    return new JsonResult(new { success = false, message = "Modifier group not found" });
+                }
+                if (_context.ModifierGroups.Any(m => m.Name == createModifierGroupViewModel.ModifierGroupName && m.Id != createModifierGroupViewModel.ModifierGroupId))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier group already exists" });
+                }
+                modifierGroup.Name = createModifierGroupViewModel.ModifierGroupName;
+                modifierGroup.Description = createModifierGroupViewModel.ModifierGroupDescription;
+                modifierGroup.UpdatedBy = userId;
+                modifierGroup.UpdatedAt = DateTime.Now;
+                _context.SaveChanges();
+                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds;
+                var existingModifierGroupIds = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroup.Id).Select(m => m.ModifierId).ToList();
+                var newModifierGroupIds = modifierGroupIds.Except(existingModifierGroupIds).ToList();
+                var deleteModifierGroupIds = existingModifierGroupIds.Except(modifierGroupIds).ToList();
+                foreach (var modifierId in newModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifierId,
+                        ModifiergroupId = modifierGroup.Id
+                    };
+                    _context.ModifierModifiergroupMappings.Add(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                foreach (var modifierId in deleteModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == modifierId && m.ModifiergroupId == modifierGroup.Id);
+                    _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                return new JsonResult(new { success = true, message = "Modifier group updated successfully" });
+            }
+        }
+
+        public MenuViewModel GetModifierGroupDetails(int modifierGroupId)
+        {
+            var modifierGroup = _context.ModifierGroups.FirstOrDefault(m => m.Id == modifierGroupId);
+            if (modifierGroup == null)
+            {
+                var MenuViewModel1 = new MenuViewModel();
+                return MenuViewModel1;
+            }
+            var selectedModifiers = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).Select(m => m.Modifier).ToList();
+            var modifierIds = selectedModifiers.Select(m => m.Id).ToList();
+            var modifiers1 = _context.Modifiers.Where(m => m.Id == 1).ToList();
+            var modifierGroups = GetModifierGroups();
+            var modifiers = GetAllModifiers(null);
+            CreateModifierGroupViewModel createModifierGroupViewModel = new CreateModifierGroupViewModel
+            {
+                ModifierGroupId = modifierGroup.Id,
+                ModifierGroupName = modifierGroup.Name,
+                ModifierGroupDescription = modifierGroup.Description,
+                Modifiers = selectedModifiers,
+                SelectedModifierIds = modifierIds
+            };
+            MenuViewModel menuViewModel = new MenuViewModel
+            {
+                CreateModifierGroupViewModel = createModifierGroupViewModel,
+                AllModifiers = modifiers.Skip(0).Take(5).ToList(),
+                ModifierGroups = modifierGroups,
+                Modifiers = modifiers1,
+                PageIndexAllModifiers = 1,
+                TotalAllModifiers = modifiers.Count,
+                PageSizeAllModifiers = 5,
+                TotalPagesAllModifiers = (int)Math.Ceiling(modifiers.Count / (double)5),
             };
             return menuViewModel;
         }

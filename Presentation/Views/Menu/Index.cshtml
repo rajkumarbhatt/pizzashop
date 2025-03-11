@@ -25,176 +25,25 @@
     <partial name="_MenuPartial" model="@Model" />
 
 
-    <div id="modifiers-content" class="d-none col-md-8 col-12 col-lg-9 col-xl-10">
-        <h4 class="px-4 py-2">Modifiers</h4>
 
-
-        <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
-            <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
-                <thead class="color-head">
-                    <tr class="text-center">
-                        <th class="text-start mx-2"> <input class="form-check-input intermediate-checkbox"
-                                type="checkbox" value="" id="flexCheckIndeterminate">
-                            <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
-                        </th>
-                        <th>Item type</th>
-                        <th>Rate</th>
-                        <th>Quantity</th>
-                        <th>Available</th>
-                        <th>Action</th>
-                </thead>
-                <tbody>
-                    <tr class="text-center">
-                        <td class="text-start mx-2 d-flex align-items-center table-checkbox-gap"><input
-                                class="form-check-input permission-checkbox" type="checkbox" value=""
-                                id="defaultCheck1">
-                            <img src="~/images/dining-menu.png" style="width: 35px;" alt="">
-                            <label class="form-check-label" for="defaultCheck1">Punjabi Tadka Sandwich
-                        </td>
-                        <td>
-                            <img src="~/images/icons/non-veg-icon.svg" class="small-image" alt="">
-                        </td>
-                        <td>200</td>
-                        <td>10</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                            </div>
-                        </td>
-                        <td>
-                            <a href="./editUser.html"> <img src="~/images/icons/edit.svg" class="small-image"
-                                    alt=""></a>
-                            <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop">
-                                <a href="#"> <img src="~/images/icons/delete.svg" class="small-image"
-                                        alt=""></a></button>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
-</div>
+@* </div>
+</div> *@
+
+@* modifiers content *@
+
+<div id="modifiers-content" class=" form-bg p-2 my-1 row mx-4 d-none">
+    <partial name="_ModifiersPartial" model="@Model" />
 </div>
 
 
-@* edit category *@
-<div class="modal fade" id="editCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit Category
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input id="EditCategoryId" class="d-none">
-                    <input type="text" class="form-control" name="CategoryName" id="EditCategoryName" required
-                        placeholder="name">
-                    <label for="category-name" class="">Name</label>
-                </div>
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="category-description" id="EditCategoryDescription"
-                        required placeholder="category-description">
-                    <label for="category-description" class="">Description</label>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button id="EditCategoryModal" type="button" class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-        </div>
-    </div>
-</div>
 
-@* add category *@
-<div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Category
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="category-name" id="CategoryName" required
-                        placeholder="name">
-                    <label for="category-name" class="">Name</label>
-                </div>
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="category-description" id="CategoryDescription"
-                        required placeholder="category-description">
-                    <label for="category-description" class="">Description</label>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button id="AddCategoryModal" type="submit" class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* delete category *@
-<div class="modal fade" id="categoryDeleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete Confirmation
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex align-items-center flex-column">
-                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
-                <p>Are you sure you want to delete this category?</p>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button id="deleteCategoryButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Yes</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* delete item *@
-<div class="modal fade" id="deleteItem" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete
-                    Confirmation
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
-                <p>Are you sure you want to delete this item?</p>
-            </div>
-            <div class="modal-footer">
-                <button id="deleteItemButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Yes</button>
-                <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
-            </div>
-        </div>
-    </div>
-</div>
 
 @* add and edit item *@
 <div id="AddItemModalPartial">
     <partial name="_AddItemPartial" model="@Model" />
 </div>
+
 
 
 <script src="~/js/menu.js" asp-append-version="true"></script>
@@ -205,7 +54,35 @@
 }
 
 <script>
+    var selectedModifiers = [];
     var selectModifierGroups = [];
+
+
+    function deleteModifierGroupFunc(modifierGroupId) {
+        console.log(modifierGroupId);
+        $("#deleteModifierGroupButton").click(function () {
+            console.log(modifierGroupId);
+            $.ajax({
+                url: '@Url.Action("DeleteModifierGroup", "Menu")',
+                type: 'DELETE',
+                data: { modifierGroupId: modifierGroupId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    function openModalAllModifiers() {
+        $("#AddModifierGroupModal2").modal("show");
+    }
 
     function addModifierGroupToList(id) {
         var isChecked = document.getElementById(id).checked;
@@ -244,7 +121,6 @@
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
     }
 
-
     document.getElementById('Image').addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -279,39 +155,40 @@
             }
         });
     }
-    
+
     function initializeFormSubmit() {
-    $("#AddItemForm").submit(function (e) {
-        e.preventDefault();
-        if (!checkMinMaxData()) {
-            toastr.error("Please enter valid minimum and maximum values");
-            return;
-        }
-        $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
-        var form = $(this)[0];
-        var formData = new FormData(form);
-        console.log($("#ModifierGroupIds").val());
-        $.ajax({
-            type: "POST",
-            url: "/Menu/AddItem",
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                if (response.success) {
-                    toastr.success(response.message);
-                    setTimeout(function () {
-                        window.location.href = "/Menu";
-                    }, 1500);
-                } else {
+        $("#AddItemForm").submit(function (e) {
+            e.preventDefault();
+            if (!checkMinMaxData()) {
+                toastr.error("Please enter valid minimum and maximum values");
+                return;
+            }
+            $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            console.log($("#ModifierGroupIds").val());
+            $.ajax({
+                type: "POST",
+                url: "/Menu/AddItem",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(function () {
+                            window.location.href = "/Menu";
+                        }, 1500);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (response) {
                     toastr.error(response.message);
                 }
-            },
-            error: function (response) {
-                toastr.error(response.message);
-            }
+            });
         });
-    });}
+    }
 
     function checkMinMaxData() {
         let isMinMaxDataValid = true;
@@ -363,7 +240,7 @@
             tag.remove();
             const option = selectElement.querySelector(`option[value="${value}"]`);
             if (option) {
-                option.selected = false; 
+                option.selected = false;
             }
             const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
             if (checkbox) {
@@ -383,9 +260,9 @@
 
     function UnSyncEditChanges() {
         @* uncheck all *@
-        selectModifierGroups.forEach(function (modifierGroup) {
-            document.getElementById(modifierGroup.Id).checked = false;
-        });
+            selectModifierGroups.forEach(function (modifierGroup) {
+                document.getElementById(modifierGroup.Id).checked = false;
+            });
     }
 
     //edit category
@@ -435,5 +312,32 @@
             $("#ShortCode").prop("disabled", true);
         }
     }
+    
 
-    </script>
+    function changeLine(item) {
+        if (item == "modifiers-div") {
+            document.getElementById("underline-para").style.marginLeft = "120px";
+            document.getElementById("underline-para").style.width = "90px";
+            document.getElementById("modifiers-div").classList.add("active-menu-item");
+            document.getElementById("items-div").classList.remove("active-menu-item");
+            document.getElementById("black-menu").classList.remove("d-none");
+            document.getElementById("blue-menu").classList.add("d-none");
+            document.getElementById("blue-modifier").classList.remove("d-none");
+            document.getElementById("black-modifier").classList.add("d-none");
+            document.getElementById("items-content").classList.add("d-none");
+            document.getElementById("modifiers-content").classList.remove("d-none");
+        } else {
+            document.getElementById("underline-para").style.marginLeft = "30px";
+            document.getElementById("underline-para").style.width = "70px";
+            document.getElementById("items-div").classList.add("active-menu-item");
+            document.getElementById("modifiers-div").classList.remove("active-menu-item");
+            document.getElementById("black-menu").classList.add("d-none");
+            document.getElementById("blue-menu").classList.remove("d-none");
+            document.getElementById("black-modifier").classList.remove("d-none");
+            document.getElementById("blue-modifier").classList.add("d-none");
+            document.getElementById("items-content").classList.remove("d-none");
+            document.getElementById("modifiers-content").classList.add("d-none");
+        }
+    }
+
+</script>

@@ -2045,3 +2045,4 @@ C:\Users\pci88\Downloads\pizzashop-user-module-main (2)\pizzashop-user-module-ma
 C:\Users\pci88\Downloads\pizzashop-user-module-main (2)\pizzashop-user-module-main\pizzashop-user-module-main\Presentation\obj\Debug\net8.0\Presentation.pdb
 C:\Users\pci88\Downloads\pizzashop-user-module-main (2)\pizzashop-user-module-main\pizzashop-user-module-main\Presentation\obj\Debug\net8.0\Presentation.genruntimeconfig.cache
 C:\Users\pci88\Downloads\pizzashop-user-module-main (2)\pizzashop-user-module-main\pizzashop-user-module-main\Presentation\obj\Debug\net8.0\ref\Presentation.dll
+C:\Users\pci88\Downloads\pizzashop-user-module-main (2)\pizzashop-user-module-main\pizzashop-user-module-main\Presentation\obj\Debug\net8.0\Presentation.sourcelink.json

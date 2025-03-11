@@ -12286,11 +12286,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\BLL.csproj",
+      "projectUniqueName": "c:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\BLL.csproj",
       "projectName": "BLL",
-      "projectPath": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\BLL.csproj",
+      "projectPath": "c:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\BLL.csproj",
       "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\obj\\",
+      "outputPath": "c:\\Users\\pci88\\Downloads\\pizzashop-user-module-main (2)\\pizzashop-user-module-main\\pizzashop-user-module-main\\BLL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
