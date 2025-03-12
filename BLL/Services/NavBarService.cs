@@ -45,7 +45,7 @@ namespace BLL.Services
         public bool IsFirstTimeLogin(int userId)
         {
             var user = _context.Users.FirstOrDefault(u => u.Id == userId);
-            if (user.HasLoggedInBefore == true)
+            if (user?.HasLoggedInBefore == true)
             {
                 return true;
             }
@@ -65,9 +65,9 @@ namespace BLL.Services
                     {
                         PermissionId = permission.Id,
                         Name = permission.Name,
-                        CanView = (bool)rolePermission.CanView,
-                        CanEdit = (bool)rolePermission.CanEdit,
-                        CanDelete = (bool)rolePermission.CanDelete
+                        CanView = rolePermission.CanView ?? false,
+                        CanEdit = rolePermission.CanEdit ?? false,
+                        CanDelete = rolePermission.CanDelete ?? false,
                     };
                     permissionModels.Add(permissionModel);
                 }

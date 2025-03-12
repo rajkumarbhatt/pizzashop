@@ -19,10 +19,6 @@ namespace BLL.Services
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-        public RoleAndPermissionService(PizzaShopContext context)
-        {
-            _context = context;
-        }
 
         public List<Permission> GetPermissions()
         {
@@ -36,7 +32,7 @@ namespace BLL.Services
 
         public Role GetRole(int roleId)
         {
-            return _context.Roles.Find(roleId);
+            return _context.Roles.Find(roleId) ?? new Role();
         }
 
         public List<Role> GetRoles()
@@ -53,7 +49,7 @@ namespace BLL.Services
             foreach (var permissionChange in changedPermissions)
             {
                 RolePermission rolePermission = _context.RolePermissions.FirstOrDefault(rp =>
-                    rp.RoleId == permissionChange.RoleId && rp.PermissionId == permissionChange.PermissionId);
+                    rp.RoleId == permissionChange.RoleId && rp.PermissionId == permissionChange.PermissionId) ?? new RolePermission();
                 if (rolePermission != null)
                 {
                     if (permissionChange.PermissionName == "CanView")
@@ -75,7 +71,7 @@ namespace BLL.Services
                 }
             }
 
-            if (_httpContextAccessor.HttpContext.Session.GetInt32("RoleId") == changedPermissions[0].RoleId)
+            if (_httpContextAccessor.HttpContext?.Session.GetInt32("RoleId") == changedPermissions[0].RoleId)
             {
                 List<PermissionModel> permissions = new List<PermissionModel>();
                 var rolePermissions = _context.RolePermissions.Where(rp => rp.RoleId == changedPermissions[0].RoleId).ToList();
@@ -88,9 +84,9 @@ namespace BLL.Services
                         {
                             PermissionId = permission.Id,
                             Name = permission.Name,
-                            CanView = (bool)rolePermission2.CanView,
-                            CanEdit = (bool)rolePermission2.CanEdit,
-                            CanDelete = (bool)rolePermission2.CanDelete
+                            CanView = rolePermission2.CanView ?? false,
+                            CanEdit = rolePermission2.CanEdit ?? false,
+                            CanDelete = rolePermission2.CanDelete ?? false
                         };
                         permissions.Add(permissionModel);
                     }

@@ -28,5 +28,6 @@ namespace DAL.ViewModels
         public int TotalAllModifiers { get; set; }
 
         public CreateModifierGroupViewModel CreateModifierGroupViewModel { get; set; }
+        public AddModifierViewModel AddModifierViewModel { get; set; }
     }
 }

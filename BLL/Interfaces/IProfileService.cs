@@ -6,7 +6,7 @@ namespace BLL.Interfaces
 {
     public interface IProfileService
     {
-        public ProfileViewModel GetUserDataFromUserId(int userId);
+        public ProfileViewModel? GetUserDataFromUserId(int userId);
         public IActionResult UpdateUserDataFromUserId(int userId, ProfileViewModel ProfileViewModel);
         public string GetCountryById(int countryId);
         public string GetStateById(int stateId);

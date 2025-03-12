@@ -18,13 +18,22 @@ namespace BLL.Services
             _httpContentAccessor = httpContentAccessor;
         }
 
-        public ProfileViewModel GetUserDataFromUserId(int userId)
+        public ProfileViewModel? GetUserDataFromUserId(int userId)
         {
             var user = _context.Users.Find(userId);
-            var role = _context.Roles.Find(user.RoleId);
-            var country = _context.Countries.Find(user.CountryId);
-            var state = _context.States.Find(user.StateId);
-            var city = _context.Cities.Find(user.CityId);
+            if (user == null)
+            {
+                return null;
+            }
+            var role = _context.Roles.Find(user?.RoleId);
+            var country = _context.Countries.Find(user?.CountryId);
+            var state = _context.States.Find(user?.StateId);
+            var city = _context.Cities.Find(user?.CityId);
+            if (user == null)
+            {
+                return null;
+            }
+
             ProfileViewModel ProfileViewModel = new ProfileViewModel
             {
                 Id = user.Id,
@@ -36,7 +45,7 @@ namespace BLL.Services
                 ZipCode = user.ZipCode,
                 Username = user.Username,
                 ProfileImageURL = user.ProfileImage,
-                Role = role.Name,
+                Role = role?.Name,
                 CountryId = user.CountryId ?? 0,
                 StateId = user.StateId ?? 0,
                 CityId = user.CityId ?? 0,
@@ -56,12 +65,17 @@ namespace BLL.Services
                 return new JsonResult(new { success=false, message = "Username already exists" });
             }  
             var user = _context.Users.Find(userId);
-            user.FirstName = ProfileViewModel.FirstName;
+            if (user == null)
+            {
+                return new JsonResult(new { success = false, message = "User not found" });
+            }
+
+            user.FirstName = ProfileViewModel.FirstName ?? user.FirstName;
             user.LastName = ProfileViewModel.LastName;
-            user.Phone = ProfileViewModel.PhoneNumber;
+            user.Phone = ProfileViewModel.PhoneNumber ?? user.Phone;
             user.Address = ProfileViewModel.Address;
             user.ZipCode = ProfileViewModel.ZipCode;
-            user.Username = ProfileViewModel.Username;
+            user.Username = ProfileViewModel.Username ?? user.Username;
             user.CountryId = ProfileViewModel.CountryId;
             user.StateId = ProfileViewModel.StateId;
             user.CityId = ProfileViewModel.CityId;
@@ -69,7 +83,6 @@ namespace BLL.Services
 
             if (ProfileViewModel.UserProfileImage != null)
             {
-                // store filename in db and save image in wwwroot/profile-images
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileViewModel.UserProfileImage.FileName);
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))
@@ -79,8 +92,8 @@ namespace BLL.Services
                 user.ProfileImage = fileName;
             }
             
-            _httpContentAccessor.HttpContext.Session.SetString("Username", user.Username);
-            _httpContentAccessor.HttpContext.Session.SetString("ProfileImageURL", user.ProfileImage);
+            _httpContentAccessor.HttpContext?.Session.SetString("Username", user.Username);
+            _httpContentAccessor.HttpContext?.Session.SetString("ProfileImageURL", user.ProfileImage??string.Empty);
 
             _context.Users.Update(user);
             _context.SaveChanges();
@@ -90,7 +103,8 @@ namespace BLL.Services
 
         public string GetCountryById(int countryId)
         {
-            return _context.Countries.Find(countryId).Name;
+            var country = _context.Countries.Find(countryId);
+            return country?.Name ?? string.Empty;
         }
 
         public string GetStateById(int stateId)
@@ -99,7 +113,8 @@ namespace BLL.Services
             {
                 return "";
             }
-            return _context.States.Find(stateId).Name;
+            var state = _context.States.Find(stateId);
+            return state?.Name ?? string.Empty;
         }
 
         public string GetCityById(int cityId)
@@ -108,7 +123,8 @@ namespace BLL.Services
             {
                 return "";
             }
-            return _context.Cities.Find(cityId).Name;
+            var city = _context.Cities.Find(cityId);
+            return city?.Name ?? string.Empty;
         }
 
         public List<Country> GetCountries()

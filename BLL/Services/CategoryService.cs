@@ -359,9 +359,10 @@ namespace BLL.Services
             return _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId && m.Modifier.Name.ToLower().Contains(searchValue)).Select(m => m.Modifier).Where(m => m.IsDeleted == false).ToList();
         }
 
-        public int GetModifierGroupId(int itemId)
+        public int GetModifierGroupId(int modifierId)
         {
-            return _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == itemId).ModifiergroupId;
+            return _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == modifierId).ModifiergroupId;
+            
         }
 
         public IActionResult DeleteModifier(int modifierId, int userId)
@@ -487,7 +488,7 @@ namespace BLL.Services
             }
             var selectedModifiers = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).Select(m => m.Modifier).ToList();
             var modifierIds = selectedModifiers.Select(m => m.Id).ToList();
-            var modifiers1 = _context.Modifiers.Where(m => m.Id == 1).ToList();
+            var modifiers1 = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).Select(m => m.Modifier).ToList();
             var modifierGroups = GetModifierGroups();
             var modifiers = GetAllModifiers(null);
             CreateModifierGroupViewModel createModifierGroupViewModel = new CreateModifierGroupViewModel
@@ -503,11 +504,136 @@ namespace BLL.Services
                 CreateModifierGroupViewModel = createModifierGroupViewModel,
                 AllModifiers = modifiers.Skip(0).Take(5).ToList(),
                 ModifierGroups = modifierGroups,
-                Modifiers = modifiers1,
+                Modifiers = modifiers1.Skip(0).Take(5).ToList(),
                 PageIndexAllModifiers = 1,
                 TotalAllModifiers = modifiers.Count,
                 PageSizeAllModifiers = 5,
                 TotalPagesAllModifiers = (int)Math.Ceiling(modifiers.Count / (double)5),
+                PageIndexModifier = 1,
+                TotalModifiers = modifiers1.Count,
+                PageSizeModifier = 5,
+                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
+            };
+            return menuViewModel;
+        }
+
+        public IActionResult AddModifier(AddModifierViewModel addModifierViewModel, int userId)
+        {
+            if (addModifierViewModel.Id == -1)
+            {
+                if (userId == null)
+                {
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                if (_context.Modifiers.Any(m => m.Name == addModifierViewModel.Name))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier already exists" });
+                }
+                var modifier = new Modifier
+                {
+                    Name = addModifierViewModel.Name,
+                    Description = addModifierViewModel.Description,
+                    Price = addModifierViewModel.Rate,
+                    Quantity = addModifierViewModel.Quantity,
+                    Unit = addModifierViewModel.Unit,
+                    CreatedBy = userId,
+                    UpdatedBy = userId
+                };
+                _context.Modifiers.Add(modifier);
+                _context.SaveChanges();
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                foreach (var modifierGroupId in modifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifier.Id,
+                        ModifiergroupId = modifierGroupId
+                    };
+                    _context.ModifierModifiergroupMappings.Add(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                return new JsonResult(new { success = true, message = "Modifier added successfully" });
+            } else {
+                if (userId == null)
+                {
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                var modifier = _context.Modifiers.FirstOrDefault(m => m.Id == addModifierViewModel.Id);
+                if (modifier == null)
+                {
+                    return new JsonResult(new { success = false, message = "Modifier not found" });
+                }
+                if (_context.Modifiers.Any(m => m.Name == addModifierViewModel.Name && m.Id != addModifierViewModel.Id))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier already exists" });
+                }
+                modifier.Name = addModifierViewModel.Name;
+                modifier.Description = addModifierViewModel.Description;
+                modifier.Price = addModifierViewModel.Rate;
+                modifier.Unit = addModifierViewModel.Unit;
+                modifier.Quantity = addModifierViewModel.Quantity;
+                modifier.UpdatedBy = userId;
+                modifier.UpdatedAt = DateTime.Now;
+                _context.SaveChanges();
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                var existingModifierGroupIds = _context.ModifierModifiergroupMappings.Where(m => m.ModifierId == modifier.Id).Select(m => m.ModifiergroupId).ToList();
+                var newModifierGroupIds = modifierGroupIds.Except(existingModifierGroupIds).ToList();
+                var deleteModifierGroupIds = existingModifierGroupIds.Except(modifierGroupIds).ToList();
+                foreach (var modifierGroupId in newModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifier.Id,
+                        ModifiergroupId = modifierGroupId
+                    };
+                    _context.ModifierModifiergroupMappings.Add(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                foreach (var modifierGroupId in deleteModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == modifier.Id && m.ModifiergroupId == modifierGroupId);
+                    _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
+                    _context.SaveChanges();
+                }
+                return new JsonResult(new { success = true, message = "Modifier updated successfully" });
+            }
+        }
+
+        public MenuViewModel GetModifierData(int modifierId, int modifierGroupId)
+        {
+            var modifier = _context.Modifiers.FirstOrDefault(m => m.Id == modifierId);
+            if (modifier == null)
+            {
+                var menuViewModel1 = new MenuViewModel();
+                return menuViewModel1;
+            }
+            var modifiers1 = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).Select(m => m.Modifier).ToList();
+            var selectedModifierGroups = _context.ModifierModifiergroupMappings.Where(m => m.ModifierId == modifierId).Select(m => m.Modifiergroup).ToList();
+            var modifierGroupIds = selectedModifierGroups.Select(m => m.Id).ToList();
+            var modifierGroups = GetModifierGroups();
+            var categories = GetCategories();
+            var allModifiers = GetAllModifiers(null);
+            AddModifierViewModel addModifierViewModel = new AddModifierViewModel
+            {
+                Id = modifier.Id,
+                Name = modifier.Name,
+                Rate = (int)modifier.Price,
+                Quantity = (int)modifier.Quantity,
+                Unit = modifier.Unit,
+                Description = modifier.Description,
+                ModifierGroupIds = modifierGroupIds
+            };
+            MenuViewModel menuViewModel = new MenuViewModel
+            {
+                ModifierGroups = modifierGroups,
+                AddModifierViewModel = addModifierViewModel,
+                Categories = categories,
+                AllModifiers = allModifiers,
+                Modifiers = modifiers1.Skip(0).Take(5).ToList(),
+                PageIndexModifier = 1,
+                TotalModifiers = modifiers1.Count,
+                PageSizeModifier = 5,
+                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
             };
             return menuViewModel;
         }

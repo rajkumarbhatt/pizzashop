@@ -15,7 +15,7 @@ namespace BLL.Services
 
         public User GetUserDataById(int userId)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == userId);
+            return _context.Users.FirstOrDefault(u => u.Id == userId) ?? new User();
         }
 
         public JsonResult ResetPassword(int userId, string newPassword)

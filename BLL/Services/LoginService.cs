@@ -29,16 +29,21 @@ namespace BLL.Services
             }
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                if ((bool)user.IsDeleted)
+                if (user.IsDeleted ?? false)
                 {
                     return new JsonResult(new { success = false, message = "User does not exist" });
                 }
-                if (!(bool)user.Status)
+                if (!user.Status ?? false)
                 {
                     return new JsonResult(new { success = false, message = "User is inactive" });
                 }
 
-                string? role = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId).Name;
+                var roleEntity = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
+                if (roleEntity == null)
+                {
+                    return new JsonResult(new { success = false, message = "User role not found" });
+                }
+                string role = roleEntity.Name;
                 string token = _jwtService.GenerateJwtToken(user, role);
                 return new JsonResult(new { token = token, success = true, message = "Login successful" });
             }

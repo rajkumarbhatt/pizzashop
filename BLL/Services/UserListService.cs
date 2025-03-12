@@ -41,12 +41,13 @@ namespace BLL.Services
 
         public User GetUserDataById(int userId)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == userId);
+            return _context.Users.FirstOrDefault(u => u.Id == userId) ?? new User();
         }
 
         public string GetRoleById(int roleId)
         {
-            return _context.Roles.FirstOrDefault(r => r.Id == roleId).Name;
+            var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
+            return role?.Name ?? "";
         }
 
         public List<Role> GetRoles()
@@ -64,12 +65,12 @@ namespace BLL.Services
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
-                LastName = user.LastName,
+                LastName = user.LastName ?? "",
                 Email = user.Email,
                 PhoneNumber = user.Phone,
                 Address = user.Address,
                 ZipCode = user.ZipCode,
-                Status = (bool)user.Status,
+                Status = user.Status ?? false,
                 Username = usernameLoggedIn,
                 RoleId = roleIdLoggedIn,
                 ProfileImageURL = profileImageURLLoggedIn,
@@ -99,13 +100,13 @@ namespace BLL.Services
             }
             user.FirstName = userViewModel.FirstName;
             user.LastName = userViewModel.LastName;
-            user.Email = userViewModel.Email;
-            user.Phone = userViewModel.PhoneNumber;
+            user.Email = userViewModel.Email ?? "";
+            user.Phone = userViewModel.PhoneNumber ?? "";
             user.Address = userViewModel.Address;
             user.ZipCode = userViewModel.ZipCode;
             user.Status = userViewModel.Status;
             user.Username = userViewModel.UsernameRequestedUSer;
-            user.RoleId = (int)userViewModel.RoleIdRequestedUser;
+            user.RoleId = userViewModel.RoleIdRequestedUser ?? 0;
             user.CountryId = userViewModel.CountryId;
             user.StateId = userViewModel.StateId;
             user.CityId = userViewModel.CityId;
@@ -124,9 +125,9 @@ namespace BLL.Services
             }
             if (userViewModel.Id == userIdLoggedIn)
             {
-                _httpContextAccessor.HttpContext.Session.SetString("Username", user.Username);
-                _httpContextAccessor.HttpContext.Session.SetString("ProfileImageURL", user.ProfileImage);
-                _httpContextAccessor.HttpContext.Session.SetInt32("RoleId", user.RoleId);
+                _httpContextAccessor.HttpContext?.Session.SetString("Username", user.Username);
+                _httpContextAccessor.HttpContext?.Session.SetString("ProfileImageURL", user.ProfileImage ?? "");
+                _httpContextAccessor.HttpContext?.Session.SetInt32("RoleId", user.RoleId);
             }
             _context.SaveChanges();
             return new JsonResult(new { success = true, message = "User updated successfully" });
@@ -134,12 +135,10 @@ namespace BLL.Services
 
         public JsonResult CreateUser(int userIdLoggedIn, CreateUserViewModel createUserViewModel)
         {
-            // if username already exists
             if (_context.Users.Any(u => u.Username == createUserViewModel.UsernameRequestedUser))
             {
                 return new JsonResult(new { success = false, message = "Username already exists" });
             }
-            // if email already exists
             if (_context.Users.Any(u => u.Email == createUserViewModel.Email))
             {
                 return new JsonResult(new { success = false, message = "Email already exists" });
@@ -149,7 +148,7 @@ namespace BLL.Services
                 FirstName = createUserViewModel.FirstName,
                 LastName = createUserViewModel.LastName,
                 Email = createUserViewModel.Email,
-                Phone = createUserViewModel.PhoneNumber,
+                Phone = createUserViewModel.PhoneNumber ?? "",
                 Address = createUserViewModel.Address,
                 ZipCode = createUserViewModel.ZipCode,
                 Username = createUserViewModel.UsernameRequestedUser,
@@ -188,7 +187,7 @@ namespace BLL.Services
 
         public (List<User>, int totalRecords) GetUsers(int pageIndex, int pageSize)
         {
-            var query = _context.Users.Where(u => (bool)!u.IsDeleted).OrderBy(u => u.FirstName);
+            var query = _context.Users.Where(u => u.IsDeleted == false).OrderBy(u => u.FirstName);
             int totalRecords = query.Count();
             var users = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
             return (users, totalRecords);
@@ -196,7 +195,7 @@ namespace BLL.Services
 
         public (List<User>, int totalRecords) GetUsersWithSearch(int pageIndex, int pageSize, string searchValue, string sortColumn, string sortColumnDirection)
         {
-            var query = _context.Users.Where(u => (bool)!u.IsDeleted);
+            var query = _context.Users.Where(u => u.IsDeleted == false);
             if (!string.IsNullOrEmpty(searchValue))
             {
                 query = query.Where(u => u.FirstName.ToLower().Contains(searchValue));

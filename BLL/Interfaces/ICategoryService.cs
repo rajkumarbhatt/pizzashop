@@ -28,5 +28,7 @@ namespace BLL.Interfaces
         public List<Modifier> GetAllModifiers(string searchValue);
         public JsonResult AddModifierGroup(CreateModifierGroupViewModel createModifierGroupViewModel, int userId);
         public MenuViewModel GetModifierGroupDetails(int modifierGroupId);
+        public IActionResult AddModifier(AddModifierViewModel createModifierViewModel, int userId);
+        public MenuViewModel GetModifierData(int modifierId, int modifierGroupId);
     }
 }
