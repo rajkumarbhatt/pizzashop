@@ -18,8 +18,8 @@ namespace Presentaion.Controllers
         }
         public IActionResult Index()
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            ProfileViewModel ProfileViewModel = _ProfileService.GetUserDataFromUserId(userId);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            ProfileViewModel ProfileViewModel = _ProfileService.GetUserDataFromUserId(userId) ?? new ProfileViewModel();
             var country = _ProfileService.GetCountryById(ProfileViewModel.CountryId ?? 0);
             var state = _ProfileService.GetStateById(ProfileViewModel.StateId ?? 0);
             var city = _ProfileService.GetCityById(ProfileViewModel.CityId ?? 0);
@@ -30,8 +30,8 @@ namespace Presentaion.Controllers
         }
         public IActionResult Edit()
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            ProfileViewModel profileViewModel = _ProfileService.GetUserDataFromUserId(userId);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            ProfileViewModel profileViewModel = _ProfileService.GetUserDataFromUserId(userId) ?? new ProfileViewModel();
             var (countries, states, cities) = _ProfileService.SetCountriesStatesCitiesToViewBag(profileViewModel);
             ViewBag.Countries = countries;
             ViewBag.States = states;
@@ -46,7 +46,7 @@ namespace Presentaion.Controllers
             {
                 return new JsonResult(new { success = false, message = "Validation errors" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _ProfileService.UpdateUserDataFromUserId(userId, ProfileViewModel);
         }
 

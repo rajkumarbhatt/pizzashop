@@ -10,7 +10,8 @@ namespace Presentaion.Controllers
         public void OnAuthorization(AuthorizationFilterContext context)
         {
 
-            if (!IsAuthorized(context.HttpContext.User, context.HttpContext.Request.Path.Value))
+            var requestedUrl = context.HttpContext.Request.Path.Value;
+            if (requestedUrl == null || !IsAuthorized(context.HttpContext.User, requestedUrl))
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary
                 {
@@ -33,7 +34,7 @@ namespace Presentaion.Controllers
                 { "account", "Dashboard"}
             };
             PizzaShopContext db = new PizzaShopContext();
-            if (user.Identity.IsAuthenticated == false)
+            if (user.Identity?.IsAuthenticated == false)
             {
                 return false;
             }
@@ -41,12 +42,17 @@ namespace Presentaion.Controllers
             var controller = requestedUrl.Split('/')[1];
             var permissionName = permissionNameObj[controller];
             var permission = db.RolePermissions.FirstOrDefault(rp => rp.RoleId == roleId && rp.Permission.Name == permissionName);
-            if (requestedUrl.ToLower().Contains("edit") || requestedUrl.ToLower().Contains("update") || requestedUrl.ToLower().Contains("create") || requestedUrl.ToLower().Contains("add")) {
-                return (bool)permission.CanView && (bool)permission.CanEdit;
-            } else if (requestedUrl.ToLower().Contains("delete")) {
-                return (bool)permission.CanView && (bool)permission.CanDelete;
+            if (permission == null)
+            {
+                return false;
             }
-            return (bool)permission.CanView;
+
+            if (requestedUrl.ToLower().Contains("edit") || requestedUrl.ToLower().Contains("update") || requestedUrl.ToLower().Contains("create") || requestedUrl.ToLower().Contains("add")) {
+                return permission.CanView == true && permission.CanEdit == true;
+            } else if (requestedUrl.ToLower().Contains("delete")) {
+                return permission.CanView == true && permission.CanDelete == true;
+            }
+            return permission.CanView == true;
         }
     }
 }

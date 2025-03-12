@@ -707,7 +707,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.13": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2"
@@ -5133,10 +5133,10 @@
         "mailkit.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.13": {
-      "sha512": "EUNaX3F4fALAfvp7wsCqjqziu1lTNwYRFbIcVJEt6vInWxEpscAM/pcG6GBOx3WcmSRdB7sqtKAKSkyY6XhTig==",
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
+      "sha512": "e19jmWJAQucbPYk3/fihJMDCYfv6CO+Qwp34pOehUSCbaHROw6FZ551SN1D0s9Btl0U/QHfuwFq6Z8Oa2ktE6g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.13",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5144,7 +5144,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
-        "microsoft.aspnetcore.authentication.jwtbearer.8.0.13.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.8.0.14.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },

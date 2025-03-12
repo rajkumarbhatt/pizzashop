@@ -30,6 +30,7 @@
                         <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
                 </td>
                 <input type="hidden" id="modifierId" value=@modifier.Id />
+                <input type="hidden" id="modifierGroupId" value="@Model.ModifierGroups[0].Id"/>
             </tr>
         }
     </tbody>
@@ -203,11 +204,11 @@
         const nextPageIndex = currentPageIndex + 1;
         const searchValue = $("#searchInputModifier").val().toLowerCase();
         const pageSize = @Model.PageSizeModifier;
-        var modifierGroupId = $("#modifierId").val();
+        var modifierGroupId = $("#modifierGroupId").val();
         $.ajax({
             url: '@Url.Action("ModifiersFilter", "Menu")',
             type: 'GET',
-            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierId: modifierGroupId, searchValue: searchValue },
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
             success: function (data) {
                 $("#ModifiersTablePartial").html(data);
             }
@@ -219,11 +220,11 @@
         const nextPageIndex = currentPageIndex - 1;
         const searchValue = $("#searchInputModifier").val().toLowerCase();
         const pageSize = @Model.PageSizeModifier;
-        var modifierGroupId = $("#modifierId").val();
+        var modifierGroupId = $("#modifierGroupId").val();
         $.ajax({
             url: '@Url.Action("ModifiersFilter", "Menu")',
             type: 'GET',
-            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierId: modifierGroupId, searchValue: searchValue },
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
             success: function (data) {
                 $("#ModifiersTablePartial").html(data);
             }
@@ -233,11 +234,11 @@
     function changePageSizeModifier(pageSize) {
         const nextPageIndex = 1;
         const searchValue = $("#searchInputModifier").val().toLowerCase();
-        var modifierGroupId = $("#modifierId").val();
+        var modifierGroupId = $("#modifierGroupId").val();
         $.ajax({
             url: '@Url.Action("ModifiersFilter", "Menu")',
             type: 'GET',
-            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierId: modifierGroupId, searchValue: searchValue },
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
             success: function (data) {
                 $("#ModifiersTablePartial").html(data);
             }
@@ -247,14 +248,14 @@
     $("#searchInputModifier").on("keyup", function () {
         clearTimeout($.data(this, 'timer'));
         var searchValue = $(this).val().toLowerCase();
-        var modifierGroupId = $("#modifierId").val();
+        var modifierGroupId = $("#modifierGroupId").val();
         $(this).data('timer', setTimeout(function () {
             const currentPageIndex = 1;
             const pageSize = @Model.PageSizeModifier;
             $.ajax({
                 url: '@Url.Action("ModifiersFilter", "Menu")',
                 type: 'GET',
-                data: { pageIndex: currentPageIndex, pageSize: pageSize, modifierId: modifierGroupId, searchValue: searchValue },
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
                 success: function (data) {
                     $("#ModifiersTablePartial").html(data);
                 }
@@ -269,6 +270,7 @@
             data: { pageIndex: 1, pageSize: 5, modifierGroupId: modifierGroupId },
             success: function (data) {
                 $("#ModifiersTablePartial").html(data);
+                $("#modifierGroupId").val(modifierGroupId);
             }
         });
     }
@@ -315,4 +317,5 @@
         });
     }
 
+   
 </script>

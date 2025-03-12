@@ -23,7 +23,7 @@ namespace Presentaion.Controllers
         }
         public IActionResult Index()
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var username = _navBarService.GetUsernameFromUserId(userId);
             var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
@@ -45,7 +45,7 @@ namespace Presentaion.Controllers
         [Route("/RoleAndPermission/ViewPermissions/{roleIdRequested}")]
         public IActionResult ViewPermissions(int roleIdRequested)
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
             var permission = _roleAndPermissionService.GetPermissions();
             var roleRequested = _roleAndPermissionService.GetRole(roleIdRequested);

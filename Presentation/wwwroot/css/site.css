@@ -613,3 +613,29 @@ td{
       max-width: 50%;
   }
 }
+
+/* add modifier dropdown styles */
+.dropdown-multiselect {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-multiselect .dropdown-toggle {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    color: black;
+}
+.dropdown-menu {
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: white;
+    color: black;
+}
+.dropdown-menu li:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}

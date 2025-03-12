@@ -82,6 +82,7 @@
 
     function openModalAllModifiers() {
         $("#AddModifierGroupModal2").modal("show");
+        tickSelectedModifiers();
     }
 
     function addModifierGroupToList(id) {
@@ -201,6 +202,7 @@
         return isMinMaxDataValid;
     }
 
+    
     triggerMultiSelect()
 
     function editItem(id) {

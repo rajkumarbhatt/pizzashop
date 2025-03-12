@@ -4,7 +4,6 @@ using DAL.ViewModels;
 using BLL.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
-using BLL.Interfaces;
 using DAL.DBContext;
 using System.Text;
 
@@ -38,7 +37,13 @@ namespace Presentaion.Controllers
             var expiry = tokenParts[1];
             if (DateTime.Parse(expiry) > DateTime.UtcNow)
             {
-                ResetPasswordViewModel resetPasswordViewModel = new ResetPasswordViewModel();
+                ResetPasswordViewModel resetPasswordViewModel = new ResetPasswordViewModel
+                {
+                    Token = token,
+                    UserId = int.Parse(id),
+                    NewPassword = string.Empty,
+                    ConfirmPassword = string.Empty
+                };
                 resetPasswordViewModel.Token = token;
                 resetPasswordViewModel.UserId = int.Parse(id);
                 return View(resetPasswordViewModel);
@@ -101,7 +106,7 @@ namespace Presentaion.Controllers
                 {
                     return new JsonResult(new { success = false, message = "Validation errors" });
                 }
-                var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+                var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
                 if (user != null)
                 {

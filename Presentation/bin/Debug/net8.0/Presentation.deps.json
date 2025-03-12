@@ -13,7 +13,7 @@
           "BLL": "1.0.0",
           "DAL": "1.0.0",
           "MailKit": "4.10.0",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.13",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.14",
           "Microsoft.EntityFrameworkCore.Design": "9.0.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.1",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.1",
@@ -644,14 +644,14 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.13": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2"
         },
         "runtime": {
           "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll": {
-            "assemblyVersion": "8.0.13.0",
-            "fileVersion": "8.0.1325.6610"
+            "assemblyVersion": "8.0.14.0",
+            "fileVersion": "8.0.1425.11221"
           }
         }
       },
@@ -2864,7 +2864,7 @@
           "BCrypt.Net-Next": "4.0.3",
           "DAL": "1.0.0",
           "MailKit": "4.10.0",
-          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.13",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.1",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "9.0.0",
           "MimeKit": "4.10.0",
@@ -3292,12 +3292,12 @@
       "path": "mailkit/4.10.0",
       "hashPath": "mailkit.4.10.0.nupkg.sha512"
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.13": {
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-EUNaX3F4fALAfvp7wsCqjqziu1lTNwYRFbIcVJEt6vInWxEpscAM/pcG6GBOx3WcmSRdB7sqtKAKSkyY6XhTig==",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.13",
-      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.8.0.13.nupkg.sha512"
+      "sha512": "sha512-e19jmWJAQucbPYk3/fihJMDCYfv6CO+Qwp34pOehUSCbaHROw6FZ551SN1D0s9Btl0U/QHfuwFq6Z8Oa2ktE6g==",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.14",
+      "hashPath": "microsoft.aspnetcore.authentication.jwtbearer.8.0.14.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Http.Abstractions/2.3.0": {
       "type": "package",

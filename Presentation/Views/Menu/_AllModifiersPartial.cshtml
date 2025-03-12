@@ -65,7 +65,7 @@
         tag.setAttribute("data-value", modifierId);
         tag.innerHTML = `
         ${modifierName}
-        <span class="tag-delete">x</span>
+        <span class="tag-delete"></span>
         `;
         tagsDiv.appendChild(tag);
     }
@@ -122,6 +122,7 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
             success: function (data) {
                 $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
             }
         });
     });
@@ -137,9 +138,19 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
             success: function (data) {
                 $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
             }
         });
     });
+
+    function tickSelectedModifiers() {
+        selectedModifiers.forEach(modifier => {
+            const customId = modifier.name.replace(' ', '/') + "_" + modifier.id;
+            if(document.getElementById(customId) != null){
+                document.getElementById(customId).checked = true;
+            }
+        });
+    }
 
     function changePageSizeAllModifiers(pageSize) {
         const nextPageIndex = 1;
@@ -150,6 +161,7 @@
             data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
             success: function (data) {
                 $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
             }
         });
     }
@@ -157,15 +169,17 @@
     $("#searchInputAllModifiers").on("keyup", function () {
         clearTimeout($.data(this, 'timer'));
         var searchValue = $(this).val().toLowerCase();
+        debugger;
         $(this).data('timer', setTimeout(function () {
             const currentPageIndex = 1;
             const pageSize = @Model.PageSizeAllModifiers;
             $.ajax({
-                url: '@Url.Action("AllModifiersSearch", "Menu")',
+                url: '@Url.Action("AllModifiersFilter", "Menu")',
                 type: 'GET',
                 data: { pageIndex: currentPageIndex, pageSize: pageSize, searchValue: searchValue },
                 success: function (data) {
                     $("#allModifiersPartial").html(data);
+                    tickSelectedModifiers();
                 }
             });
         }, 300));

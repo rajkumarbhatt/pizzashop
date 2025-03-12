@@ -16,18 +16,18 @@ namespace Presentaion.Controllers
             _categoryService = categoryService;
             _jwtService = jwtService;
         }
-        public IActionResult Index(int pageIndex = 1, int pageSize = 5, string searchValue = null)
+        public IActionResult Index(int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
             var categories = _categoryService.GetCategories();
-            int categoryId = categories.FirstOrDefault().Id;
-            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            int categoryId = categories.FirstOrDefault()?.Id ?? 0;
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var modifierGroups = _categoryService.GetModifierGroups();
-            var modifierId = modifierGroups.FirstOrDefault().Id;
-            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue);
+            var modifierId = modifierGroups.FirstOrDefault()?.Id ?? 0;
+            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue ?? "");
             var pageIndexModifier = 1;
             var pageSizeModifier = 5;
             var totalModifiers = modifiers.Count;
-            var allModifiers = _categoryService.GetAllModifiers(searchValue);
+            var allModifiers = _categoryService.GetAllModifiers(searchValue ?? "");
             var TotalPagesModifier = (int)Math.Ceiling(totalModifiers / (double)pageSizeModifier);
             var menuViewModel = new MenuViewModel
             {
@@ -55,29 +55,29 @@ namespace Presentaion.Controllers
         [HttpPost]
         public IActionResult AddCategory(string categoryName, string categoryDescription)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.AddCategory(categoryName, categoryDescription, userId);
         }
 
         [HttpPut]
         public IActionResult UpdateCategory(int categoryId, string categoryName, string categoryDescription)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.UpdateCategory(categoryId, categoryName, categoryDescription, userId);
         }
 
         [HttpDelete]
         public IActionResult DeleteCategory(int categoryId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.DeleteCategory(categoryId, userId);
         }
 
         [HttpGet]
-        public IActionResult ItemsFilter(int pageIndex, int pageSize, int categoryId, string searchValue = null)
+        public IActionResult ItemsFilter(int pageIndex, int pageSize, int categoryId, string? searchValue = null)
         {
             var categories = _categoryService.GetCategories();
-            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -91,10 +91,10 @@ namespace Presentaion.Controllers
         }
 
         [HttpGet]
-        public IActionResult ItemsSearch(int pageIndex, int pageSize, int categoryId, string searchValue = null)
+        public IActionResult ItemsSearch(int pageIndex, int pageSize, int categoryId, string? searchValue = null)
         {
             var categories = _categoryService.GetCategories();
-            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue);
+            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -110,14 +110,14 @@ namespace Presentaion.Controllers
         [HttpPost]
         public void UpdateItemAvailability(int itemId, bool isAvailable)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             _categoryService.UpdateItemAvailability(itemId, isAvailable, userId);
         }
 
         [HttpDelete]
         public IActionResult DeleteItem(int itemId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.DeleteItem(itemId, userId);
         }
 
@@ -129,16 +129,16 @@ namespace Presentaion.Controllers
             {
                 return PartialView("_AddItemModifierGroupPartial", new MenuViewModel());
             }
-            var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(modifierGroupIds);
-            var selectedModifierGroups = _categoryService.GetModifierGroupsFromList(modifierGroupData.Select(x => x.Id).ToList());
-            var selectedModifiers = _categoryService.GetModifiersFromList(modifierGroupData.Select(x => x.Id).ToList());
-            var selectedModifierModifierGroupMappings = _categoryService.GetModifierModifierGroupMappings(modifierGroupData.Select(x => x.Id).ToList());
+            var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(modifierGroupIds) ?? new List<ModifierGroupData>();
+            var selectedModifierGroups = _categoryService.GetModifierGroupsFromList(modifierGroupData?.Select(x => x.Id).ToList() ?? new List<int>());
+            var selectedModifiers = _categoryService.GetModifiersFromList(modifierGroupData?.Select(x => x.Id).ToList() ?? new List<int>());
+            var selectedModifierModifierGroupMappings = _categoryService.GetModifierModifierGroupMappings(modifierGroupData?.Select(x => x.Id).ToList() ?? new List<int>());
             var menuViewModel = new MenuViewModel
             {
                 SelectedModifierGroups = selectedModifierGroups,
                 SelectedModifiers = selectedModifiers,
                 SelectedModifierModifierGroupMappings = selectedModifierModifierGroupMappings,
-                ModifierGroupData = modifierGroupData
+                ModifierGroupData = modifierGroupData ?? new List<ModifierGroupData>()
             };
             return PartialView("_AddItemModifierGroupPartial", menuViewModel);
         }
@@ -155,7 +155,7 @@ namespace Presentaion.Controllers
                 }
                 return new JsonResult(new { success = false, message = "Invalid input" });  
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var itemName = _categoryService.AddItem(addItemViewModel, userId);
             return _categoryService.UpdateItemModifierGroup(addItemViewModel, itemName, userId);
         }
@@ -168,14 +168,10 @@ namespace Presentaion.Controllers
         }
 
         [HttpGet]
-        public IActionResult ModifiersFilter(int pageIndex, int pageSize, int modifierId, int modifierGroupId, string searchValue = null)
+        public IActionResult ModifiersFilter(int pageIndex, int pageSize, int modifierGroupId, string? searchValue = null)
         {
             var modifierGroups = _categoryService.GetModifierGroups();
-            if (modifierGroupId == 0)
-            {
-                modifierGroupId = _categoryService.GetModifierGroupId(modifierId);
-            }
-            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierGroupId, searchValue);
+            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierGroupId, searchValue ?? "");
             var menuViewModel = new MenuViewModel
             {
                 ModifierGroups = modifierGroups,
@@ -191,21 +187,21 @@ namespace Presentaion.Controllers
         [HttpDelete]
         public IActionResult DeleteModifier(int modifierId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.DeleteModifier(modifierId, userId);
         }
 
         [HttpDelete]
         public IActionResult DeleteModifierGroup(int modifierGroupId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.DeleteModifierGroup(modifierGroupId, userId);
         }
 
         [HttpGet]
-        public IActionResult AllModifiersFilter(int pageIndex, int pageSize, string searchValue = null)
+        public IActionResult AllModifiersFilter(int pageIndex, int pageSize, string? searchValue = null)
         {
-            var allModifiers = _categoryService.GetAllModifiers(searchValue);
+            var allModifiers = _categoryService.GetAllModifiers(searchValue ?? "");
             var menuViewModel = new MenuViewModel
             {
                 AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
@@ -229,7 +225,7 @@ namespace Presentaion.Controllers
                 }
                 return new JsonResult(new { success = false, message = "Invalid input" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _categoryService.AddModifierGroup(createModifierGroupViewModel, userId);
         }
 
@@ -237,6 +233,29 @@ namespace Presentaion.Controllers
         public IActionResult EditModifierGroup(int modifierGroupId)
         {
             MenuViewModel menuViewModel = _categoryService.GetModifierGroupDetails(modifierGroupId);
+            return PartialView("_ModifiersPartial", menuViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddModifier([FromBody]AddModifierViewModel createModifierViewModel)
+        {   
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                }
+                return new JsonResult(new { success = false, message = "Invalid input" });
+            }
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            return _categoryService.AddModifier(createModifierViewModel, userId);
+        }
+
+        [HttpGet]
+        public IActionResult EditModifier(int modifierId, int modifierGroupId)
+        {
+            MenuViewModel menuViewModel = _categoryService.GetModifierData(modifierId, modifierGroupId);
             return PartialView("_ModifiersPartial", menuViewModel);
         }
     }

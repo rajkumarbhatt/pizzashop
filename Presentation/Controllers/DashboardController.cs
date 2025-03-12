@@ -20,7 +20,7 @@ namespace Presentaion.Controllers
         public IActionResult Index()
         {
             var token = Request.Cookies["token"];
-            var userId = _jwtService.GetUserIdFromJwtToken(token);
+            var userId = _jwtService.GetUserIdFromJwtToken(token??"");
             var hasLoggedInBefore = _navBarService.IsFirstTimeLogin(userId);
             var username = _navBarService.GetUsernameFromUserId(userId);
             var roleId  = _navBarService.GetRoleIdFromUserId(userId);

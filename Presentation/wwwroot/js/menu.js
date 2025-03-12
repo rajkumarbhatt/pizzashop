@@ -166,3 +166,4 @@ function triggerMultiSelect(){
             }, 200);
         });
 }
+

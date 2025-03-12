@@ -24,7 +24,7 @@ namespace Presentaion.Controllers
 
         public IActionResult Index(int pageIndex = 1, int pageSize = 5)
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
             var (users, totalUsers) = _userListService.GetUsers(pageIndex, pageSize);
             var rolePermissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
@@ -43,14 +43,14 @@ namespace Presentaion.Controllers
             return View(userListViewModel);
         }
 
-        public IActionResult SearchUser(int pageIndex = 1, int pageSize = 5, string searchValue = null, string sortColumn = "FirstName", string sortColumnDirection = "asc")
+        public IActionResult SearchUser(int pageIndex = 1, int pageSize = 5, string? searchValue = null, string sortColumn = "FirstName", string sortColumnDirection = "asc")
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var username = _navBarService.GetUsernameFromUserId(userId);
             var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
             var roleId = _navBarService.GetRoleIdFromUserId(userId);
 
-            var (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue, sortColumn, sortColumnDirection);
+            var (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
             int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
 
             // Store original page index before adjustment
@@ -62,7 +62,7 @@ namespace Presentaion.Controllers
             // Re-fetch if page index was adjusted
             if (pageIndex != originalPageIndex)
             {
-                (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue, sortColumn, sortColumnDirection);
+                (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
                 totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
             }
 
@@ -94,7 +94,7 @@ namespace Presentaion.Controllers
         [Route("UserList/EditUser/{userId}")]
         public IActionResult EditUser(int userId)
         {
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             EditUserViewModel userViewModel = _userListService.GetUserDataFromUserId(userId, userIdLoggedIn);
 
             var countries = _profileService.GetCountries();
@@ -118,7 +118,7 @@ namespace Presentaion.Controllers
             {             
                 return new JsonResult(new { success = false, message = "Validation Error" });
             }
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _userListService.UpdateUserDataFromUserId(userIdLoggedIn, userViewModel);
         }
 
@@ -128,7 +128,7 @@ namespace Presentaion.Controllers
         {
             var countries = _profileService.GetCountries();
             var roles = _userListService.GetRoles();
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var usernameLoggedIn = _navBarService.GetUsernameFromUserId(userIdLoggedIn);
             var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userIdLoggedIn);
             var roleId = _navBarService.GetRoleIdFromUserId(userIdLoggedIn);
@@ -137,7 +137,11 @@ namespace Presentaion.Controllers
             {
                 Username = usernameLoggedIn,
                 ProfileImageURL = profileImageURL,
-                RoleId = roleId
+                RoleId = roleId,
+                FirstName = "", 
+                Email = "", 
+                Password = "", 
+                UsernameRequestedUser = ""
             };
 
             ViewBag.Roles = roles;
@@ -154,7 +158,7 @@ namespace Presentaion.Controllers
             {
                 return new JsonResult(new { success = false, message = "Validation Error" });
             }
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
 
             await _emailService.SendCreateUserEmailAsync(createUserViewModel.Email, createUserViewModel.Password);
 

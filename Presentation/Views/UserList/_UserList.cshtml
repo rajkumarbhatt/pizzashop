@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody class="">
-                        @foreach(var user in Model.Users)
+                        @foreach(var user in Model.Users) 
                         {
                             <tr class="text-start">
                                 @{
@@ -57,14 +57,14 @@
 
                                 </td>
                                 <td>
-                                    @if(permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                                    @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
                                     {
                                         <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
                                     } else 
                                     {
                                         <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
                                     }
-                                    @if(permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
+                                    @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
                                     {
                                         <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
                                             <a href="#"> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
