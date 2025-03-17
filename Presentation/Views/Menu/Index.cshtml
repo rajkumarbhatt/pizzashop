@@ -1,0 +1,336 @@
+@model DAL.ViewModels.MenuViewModel
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">Menu</h1>
+</div>
+
+<!-- table -->
+<div class="d-block form-bg p-2 my mx-4 ">
+    <div class="d-flex mb-2 items-div ">
+        <div class="d-flex cursor-pointer active-menu-item" id="items-div" onclick="changeLine('items-div')">
+            <img src="~/images/icons/menu.svg" id="blue-menu" class="extra-small-image mx-1" alt="">
+            <img src="~/images/icons/menu-black.svg" id="black-menu" class="extra-small-image mx-1 d-none" alt="">
+            <p>Items</p>
+        </div>
+        <div class="d-flex mx-4 modifiers-div cursor-pointer" id="modifiers-div" onclick="changeLine('modifiers-div')">
+            <img src="~/images/icons/black-modifier.svg" id="black-modifier" class="extra-small-image mx-1" alt="">
+            <img src="~/images/icons/blue-modifier.svg" id="blue-modifier" class="extra-small-image mx-1 d-none" alt="">
+            <p>Modifiers</p>
+        </div>
+    </div>
+</div>
+<p class="underline-para" id="underline-para"></p>
+
+<div id="partialViewStarting" class="">
+
+    <partial name="_MenuPartial" model="@Model" />
+
+
+
+</div>
+
+@* modifiers content *@
+
+<div id="modifiers-content" class=" form-bg p-2 my-1 row mx-4 d-none">
+    <partial name="_ModifiersPartial" model="@Model" />
+</div>
+
+
+
+
+@* add and edit item *@
+<div id="AddItemModalPartial">
+    <partial name="_AddItemPartial" model="@Model" />
+</div>
+
+
+
+<script src="~/js/menu.js" asp-append-version="true"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    var selectedModifiers = [];
+    var selectModifierGroups = [];
+
+
+    function deleteModifierGroupFunc(modifierGroupId) {
+        console.log(modifierGroupId);
+        $("#deleteModifierGroupButton").click(function () {
+            console.log(modifierGroupId);
+            $.ajax({
+                url: '@Url.Action("DeleteModifierGroup", "Menu")',
+                type: 'DELETE',
+                data: { modifierGroupId: modifierGroupId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    function openModalAllModifiers() {
+        $("#AddModifierGroupModal2").modal("show");
+        tickSelectedModifiers();
+    }
+
+    function addModifierGroupToList(id) {
+        var isChecked = document.getElementById(id).checked;
+        var idInt = parseInt(id);
+        if (isChecked) {
+            selectModifierGroups.push({
+                Id: idInt,
+                MinimumQuantity: 0,
+                MaximumQuantity: 0
+            });
+        } else {
+            selectModifierGroups = selectModifierGroups.filter((value) => value.Id !== idInt);
+        }
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
+            success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
+                $("#modifierGroupdata").html(response);
+            }
+        });
+    }
+
+    function addMinimum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MinimumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
+    function addMaximum(id, value) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups[index].MaximumQuantity = value;
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+    }
+
+    document.getElementById('Image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const file = e.target.files[0];
+            document.getElementById('file-name').textContent = file.name;
+        }
+    });
+
+    function removeTag(value) {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+        const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
+        if (tag) {
+            tag.remove();
+        }
+    }
+
+    function deleteSelectedModifierGroup(id) {
+        var index = selectModifierGroups.findIndex(x => x.Id === id);
+        selectModifierGroups.splice(index, 1);
+        var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        document.getElementById(id).checked = false;
+        removeTag(id);
+
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetModifierGroupData",
+            data: { modifierGroupIds: selectModifierGroupsString },
+            success: function (response) {
+                selectModifierGroups = JSON.parse(selectModifierGroupsString);
+                $("#modifierGroupdata").html(response);
+            }
+        });
+    }
+
+    function initializeFormSubmit() {
+        $("#AddItemForm").submit(function (e) {
+            e.preventDefault();
+            if (!checkMinMaxData()) {
+                toastr.error("Please enter valid minimum and maximum values");
+                return;
+            }
+            $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            console.log($("#ModifierGroupIds").val());
+            $.ajax({
+                type: "POST",
+                url: "/Menu/AddItem",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(function () {
+                            window.location.href = "/Menu";
+                        }, 1500);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (response) {
+                    toastr.error(response.message);
+                }
+            });
+        });
+    }
+
+    function checkMinMaxData() {
+        let isMinMaxDataValid = true;
+        selectModifierGroups.forEach(function (modifierGroup) {
+            if (modifierGroup.MinimumQuantity > modifierGroup.MaximumQuantity) {
+                isMinMaxDataValid = false;
+            }
+        });
+
+        return isMinMaxDataValid;
+    }
+
+    
+    triggerMultiSelect()
+
+    function editItem(id) {
+        $.ajax({
+            type: "GET",
+            url: "/Menu/GetItemData",
+            data: { itemId: id },
+            success: function (response) {
+                $("#AddItemModalPartial").html(response);
+                $("#AddItemModalHeading").text("Edit Item");
+                $("#AddItemButton").text("Update");
+                triggerMultiSelect();
+                SyncEditChanges();
+                initializeFormSubmit();
+                $("#addItemModal").modal("show");
+                $("IdItemEdit").val(id);
+            },
+            error: function (response) {
+                toastr.error(response.message);
+            }
+        });
+    }
+
+    function addTag(value, text) {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        const selectedTagsContainer = customMultiSelect.querySelector('.selected-tags');
+
+        const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.setAttribute('data-value', value);
+        tag.innerHTML = `
+        ${text}
+        <span class="tag-delete"></span>
+        `;
+        selectedTagsContainer.appendChild(tag);
+        tag.querySelector('.tag-delete').addEventListener('click', () => {
+            tag.remove();
+            const option = selectElement.querySelector(`option[value="${value}"]`);
+            if (option) {
+                option.selected = false;
+            }
+            const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+        });
+    }
+
+    function SyncEditChanges() {
+        selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
+        console.log(selectModifierGroups);
+        selectModifierGroups.forEach(function (modifierGroup) {
+            document.getElementById(modifierGroup.Id).checked = true;
+            addTag(modifierGroup.Id, modifierGroup.Name);
+        });
+    }
+
+    //edit category
+    function editCategory(categoryId, categoryName, categoryDescription) {
+        $("#EditCategoryName").val(categoryName);
+        $("#EditCategoryDescription").val(categoryDescription);
+        $("#EditCategoryId").val(categoryId);
+    }
+
+    //delete category
+    function openModal(categoryId) {
+        $("#deleteCategoryButton").click(function () {
+            $.ajax({
+                url: '/Menu/DeleteCategory',
+                type: 'DELETE',
+                data: { categoryId: categoryId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            window.location.href = "/Menu";
+                        }, 1000);
+                    } else {
+                        if (!data.success) {
+                            if (data.message != null) {
+                                toastr.error(data.message);
+                            } else {
+                                toastr.error("Not Authorized");
+                            }
+                        }
+                    }
+                },
+                error: function (data) {
+                    toastr.error(data.message);
+                }
+            });
+        });
+    }
+
+    function changeDefaultTax() {
+        var value = document.getElementById("IsDefaultTaxable").checked;
+        if (value) {
+            $("#TaxPercentage").prop("disabled", false);
+            $("#ShortCode").prop("disabled", false);
+        } else {
+            $("#TaxPercentage").prop("disabled", true);
+            $("#ShortCode").prop("disabled", true);
+        }
+    }
+    
+
+    function changeLine(item) {
+        if (item == "modifiers-div") {
+            document.getElementById("underline-para").style.marginLeft = "120px";
+            document.getElementById("underline-para").style.width = "90px";
+            document.getElementById("modifiers-div").classList.add("active-menu-item");
+            document.getElementById("items-div").classList.remove("active-menu-item");
+            document.getElementById("black-menu").classList.remove("d-none");
+            document.getElementById("blue-menu").classList.add("d-none");
+            document.getElementById("blue-modifier").classList.remove("d-none");
+            document.getElementById("black-modifier").classList.add("d-none");
+            document.getElementById("items-content").classList.add("d-none");
+            document.getElementById("modifiers-content").classList.remove("d-none");
+        } else {
+            document.getElementById("underline-para").style.marginLeft = "30px";
+            document.getElementById("underline-para").style.width = "70px";
+            document.getElementById("items-div").classList.add("active-menu-item");
+            document.getElementById("modifiers-div").classList.remove("active-menu-item");
+            document.getElementById("black-menu").classList.add("d-none");
+            document.getElementById("blue-menu").classList.remove("d-none");
+            document.getElementById("black-modifier").classList.remove("d-none");
+            document.getElementById("blue-modifier").classList.add("d-none");
+            document.getElementById("items-content").classList.remove("d-none");
+            document.getElementById("modifiers-content").classList.add("d-none");
+        }
+    }
+
+</script>

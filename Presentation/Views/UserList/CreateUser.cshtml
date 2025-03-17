@@ -1,0 +1,134 @@
+@model DAL.ViewModels.CreateUserViewModel
+
+<!-- user heading and search box and add user button -->
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">Create User</h1>
+    <a asp-controller="UserList" asp-action="Index">
+        <button class="btn btn-contrast mx-4">
+            < Back</button>
+    </a>
+</div>
+
+<!-- form -->
+<div class="form-bg mx-4 p-3 shadow my-3">
+    <form action="" id="create-user-form">
+        <div class="row g-3">
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <input type="text" class="form-control" name="FirstName" asp-for="@Model.FirstName" id="first-name"
+                    placeholder="first-name">
+                <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                <label for="first-name" class="mx-2 mt-2">First Name</label>
+            </div>
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <input type="text" class="form-control" name="LastName" id="last-name" placeholder="last-name">
+                <label for="last-name" class="mx-2 mt-2">Last Name</label>
+            </div>
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <input type="text" class="form-control" asp-for="@Model.UsernameRequestedUser"
+                    name="UsernameRequestedUser" id="user-name" placeholder="user-name">
+                <span asp-validation-for="@Model.UsernameRequestedUser" class="text-danger"></span>
+                <label for="user-name" class="mx-2 mt-2">User Name</label>
+            </div>
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <select name="RoleIdRequestedUser" asp-for="@Model.RoleId" id="select-role" class="form-select"
+                    aria-label="Select Role">
+                    @foreach (var role in ViewBag.Roles)
+                    {
+                        <option value="@role.Id">@role.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.RoleId" class="text-danger"></span>
+                <label for="select-role" class="mx-2 mt-2">Role</label>
+            </div>
+            <!-- email -->
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <input type="email" class="form-control" name="Email" asp-for="@Model.Email" id="email"
+                    placeholder="email">
+                <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                <label for="email" class="mx-2 mt-2">Email</label>
+            </div>
+            <!-- status -->
+            <div class="col-12 col-sm-6 p-2 form-floating">
+                <input type="password" class="form-control" asp-for="@Model.Password" autocomplete="off" name="Password" id="password"
+                    placeholder="password">
+                <img src="~/images/icons/show-password.svg" id="show-current-password"
+                    onclick="showAndHidePassword(true)" class="small-image image-inside-password" alt="">
+                <img src="~/images/icons/hide-password.svg" id="hide-current-password"
+                    onclick="showAndHidePassword(false)" class="small-image image-inside-password d-none" alt="">
+                <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                <label for="password" class="mx-2 mt-2">Password</label>
+            </div>
+            <div class="col-12 py-2">
+                <div class="file upload position-relative overflow-hidden btn-custom">
+                    <div class="d-flex flex-column justify-content-center align-items-center my-3">
+                        <img src="~/images/icons/cloud.svg" class="small-image" alt="">
+                        <span>Browse Files</span>
+                        <p id="file-name"></p>
+                    </div>
+                    <input type="file" id="upload-btn" class="position-absolute file-input-btn" name="ProfileImage"
+                        accept="image/*" />
+                </div>
+            </div>
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <select name="CountryId" asp-for="@Model.CountryId" id="select-country" class="form-select"
+                    aria-label="Select Country">
+                    <option value="">Select Country</option>
+                    @foreach (var country in ViewBag.Countries)
+                    {
+                        <option value="@country.Id" selected="@(Model.CountryId == country.Id)">@country.Name
+                        </option>
+                    }
+                </select>
+                <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+                <label for="select-country" class="mx-2 mt-2">Country</label>
+            </div>
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <select name="StateId" id="select-state" class="form-select" asp-for="@Model.StateId"
+                    aria-label="Select State">
+                    <option value="">Select State</option>
+                </select>
+                <span asp-validation-for="@Model.StateId" class="text-danger"></span>
+                <label for="select-state" class="mx-2 mt-2">State</label>
+            </div>
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <select name="CityId" id="select-city" asp-for="@Model.CityId" class="form-select"
+                    aria-label="Select City">
+                    <option value="">Select City</option>
+                </select>
+                <span asp-validation-for="@Model.CityId" class="text-danger"></span>
+                <label for="select-city" class="mx-2 mt-2">City</label>
+            </div>
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <input type="text" class="form-control" name="ZipCode" id="zipcode" placeholder="Zipcode">
+                <label for="first-name" class="mx-2 mt-2">Zipcode</label>
+            </div>
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <input type="text" class="form-control" name="Address" id="address" placeholder="Address">
+                <label for="address" class="mx-2 mt-2">Address</label>
+            </div>
+            <!-- phone-number -->
+            <div class="col-12 col-sm-4 p-2 form-floating">
+                <input type="text" asp-for="@Model.PhoneNumber" class="form-control" name="PhoneNumber" id="phone-number" placeholder="phone-number">
+                <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                <label for="phone-number" class="mx-2 mt-2">Phone Number</label>
+            </div>
+            <div class="my-3 mx-2">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <button class="btn btn-contrast">
+                    <a asp-controller="UserList" asp-action="Index" class="text-decoration-none position p-3">
+                        Cancel</a>
+                </button>
+            </div>
+            <input id="userid" name="Id" class="d-none" value="@Model.Id" />
+
+        </div>
+    </form>
+</div>
+</div>
+
+<script src="~/js/createUser.js" asp-append-version="true"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

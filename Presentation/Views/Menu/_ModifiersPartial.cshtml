@@ -1,0 +1,582 @@
+@model DAL.ViewModels.MenuViewModel
+@if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.ModifierGroupIds != null)
+{
+    <script>
+        var selectedModifiersGroupsAddModifier2 = @Html.Raw(Json.Serialize(Model.AddModifierViewModel.ModifierGroupIds));
+        selectedModifiersGroupsAddModifier2 = selectedModifiersGroupsAddModifier2.map(x => parseInt(x));
+        $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier2);
+        selectedModifiersGroupsAddModifier2.forEach(x => {
+            var customId = "AddModifier" + x;
+            $("#" + customId).prop("checked", true);
+        });
+    </script>
+}
+<div class="d-none d-md-block col-md-4 col-lg-3 col-xxl-2 bg-menu-category height-main-container">
+    <div class="d-flex justify-content-between p-3">
+        <h4 class="font-blue">Modifiers</h4>
+        <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
+            <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+        </button>
+    </div>
+    <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
+        @foreach (var modifierGroup in Model.ModifierGroups)
+        {
+            var divCustomId = "modifierGroup" + modifierGroup.Id;
+            <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)" onclick="changeModifiers(@modifierGroup.Id)"
+                class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                <div>
+                    <img src="~/images/icons/gray-six-dots.svg" class="small-image " alt="">
+                    <img src="~/images/icons/blue-six-dots.svg d-none"  class="small-image" alt="">
+                    <span class="menu-category-navigation-items" >@modifierGroup.Name</span>
+                </div>
+                <div id="@divCustomId" class="d-none">
+                    <button type="button" class="delete-btn bg-white">
+                        <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                    </button>
+                    <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                        data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="accordion col-12 d-block d-md-none" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne"> Modifiers
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="d-block d-lg-none p-3 col-lg-3 bg-menu-category">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="font-blue">Modifier Group</h4>
+                            <button type="button" class="delete-btn" data-bs-toggle="modal"
+                                data-bs-target="#AddModifierGroupModal">
+                                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
+                                        alt=""></a>
+                            </button>
+                        </div>
+                        <div class="d-flex flex-column mt-2 mt-sm-3 mt-md-5">
+                            @foreach (var modifierGroup in @Model.ModifierGroups)
+                            {
+                                var divCustomId = "modifierGroup" + modifierGroup.Id;
+                                <div onclick="changeModifiers(@modifierGroup.Id)"
+                                    class="d-flex justify-content-between align-items-center cursor-pointer p-1">
+                                    <div>
+                                        <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots"
+                                            class="small-image " alt="">
+                                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots"
+                                            class="small-image" alt="">
+                                        <span class="menu-category-navigation-items" id="sandwich-span">@modifierGroup.Name</span>
+                                    </div>
+                                    <div>
+                                        <button type="button" class="delete-btn bg-white">
+                                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                                    onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                                        </button>
+                                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModifierGroup"
+                                            onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
+                                                    id="sandwich-delete-icon"></a>
+                                        </button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<input type="hidden" id="modifierGroupId21" value="@Model.ModifierGroups[0].Id"/>s
+<div class="col-12 col-md-8 col-lg-9">
+    <div class="d-flex menu-mobile-header-div justify-content-between pt-3 pt-sm-2 align-items-center">
+        <h4 class="px-sm-4 py-2">Modifiers</h4>
+        <div class="d-flex justify-content-center gap-2 align-items-center mx-3">
+            <div class="input-group search-box d-none d-md-block">
+                <input type="text" id="searchInputModifier" class="form-control search-input py-1 py-sm-2"
+                    placeholder="Search">
+                <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+            </div>
+            <p class="delete-styles d-bloack d-md-none" id="search-icon-modifier" onclick="showSearchBar()">
+                <a href="#" class="text-decoration-none text-black add-user-link">
+                    <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
+                </a>
+            </p>
+            <div id="mobile-search-bar" class="input-group search-box d-none d-md-none">
+                <input id="searchInputModifierMobile" type="text" class="form-control search-input py-1 py-sm-2"
+                    placeholder="Search">
+                <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+            </div>
+            <p class="delete-styles " data-bs-toggle="modal" data-bs-target="#deleteModifiers" id="deleteSelectedModifiersButton">
+                <a href="#" class="text-decoration-none text-black   add-user-link">
+                    <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                </a>
+            </p>
+            <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
+                data-bs-toggle="modal" data-bs-target="#AddModifierModal" style="width: 49px; height: 49px;">
+                <button class="text-decoration-none text-black btn  add-user-link">
+                    <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                </button>
+            </p>
+            <button data-bs-toggle="modal" data-bs-target="#AddModifierModal" id="addModifierModal"
+                class="d-none d-md-block button-styles-header w-100 add-item-button">
+                <a href="#" class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                    <p>+</p>
+                    <p class="d-none d-sm-block">Add Modifier</p>
+                </a>
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+
+
+        <div id="ModifiersTablePartial" class="">
+
+
+            <partial name="_ModifiersTable" model="@Model" />
+
+        </div>
+    </div>
+
+@* delete modifiergroup modal *@
+    <div class="modal fade" id="deleteModifierGroup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel1">Delete Confirmation
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex align-items-center flex-column">
+                    <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                    <p>Are you sure you want to delete this modifier group?</p>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button id="deleteModifierGroupButton" type="button" class="btn btn-primary px-3"
+                        data-bs-dismiss="modal">Yes</button>
+                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@* add modifier group modal *@
+    <div class="modal fade" id="AddModifierGroupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Add Modifier Group</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-floating my-auto">
+                                    <input type="text" asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupName"
+                                        class="form-control" name="Model.CreateModifierGroupViewModel.ModifierGroupName"
+                                        id="AddModifierName" required placeholder="name">
+                                    <label for="category-name" class="">Name*</label>
+                                    <span id="addMGName" asp-validation-for="@Model.CreateModifierGroupViewModel.ModifierGroupName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mt-2 mb-3">
+                                <div class="form-floating my-auto">
+                                    <input type="text"
+                                        asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupDescription"
+                                        class="form-control"
+                                        name="Model.CreateModifierGroupViewModel.ModifierGroupDescription"
+                                        id="AddModifierDescription" required placeholder="Description*">
+                                    <label for="category-description" class="">Description*</label>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="ModifierIdsAddModifierGroup"
+                            asp-for="@Model.CreateModifierGroupViewModel.SelectedModifierIds"
+                            name="Model.CreateModifierGroupViewModel.SelectedModifierIds" />
+                        @if (Model.CreateModifierGroupViewModel != null && Model.CreateModifierGroupViewModel.ModifierGroupId != 0)
+                        {
+                            <input type="hidden" id="ModifierGroupId"
+                                asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
+                                name="Model.CreateModifierGroupViewModel.ModifierGroupId"
+                                value="@Model.CreateModifierGroupViewModel.ModifierGroupId" />
+                        }
+                        else
+                        {
+                            <input type="hidden" id="ModifierGroupId"
+                                asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
+                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value="0" />
+                        }
+                        <a onclick="openModalAllModifiers()" class="text-decoration-none cursor-pointer">+ Add Existing
+                            Modifiers</a>
+                        <div id="modifiersSelected" class="d-flex flex-wrap mt-2 ">
+                            @if (Model.CreateModifierGroupViewModel != null &&
+                                                        Model.CreateModifierGroupViewModel.SelectedModifierIds != null)
+                            {
+                                foreach (var modifier in Model.CreateModifierGroupViewModel.Modifiers)
+                                {
+                                    <script>
+                                        addTagCustom(@modifier.Id, '@modifier.Name');
+                                        selectedModifiers.push({
+                                            id: @modifier.Id,
+                                            name: '@modifier.Name'
+                                        });
+                                    </script>
+                                }
+                            }
+                        </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="button" id="AddModifierButton2" class="btn btn-primary px-3" >Save</button>
+                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@* delete modififers modal *@
+<div class="modal fade" id="deleteModifiers" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete
+                    Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete these modifiers?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteModifierButton" onclick="deleteSelectedModifiers()" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* add modifier group modal 2 *@
+    <div class="modal fade" id="AddModifierGroupModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Select Existing Modifier(s)
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="input-group search-box">
+                                <input id="searchInputAllModifiers" type="text"
+                                    class="form-control search-input py-1 py-sm-2" placeholder="Search">
+                                <img src="./images/icons/search-icon.svg" class="small-image anchor-tag  search-icon"
+                                    alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive col-12 form-bg mx-4  mx-auto">
+                                <div id="allModifiersPartial">
+                                    <partial name="_AllModifiersPartial" model="@Model" />
+                                </div>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-end">
+                                <button onclick="addModalsToList()" type="button" class="btn btn-primary px-3"
+                                    data-bs-dismiss="modal">Save</button>
+                                <a data-bs-dismiss="modal"><button type="button"
+                                        class="btn btn-contrast px-3">Cancel</button></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+@* add new modifier modal *@
+<div class="modal fade" id="AddModifierModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add New Modifier
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row align-items-center">
+                    <div class="col-12  row">
+                        <div class="dropdown dropdown-multiselect col-12 col-md-6 p-2">
+                            <button
+                                class="btn btn-outline-primary dropdown-toggle d-flex justify-content-between align-items-center"
+                                type="button" id="custom-multiselect" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <span>Select Modifier Group(s)</span>
+                                <span class="ms-auto dropdown-arrow"></span>
+                            </button>
+                            <ul class="dropdown-menu p-2" aria-labelledby="custom-multiselect" style="width: 98%;">
+                                @foreach (var modifierGroup in Model.ModifierGroups)
+                                {
+                                    var customId = "AddModifier" + modifierGroup.Id;
+                                    <li>
+                                        <input onchange="addModifierGroupToModifier(id)" type="checkbox" style="height:1em;"
+                                            class="form-check-input multi-checkbox"
+                                            value="@modifierGroup.Id" id="@customId">
+                                        <label class="form-check-label" for="@customId">@modifierGroup.Name</label>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-6 form-floating">
+                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Name != null)
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Name" 
+                                    value="@Model.AddModifierViewModel.Name"
+                                    id="AddModifierName21" required placeholder="name">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Name"
+                                    id="AddModifierName21" required placeholder="name">
+                            }
+                            <span asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
+                            <label for="AddModifierName21" class="">Name*</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-12  row">
+                        <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Rate"
+                                    value="@Model.AddModifierViewModel.Rate"
+                                    id="AddModifierRate" required placeholder="name">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Rate"
+                                    id="AddModifierRate" required placeholder="name">
+                            }
+                            <label for="AddModifierRate" class="">Rate*</label>
+                        </div>
+                        <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Quantity != null)
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Quantity"
+                                    value="@Model.AddModifierViewModel.Quantity"
+                                    id="AddModifierQuantity" required placeholder="name">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Quantity"
+                                    id="AddModifierQuantity" required placeholder="name">
+                            }
+                            <label for="AddModifierQuantity" class="">Quantity</label>
+                        </div>
+                        <div class="col-12 col-md-4 p-2 form-floating">
+                            <select asp-for="@Model.AddModifierViewModel.Unit"
+                                name="Model.AddModifierViewModel.Unit" id="AddModifierUnit"
+                                class="form-select" aria-label="Select Country">
+                                <option value="" disabled selected hidden>Select Units</option>
+                                <option value="pcs">Pcs</option>
+                                <option value="plate">Plate</option>
+                                <option value="gm">Gm</option>
+                                <option value="ml">Ml</option>
+                            </select>
+                            <label for="select-country" class="mx-2 mt-2">Unit*</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row align-items-center">
+                    <div class="col-12  row">
+                        <div class="form-floating my-auto col-12 pt-2">
+                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Description != null)
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Description"
+                                    value="@Model.AddModifierViewModel.Description"
+                                    id="AddModifierDescription21" placeholder="name">
+                            }
+                            else
+                            {
+                                <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                    class="form-control" name="Model.AddModifierViewModel.Description"
+                                    id="AddModifierDescription21" placeholder="name">
+                            }
+                            <label for="AddModifierDescription21" class="">Description</label>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="AddModifierModifierGroupIds"
+                    asp-for="@Model.AddModifierViewModel.ModifierGroupIds"
+                    name="Model.AddModifierViewModel.ModifierGroupIds" />
+                @if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.Id != 0)
+                {
+                    <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                        name="Model.AddModifierViewModel.Id" value="@Model.AddModifierViewModel.Id" />
+                }
+                else
+                {
+                    <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                        name="Model.AddModifierViewModel.Id" value="-1" />
+                }
+            </div>
+            <div class="modal-footer d-flex justify-content-end">
+                <button type="submit" onclick="addModifier()" id="AddModifierButton" class="btn btn-primary px-3">Save</button>
+                <a onclick="closeModal('AddModifierModal')"><button type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var selectedModifiersGroupsAddModifier = [];
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+    if (selectedModifiersGroupsAddModifier2) {
+        selectedModifiersGroupsAddModifier = selectedModifiersGroupsAddModifier2;
+    }
+
+    function addModifierGroupToModifier(id) {
+        var modifierGroupId = id.replace("AddModifier", "");
+        modifierGroupId = parseInt(modifierGroupId);
+        if (selectedModifiersGroupsAddModifier.includes(modifierGroupId)) {
+            selectedModifiersGroupsAddModifier = selectedModifiersGroupsAddModifier.filter(x => x !== modifierGroupId);
+            $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier);
+        } else {
+            selectedModifiersGroupsAddModifier.push(modifierGroupId);
+            $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier);
+        }
+    }
+
+    function addModifier() {
+        var name = $("#AddModifierName21").val();
+        var rate = $("#AddModifierRate").val();
+        var quantity = $("#AddModifierQuantity").val();
+        var unit = $("#AddModifierUnit").val();
+        var description = $("#AddModifierDescription21").val();
+        var id = $("#AddModifierId").val();
+        var modifierGroupIds = selectedModifiersGroupsAddModifier;
+        console.log(id);
+        $.ajax({
+            url: '@Url.Action("AddModifier", "Menu")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ Name: name, Rate: rate, Quantity: quantity, Unit: unit, Description: description, ModifierGroupIds: modifierGroupIds, Id: id }),
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    }
+
+    function editModifierGroup(modifierGroupId) {
+        $.ajax({
+            url: '@Url.Action("EditModifierGroup", "Menu")',
+            type: 'GET',
+            data: { modifierGroupId: modifierGroupId },
+            success: function (data) {
+                $("#modifiers-content").html(data);
+                $("#AddModifierGroupModal").modal("show");
+                addModigierGroupFunc()
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function addModigierGroupFunc() {
+        $("#AddModifierButton2").click(function () {
+            var name = $("#AddModifierName").val();
+            if (name.length <= 0) {
+                $("#addMGName").text("Modifier Group's name is required.")
+                return;
+            }
+            var description = $("#AddModifierDescription").val();
+            var modifierIds = selectedModifiers.map(x => x.id);
+            var modifierGroupId = $("#ModifierGroupId").val();
+            $.ajax({
+                url: '@Url.Action("AddModifierGroup", "Menu")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ ModifierGroupName: name, ModifierGroupDescription: description, SelectedModifierIds: modifierIds, ModifierGroupId: modifierGroupId }),
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    $(document).ready(function () {
+        $(".multi-checkbox").change(function () {
+            var selected = [];
+            $(".multi-checkbox:checked").each(function () {
+                selected.push($(this).next("label").text());
+            });
+
+            if (selected.length > 0) {
+                $("#custom-multiselect span:first-child").text(selected.join(", "));
+            } else {
+                $("#custom-multiselect span:first-child").text("Select Categories");
+            }
+        });
+    });
+
+    function editModifier(modifierId) {
+        var modifierGroupId = $("#ModifierGroupId").val();
+        $.ajax({
+            url: '@Url.Action("EditModifier", "Menu")',
+            type: 'GET',
+            data: { modifierId: modifierId, modifierGroupId: modifierGroupId },
+            success: function (data) {
+                $("#modifiers-content").html(data);
+                $("#AddModifierModal").modal('show');
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+</script>

@@ -1,0 +1,95 @@
+@model DAL.ViewModels.EditPermissionsViewModel
+
+<!-- user heading and search box and add user button -->
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">Permissions</h1>
+    <a asp-controller="RoleAndPermission" asp-action="Index">
+        <button class="btn btn-contrast mx-4">
+            < Back</button>
+    </a>
+</div>
+
+<!-- table -->
+<div class="table-responsive col-11 form-bg mx-4 p-3 shadow my-3 mx-auto">
+    <!-- select role -->
+    <div class="col-12 col-sm-4 p-2 form-floating">
+        <select name="select-role" id="select-role" class="form-select" disabled aria-label="Select Role">
+            <option value="manager" selected>@Model.RequestedRole.Name</option>
+        </select>
+        <label for="select-role" class="mx-2 mt-2">Role</label>
+    </div>
+
+    <table id="userTable" class="table-responsive table"  style="white-space: nowrap;">
+        <thead class="color-head">
+            <tr class="text-center">
+                <th class="text-start mx-2"> <input class="form-check-input intermediate-checkbox" type="checkbox" value="" id="flexCheckIndeterminate" onchange="checkAll()">
+                    <label class="form-check-label" for="flexCheckIndeterminate"></label>Permissions</th>
+                <th>Can View</th>
+                <th>Can Add/Edit</th>
+                <th>Can Delete</th>
+        </thead>
+        <tbody>
+            @foreach (var permission in Model.Permission)
+            {
+                <tr class="text-center">
+                    <td class="text-start mx-2">
+                        <input id="@permission.Id" class="form-check-input permission-checkbox me-1" type="checkbox" value="@permission.Id" onchange="enableAll(@permission.Id)">
+                        <label class="form-check-label" for="defaultCheck1">@permission.Name</td>
+                    <td>
+                        <div class="form-check form-switch">
+                            @{
+                                var htmlIdName = "CanView" + @Model.RequestedRole.Id + @permission.Id;
+                            }
+                            @if (Model.RolePermissions.Any(rp => rp.RoleId == Model.RequestedRole.Id && rp.PermissionId == permission.Id && rp.CanView.GetValueOrDefault()))
+                            {
+                                <input id="@htmlIdName" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanView')"  checked>
+                            }
+                            else
+                            {
+                                <input id="@htmlIdName" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanView')" >
+                            }
+                            <label for="flexSwitchCheckChecked"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            @{
+                                var htmlIdName2 = "CanEdit" + @Model.RequestedRole.Id + @permission.Id;
+                            }
+                            @if (Model.RolePermissions.Any(rp => rp.RoleId == Model.RequestedRole.Id && rp.PermissionId == permission.Id && rp.CanEdit.GetValueOrDefault() && rp.CanView.GetValueOrDefault()))
+                            {
+                                <input id="@htmlIdName2" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanEdit')"  checked>
+                            }
+                            else
+                            {
+                                <input id="@htmlIdName2" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanEdit')" >
+                            }   
+                            <label for="flexSwitchCheckChecked"></label>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check form-switch">
+                            @{
+                                var htmlIdName3 = "CanDelete" + @Model.RequestedRole.Id + @permission.Id;
+                            }
+                            @if (Model.RolePermissions.Any(rp => rp.RoleId == Model.RequestedRole.Id && rp.PermissionId == permission.Id && rp.CanDelete.GetValueOrDefault() && rp.CanView.GetValueOrDefault()))
+                            {
+                                <input id="@htmlIdName3" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanDelete')"  checked>
+                            }
+                            else
+                            {
+                                <input id="@htmlIdName3" class="form-check-input @permission.Id" type="checkbox" disabled onchange="changePermission(@Model.RequestedRole.Id, @permission.Id, 'CanDelete')" >
+                            }
+                            <label for="flexSwitchCheckChecked"></label>
+                        </div>
+                    </td>   
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-end gap-3">
+        <button class="btn btn-primary" onclick="savePermissions()">Save</button>
+        <a asp-controller="RoleAndPermission" asp-action="Index"><button class="btn btn-contrast">Close</button></a>
+    </div>
+</div>
+<script src="~/js/viewPermissions.js" asp-append-version="true"></script>

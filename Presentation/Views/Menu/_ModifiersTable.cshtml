@@ -1,0 +1,378 @@
+@model DAL.ViewModels.MenuViewModel
+<table id="userTable" class="table table-responsive" style="white-space: nowrap;">
+    <thead class="color-head">
+        <tr class="text-center">
+            <th class="text-start mx-2">
+                <input class="form-check-input intermediate-checkbox modifiers-name-checkbox-intermediate" type="checkbox" value=""
+                    id="modifiers-name-checkbox-intermediate" style="height: 1em;">
+                <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
+            </th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Quantity</th>
+            <th>Action</th>
+    </thead>
+    <tbody>
+        @foreach (var modifier in Model.Modifiers)
+        {
+            <tr class="text-center">
+                <td class="text-start mx-2">
+                    <input onchange="addModifierToDeleteList(@modifier.Id)" class="form-check-input modifiers-name-checkbox" type="checkbox" value=@modifier.Id id="flexCheckChecked" style="height: 1em;">
+                    <label class="form-check-label" for="flexCheckChecked">@modifier.Name</label>
+                </td>
+                <td>@modifier.Unit</td>
+                <td>@modifier.Price</td>
+                <td>@modifier.Quantity</td>
+                <td>
+                    <button onclick="editModifier(@modifier.Id)" type="button" class="edit-btn btn">
+                        <a href="#"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
+                    <button onclick="deleteModifierFunc(@modifier.Id)" type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteModifier">
+                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                </td>
+                <input type="hidden" id="modifierId" value=@modifier.Id />
+                
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
+    <p>Items per page: </p>
+    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+        onchange="changePageSizeModifier(this.value)">
+        <option value="5" selected="@(Model.PageSizeModifier == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.PageSizeModifier == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.PageSizeModifier == 15 ? "selected" : null)">15</option>
+    </select>
+    <p class="px-1">
+        Showing @((Model.PageIndexModifier - 1) * Model.PageSizeModifier + 1) -
+        @(Math.Min(Model.PageIndexModifier * Model.PageSizeModifier, Model.TotalModifiers)) of
+        @Model.TotalModifiers
+    </p>
+
+
+    <div>
+    </div>
+    <button id="previousButtonModifier" class="p-1 px-2" @(Model.PageIndexModifier == 1 ? "disabled" : "")>&lt;</button>
+
+    <button id="nextButtonModifier" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndexModifier == Model.TotalPagesModifier ?
+        "disabled" : "")> &gt;</ button >
+</div>
+
+@* delete modififer modal *@
+<div class="modal fade" id="deleteModifier" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete
+                    Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete this modifier?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteModifierButton" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    var deleteModifierList = [];
+
+    function addModifierToDeleteList(modifierId) {
+        if (deleteModifierList.includes(modifierId)) {
+            deleteModifierList = deleteModifierList.filter(item => item !== modifierId);
+        } else {
+            deleteModifierList.push(modifierId);
+        }
+        console.log(deleteModifierList);
+    }
+
+    $("#modifiers-name-checkbox-intermediate").click(function () {
+        if ($(this).is(":checked")) {
+            $(".modifiers-name-checkbox").prop("checked", true);
+            deleteModifierList = [];
+            $(".modifiers-name-checkbox").each(function () {
+                deleteModifierList.push($(this).val());
+            });
+        } else {
+            $(".modifiers-name-checkbox").prop("checked", false);
+            deleteModifierList = [];
+        }
+        console.log(deleteModifierList);
+    });
+
+    $(".modifiers-name-checkbox").click(function () {
+        if ($(".modifiers-name-checkbox:checked").length === $(".modifiers-name-checkbox").length) {
+            $("#modifiers-name-checkbox-intermediate").prop("checked", true);
+        } else {
+            $("#modifiers-name-checkbox-intermediate").prop("checked", false);
+        }
+    });
+
+    function deleteSelectedModifiers() {
+        deleteModifierList = deleteModifierList.map(function (x) {
+            return parseInt(x, 10);
+        });
+        console.log(deleteModifierList);
+        var modifierGroupId = $("#modifierGroupId21").val();
+        $.ajax({
+            url: '@Url.Action("DeleteSelectedModifiers", "Menu")',
+            type: 'DELETE',
+            data: { modifierIds: deleteModifierList, modifierGroupId: modifierGroupId },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    }
+
+    $("#nextButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex + 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    $("#previousButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex - 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    function changePageSize(pageSize) {
+        const nextPageIndex = 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    $("#searchInput").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    $("#searchInput2").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+
+    function changeItems(categoryId) {
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    function deleteItem(itemId) {
+        $("#deleteItemButton").click(function () {
+            $.ajax({
+                url: '@Url.Action("DeleteItem", "Menu")',
+                type: 'DELETE',
+                data: { itemId: itemId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    $("#nextButtonModifier").click(function () {
+        const currentPageIndex = @Model.PageIndexModifier;
+        const nextPageIndex = currentPageIndex + 1;
+        const searchValue = $("#searchInputModifier").val().toLowerCase();
+        const pageSize = @Model.PageSizeModifier;
+        var modifierGroupId = $("#modifierGroupId21").val();
+        $.ajax({
+            url: '@Url.Action("ModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
+            success: function (data) {
+                $("#ModifiersTablePartial").html(data);
+            }
+        });
+    });
+
+    $("#previousButtonModifier").click(function () {
+        const currentPageIndex = @Model.PageIndexModifier;
+        const nextPageIndex = currentPageIndex - 1;
+        const searchValue = $("#searchInputModifier").val().toLowerCase();
+        const pageSize = @Model.PageSizeModifier;
+        var modifierGroupId = $("#modifierGroupId21").val();
+        $.ajax({
+            url: '@Url.Action("ModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
+            success: function (data) {
+                $("#ModifiersTablePartial").html(data);
+            }
+        });
+    });
+
+    function changePageSizeModifier(pageSize) {
+        const nextPageIndex = 1;
+        const searchValue = $("#searchInputModifier").val().toLowerCase();
+        var modifierGroupId = $("#modifierGroupId21").val();
+        $.ajax({
+            url: '@Url.Action("ModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
+            success: function (data) {
+                $("#ModifiersTablePartial").html(data);
+            }
+        });
+    }
+
+    $("#searchInputModifier").on("keyup", function () {
+        console.log($("#modifierGroupId21").val()); 
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var modifierGroupId = $("#modifierGroupId21").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSizeModifier;
+            $.ajax({
+                url: '@Url.Action("ModifiersFilter", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, modifierGroupId: modifierGroupId, searchValue: searchValue },
+                success: function (data) {
+                    $("#ModifiersTablePartial").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    function changeModifiers(modifierGroupId) {
+        $.ajax({
+            url: '@Url.Action("ModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: 5, modifierGroupId: modifierGroupId },
+            success: function (data) {
+                $("#ModifiersTablePartial").html(data);
+                $("#modifierGroupId21").val(modifierGroupId);
+                console.log($("#modifierGroupId21").val());
+            }
+        });
+    }
+
+    function deleteModifierFunc(modifierId) {
+        $("#deleteModifierButton").click(function () {
+            $.ajax({
+                url: '@Url.Action("DeleteModifier", "Menu")',
+                type: 'DELETE',
+                data: { modifierId: modifierId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    function deleteModifierGroupFunc(modifierGroupId) {
+        console.log(modifierGroupId);
+        $("#deleteModifierGroupButton").click(function () {
+            console.log(modifierGroupId);
+            $.ajax({
+                url: '@Url.Action("DeleteModifierGroup", "Menu")',
+                type: 'DELETE',
+                data: { modifierGroupId: modifierGroupId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+   
+</script>

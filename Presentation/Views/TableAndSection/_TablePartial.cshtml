@@ -1,0 +1,191 @@
+@model DAL.ViewModels.TableAndSectionViewModel
+<table id="userTable" class="table table-responsive" style="white-space: nowrap;">
+    <thead class="color-head">
+        <tr class="text-center">
+            <th class="text-start mx-2">
+                <input class="form-check-input intermediate-checkbox" type="checkbox" value=""
+                    id="DeleteTablesIntermediateCheckbox" style="height: 1em;">
+                <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
+            </th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Action</th>
+    </thead>
+    <tbody>
+        @foreach (var table in Model.Tables)
+        {
+            <tr class="text-center">
+                <td class="text-start mx-2 d-flex align-items-center table-checkbox-gap">
+                    <input class="form-check-input permission-checkbox table-name-checkbox" type="checkbox" value="@table.Id"
+                        style="height: 1em;" onclick="addToList(@table.Id)">
+                    <label class="form-check-label" for="defaultCheck1">@table.Name
+                </td>
+                <td>@table.Capacity</td>
+                <td>
+                    @if (table.Status == "Available")
+                    {
+                        <span class="active-user">@table.Status</span>
+                    }
+                    else
+                    {
+                        <span class="inactive-user">@table.Status</span>
+                    }
+                </td>
+                <td>
+                    <button type="button" onclick="editTableFunc(@table.Id)" class="edit-btn btn">
+                         <a href="#"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
+                    <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteTable" onclick="deleteTableId(@table.Id)">
+                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
+    <p>Items per page: </p>
+    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+        onchange="changePageSize(this.value)">
+        <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
+    </select>
+    <p class="px-1">
+        Showing @((Model.PageIndex - 1) * Model.PageSize + 1) -
+        @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalTables)) of
+        @Model.TotalTables
+    </p>
+
+
+    <div>
+    </div>
+    <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
+
+    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndex == Model.TotalPages ?
+        "disabled" : "")> &gt;</ button >
+</div>
+
+<script>
+
+    function editTableFunc(id) {
+        $.ajax({
+            url: '@Url.Action("EditTable", "TableAndSection")',
+            type: 'GET',
+            data: { tableId: id },
+            success: function (data) {
+                $("#TableName").val(data.name);
+                $("#TableCapacity").val(data.capacity);
+                $("#TableStatus").val(data.status);
+                $("#TableSection").val(data.sectionId);
+                $("#TableId").val(data.id);
+                console.log(data);
+                $("#addTableModal").modal("show");
+            }
+        });
+    }
+
+    $("#DeleteTablesIntermediateCheckbox").click(function () {
+        if ($(this).is(":checked")) {
+            $(".table-name-checkbox").prop("checked", true);
+            deleteTableIds = [];
+            $(".table-name-checkbox").each(function () {
+                deleteTableIds.push(parseInt($(this).val()));
+            });
+        } else {
+            $(".table-name-checkbox").prop("checked", false);
+            deleteTableIds = [];
+        }
+    });
+
+    $(".table-name-checkbox").click(function () {
+        if ($(".table-name-checkbox:checked").length === $(".table-name-checkbox").length) {
+            $("#DeleteTablesIntermediateCheckbox").prop("checked", true);
+        } else {
+            $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
+        }
+    });
+
+    function addToList(tableId) {
+        if (deleteTableIds.includes(tableId)) {
+            deleteTableIds = deleteTableIds.filter(id => id !== tableId);
+        } else {
+            deleteTableIds.push(tableId);
+        }
+    }
+
+    function changeTables(sectionId) {
+        var searchValue = $("#searchInput").val().toLowerCase();
+        var pageSize = @Model.PageSize;
+        $.ajax({
+            url: '@Url.Action("TablesFilter", "TableAndSection")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: pageSize, sectionId: sectionId, searchValue: searchValue },
+            success: function (data) {
+                $("#tablePartialView").html(data);
+                $("#SectionId").val(sectionId);
+            }
+        });
+    }
+
+    $("#nextButton").click(function () {
+        var currentPageIndex = @Model.PageIndex;
+        var nextPageIndex = currentPageIndex + 1;
+        var searchValue = $("#searchInput").val().toLowerCase();
+        var pageSize = @Model.PageSize;
+        var sectionId = $("#SectionId").val();
+        $.ajax({
+            url: '@Url.Action("TablesFilter", "TableAndSection")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, sectionId: sectionId, searchValue: searchValue },
+            success: function (data) {
+                $("#tablePartialView").html(data);
+            }
+        });
+    });
+
+    $("#previousButton").click(function () {
+        var currentPageIndex = @Model.PageIndex;
+        var previousPageIndex = currentPageIndex - 1;
+        var searchValue = $("#searchInput").val().toLowerCase();
+        var pageSize = @Model.PageSize;
+        var sectionId = $("#SectionId").val();
+        $.ajax({
+            url: '@Url.Action("TablesFilter", "TableAndSection")',
+            type: 'GET',
+            data: { pageIndex: previousPageIndex, pageSize: pageSize, sectionId: sectionId, searchValue: searchValue },
+            success: function (data) {
+                $("#tablePartialView").html(data);
+            }
+        });
+    });
+
+    function changePageSize(pageSize) {
+        var searchValue = $("#searchInput").val().toLowerCase();
+        var sectionId = $("#SectionId").val();
+        $.ajax({
+            url: '@Url.Action("TablesFilter", "TableAndSection")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: pageSize, sectionId: sectionId, searchValue: searchValue },
+            success: function (data) {
+                $("#tablePartialView").html(data);
+            }
+        });
+    }
+
+    $("#searchInput").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var sectionId = $("#SectionId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("TablesFilter", "TableAndSection")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, sectionId: sectionId, searchValue: searchValue },
+                success: function (data) {
+                    $("#tablePartialView").html(data);
+                }
+            });
+        }, 300));
+    });
+</script>

@@ -1,0 +1,56 @@
+@{
+    Layout = null;
+}
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PizzaShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+@model DAL.ViewModels.ForgotPasswordViewModel;
+
+<div class="sma container-fluid row bg-color main-container position-absolute h-100">
+
+        <!-- left container -->
+        <div class="d-none d-md-block col-sm-12 col-md-6 img-container">
+            <img class="img-fluid object-fit-cover h-100" src="~/images/dominos_background.jpg" alt="">
+        </div>
+
+        <!-- right container -->
+        <div class="h-100 col-sm-12 col-md-6 right-part d-flex flex-column align-items-center justify-content-center">
+            
+            <!-- logo and heading -->
+            <div class="container-fluid d-flex gap-md-1 gap-lg-2 gap-xl-4 align-items-center justify-content-center heading-container">
+                <img class="logo-img" src="~/images/logos/pizzashop_logo.png" alt="">
+                <h1 class="right-heading">PIZZASHOP</h1>
+            </div>
+            
+            <!-- welcome message -->
+            <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
+                <p class="margin-left welcome-message align-self-center align-self-md-start mb-2 mt-3">Forgot Password</p>
+                <p class="margin-left small align-self-center align-self-md-start mb-2 px-3 px-sm-0">Enter your email and we will send you a link to reset your password</p>
+                <!-- form -->
+                <form action="" onsubmit=" name="login-form" id="forgot-password-form" class=" form-container d-flex flex-column align-items-center justify-content-center gap-3">
+                    <div class="input-group  d-flex flex-column">
+                        <input asp-for="@Model.Email" type="email" id="email" name="email" placeholder="Email*" class="form-control w-100 p-2">
+                        <img class="small-image image-in-input" src="~/images/icons/person.svg" alt="">
+                        <p id="email-error" class="error-message small "></p>
+                    </div>
+                    <a class="w-100"><button type="submit" class="btn w-100 btn-primary">Send</button></a>
+                    <a asp-controller="Home"  class="text-decoration-none link-primary">Back to Login</a>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/forgotPassword.js" asp-append-version="true"></script>

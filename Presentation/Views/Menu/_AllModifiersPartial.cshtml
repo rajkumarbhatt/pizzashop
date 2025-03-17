@@ -1,0 +1,188 @@
+@model DAL.ViewModels.MenuViewModel
+
+
+<table id="userTable" class="table table-responsive add-modifier-group-div" style="white-space: nowrap;">
+    <thead class="color-head">
+        <tr class="text-center">
+            <th class="text-start mx-2">
+                <input class="form-check-input intermediate-checkbox" type="checkbox" value=""
+                    id="flexCheckIndeterminate">
+                <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
+            </th>
+            <th>Unit</th>
+            <th>Rate</th>
+            <th>Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var modifier in Model.AllModifiers)
+        {
+            <tr class="text-center">
+                @{
+                    var customId = modifier.Name.Replace(' ','/') + "_" + modifier.Id;
+                }
+                <td class="text-start mx-2"> <input class="form-check-input all-modifiers-select" type="checkbox" value="" id=@customId onchange="addToList(id)" style="height: 1em;"> <label class="form-check-label" for="flexCheckDefault"></label>@modifier.Name
+                </td>
+                <td>@modifier.Unit</td>
+                <td>@modifier.Price</td>
+                <td>@modifier.Quantity</td>
+            </tr>
+        }
+</table>
+<div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
+    <p>Modifiers per page: </p>
+    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+        onchange="changePageSizeAllModifiers(this.value)">
+        <option value="5" selected="@(Model.PageSizeAllModifiers == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.PageSizeAllModifiers == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.PageSizeAllModifiers == 15 ? "selected" : null)">15</option>
+    </select>
+    <p class="px-1">
+        Showing @((Model.PageIndexAllModifiers - 1) * Model.PageSizeAllModifiers + 1) -
+        @(Math.Min(Model.PageIndexAllModifiers * Model.PageSizeAllModifiers, Model.TotalAllModifiers)) of
+        @Model.TotalAllModifiers
+    </p>
+
+
+    <div>
+    </div>
+    <button type="button" id="previousButtonAllModifiers" class="p-1 px-2" @(Model.PageIndexAllModifiers == 1 ?
+        "disabled" : "")> &lt;</ button >
+
+    <button type="button" id="nextButtonAllModifiers" class="p-1 px-2 ms-1 border-1 border-secondary"
+        @(Model.PageIndexAllModifiers == Model.TotalPagesAllModifiers ? "disabled" : "")> &gt;</ button>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+    function addTagCustom(modifierId, modifierName) {
+        var tagsDiv = document.getElementById("modifiersSelected");
+        var tag = document.createElement("div");
+        tag.className = "tag ms-1";
+        tag.setAttribute("data-value", modifierId);
+        tag.innerHTML = `
+        ${modifierName}
+        <span class="tag-delete"></span>
+        `;
+        tagsDiv.appendChild(tag);
+    }
+    
+
+    function addToList(id) {
+        let modifierId = id.split("_")[1];
+        modifierId = parseInt(modifierId);
+        let modifierName = id.split("_")[0];
+        modifierName = modifierName.replace("/", " ");
+        const modifier = {
+            id: modifierId,
+            name: modifierName
+        };
+        if (selectedModifiers.length === 0) {
+            selectedModifiers.push(modifier);
+        } else {
+            const index = selectedModifiers.findIndex(x => x.id === modifierId);
+            if (index === -1) {
+                selectedModifiers.push(modifier);
+            } else {
+                selectedModifiers.splice(index, 1);
+            }
+        }
+    }
+
+    function addModalsToList() {
+        var tagsDiv = document.getElementById("modifiersSelected");
+        tagsDiv.innerHTML = "";
+        selectedModifiers.forEach(modifier => {
+            addTagCustom(modifier.id, modifier.name);
+        });
+
+        document.querySelectorAll(".tag-delete").forEach(tag => {
+            tag.addEventListener("click", function () {
+                const modifierId = this.parentElement.getAttribute("data-value");
+                const index = selectedModifiers.findIndex(x => x.id === parseInt(modifierId));
+                selectedModifiers.splice(index, 1);
+                this.parentElement.remove();
+                console.log(selectedModifiers);
+            });
+        });
+        console.log(selectedModifiers);
+    }
+
+    $("#previousButtonAllModifiers").click(function () {
+        const currentPageIndex = @Model.PageIndexAllModifiers;
+        const nextPageIndex = currentPageIndex - 1;
+        const searchValue = $("#searchInputAllModifiers").val().toLowerCase();
+        const pageSize = @Model.PageSizeAllModifiers;
+        $.ajax({
+            url: '@Url.Action("AllModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
+            success: function (data) {
+                $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
+            }
+        });
+    });
+
+    $("#nextButtonAllModifiers").click(function () {
+        const currentPageIndex = @Model.PageIndexAllModifiers;
+        const nextPageIndex = currentPageIndex + 1;
+        const searchValue = $("#searchInputAllModifiers").val().toLowerCase();
+        const pageSize = @Model.PageSizeAllModifiers;
+        $.ajax({
+            url: '@Url.Action("AllModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
+            success: function (data) {
+                $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
+            }
+        });
+    });
+
+    function tickSelectedModifiers() {
+        selectedModifiers.forEach(modifier => {
+            const customId = modifier.name.replace(' ', '/') + "_" + modifier.id;
+            if(document.getElementById(customId) != null){
+                document.getElementById(customId).checked = true;
+            }
+        });
+    }
+
+    function changePageSizeAllModifiers(pageSize) {
+        const nextPageIndex = 1;
+        const searchValue = $("#searchInputAllModifiers").val().toLowerCase();
+        $.ajax({
+            url: '@Url.Action("AllModifiersFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue },
+            success: function (data) {
+                $("#allModifiersPartial").html(data);
+                tickSelectedModifiers();
+            }
+        });
+    }
+
+    $("#searchInputAllModifiers").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        debugger;
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSizeAllModifiers;
+            $.ajax({
+                url: '@Url.Action("AllModifiersFilter", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, searchValue: searchValue },
+                success: function (data) {
+                    $("#allModifiersPartial").html(data);
+                    tickSelectedModifiers();
+                }
+            });
+        }, 300));
+    });
+
+</script>

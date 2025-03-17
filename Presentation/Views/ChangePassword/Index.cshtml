@@ -1,0 +1,63 @@
+@model DAL.ViewModels.ChangePasswordViewModel;
+
+
+        <!-- user heading and search box and add user button -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="main-page-heading">Change Password</h1>
+        </div>
+
+        <div class="row flex-column">
+            <p class="col-10 mx-auto mx-sm-5" style="padding: 8px;">Enter a new password to update your account
+                credentials</p>
+            <form id="change-password-form" class="row flex-column">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <!-- current password -->
+                <div class="col-10 col-sm-6 col-lg-3 mx-auto mx-sm-5 p-2 form-floating">
+                    <input type="password" asp-for="@Model.CurrentPassword" autocomplete='off' class="form-control" id="current-password" placeholder="current-password">
+
+                    <span asp-validation-for="@Model.CurrentPassword" class="text-danger"></span>
+                    <label for="current-password" class="mx-2 mt-2">Current Password</label>
+                    <img src="~/images/icons/show-password.svg" id="show-current-password"
+                        onclick="showAndHidePassword(true)" class="small-image image-inside-password" alt="">
+                    <img src="~/images/icons/hide-password.svg" id="hide-current-password"
+                        onclick="showAndHidePassword(false)" class="small-image image-inside-password d-none" alt="">
+                </div>
+                <!-- new password -->
+                <div class="col-10 col-sm-6 col-lg-3 mx-auto mx-sm-5 p-2 form-floating">
+                    <input type="password" asp-for="@Model.NewPassword" autocomplete='off' class="form-control" id="new-password" placeholder="new-password">
+                    <span asp-validation-for="@Model.NewPassword" class="text-danger"></span>
+                    <label for="new-password" class="mx-2 mt-2">New Password</label>
+                    <img src="~/images/icons/show-password.svg" id="show-new-password"
+                        onclick="showAndHideNewPassword(true)" class="small-image image-inside-password" alt="">
+                    <img src="~/images/icons/hide-password.svg" id="hide-new-password"
+                        onclick="showAndHideNewPassword(false)" class="small-image image-inside-password d-none" alt="">
+                </div>
+                <!-- confirm password -->
+                <div class="col-10 col-sm-6 col-lg-3 mx-auto mx-sm-5 p-2 form-floating">
+                    <input type="password" asp-for="@Model.ConfirmPassword" autocomplete='off' class="form-control" id="confirm-password" placeholder="confirm-password">
+                    <span asp-validation-for="@Model.ConfirmPassword" class="text-danger"></span>
+
+                    <label for="confirm-password" class="mx-2 mt-2">Confirm Password</label>
+                    <img src="~/images/icons/show-password.svg" id="show-confirm-password"
+                        onclick="showAndHideConfirmPassword(true)" class="small-image image-inside-password" alt="">
+                    <img src="~/images/icons/hide-password.svg" id="hide-confirm-password"
+                        onclick="showAndHideConfirmPassword(false)" class="small-image image-inside-password d-none"
+                        alt="">
+                </div>
+
+                <!-- submit and cancel buttons -->
+                <div class="col-10 col-sm-6 gap-2 col-lg-3 mx-auto mx-sm-5 d-flex justify-content-start"
+                    style="padding: 8px;">
+                    <button asp-controller="ChangePassword" asp-action="ChangePassword" type="submit"
+                        class="btn btn-primary" id="submit-button">Submit</button>
+                    <button asp-controller="Dashboard" asp-action="Index" class="btn btn-contrast" id="cancel-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+<script src="~/js/changepassword.js"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

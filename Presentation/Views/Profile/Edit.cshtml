@@ -1,0 +1,132 @@
+@model DAL.ViewModels.ProfileViewModel
+
+
+        <!-- user heading and search box and add user button -->
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="main-page-heading">My Profile</h1>
+        </div>
+
+        <!-- form -->
+        <div class="form-bg mx-4 p-3 shadow my-3">
+            <form action="" id="edit-profile-form">
+                <div class="image-bg-div py-4 bg"></div>
+                <div class="d-flex">
+                    @{
+                            string profileImagePath = string.IsNullOrEmpty(@Model.ProfileImageURL)
+                            ? "/images/default-profile.png"
+                            : $"/images/profile-images/{@Model.ProfileImageURL}";
+                        }
+                    <img src=@profileImagePath class="object-fit-cover my-profile-image profile-image-border" id="profile-pic" class="" alt="">
+
+                    <div class="file upload position-relative overflow-hidden btn-custom2" id="file-upload-div">
+                        <input asp-for=@Model.UserProfileImage name="UserProfileImage" type="file" class="position-absolute top-0 start-0 opacity-0" id="file-upload"/>
+                        <label for="file-upload" class="d-flex flex-column justify-content-center align-items-center my-3">
+                            <img src="~/images/icons/cloud.svg" class="small-image" id="cloud-icon" alt="">
+                        </label>
+                    </div>
+
+                    <div class="my-profile-heading-name" style="left: 15px;">
+                        <h3>@Model.FirstName @Model.LastName</h3>
+                        <h6>@Model.Role</h6> 
+                    </div>
+                </div>
+                <div>
+                    <div class="row g-3">
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input type="text" class="form-control" name="FirstName" id="first-name" asp
+                                placeholder="first-name" value=@Model?.FirstName asp-for="FirstName">
+                            <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
+                            <label for="first-name" class="mx-2 mt-2">First Name</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input type="text" class="form-control" name="LastName" id="last-name"
+                                placeholder="last-name" value=@Model?.LastName asp-for="LastName">
+                            <span asp-validation-for="@Model.LastName" class="text-danger"></span>
+                            <label for="last-name" class="mx-2 mt-2">Last Name</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input type="text" class="form-control" name="Username" id="user-name"
+                                placeholder="user-name" value=@Model.Username asp-for="@Model.Username">
+                            <span asp-validation-for="@Model.Username" class="text-danger"></span>
+                            <label for="user-name" class="mx-2 mt-2">Username</label>
+                        </div>
+                        <div class="col-12 col-sm-6 p-2 form-floating">
+                            <input type="text" class="form-control" name="PhoneNumber" id="phone-number"
+                                placeholder="phone-number" value=@Model.PhoneNumber>
+                            <label for="phone-number" class="mx-2 mt-2">Phone</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select name="CountryId" id="select-country" asp-for="@Model.CountryId" class="form-select" aria-label="Select Country">
+                                <option value="">Select Country</option>
+                                @foreach (var country in ViewBag.Countries)
+                                {
+                                    <option value="@country.Id" selected="@(Model.CountryId == country.Id)">@country.Name
+                                    </option>
+                                }
+                            </select>
+                                <span asp-validation-for="@Model.CountryId" class="text-danger"></span>
+                            <label for="select-country" class="mx-2 mt-2">Country</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select name="StateId" id="select-state" class="form-select" aria-label="Select State" asp-for="@Model.StateId">
+                                <option value="">Select State</option>
+                                @foreach (var state in ViewBag.States)
+                                {
+                                    <option value="@state.Id" selected="@(Model.StateId == state.Id)">@state.Name</option>
+                                }
+                            </select>
+                                <span asp-validation-for="@Model.StateId" class="text-danger"></span>
+                            <label for="select-state" class="mx-2 mt-2">State</label>
+                        </div>
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <select name="CityId" id="select-city" class="form-select" aria-label="Select City" asp-for="@Model.CityId">
+                                <option value="">Select City</option>
+                                @foreach (var city in ViewBag.Cities)
+                                {
+                                    <option value="@city.Id" selected="@(Model.CityId == city.Id)">@city.Name</option>
+                                }
+                            </select>
+                                <span asp-validation-for="@Model.CityId" class="text-danger"></span>
+                            <label for="select-city" class="mx-2 mt-2">City</label>
+                        </div>
+                        <div class="col-12 col-sm-8 p-2 form-floating">
+                            <input value=@Model.Address type="text" asp-for="@Model.Address" class="form-control" name="Address" id="address"
+                                placeholder="Address">
+                            <label for="address" class="mx-2 mt-2">Address</label>
+                        </div>
+                        <input type="text" name="Email" value="@Model.Email" class="d-none">
+                        <input type="int" name="Id" value="@Model.Id" class="d-none">
+                        <input type="text" name="ProfileImageURL" value="@Model.ProfileImageURL" class="d-none">
+                        <input type="text" name="Role" value="@Model.Role" class="d-none">
+
+                        <div class="col-12 col-sm-4 p-2 form-floating">
+                            <input type="text" value=@Model.ZipCode class="form-control" name="ZipCode" id="zipcode"
+                                placeholder="Zipcode">
+                            <label for="first-name" class="mx-2 mt-2">Zipcode</label>
+                        </div>
+                        <div class="my-3 mx-2 d-flex justify-content-end gap-2">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button class="btn btn-contrast me-3">
+                                <a asp-controller="Dashboard" asp-action="Index"
+                                    class="text-decoration-none position p-1 ">
+                                    Cancel</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script src="~/js/editProfile.js" asp-append-version="true"></script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+    document.getElementById('file-upload').addEventListener('change', (e) => {
+       const file = e.target.files[0];
+       if (file) {
+            document.getElementById('profile-pic').src = URL.createObjectURL(file);
+       }
+   });
+</script>
