@@ -151,7 +151,7 @@ namespace BLL.Services
 
         public string AddItem(AddItemViewModel addItemViewModel, int userId)
         {
-            if (addItemViewModel.Id == null)
+            if (addItemViewModel.Id == -1)
             {
                 var item = new Item
                 {
@@ -163,8 +163,8 @@ namespace BLL.Services
                     Unit = addItemViewModel.Unit,
                     IsAvailable = addItemViewModel.IsAvailable,
                     DefaultTax = addItemViewModel.IsDefaultTaxable,
-                    TaxPercentage = (decimal)addItemViewModel.TaxPercentage,
-                    ShortCode = addItemViewModel.ShortCode,
+                    TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage,
+                    ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode,
                     Description = addItemViewModel.Description,
                     CreatedBy = userId,
                     UpdatedBy = userId
@@ -199,8 +199,8 @@ namespace BLL.Services
                 item.Unit = addItemViewModel.Unit;
                 item.IsAvailable = addItemViewModel.IsAvailable;
                 item.DefaultTax = addItemViewModel.IsDefaultTaxable;
-                item.TaxPercentage = (decimal)addItemViewModel.TaxPercentage;
-                item.ShortCode = addItemViewModel.ShortCode;
+                item.TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage;
+                item.ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode;
                 item.Description = addItemViewModel.Description;
                 item.UpdatedBy = userId;
                 if (addItemViewModel.Image != null)
@@ -221,8 +221,12 @@ namespace BLL.Services
 
         public IActionResult UpdateItemModifierGroup(AddItemViewModel addItemViewModel, string itemName, int userId)
         {
-            if (addItemViewModel.Id == null)
+            if (addItemViewModel.Id == -1)
             {
+                if (string.IsNullOrEmpty(addItemViewModel.ModifierGroupIds))
+                {
+                    return new JsonResult(new { success = true, message = "Item added suceccefully" });
+                }
                 var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(addItemViewModel.ModifierGroupIds);
                 if (userId == null)
                 {
@@ -640,7 +644,7 @@ namespace BLL.Services
                 PageIndexModifier = 1,
                 TotalModifiers = modifiers1.Count,
                 PageSizeModifier = 5,
-                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
+                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5),
             };
             return menuViewModel;
         }

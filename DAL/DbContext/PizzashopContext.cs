@@ -48,6 +48,8 @@ public partial class PizzaShopContext : DbContext
 
     public virtual DbSet<Permission> Permissions { get; set; }
 
+    public virtual DbSet<ResetPasswordLink> ResetPasswordLinks { get; set; }
+
     public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<RolePermission> RolePermissions { get; set; }
@@ -647,6 +649,20 @@ public partial class PizzaShopContext : DbContext
                 .HasForeignKey(d => d.UpdatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("permissions_updated_by_fkey");
+        });
+
+        modelBuilder.Entity<ResetPasswordLink>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("reset-password-links_pkey");
+
+            entity.ToTable("reset-password-links");
+
+            entity.Property(e => e.Id)
+                .UseIdentityAlwaysColumn()
+                .HasColumnName("id");
+            entity.Property(e => e.Link)
+                .HasMaxLength(200)
+                .HasColumnName("link");
         });
 
         modelBuilder.Entity<Role>(entity =>
