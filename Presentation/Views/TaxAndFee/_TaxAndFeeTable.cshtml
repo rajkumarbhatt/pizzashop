@@ -1,0 +1,150 @@
+@using DAL.ViewModels;
+@model DAL.ViewModels.TaxAndFeeViewModel
+
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
+
+<table id="userTable" class="table table-responsive" style="white-space: nowrap;">
+        <thead class="color-head">
+            <tr class="text-start">
+                <th>Name</th>
+                <th>Type</th>
+                <th>IsEnabled</th>
+                <th>TaxValue</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="">
+            @foreach (var tax in Model.Taxes)
+            {
+                <tr class="text-start">
+                    <td>@tax.Name</td>
+                    <td>@tax.TaxType</td>
+                    <td>
+                        @{
+                            var idCustom = "isEnabled" + tax.Id;
+                        }
+                        @if (tax.IsEnabled ?? false)
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
+                                    type="checkbox" checked id="@idCustom">
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-check form-switch">
+                                <input class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
+                                    type="checkbox" id="@idCustom">
+                            </div>
+                        }
+                    </td>
+                    <td>
+                        @{
+                            string taxAmount = tax.Amount.ToString();
+                            if (tax.TaxType == "Percentage")
+                            {
+                                taxAmount = tax.Amount + "%";
+                            }
+                            else
+                            {
+                                taxAmount = "₹" + tax.Amount;
+                            }
+                        }
+                        @taxAmount
+                    </td>
+                    <td>
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true))
+                        {
+                            <button class="delete-btn" onclick="editTax(@tax.Id)"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
+                        }
+                        else
+                        {
+                            <button disabled class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg"
+                                    class="small-image  cursor-none" alt=""></button>
+                        }
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "TaxAndFee" && p.CanDelete ==
+                                            true))
+                        {
+                            <button type="button"  class="delete-btn" onclick="deleteTax(@tax.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
+                        }
+                        else
+                        {
+                            <button disabled type="button" class="delete-btn cursor-none">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <script>
+    
+    function editTax(id) {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("Edit", "TaxAndFee")",
+            data: { id: id },
+            success: function (data) {
+                $("#TaxName").val(data.tax.name);
+                $("#TaxType").val(data.tax.taxType);
+                $("#TaxAmount").val(data.tax.amount);
+                $("#TaxId").val(data.tax.id);
+                $("#IsEnabled").prop("checked", data.tax.isEnabled);
+                $("#addTax").modal("show");
+            },
+            error: function (data) {
+                toastr.error("Unauthorized Access");
+            }
+        });
+    }
+
+    function saveChangesOfIsEnabled(id) {
+        var isEnabled = document.getElementById("isEnabled" + id).checked;
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("SaveChangesOfEnabled", "TaxAndFee")",
+            data: { id: id, isEnabled: isEnabled },
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    function deleteTax(id) {
+        $("#deleteTax").modal("show");
+        $("#deleteTaxButton").click(function () {
+            $.ajax({
+                type: "DELETE",
+                url: "@Url.Action("Delete", "TaxAndFee")",
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error("Unauthorized Access");
+                    }
+                },
+                error: function (data) {
+                    toastr.error("Unauthorized Access");
+                }
+            });
+        });
+    }
+
+</script>

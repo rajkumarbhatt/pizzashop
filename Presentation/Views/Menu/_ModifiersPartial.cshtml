@@ -1,4 +1,14 @@
+@using DAL.ViewModels
 @model DAL.ViewModels.MenuViewModel
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 @if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.ModifierGroupIds != null)
 {
     <script>
@@ -14,11 +24,20 @@
 <div class="d-none d-md-block col-md-4 col-lg-3 col-xxl-2 bg-menu-category height-main-container">
     <div class="d-flex justify-content-between p-3">
         <h4 class="font-blue">Modifiers</h4>
-        <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
-            <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
-        </button>
+        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+        {
+            <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
+                <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+            </button>
+        }
+        else 
+        {
+            <button type="button" class="delete-btn cursor-none" >
+                <a class="cursor-none"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none" alt=""></a>
+            </button>
+        }
     </div>
-    <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
+    <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles">
         @foreach (var modifierGroup in Model.ModifierGroups)
         {
             var divCustomId = "modifierGroup" + modifierGroup.Id;
@@ -30,14 +49,31 @@
                     <span class="menu-category-navigation-items" >@modifierGroup.Name</span>
                 </div>
                 <div id="@divCustomId" class="d-none">
-                    <button type="button" class="delete-btn bg-white">
-                        <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                onclick="editModifierGroup(@modifierGroup.Id)"></a>
-                    </button>
-                    <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                        data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
-                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
-                    </button>
+                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                    {
+                        <button type="button" class="delete-btn bg-white">
+                            <a> <img src="~/images/icons/edit.svg" class="small-image " alt="" onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="delete-btn bg-white cursor-none">
+                            <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a>
+                        </button>
+                    }
+                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                    {
+                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                            data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                            <a> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="delete-btn bg-white cursor-none">
+                            <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt="" id="delete-icon"></a>
+                        </button>
+                    }
                 </div>
             </div>
         }
@@ -56,11 +92,18 @@
                     <div class="d-block d-lg-none p-3 col-lg-3 bg-menu-category">
                         <div class="d-flex justify-content-between">
                             <h4 class="font-blue">Modifier Group</h4>
-                            <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                data-bs-target="#AddModifierGroupModal">
-                                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
-                                        alt=""></a>
-                            </button>
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                            {
+                                <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
+                                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+                                </button>
+                            }
+                            else 
+                            {
+                                <button type="button" class="delete-btn cursor-none" >
+                                    <a class="cursor-none"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none" alt=""></a>
+                                </button>
+                            }
                         </div>
                         <div class="d-flex flex-column mt-2 mt-sm-3 mt-md-5">
                             @foreach (var modifierGroup in @Model.ModifierGroups)
@@ -76,16 +119,31 @@
                                         <span class="menu-category-navigation-items" id="sandwich-span">@modifierGroup.Name</span>
                                     </div>
                                     <div>
-                                        <button type="button" class="delete-btn bg-white">
-                                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                                    onclick="editModifierGroup(@modifierGroup.Id)"></a>
-                                        </button>
-                                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                                            data-bs-target="#deleteModifierGroup"
-                                            onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
-                                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                                    id="sandwich-delete-icon"></a>
-                                        </button>
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white">
+                                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt="" onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none">
+                                                <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a>
+                                            </button>
+                                        }
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                                data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none">
+                                                <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt="" id="delete-icon"></a>
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -95,7 +153,7 @@
             </div>
         </div>
     </div>
-<input type="hidden" id="modifierGroupId21" value="@Model.ModifierGroups[0].Id"/>s
+<input type="hidden" id="modifierGroupId21" value="@Model.ModifierGroups[0].Id"/>
 <div class="col-12 col-md-8 col-lg-9">
     <div class="d-flex menu-mobile-header-div justify-content-between pt-3 pt-sm-2 align-items-center">
         <h4 class="px-sm-4 py-2">Modifiers</h4>
@@ -106,7 +164,7 @@
                 <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
             </div>
             <p class="delete-styles d-bloack d-md-none" id="search-icon-modifier" onclick="showSearchBar()">
-                <a href="#" class="text-decoration-none text-black add-user-link">
+                <a class="text-decoration-none text-black add-user-link">
                     <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
                 </a>
             </p>
@@ -115,24 +173,50 @@
                     placeholder="Search">
                 <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
             </div>
-            <p class="delete-styles " data-bs-toggle="modal" data-bs-target="#deleteModifiers" id="deleteSelectedModifiersButton">
-                <a href="#" class="text-decoration-none text-black   add-user-link">
-                    <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
-                </a>
-            </p>
-            <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
-                data-bs-toggle="modal" data-bs-target="#AddModifierModal" style="width: 49px; height: 49px;">
-                <button class="text-decoration-none text-black btn  add-user-link">
-                    <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+            @if(permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+            {
+                <p class="delete-styles " data-bs-toggle="modal" data-bs-target="#deleteModifiers" id="deleteSelectedModifiersButton">
+                    <a class="text-decoration-none text-black cursor-pointer add-user-link">
+                        <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                    </a>
+                </p>
+            }
+            else {
+                <p class="delete-styles cursor-none" id="deleteSelectedModifiersButton">
+                    <a class="text-decoration-none text-black cursor-none">
+                        <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete cursor-none" alt="">
+                    </a>
+                </p>
+            }
+            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+            {
+                <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
+                    data-bs-toggle="modal" data-bs-target="#AddModifierModal" style="width: 49px; height: 49px;">
+                    <button class="text-decoration-none text-black btn  add-user-link">
+                        <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                    </button>
+                </p>
+                <button data-bs-toggle="modal" data-bs-target="#AddModifierModal" id="addModifierModal"
+                    class="d-none d-md-block button-styles-header w-100 add-item-button">
+                    <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                        <p>+</p>
+                        <p class="d-none d-sm-block">Add Modifier</p>
+                    </a>
                 </button>
-            </p>
-            <button data-bs-toggle="modal" data-bs-target="#AddModifierModal" id="addModifierModal"
-                class="d-none d-md-block button-styles-header w-100 add-item-button">
-                <a href="#" class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
-                    <p>+</p>
-                    <p class="d-none d-sm-block">Add Modifier</p>
-                </a>
-            </button>
+            }
+            else{
+                <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none" style="width: 49px; height: 49px;">
+                    <button class="text-decoration-none text-black btn  add-user-link cursor-none">
+                        <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none" alt="">
+                    </button>
+                </p>
+                <button  id="addModifierModal" class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor:not-allowed;">
+                    <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
+                        <p class="cursor-nonr">+</p>
+                        <p class="d-none d-sm-block cursor-nonr">Add Modifier</p>
+                    </a>
+                </button>
+            }
         </div>
     </div>
 
@@ -272,42 +356,45 @@
 </div>
 
 @* add modifier group modal 2 *@
-    <div class="modal fade" id="AddModifierGroupModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Select Existing Modifier(s)
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="input-group search-box">
-                                <input id="searchInputAllModifiers" type="text"
-                                    class="form-control search-input py-1 py-sm-2" placeholder="Search">
-                                <img src="./images/icons/search-icon.svg" class="small-image anchor-tag  search-icon"
-                                    alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="table-responsive col-12 form-bg mx-4  mx-auto">
-                                <div id="allModifiersPartial">
-                                    <partial name="_AllModifiersPartial" model="@Model" />
-                                </div>
-                            </div>
-                            <div class="modal-footer d-flex justify-content-end">
-                                <button onclick="addModalsToList()" type="button" class="btn btn-primary px-3"
-                                    data-bs-dismiss="modal">Save</button>
-                                <a data-bs-dismiss="modal"><button type="button"
-                                        class="btn btn-contrast px-3">Cancel</button></a>
-                            </div>
+<div class="modal fade" id="AddModifierGroupModal2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Select Existing Modifier(s)
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="input-group search-box">
+                            <input id="searchInputAllModifiers" type="text"
+                                class="form-control search-input py-1 py-sm-2" placeholder="Search">
+                            <img src="./images/icons/search-icon.svg" class="small-image anchor-tag  search-icon"
+                                alt="">
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="table-responsive col-12 form-bg mx-4  mx-auto">
+                            <div id="allModifiersPartial">
+                                <partial name="_AllModifiersPartial" model="@Model" />
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-end">
+                            <button onclick="addModalsToList()" type="button" class="btn btn-primary px-3"
+                                data-bs-dismiss="modal">Save</button>
+                            <a data-bs-dismiss="modal"><button type="button"
+                                    class="btn btn-contrast px-3">Cancel</button></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @* add new modifier modal *@
 <div class="modal fade" id="AddModifierModal" data-bs-backdrop="static" data-bs-keyboard="false"
@@ -454,6 +541,8 @@
         </div>
     </div>
 </div>
+
+
 <script>
     var selectedModifiersGroupsAddModifier = [];
     @section Scripts {

@@ -647,6 +647,10 @@ namespace BLL.Services
 
         public IActionResult DeleteSelectedModifiers(List<int> modifierIds, int modifierGroupId, int userId)
         {
+            if (modifierIds.Count == 0)
+            {
+                return new JsonResult(new { success = false, message = "No modifiers selected" });
+            }
             var modifierGroup = _context.ModifierGroups.FirstOrDefault(m => m.Id == modifierGroupId);
             if (modifierGroup == null)
             {
@@ -671,6 +675,10 @@ namespace BLL.Services
 
         public IActionResult DeleteSelectedItems(List<int> itemIds, int userId)
         {
+            if (itemIds.Count == 0)
+            {
+                return new JsonResult(new { success = false, message = "No items selected" });
+            }
             foreach (var itemId in itemIds)
             {
                 var item = _context.Items.FirstOrDefault(i => i.Id == itemId);

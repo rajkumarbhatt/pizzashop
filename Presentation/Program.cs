@@ -29,6 +29,8 @@ builder.Services.AddScoped<IResetPasswordService, ResetPasswordService>();
 builder.Services.AddScoped<IRoleAndPermissionService, RoleAndPermissionService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ITableAndSectionService, TableAndSectionService>();
+builder.Services.AddScoped<ITaxAndFeeService, TaxAndFeeService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;

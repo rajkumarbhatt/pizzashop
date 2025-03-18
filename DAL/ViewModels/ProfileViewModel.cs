@@ -14,6 +14,7 @@ namespace DAL.ViewModels
         public int? RoleId { get; set; }
         public string? Email { get; set; }
         public string? Role { get; set; }
+        [Required(ErrorMessage = "Phone Number is required")]
         public string? PhoneNumber { get; set; }
         public string? Address { get; set; }
         public string? ZipCode { get; set; }

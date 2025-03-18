@@ -1,4 +1,14 @@
+@using DAL.ViewModels
 @model DAL.ViewModels.MenuViewModel
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
     <thead class="color-head">
         <tr class="text-center">
@@ -55,11 +65,27 @@
                     }
                 </td>
                 <td>
-                    <button onclick="editItem(@item.Id)" type="button" class="edit-btn btn">
-                        <a href="#"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
-                    <button onclick="deleteItem(@item.Id)" type="button" class="delete-btn" data-bs-toggle="modal"
-                        data-bs-target="#deleteItem">
-                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                    {
+                        <button onclick="editItem(@item.Id)" type="button" class="edit-btn btn">
+                            <a> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="edit-btn btn cursor-none" >
+                            <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></button>
+                    }
+                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                    {
+                        <button onclick="deleteItem(@item.Id)" type="button" class="delete-btn" data-bs-toggle="modal"
+                            data-bs-target="#deleteItem">
+                            <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="delete-btn cursor-none" disabled>
+                            <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""></a></button>
+                    }
                 </td>
                 <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="ItemId" type="hidden"
                     value="@item.Id" />

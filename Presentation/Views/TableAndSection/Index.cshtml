@@ -1,5 +1,14 @@
 @model DAL.ViewModels.TableAndSectionViewModel
+@using DAL.ViewModels
+@{
+    var permissionList = new List<PermissionModel>();
 
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 <div class="d-flex justify-content-between align-items-center">
     <h1 class="main-page-heading">Sections/Tables</h1>
 </div>
@@ -8,9 +17,18 @@
     <div class="d-none d-md-block col-md-4 col-lg-3 col-xxl-2 bg-menu-category height-main-container">
         <div class="d-flex justify-content-between p-3">
             <h4 class="font-blue">Section</h4>
-            <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#addSectionModal">
-                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
-            </button>
+            @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+            {
+                <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#addSectionModal">
+                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+                </button>
+            }
+            else 
+            {
+                <button type="button" class="delete-btn cursor-none">
+                    <a class="cursor-none"> <img src="~/images/icons/plus-with-border.svg" class="cursor-none menu-category-image" alt=""></a>
+                </button>
+            }
         </div>
         <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
             @foreach (var Section in Model.Sections)
@@ -26,15 +44,30 @@
                         <span class="menu-category-navigation-items" id="sandwich-span">@Section.Name</span>
                     </div>
                     <div id="@divCustomId" class="d-none">
-
-                        <button type="button" class="delete-btn bg-white" onclick="editSection(@Section.Id)">
-                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""></a>
-                        </button>
-                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                            data-bs-target="#deleteSectionModal" onclick="deleteSection(@Section.Id)">
-                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                    id="sandwich-delete-icon"></a>
-                        </button>
+                        @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" onclick="editSection(@Section.Id)">
+                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="cursor-none small-image " alt=""></a>
+                            </button>
+                        }
+                        @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanDelete == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal" data-bs-target="#deleteSectionModal" onclick="deleteSection(@Section.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="cursor-none small-image" alt=""></a>
+                            </button>
+                        }
                     </div>
                 </div>
             }
@@ -53,16 +86,23 @@
                     <div class="d-block d-lg-none p-3 col-lg-3 bg-menu-category">
                         <div class="d-flex justify-content-between">
                             <h4 class="font-blue">Sections</h4>
-                            <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                data-bs-target="#addSectionModal">
-                                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
-                                        alt=""></a>
-                            </button>
+                            @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+                            {
+                                <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#addSectionModal">
+                                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+                                </button>
+                            }
+                            else 
+                            {
+                                <button type="button" class="delete-btn cursor-none">
+                                    <a class="cursor-none"> <img src="~/images/icons/plus-with-border.svg" class="cursor-none menu-category-image" alt=""></a>
+                                </button>
+                            }
                         </div>
                         <div class="d-flex flex-column gap-2 mt-2 mt-sm-3 mt-md-5">
                             @foreach (var Section in Model.Sections)
                             {
-                                <div class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                                <div class="d-flex justify-content-between align-items-center cursor-pointer p-2" onclick="changeTables(@Section.Id)">
                                     <div>
                                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots"
                                             class="small-image " alt="">
@@ -71,15 +111,31 @@
                                         <span class="menu-category-navigation-items" id="sandwich-span">@Section.Name</span>
                                     </div>
                                     <div>
-                                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                                            data-bs-target="#editCategoryModal">
-                                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""></a>
-                                        </button>
-                                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                                            data-bs-target="#categoryDeleteModal">
-                                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                                    id="sandwich-delete-icon"></a>
-                                        </button>
+                                        @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white" onclick="editSection(@Section.Id)">
+                                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none">
+                                                <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="cursor-none small-image " alt=""></a>
+                                            </button>
+                                        }
+                                        @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanDelete == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                                data-bs-target="#deleteSectionModal" onclick="deleteSection(@Section.Id)">
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none">
+                                                <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="cursor-none small-image" alt=""></a>
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -100,7 +156,7 @@
                     <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
                 <p class="delete-styles d-bloack d-md-none" id="search-icon" onclick="showSearchBar()">
-                    <a href="#" class="text-decoration-none text-black add-user-link">
+                    <a class="text-decoration-none text-black add-user-link">
                         <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
                     </a>
                 </p>
@@ -109,25 +165,55 @@
                         placeholder="Search">
                     <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
-                <p class="delete-styles" data-bs-toggle="modal" data-bs-target="#deleteTables">
-                    <a href="#" class="text-decoration-none text-black   add-user-link">
-                        <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
-                    </a>
-                </p>
-                <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
-                    data-bs-toggle="modal" data-bs-target="#addTableModal" style="width: 49px; height: 49px;">
-                    <button class="text-decoration-none text-black btn  add-user-link">
-                        <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                @if(permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanDelete == true))
+                {
+                    <p class="delete-styles" data-bs-toggle="modal" data-bs-target="#deleteTables">
+                        <a class="text-decoration-none text-black   add-user-link">
+                            <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                        </a>
+                    </p>
+                }
+                else
+                {
+                    <p class="delete-styles cursor-none">
+                        <a class="cursor-none text-decoration-none text-black   add-user-link">
+                            <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                        </a>
+                    </p>
+                }
+                @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+                {
+                    <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#addTableModal" style="width: 49px; height: 49px;">
+                        <button class="text-decoration-none text-black btn  add-user-link">
+                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                        </button>
+                    </p>
+                    <button data-bs-toggle="modal" data-bs-target="#addTableModal" id="AddItemModal" onclick="addItem()"
+                        class="d-none d-md-block button-styles-header w-100 add-item-button">
+                        <a
+                            class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                            <p>+</p>
+                            <p class="d-none d-sm-block">New Table</p>
+                        </a>
                     </button>
-                </p>
-                <button data-bs-toggle="modal" data-bs-target="#addTableModal" id="AddItemModal" onclick="addItem()"
-                    class="d-none d-md-block button-styles-header w-100 add-item-button">
-                    <a href="#"
-                        class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
-                        <p>+</p>
-                        <p class="d-none d-sm-block">New Table</p>
-                    </a>
-                </button>
+                }
+                else
+                {
+                    <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none"
+                        data-bs-toggle="modal" data-bs-target="#addTableModal" style="width: 49px; height: 49px;">
+                        <button class="text-decoration-none text-black btn  add-user-link cursor-none">
+                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none" alt="">
+                        </button>
+                    </p>
+                    <button data-bs-toggle="modal" data-bs-target="#addTableModal" id="AddItemModal" onclick="addItem()"
+                        class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor: not-allowed;"> 
+                        <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
+                            <p>+</p>
+                            <p class="d-none d-sm-block">New Table</p>
+                        </a>
+                    </button>
+                }
             </div>
         </div>
 
@@ -260,16 +346,17 @@
                     <div class="col-12 row">
                         <div class="form-floating my-auto col-12 col-md-6">
                             <input type="hidden" id="TableId" value="-1" />
-                            <input type="text" class="form-control" name="" id="TableName" required placeholder="ItemName">
+                            <input type="text" class="form-control" name="" id="TableName" required
+                                placeholder="ItemName">
                             <span id="TableNameError" class="text-danger"></span>
                             <label for="ItemName" class="">Name*</label>
                         </div>
                         <div class="col-12 col-md-6 p-2 form-floating">
-                            <select id="TableSection" class="form-select" aria-label="CategoryId"> 
+                            <select id="TableSection" class="form-select" aria-label="CategoryId">
                                 @foreach (var Section in Model.Sections)
                                 {
                                     <option value="@Section.Id">@Section.Name</option>
-                                } 
+                                }
                             </select>
                             <span id="TableSectionError" class="text-danger"></span>
                             <label for="CategoryId" class="mx-2 mt-2">Section*</label>
@@ -277,12 +364,13 @@
                     </div>
                     <div class="col-12 row">
                         <div class="form-floating my-auto col-12 col-md-6">
-                            <input type="text" class="form-control" name="" id="TableCapacity" required placeholder="ItemName">
+                            <input type="text" class="form-control" name="" id="TableCapacity" required
+                                placeholder="ItemName">
                             <span id="TableCapacityError" class="text-danger"></span>
                             <label for="ItemName" class="">Capacity*</label>
                         </div>
                         <div class="col-12 col-md-6 p-2 form-floating">
-                            <select id="TableStatus" class="form-select" aria-label="CategoryId"> 
+                            <select id="TableStatus" class="form-select" aria-label="CategoryId">
                                 <option value="Available">Available</option>
                                 <option value="Occupied">Occupied</option>
                             </select>
@@ -293,178 +381,181 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end ">
-                <button id="AddTableButton" onclick="addTable()" type="button" class="btn btn-primary px-3">Save</button>
+                <button id="AddTableButton" onclick="addTable()" type="button"
+                    class="btn btn-primary px-3">Save</button>
                 <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
+    </div>
+</div>
 
 
-        <script>
+<script>
 
-            var deleteTableIds = [];
+    var deleteTableIds = [];
 
-            function showDiv(divId) {
-                divId.classList.remove('d-none');
-            }
+    function showDiv(divId) {
+        divId.classList.remove('d-none');
+    }
 
-            function hideDiv(divId) {
-                divId.classList.add('d-none');
-            }
+    function hideDiv(divId) {
+        divId.classList.add('d-none');
+    }
 
-            function addSection() {
-                var sectionName = document.getElementById("SectionName").value;
-                if (sectionName == "") {
-                    document.getElementById("SectionNameError").innerText = "Section Name is required.";
-                    return;
+    function addSection() {
+        var sectionName = document.getElementById("SectionName").value;
+        if (sectionName == "") {
+            document.getElementById("SectionNameError").innerText = "Section Name is required.";
+            return;
+        }
+        var sectionId = document.getElementById("SectionIdModal").value;
+        var sectionDescription = document.getElementById("SectionDescription").value;
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddSection", "TableAndSection")',
+            data: { sectionName: sectionName, sectionDescription: sectionDescription, sectionId: sectionId },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
                 }
-                var sectionId = document.getElementById("SectionIdModal").value;
-                var sectionDescription = document.getElementById("SectionDescription").value;
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("AddSection", "TableAndSection")',
-                    data: { sectionName: sectionName, sectionDescription: sectionDescription, sectionId: sectionId },
-                    success: function (response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function (response) {
-                        toastr.error("Unauthorized Access");
+            },
+            error: function (response) {
+                toastr.error("Unauthorized Access");
+            }
+        });
+    }
+
+    function editSection(sectionId) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("EditSection", "TableAndSection")',
+            data: { sectionId: sectionId },
+            success: function (response) {
+                console.log(response);
+                document.getElementById("SectionName").value = response.name;
+                document.getElementById("SectionDescription").value = response.description;
+                document.getElementById("SectionIdModal").value = sectionId;
+                $("#addSectionModal").modal("show");
+            },
+            error: function (response) {
+                toastr.error("Unauthorized Access");
+            }
+        });
+    }
+
+    function deleteSection(sectionId) {
+        $("#deleteSectionButton").click(function () {
+            $.ajax({
+                type: "DELETE",
+                url: '@Url.Action("DeleteSection", "TableAndSection")',
+                data: { sectionId: sectionId },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
                     }
-                });
-            }
+                },
+                error: function (response) {
+                    toastr.error("Unauthorized Access");
+                }
+            });
+        });
+    }
 
-            function editSection(sectionId) {
-                $.ajax({
-                    type: "GET",
-                    url: '@Url.Action("EditSection", "TableAndSection")',
-                    data: { sectionId: sectionId },
-                    success: function (response) {
-                        console.log(response);
-                        document.getElementById("SectionName").value = response.name;
-                        document.getElementById("SectionDescription").value = response.description;
-                        document.getElementById("SectionIdModal").value = sectionId;
-                        $("#addSectionModal").modal("show");
-                    },
-                    error: function (response) {
-                        toastr.error("Unauthorized Access");
+    function deleteSelectedTables() {
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("DeleteTables", "TableAndSection")',
+            data: { tableIds: deleteTableIds },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (response) {
+                toastr.error("Unauthorized Access");
+            }
+        });
+    }
+
+    function deleteTableId(id) {
+        $("#deleteTableButton").click(function () {
+            $.ajax({
+                type: "DELETE",
+                url: '@Url.Action("DeleteTable", "TableAndSection")',
+                data: { tableId: id },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        toastr.error(response.message);
                     }
-                });
-            }
-
-            function deleteSection(sectionId) {
-                $("#deleteSectionButton").click(function () {
-                    $.ajax({
-                        type: "DELETE",
-                        url: '@Url.Action("DeleteSection", "TableAndSection")',
-                        data: { sectionId: sectionId },
-                        success: function (response) {
-                            if (response.success) {
-                                toastr.success(response.message);
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function (response) {
-                            toastr.error("Unauthorized Access");
-                        }
-                    });
-                });
-            }
-
-            function deleteSelectedTables() {
-                $.ajax({
-                    type: "DELETE",
-                    url: '@Url.Action("DeleteTables", "TableAndSection")',
-                    data: { tableIds: deleteTableIds },
-                    success: function (response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function (response) {
-                        toastr.error("Unauthorized Access");
-                    }
-                });
-            }
-
-            function deleteTableId(id) {
-                $("#deleteTableButton").click(function () {
-                    $.ajax({
-                        type: "DELETE",
-                        url: '@Url.Action("DeleteTable", "TableAndSection")',
-                        data: { tableId: id },
-                        success: function (response) {
-                            if (response.success) {
-                                toastr.success(response.message);
-                                setTimeout(function () {
-                                    location.reload();
-                                }, 1000);
-                            } else {
-                                toastr.error(response.message);
-                            }
-                        },
-                        error: function (response) {
-                            toastr.error("Unauthorized Access");
-                        }
-                    });
-                });
-            }
-        
-            function addTable() {
-                var tableName = document.getElementById("TableName").value;
-                var tableSection = document.getElementById("TableSection").value;
-                var tableCapacity = document.getElementById("TableCapacity").value;
-                var tableStatus = document.getElementById("TableStatus").value;
-                var tableId = document.getElementById("TableId").value;
-                if (tableName == "") {
-                    document.getElementById("TableNameError").innerText = "Table Name is required.";
-                    return;
+                },
+                error: function (response) {
+                    toastr.error("Unauthorized Access");
                 }
-                if (tableSection == "") {
-                    document.getElementById("TableSectionError").innerText = "Table Section is required.";
-                    return;
-                }
-                if (tableCapacity == "") {
-                    document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
-                    return;
-                }
-                if (tableStatus == "") {
-                    document.getElementById("TableStatusError").innerText = "Table Status is required.";
-                    return;
-                }
-                $.ajax({
-                    type: "POST",
-                    url: '@Url.Action("AddTable", "TableAndSection")',
-                    data: { tableId: tableId, tableName: tableName, sectionId: tableSection, tableCapacity: tableCapacity, tableStatus: tableStatus },
-                    success: function (response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function (response) {
-                        toastr.error("Unauthorized Access");
-                    }
-                });
-            }
+            });
+        });
+    }
 
-            
-        </script>
+    function addTable() {
+        var tableName = document.getElementById("TableName").value;
+        var tableSection = document.getElementById("TableSection").value;
+        var tableCapacity = document.getElementById("TableCapacity").value;
+        var tableStatus = document.getElementById("TableStatus").value;
+        var tableId = document.getElementById("TableId").value;
+        if (tableName == "") {
+            document.getElementById("TableNameError").innerText = "Table Name is required.";
+            return;
+        }
+        if (tableSection == "") {
+            document.getElementById("TableSectionError").innerText = "Table Section is required.";
+            return;
+        }
+        if (tableCapacity == "") {
+            document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
+            return;
+        }
+        if (tableStatus == "") {
+            document.getElementById("TableStatusError").innerText = "Table Status is required.";
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddTable", "TableAndSection")',
+            data: { tableId: tableId, tableName: tableName, sectionId: tableSection, tableCapacity: tableCapacity, tableStatus: tableStatus },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (response) {
+                toastr.error("Unauthorized Access");
+            }
+        });
+    }
+
+
+</script>

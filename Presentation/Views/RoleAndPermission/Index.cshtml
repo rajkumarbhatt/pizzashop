@@ -1,29 +1,56 @@
-@model DAL.ViewModels.RoleAndPermissionViewModel            
-            
-    <div class="table-responsive col-10 col-md-8 d-flex justify-content-start form-bg my-5 p-3 mx-auto m-sm-5 shadow my-3">
-                <table class="table">
-                    <thead class="color-head">
-                        <tr class="text-start">
-                            <th scope="col">Role</th>
-                            <th scope="col">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach(var role in Model.Roles)
-                        {
-                            <tr class="text-start">
-                                <td>@role.Name</td>
-                                <td><a onclick="openPermissions(@role.Id)"><img src="~/images/icons/edit.svg" class="small-image" alt=""></a></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+@using DAL.ViewModels
+@model DAL.ViewModels.RoleAndPermissionViewModel
 
-    <script>
-        function openPermissions(id) {
-            window.location.href = "/RoleAndPermission/ViewPermissions/" + id;
-        }
-    </script>
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
+
+<div class="table-responsive col-10 col-md-8 d-flex justify-content-start form-bg my-5 p-3 mx-auto m-sm-5 shadow my-3">
+    <table class="table">
+        <thead class="color-head">
+            <tr class="text-start">
+                <th scope="col">Role</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in Model.Roles)
+            {
+                <tr class="text-start">
+                    <td>@role.Name</td>
+                    @* 
+                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                                    {
+                                        <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
+                                    } else 
+                                    {
+                                        <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
+                                    }
+                     *@
+                     @if(permissionList != null && permissionList.Any(p => p.Name == "RoleAndPermission" && p.CanEdit == true))
+                    {
+                        <td><a onclick="openPermissions(@role.Id)"><img src="~/images/icons/edit.svg" class="small-image" alt=""></a></td>
+                    }
+                    else
+                    {
+                        <td ><a onclick="openPermissions(@role.Id)"><img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+
+<script>
+    function openPermissions(id) {
+        window.location.href = "/RoleAndPermission/ViewPermissions/" + id;
+    }
+</script>

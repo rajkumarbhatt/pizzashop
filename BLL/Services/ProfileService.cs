@@ -84,6 +84,10 @@ namespace BLL.Services
             if (ProfileViewModel.UserProfileImage != null)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(ProfileViewModel.UserProfileImage.FileName);
+                if (!ProfileViewModel.UserProfileImage.ContentType.Contains("image"))
+                {
+                    return new JsonResult(new { success = false, message = "Invalid file type" });
+                }
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {

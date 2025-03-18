@@ -1,4 +1,14 @@
 @model DAL.ViewModels.TableAndSectionViewModel
+@using DAL.ViewModels
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
     <thead class="color-head">
         <tr class="text-center">
@@ -24,18 +34,34 @@
                 <td>
                     @if (table.Status == "Available")
                     {
-                        <span class="active-user">@table.Status</span>
+                        <span class="available-table">@table.Status</span>
                     }
                     else
                     {
-                        <span class="inactive-user">@table.Status</span>
+                        <span class="occupied-table">@table.Status</span>
                     }
                 </td>
                 <td>
-                    <button type="button" onclick="editTableFunc(@table.Id)" class="edit-btn btn">
-                         <a href="#"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
-                    <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteTable" onclick="deleteTableId(@table.Id)">
-                        <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                    @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
+                    {
+                        <button type="button" onclick="editTableFunc(@table.Id)" class="edit-btn btn">
+                            <a> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
+                    }
+                    else 
+                    {
+                        <button type="button" class="edit-btn btn cursor-none">
+                            <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></button>
+                    }
+                    @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanDelete == true))
+                    {
+                        <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteTable" onclick="deleteTableId(@table.Id)">
+                            <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
+                    }
+                    else
+                    {
+                        <button type="button" class="delete-btn cursor-none">
+                            <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""></a></button>
+                    }
                 </td>
             </tr>
         }

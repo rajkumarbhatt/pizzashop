@@ -1,1 +1,184 @@
-<h1>Tax And Fees</h1>
+@using DAL.ViewModels;
+@model DAL.ViewModels.TaxAndFeeViewModel
+
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
+
+<div class="d-flex justify-content-between align-items-center">
+
+    <h1 class="main-page-heading">Taxes/Fees</h1>
+    <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box">
+            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInput" placeholder="Search">
+            <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+        </div>
+        <p class="delete-styles d-block d-md-none">
+            <a asp-controller="UserList" asp-action="CreateUser"
+                class="text-decoration-none text-black   add-user-link">
+                <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+            </a>
+        </p>
+        @if (permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true))
+        {
+            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2">
+                <a class="text-decoration-none text-white add-user-link">+
+                    Add User</a></button>
+        }
+        else
+        {
+            <button class="d-none d-md-block button-styles py-1 py-sm-2  cursor-none" style="cursor: not-allowed;">
+                <a class="text-decoration-none cursor-none text-white add-user-link">+
+                    Add User</a></button>
+        }
+    </div>
+</div>
+
+<!-- table -->
+
+<div id="partialViewStarting" class="table-responsive col-11 form-bg mx-4 p-3 shadow my-3 mx-auto">
+
+    <partial name="_TaxAndFeeTable" model="@Model" />
+    
+</div>
+
+@* delete tax modal *@
+<div class="modal fade" id="deleteTax" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete
+                    Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete this tax?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteTaxButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* add tax modal *@
+<div class="modal fade" id="addTax" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered table-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Add Tax
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row align-items-center">
+                    <form id="addTaxForm" class="col-12">
+                        <div class="col-12 row">
+                            <div class="form-floating my-auto col-12 col-md-6">
+                                <input type="hidden" id="TaxId" value="-1" />
+                                <input type="text" class="form-control" name="" id="TaxName" required
+                                    placeholder="ItemName">
+                                <span id="TaxNameError" class="text-danger"></span>
+                                <label for="ItemName" class="">Name*</label>
+                            </div>
+                            <div class="col-12 col-md-6 p-2 form-check form-switch">
+                                <div class="form-check form-switch d-flex justify-content-center align-items-center">
+                                    <input class="form-check-input form-check-switch" type="checkbox" id="IsEnabled" style="height: 2.0em; width: 3.5em;">
+                                    <label for="CategoryId" class="mx-2 mt-2">IsEnabled</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 row">
+                            <div class="col-12 col-md-6 p-2 form-floating">
+                                <select id="TaxType" class="form-select" aria-label="CategoryId">
+                                    <option value="Percentage">Percentage</option>
+                                    <option value="Fixed Amount">Fixed Amount</option>
+                                </select>
+                                <span id="TableStatusError" class="text-danger"></span>
+                                <label for="CategoryId" class="mx-2 mt-2">Status*</label>
+                            </div>
+                            <div class="form-floating my-auto col-12 col-md-6">
+                                <input type="text" class="form-control" name="" id="TaxAmount" required
+                                    placeholder="ItemName" value="0">
+                                <span id="TaxAmountError" class="text-danger"></span>
+                                <label for="ItemName" class="">Amount*</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end ">
+                <button type="submit" id="AddTableButton" onclick="addTax()" type="button"
+                    class="btn btn-primary px-3">Save</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function addTax () {
+        var taxId = $("#TaxId").val();
+        var taxName = $("#TaxName").val();
+        var isEnabled = $("#IsEnabled").is(":checked");
+        var taxType = $("#TaxType").val();
+        var taxAmount = $("#TaxAmount").val();
+
+        if (taxName == "") {
+            $("#TaxNameError").text("Name is required");
+            return;
+        }
+        if (taxAmount == "0") {
+            $("#TaxAmountError").text("Amount is required");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("AddTax", "TaxAndFee")',
+            data: { taxId: taxId, taxName: taxName, isEnabled: isEnabled, taxType: taxType, taxAmount: taxAmount },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error("Unable to add tax");
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+
+    $("#searchInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        clearTimeout($.data(this, 'timer'));
+        $(this).data('timer', setTimeout(function () {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Search", "TaxAndFee")',
+                data: { searchValue : value },
+                success: function (data) {
+                    $("#partialViewStarting").html(data);
+                }
+            });
+        }, 300));
+    });
+
+</script>

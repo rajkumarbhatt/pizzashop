@@ -116,6 +116,10 @@ namespace BLL.Services
             if (userViewModel.ProfileImage != null)
             {
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(userViewModel.ProfileImage.FileName);
+                if (!userViewModel.ProfileImage.ContentType.Contains("image"))
+                {
+                    return new JsonResult(new { success = false, message = "Invalid file type" });
+                }
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
@@ -166,7 +170,10 @@ namespace BLL.Services
             };
             if (createUserViewModel.ProfileImage != null)
             {
-                // store filename in db and save image in wwwroot/profile-images
+                if (!createUserViewModel.ProfileImage.ContentType.Contains("image"))
+                {
+                    return new JsonResult(new { success = false, message = "Invalid file type" });
+                }
                 var fileName = Guid.NewGuid().ToString() + Path.GetExtension(createUserViewModel.ProfileImage.FileName);
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))

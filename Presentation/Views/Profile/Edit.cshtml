@@ -51,8 +51,8 @@
                             <label for="user-name" class="mx-2 mt-2">Username</label>
                         </div>
                         <div class="col-12 col-sm-6 p-2 form-floating">
-                            <input type="text" class="form-control" name="PhoneNumber" id="phone-number"
-                                placeholder="phone-number" value=@Model.PhoneNumber>
+                            <input type="text" class="form-control" name="PhoneNumber" id="phone-number" placeholder="phone-number" value=@Model.PhoneNumber>
+                            <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                             <label for="phone-number" class="mx-2 mt-2">Phone</label>
                         </div>
                         <div class="col-12 col-sm-4 p-2 form-floating">

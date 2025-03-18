@@ -1,18 +1,40 @@
+@using DAL.ViewModels
 @model DAL.ViewModels.MenuViewModel
+@{
+    var permissionList = new List<PermissionModel>();
+
+    if (Context.Session.Get("permissions") != null)
+    {
+        permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
+    }
+
+}
 <input class="d-none" id="categoryId" value="@Model.Categories[0].Id" />
 <div id="items-content" class=" form-bg p-2 my-1 row mx-4 ">
     <div class="d-none d-md-block col-md-4 col-lg-3 col-xxl-2 bg-menu-category height-main-container">
         <div class="d-flex justify-content-between p-3">
             <h4 class="font-blue">Category</h4>
-            <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#categoryModal">
-                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
-            </button>
+            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+            {
+                <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
+                </button>
+            }
+            else
+            {
+                <button type="button" class="delete-btn cursor-none" data-bs-toggle="modal" data-bs-target="#categoryModal"
+                    disabled>
+                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none"
+                            alt=""></a>
+                </button>
+            }
         </div>
         <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
             @foreach (var category in Model.Categories)
-            {      
+            {
                 var divCustomId = "div" + category.Id;
-                <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)" onclick="changeItems(@category.Id)"  
+                <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
+                    onclick="changeItems(@category.Id)"
                     class="d-flex justify-content-between align-items-center cursor-pointer p-2">
                     <div>
                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots" class="small-image " alt="">
@@ -21,17 +43,38 @@
                         <span class="menu-category-navigation-items" id="sandwich-span">@category.Name</span>
                     </div>
                     <div id="@divCustomId" class="d-none">
-                        
-                        <button type="button"class="delete-btn bg-white" data-bs-toggle="modal"
-                            data-bs-target="#editCategoryModal">
-                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                    onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                        </button>
-                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                            data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
-                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                    id="sandwich-delete-icon"></a>
-                        </button>
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                data-bs-target="#editCategoryModal">
+                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                data-bs-target="#editCategoryModal" disabled>
+                                <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
+                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                            </button>
+                        }
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
+                                        id="sandwich-delete-icon"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                data-bs-target="#categoryDeleteModal" disabled>
+                                <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
+                                        id="sandwich-delete-icon"></a>
+                            </button>
+                        }
                     </div>
                 </div>
             }
@@ -50,11 +93,22 @@
                     <div class="d-block d-lg-none p-3 col-lg-3 bg-menu-category">
                         <div class="d-flex justify-content-between">
                             <h4 class="font-blue">Category</h4>
-                            <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                data-bs-target="#categoryModalMobile">
-                                <a href="#"> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
-                                        alt=""></a>
-                            </button>
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                            {
+                                <button type="button" class="delete-btn" data-bs-toggle="modal"
+                                    data-bs-target="#categoryModal">
+                                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
+                                            alt=""></a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-btn cursor-none" data-bs-toggle="modal"
+                                    data-bs-target="#categoryModal" disabled>
+                                    <a> <img src="~/images/icons/plus-with-border.svg"
+                                            class="menu-category-image cursor-none" alt=""></a>
+                                </button>
+                            }
                             <div class="modal fade" id="categoryModalMobile" data-bs-backdrop="static"
                                 data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
                                 aria-hidden="true">
@@ -103,16 +157,38 @@
                                             id="sandwich-span">@category.Name</span>
                                     </div>
                                     <div>
-                                        <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                            data-bs-target="#editCategoryModal">
-                                            <a href="#"> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                                    onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                                        </button>
-                                        <button type="button" class="delete-btn" data-bs-toggle="modal"
-                                            data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
-                                            <a href="#"> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                                    id="sandwich-delete-icon"></a>
-                                        </button>
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                                data-bs-target="#editCategoryModal">
+                                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                                data-bs-target="#editCategoryModal" disabled>
+                                                <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
+                                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                            </button>
+                                        }
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                                        {
+                                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                                data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
+                                                        id="sandwich-delete-icon"></a>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                                data-bs-target="#categoryDeleteModal" disabled>
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
+                                                        id="sandwich-delete-icon"></a>
+                                            </button>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -132,7 +208,7 @@
                     <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
                 <p class="delete-styles d-bloack d-md-none" id="search-icon" onclick="showSearchBar()">
-                    <a href="#" class="text-decoration-none text-black add-user-link">
+                    <a   class="text-decoration-none text-black add-user-link">
                         <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
                     </a>
                 </p>
@@ -141,25 +217,60 @@
                         placeholder="Search">
                     <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
-                <p class="delete-styles" data-bs-toggle="modal" data-bs-target="#deleteItems">
-                    <a href="#" class="text-decoration-none text-black   add-user-link">
-                        <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
-                    </a>
-                </p>
-                <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
-                    data-bs-toggle="modal" data-bs-target="#addItemModal" style="width: 49px; height: 49px;">
-                    <button class="text-decoration-none text-black btn  add-user-link">
-                        <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                {
+                    <p class="delete-styles" data-bs-toggle="modal" data-bs-target="#deleteItems">
+                        <a   class="text-decoration-none text-black   add-user-link">
+                            <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
+                        </a>
+                    </p>
+                }
+                else
+                {
+                    <p class="delete-styles cursor-none"  disabled>
+                        <a   class="text-decoration-none text-black   add-user-link cursor-none">
+                            <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete cursor-none"
+                                alt="">
+                        </a>
+                    </p>
+                }
+                @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                {
+                    <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
+                        data-bs-toggle="modal" data-bs-target="#addItemModal" style="width: 49px; height: 49px;">
+                        <button class="text-decoration-none text-black btn  add-user-link">
+                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+                        </button>
+                    </p>
+                } 
+                else
+                {
+                    <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none"
+                         style="width: 49px; height: 49px;">
+                        <button class="text-decoration-none text-black btn  add-user-link cursor-none">
+                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none"
+                                alt="">
+                        </button>
+                    </p>
+                }
+                @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                {
+                    <button id="AddItemModal" onclick="addItem()" class="d-none d-md-block button-styles-header w-100 add-item-button">
+                        <a   class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                            <p>+</p>
+                            <p class="d-none d-sm-block">Add Item</p>
+                        </a>
                     </button>
-                </p>
-                <button id="AddItemModal" onclick="addItem()"
-                    class="d-none d-md-block button-styles-header w-100 add-item-button">
-                    <a href="#"
-                        class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
-                        <p>+</p>
-                        <p class="d-none d-sm-block">Add Item</p>
-                    </a>
-                </button>
+                }
+                else
+                {
+                    <button id="AddItemModal"  class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor: not-allowed;">
+                        <a   class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
+                            <p>+</p>
+                            <p class="d-none d-sm-block">Add Item</p>
+                        </a>
+                    </button>
+                }
             </div>
         </div>
 
@@ -197,8 +308,8 @@
                 <p>Are you sure you want to delete these items?</p>
             </div>
             <div class="modal-footer">
-                <button id="deleteItemButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal" onclick="deleteSelectedItems()">Yes</button>
+                <button id="deleteItemButton" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal"
+                    onclick="deleteSelectedItems()">Yes</button>
                 <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>

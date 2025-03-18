@@ -91,12 +91,17 @@ namespace BLL.Services
             {
                 table.IsDeleted = true;
                 table.UpdatedBy = userId;
+                _context.SaveChanges();
             }
             return new JsonResult(new { success = true, message = "Section deleted successfully" });
         }
 
         public IActionResult DeleteTables (List<int> tableIds, int userId)
         {
+            if (tableIds.Count == 0)
+            {
+                return new JsonResult(new { success = false, message = "No tables selected" });
+            }
             List<Table> tables = _context.Tables.Where(t => tableIds.Contains(t.Id)).ToList();
             foreach (Table table in tables)
             {

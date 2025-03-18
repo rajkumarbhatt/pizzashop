@@ -155,3 +155,4 @@ C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\BLL.pdb
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\BLL.genruntimeconfig.cache
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\ref\BLL.dll
+C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\BLL.sourcelink.json

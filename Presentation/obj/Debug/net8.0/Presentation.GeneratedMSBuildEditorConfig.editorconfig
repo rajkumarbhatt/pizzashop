@@ -74,6 +74,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTWVudVxfTW9kaWZpZXJzVGFibGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/pci88/Downloads/pizzashop-user-module-menu-module/pizzashop-user-module-menu-module/Presentation/Views/Order/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcT3JkZXJcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/pci88/Downloads/pizzashop-user-module-menu-module/pizzashop-user-module-menu-module/Presentation/Views/PageNotFound/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFnZU5vdEZvdW5kXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -124,6 +128,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/pci88/Downloads/pizzashop-user-module-menu-module/pizzashop-user-module-menu-module/Presentation/Views/TaxAndFee/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGF4QW5kRmVlXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci88/Downloads/pizzashop-user-module-menu-module/pizzashop-user-module-menu-module/Presentation/Views/TaxAndFee/_TaxAndFeeTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGF4QW5kRmVlXF9UYXhBbmRGZWVUYWJsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/pci88/Downloads/pizzashop-user-module-menu-module/pizzashop-user-module-menu-module/Presentation/Views/UserList/CreateUser.cshtml]

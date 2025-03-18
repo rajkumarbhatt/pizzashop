@@ -17,5 +17,15 @@ public partial class TaxesFee
 
     public bool? IsDefault { get; set; }
 
+    public short CreatedBy { get; set; }
+
+    public short? UpdatedBy { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
     public virtual ICollection<OrderTaxis> OrderTaxes { get; set; } = new List<OrderTaxis>();
 }
