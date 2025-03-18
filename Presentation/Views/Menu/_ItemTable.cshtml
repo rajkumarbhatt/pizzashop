@@ -26,11 +26,18 @@
     <tbody>
         @foreach (var item in Model.Items)
         {
-            
+
             <tr class="text-center">
                 <td class="text-start mx-2 d-flex align-items-center table-checkbox-gap">
-                <input onclick="addItemToDeleteList(@item.Id)" class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" value="@item.Id"  style="height: 1em;">
-                    <img src="~/images/dining-menu.png" style="width: 35px;" alt="">
+                    @{
+                        string profileImagePath = string.IsNullOrEmpty(@item.ImageUrl)
+                        ? "/images/dining-menu.png"
+                        : $"/images/item-images/{@item.ImageUrl}";
+                    }
+                    <input onclick="addItemToDeleteList(@item.Id)"
+                        class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" value="@item.Id"
+                        style="height: 1em;">
+                    <img src="@profileImagePath" class="table-name-image profile-image-border object-fit-cover" alt="">
                     <label class="form-check-label" for="defaultCheck1">@item.Name
                 </td>
                 <td>
@@ -72,7 +79,7 @@
                     }
                     else
                     {
-                        <button type="button" class="edit-btn btn cursor-none" >
+                        <button type="button" class="edit-btn btn cursor-none">
                             <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></button>
                     }
                     @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
@@ -95,13 +102,14 @@
 </table>
 <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
     <p>Items per page: </p>
-    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+    <select id="PageSize" class="form-select pagination-dropdown text-black" aria-label="Items per page"
         onchange="changePageSize(this.value)">
         <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
         <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
         <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
+        <input type="hidden" id="PageIndex" value="@Model.PageIndex" />
         Showing @((Model.PageIndex - 1) * Model.PageSize + 1) -
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalItems)) of
         @Model.TotalItems
@@ -133,197 +141,222 @@
                 <p>Are you sure you want to delete this item?</p>
             </div>
             <div class="modal-footer">
-                <button id="deleteItemButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Yes</button>
-                <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                <button id="deleteItemButton" type="button" class="btn btn-primary px-3">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
     </div>
 </div>
 
 
-    <script>
+<script>
 
-        var deleteItemsList = [];
+    var deleteItemsList = [];
 
-        $("#DeleteItemsIntermediateCheckbox").click(function () {
-            if(this.checked) {
-                $(".item-name-checkbox").prop("checked", true);
-                deleteItemsList = [];
-                $(".item-name-checkbox").each(function () {
-                    var itemIdTemp = parseInt($(this).val());
-                    deleteItemsList.push(itemIdTemp);
-                });
-            } else {
-                $(".item-name-checkbox").prop("checked", false);
-                deleteItemsList = [];
-            }
-            console.log(deleteItemsList);
-        });
-
-        $(".item-name-checkbox").click(function () {
-            if ($(".item-name-checkbox:checked").length === $(".item-name-checkbox").length) {
-                $("#DeleteItemsIntermediateCheckbox").prop("checked", true);
-            } else {
-                $("#DeleteItemsIntermediateCheckbox").prop("checked", false);
-            }
-            console.log(deleteItemsList);
-        });
-
-        function addItemToDeleteList(itemId) {
-            itemId = parseInt(itemId);
-            if (deleteItemsList.includes(itemId)) {
-                deleteItemsList = deleteItemsList.filter(item => item !== itemId);
-            } else {
-                deleteItemsList.push(itemId);
-            }
+    $("#DeleteItemsIntermediateCheckbox").click(function () {
+        if (this.checked) {
+            $(".item-name-checkbox").prop("checked", true);
+            deleteItemsList = [];
+            $(".item-name-checkbox").each(function () {
+                var itemIdTemp = parseInt($(this).val());
+                deleteItemsList.push(itemIdTemp);
+            });
+        } else {
+            $(".item-name-checkbox").prop("checked", false);
+            deleteItemsList = [];
         }
+        console.log(deleteItemsList);
+    });
 
-        function deleteSelectedItems() {
-            deleteItemsList = deleteItemsList.map(item => parseInt(item));
+    $(".item-name-checkbox").click(function () {
+        if ($(".item-name-checkbox:checked").length === $(".item-name-checkbox").length) {
+            $("#DeleteItemsIntermediateCheckbox").prop("checked", true);
+        } else {
+            $("#DeleteItemsIntermediateCheckbox").prop("checked", false);
+        }
+        console.log(deleteItemsList);
+    });
+
+    function addItemToDeleteList(itemId) {
+        itemId = parseInt(itemId);
+        if (deleteItemsList.includes(itemId)) {
+            deleteItemsList = deleteItemsList.filter(item => item !== itemId);
+        } else {
+            deleteItemsList.push(itemId);
+        }
+    }
+
+    function deleteSelectedItems() {
+        deleteItemsList = deleteItemsList.map(item => parseInt(item));
+        $.ajax({
+            url: '@Url.Action("DeleteSelectedItems", "Menu")',
+            type: 'DELETE',
+            data: { itemIds: deleteItemsList },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    $.ajax({
+                        type: "GET",
+                        url: "/Menu/ItemsFilter",
+                        data: { categoryId: $("#categoryId").val(), pageIndex: $("#PageIndex").val(), pageSize: $("#PageSize").val() },
+                        success: function (data) {
+                            $("#partialViewStartingInner").html(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                    $("#deleteItems").modal("hide");
+                } else {
+                    toastr.error(data.message);
+                }
+            }
+        });
+    }
+
+
+    $("#nextButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex + 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        console.log(categoryId);
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    $("#previousButton").click(function () {
+        const currentPageIndex = @Model.PageIndex;
+        const nextPageIndex = currentPageIndex - 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const pageSize = @Model.PageSize;
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    });
+
+    function changePageSize(pageSize) {
+        const nextPageIndex = 1;
+        const searchValue = $("#searchInput").val().toLowerCase();
+        const categoryId = $("#categoryId").val();
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
+            success: function (data) {
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    $("#searchInput").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
             $.ajax({
-                url: '@Url.Action("DeleteSelectedItems", "Menu")',
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    $("#searchInput2").on("keyup", function () {
+        clearTimeout($.data(this, 'timer'));
+        var searchValue = $(this).val().toLowerCase();
+        var categoryId = $("#categoryId").val();
+        $(this).data('timer', setTimeout(function () {
+            const currentPageIndex = 1;
+            const pageSize = @Model.PageSize;
+            $.ajax({
+                url: '@Url.Action("ItemsSearch", "Menu")',
+                type: 'GET',
+                data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
+                success: function (data) {
+                    $("#partialViewStartingInner").html(data);
+                }
+            });
+        }, 300));
+    });
+
+    function saveChangesOfSwitch(itemId) {
+        var idCustom = "flexSwitchCheckChecked" + itemId;
+        var isAvailable = document.getElementById(idCustom).checked;
+        console.log(isAvailable);
+        $.ajax({
+            url: '@Url.Action("UpdateItemAvailability", "Menu")',
+            type: 'POST',
+            data: { itemId: itemId, isAvailable: isAvailable },
+            success: function (data) {
+            }
+        });
+    }
+
+    function changeItems(categoryId) {
+        $.ajax({
+            url: '@Url.Action("ItemsFilter", "Menu")',
+            type: 'GET',
+            data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
+            success: function (data) {
+                $("#categoryId").val(categoryId);
+                $("#partialViewStartingInner").html(data);
+            }
+        });
+    }
+
+    function deleteItem(itemId) {
+        var currentCategoryId = $("#categoryId").val();
+        var currentPageIndex = $("#PageIndex").val();
+        var currentPageSize = $("#PageSize").val();
+        console.log(currentCategoryId);
+        console.log(currentPageIndex);
+        console.log(currentPageSize);
+        $("#deleteItemButton").click(function () {
+            $.ajax({
+                url: '@Url.Action("DeleteItem", "Menu")',
                 type: 'DELETE',
-                data: { itemIds: deleteItemsList },
+                data: { itemId: itemId },
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/ItemsFilter",
+                            data: { categoryId: currentCategoryId, pageIndex: currentPageIndex, pageSize: currentPageSize },
+                            success: function (data) {
+                                $("#partialViewStartingInner").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                        $("#deleteItem").modal("hide");
                     } else {
                         toastr.error(data.message);
                     }
                 }
             });
-        }
-
-
-        $("#nextButton").click(function () {
-            const currentPageIndex = @Model.PageIndex;
-            const nextPageIndex = currentPageIndex + 1;
-            const searchValue = $("#searchInput").val().toLowerCase();
-            const pageSize = @Model.PageSize;
-            const categoryId = $("#categoryId").val();
-            $.ajax({
-                url: '@Url.Action("ItemsFilter", "Menu")',
-                type: 'GET',
-                data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
-                success: function (data) {
-                    $("#partialViewStartingInner").html(data);
-                }
-            });
         });
+    }
 
-        $("#previousButton").click(function () {
-            const currentPageIndex = @Model.PageIndex;
-            const nextPageIndex = currentPageIndex - 1;
-            const searchValue = $("#searchInput").val().toLowerCase();
-            const pageSize = @Model.PageSize;
-            const categoryId = $("#categoryId").val();
-            $.ajax({
-                url: '@Url.Action("ItemsFilter", "Menu")',
-                type: 'GET',
-                data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
-                success: function (data) {
-                    $("#partialViewStartingInner").html(data);
-                }
-            });
-        });
 
-        function changePageSize(pageSize) {
-            const nextPageIndex = 1;
-            const searchValue = $("#searchInput").val().toLowerCase();
-            const categoryId = $("#categoryId").val();
-            $.ajax({
-                url: '@Url.Action("ItemsFilter", "Menu")',
-                type: 'GET',
-                data: { pageIndex: nextPageIndex, pageSize: pageSize, categoryId: categoryId },
-                success: function (data) {
-                    $("#partialViewStartingInner").html(data);
-                }
-            });
-        }
-
-        $("#searchInput").on("keyup", function () {
-            clearTimeout($.data(this, 'timer'));
-            var searchValue = $(this).val().toLowerCase();
-            var categoryId = $("#categoryId").val();
-            $(this).data('timer', setTimeout(function () {
-                const currentPageIndex = 1;
-                const pageSize = @Model.PageSize;
-                $.ajax({
-                    url: '@Url.Action("ItemsSearch", "Menu")',
-                    type: 'GET',
-                    data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
-                    success: function (data) {
-                        $("#partialViewStartingInner").html(data);
-                    }
-                });
-            }, 300));
-        });
-
-        $("#searchInput2").on("keyup", function () {
-            clearTimeout($.data(this, 'timer'));
-            var searchValue = $(this).val().toLowerCase();
-            var categoryId = $("#categoryId").val();
-            $(this).data('timer', setTimeout(function () {
-                const currentPageIndex = 1;
-                const pageSize = @Model.PageSize;
-                $.ajax({
-                    url: '@Url.Action("ItemsSearch", "Menu")',
-                    type: 'GET',
-                    data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
-                    success: function (data) {
-                        $("#partialViewStartingInner").html(data);
-                    }
-                });
-            }, 300));
-        });
-
-        function saveChangesOfSwitch(itemId) {
-            var idCustom = "flexSwitchCheckChecked" + itemId;
-            var isAvailable = document.getElementById(idCustom).checked;
-            console.log(isAvailable);
-            $.ajax({
-                url: '@Url.Action("UpdateItemAvailability", "Menu")',
-                type: 'POST',
-                data: { itemId: itemId, isAvailable: isAvailable },
-                success: function (data) {
-                }
-            });
-        }
-
-        function changeItems(categoryId) {
-            $.ajax({
-                url: '@Url.Action("ItemsFilter", "Menu")',
-                type: 'GET',
-                data: { pageIndex: 1, pageSize: 5, categoryId: categoryId },
-                success: function (data) {
-                    $("#partialViewStartingInner").html(data);
-                    $("#categoryId").val(categoryId);
-                }
-            });
-        }
-
-        function deleteItem(itemId) {
-            $("#deleteItemButton").click(function () {
-                $.ajax({
-                    url: '@Url.Action("DeleteItem", "Menu")',
-                    type: 'DELETE',
-                    data: { itemId: itemId },
-                    success: function (data) {
-                        if (data.success) {
-                            toastr.success(data.message);
-                            setTimeout(function () {
-                                location.reload();
-                            }, 1000);
-                        } else {
-                            toastr.error(data.message);
-                        }
-                    }
-                });
-            });
-        }
-
-    </script>
+</script>

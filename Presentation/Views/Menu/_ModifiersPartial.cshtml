@@ -302,7 +302,7 @@
                         {
                             <input type="hidden" id="ModifierGroupId"
                                 asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
-                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value="0" />
+                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value=@Model.ModifierGroups[0].Id />
                         }
                         <a onclick="openModalAllModifiers()" class="text-decoration-none cursor-pointer">+ Add Existing
                             Modifiers</a>
@@ -544,6 +544,74 @@
 
 
 <script>
+
+    
+
+    function addModigierGroupFunc() {
+        $("#AddModifierButton2").click(function () {
+            var name = $("#AddModifierName").val();
+            if (name.length <= 0) {
+                $("#addMGName").text("Modifier Group's name is required.")
+                return;
+            }
+            var description = $("#AddModifierDescription").val();
+            var modifierIds = selectedModifiers.map(x => x.id);
+            var modifierGroupId = $("#ModifierGroupId").val();
+            $.ajax({
+                url: '@Url.Action("AddModifierGroup", "Menu")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ ModifierGroupName: name, ModifierGroupDescription: description, SelectedModifierIds: modifierIds, ModifierGroupId: modifierGroupId }),
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        $("#AddModifierGroupModal").modal("hide");
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/RefreshModifiersPartial",
+                            success: function (data) {
+                                $("#modifiers-content").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
+    function deleteModifierGroupFunc (modifierId) {
+        $("#deleteModifierGroupButton").click(function () {
+            $.ajax({
+                url: '@Url.Action("DeleteModifierGroup", "Menu")',
+                type: 'DELETE',
+                data: { modifierGroupId: modifierId },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        $("#deleteModifierGroup").modal("hide");
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/RefreshModifiersPartial",
+                            success: function (data) {
+                                $("#modifiers-content").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });
+        });
+    }
+
     var selectedModifiersGroupsAddModifier = [];
     @section Scripts {
         @{
@@ -606,35 +674,6 @@
             error: function (error) {
                 console.log(error);
             }
-        });
-    }
-
-    function addModigierGroupFunc() {
-        $("#AddModifierButton2").click(function () {
-            var name = $("#AddModifierName").val();
-            if (name.length <= 0) {
-                $("#addMGName").text("Modifier Group's name is required.")
-                return;
-            }
-            var description = $("#AddModifierDescription").val();
-            var modifierIds = selectedModifiers.map(x => x.id);
-            var modifierGroupId = $("#ModifierGroupId").val();
-            $.ajax({
-                url: '@Url.Action("AddModifierGroup", "Menu")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ ModifierGroupName: name, ModifierGroupDescription: description, SelectedModifierIds: modifierIds, ModifierGroupId: modifierGroupId }),
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        toastr.error(data.message);
-                    }
-                }
-            });
         });
     }
 

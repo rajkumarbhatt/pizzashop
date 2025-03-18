@@ -11,7 +11,13 @@
             </div>
             <div class="modal-body">
                 <form id="AddItemForm" method="post">
-                    <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="IdItemEdit" type="hidden" />
+                    @if (Model.AddItemViewModel != null && Model.AddItemViewModel.Id > 0)
+                    {
+                        <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="IdItemEdit" value="@Model.AddItemViewModel.Id" type="hidden" />
+                    } else
+                    {
+                        <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="IdItemEdit" value="-1" type="hidden" />
+                    }
                     <div class="row">
                         <div class="col-12 col-md-8">
 
@@ -136,7 +142,7 @@
                                         bool isDefaultTaxable;
                                         if(Model.AddItemViewModel != null && Model.AddItemViewModel.IsDefaultTaxable == true)
                                         {
-                                            isDefaultTaxable = Model.AddItemViewModel.IsDefaultTaxable;
+                                            isDefaultTaxable = true;
                                         } else
                                         {
                                             isDefaultTaxable = false;
@@ -144,7 +150,7 @@
                                     }
                                     @if(Model.AddItemViewModel != null && Model.AddItemViewModel.TaxPercentage >= 0)
                                     {
-                                        @if (@isDefaultTaxable == true)
+                                        @if (@isDefaultTaxable)
                                         {
                                             <div class="form-floating pe-2 my-auto col-12 col-md-3">
                                                 <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" value="@Model.AddItemViewModel.TaxPercentage"
@@ -188,8 +194,8 @@
                                         } else
                                         {
                                             <div class="form-floating pe-2 my-auto col-12 col-md-3">
-                                                <input value="@Model.AddItemViewModel.ShortCode" asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" name="AddItemViewModel.ShortCode" id="ShortCode"
-                                                    required placeholder="name" disabled>
+                                                 <input asp-for="@Model.AddItemViewModel.ShortCode" type="text" class="form-control" value="@Model.AddItemViewModel.ShortCode" name="AddItemViewModel.ShortCode" id="ShortCode" disabled
+                                                    required placeholder="name">
                                                 <label for="ShortCode" class="">Short Code</label>
                                             </div>
                                         }
@@ -241,10 +247,9 @@
                                             style="height: 100px;">
                                             <img src="~/images/icons/cloud.svg" class="small-image" alt="">
                                             <span>Drag and Drop or Browse files</span>
-                                            <p id="file-name"></p>
+                                            <p id="file-name-item"></p>
                                         </div>
-                                        <input name="AddItemViewModel.Image" asp-for="@Model.AddItemViewModel.Image" type="file" id="Image" class="position-absolute file-input-btn"
-                                            accept="image/*" />
+                                        <input name="AddItemViewModel.Image" asp-for="@Model.AddItemViewModel.Image" type="file" id="ImageItem" class="position-absolute file-input-btn" accept="image/*" />
                                     </div>
                                 </div>
                             </div>
@@ -322,6 +327,12 @@
         });
     });
 
-    
+    document.getElementById('ImageItem').addEventListener('change', (e) => {
+       const file = e.target.files[0];
+       if (file) {
+           const file = e.target.files[0];
+           document.getElementById('file-name-item').textContent = file.name;
+       }
+   });
 
 </script>

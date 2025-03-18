@@ -30,9 +30,17 @@ $(document).ready(function() {
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    setTimeout(function() {
-                        window.location.href = "/Menu"; 
-                    }, 1000);
+                    $.ajax({
+                        type: "GET",
+                        url: "/Menu/RefreshItemsPartial",
+                        success: function (data) {
+                            $("#partialViewStarting").html(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                    $("#categoryModal").modal("hide");
                 } else {
                     if(data.message != null) {
                         toastr.error(data.message);
@@ -64,9 +72,17 @@ $(document).ready(function() {
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    setTimeout(function() {
-                        window.location.href = "/Menu"; 
-                    }, 1000);
+                    $.ajax({
+                        type: "GET",
+                        url: "/Menu/RefreshItemsPartial",
+                        success: function (data) {
+                            $("#partialViewStarting").html(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                    $("#editCategoryModal").modal("hide");
                 } else {
                     if(data.message != null) {
                         toastr.error(data.message);

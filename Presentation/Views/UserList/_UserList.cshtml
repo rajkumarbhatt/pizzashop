@@ -216,7 +216,40 @@
             });
         }, 300));
     });
-    
+
+    function openModel(id) {
+        var pageIndex = @Model.PageIndex;
+        var pageSize = @Model.PageSize;
+        var searchValue = $("#searchInput").val().toLowerCase();
+        var sortColumn = "FirstName";
+        var sortColumnDirection = "asc";
+        $("#deleteButton").click(function () {
+            $.ajax({
+                type: "DELETE",
+                url: "/UserList/DeleteUser/" + id,
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        $.ajax({
+                            url: '@Url.Action("SearchUser", "UserList")',
+                            type: 'GET',
+                            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
+                            success: function (data) {
+                                $("#partialViewStarting").html(data);
+                            }
+                        });
+                    } else {
+                        toastr.error(data.message);
+                    }
+                },
+                error: function () {
+                    toastr.error("Error");
+                }
+            });
+        });
+    }
+        
 </script>
 
         </div>

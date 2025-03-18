@@ -31,6 +31,10 @@ namespace Presentaion.Controllers
         [Route("resetpassword")]
         public IActionResult ResetPassword(string token)
         {
+            if (_context.ResetPasswordLinks.Any(l => l.Link == token))
+            {
+                return RedirectToAction("Index", "PageNotFound");
+            }
             var tokenData = Encoding.UTF8.GetString(Convert.FromBase64String(token));
             var tokenParts = tokenData.Split("_");
             var id = tokenParts[0];
@@ -72,6 +76,11 @@ namespace Presentaion.Controllers
                     if (DateTime.Parse(expiry) > DateTime.UtcNow)
                     {
                         user.Password = BCrypt.Net.BCrypt.HashPassword(model.NewPassword);
+                        _context.SaveChanges();
+                        _context.ResetPasswordLinks.Add(new ResetPasswordLink
+                        {
+                            Link = token,
+                        });
                         _context.SaveChanges();
                         return new JsonResult(new { success = true, message = "Password reset successfully" });
                     }

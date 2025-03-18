@@ -308,7 +308,7 @@
                 <p>Are you sure you want to delete these items?</p>
             </div>
             <div class="modal-footer">
-                <button id="deleteItemButton" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal"
+                <button id="deleteItemButtons" type="button" class="btn btn-primary px-3" data-bs-dismiss="modal"
                     onclick="deleteSelectedItems()">Yes</button>
                 <a href="./menu.html"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
@@ -415,10 +415,11 @@
 <script>
 
     function addItem() {
+        initializeFormSubmit();
+        triggerMultiSelect();
         $("#addItemModal").modal('show');
         $("#modifierGroupdata").html('');
         $("#selectedTags").html('');
-        initializeFormSubmit();
     }
 
     function showDiv(divId) {

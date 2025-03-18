@@ -56,28 +56,7 @@
     var selectModifierGroups = [];
 
 
-    function deleteModifierGroupFunc(modifierGroupId) {
-        console.log(modifierGroupId);
-        $("#deleteModifierGroupButton").click(function () {
-            console.log(modifierGroupId);
-            $.ajax({
-                url: '@Url.Action("DeleteModifierGroup", "Menu")',
-                type: 'DELETE',
-                data: { modifierGroupId: modifierGroupId },
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        toastr.error(data.message);
-                    }
-                }
-            });
-        });
-    }
-
+    
     function openModalAllModifiers() {
         $("#AddModifierGroupModal2").modal("show");
         tickSelectedModifiers();
@@ -165,7 +144,9 @@
             $("#ModifierGroupIds").val(JSON.stringify(selectModifierGroups));
             var form = $(this)[0];
             var formData = new FormData(form);
-            console.log($("#ModifierGroupIds").val());
+            var currentCategoryId = $("#categoryId").val();
+            var currentPageIndex = $("#PageIndex").val();
+            var currentPageSize = $("#PageSize").val();
             $.ajax({
                 type: "POST",
                 url: "/Menu/AddItem",
@@ -175,9 +156,18 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
-                        setTimeout(function () {
-                            window.location.href = "/Menu";
-                        }, 1500);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/ItemsFilter",
+                            data: { categoryId: currentCategoryId, pageIndex: currentPageIndex, pageSize: currentPageSize },
+                            success: function (data) {
+                                $("#partialViewStartingInner").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                        $("#addItemModal").modal("hide");
                     } else {
                         toastr.error(response.message);
                     }
@@ -201,7 +191,7 @@
     }
 
     
-    triggerMultiSelect()
+    
 
     function editItem(id) {
         $.ajax({
@@ -275,9 +265,16 @@
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
-                        setTimeout(function () {
-                            window.location.href = "/Menu";
-                        }, 1000);
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/RefreshItemsPartial",
+                            success: function (data) {
+                                $("#partialViewStarting").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
                     } else {
                         if (!data.success) {
                             if (data.message != null) {
@@ -332,5 +329,6 @@
             document.getElementById("modifiers-content").classList.add("d-none");
         }
     }
+
 
 </script>
