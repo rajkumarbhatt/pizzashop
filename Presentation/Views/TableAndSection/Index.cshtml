@@ -232,7 +232,7 @@
         <div class="modal-content">
             <input type="hidden" id="SectionIdModal" value="-1" />
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Section
+                <h5 id="addSectionModalTitle" class="modal-title" id="staticBackdropLabel">Add Section
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -252,7 +252,7 @@
             <div class="modal-footer d-flex justify-content-end">
                 <button id="AddSectionButton" onclick="addSection()" type="submit"
                     class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
+                <a data-bs-dismiss="modal"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
@@ -337,8 +337,7 @@
     <div class="modal-dialog modal-dialog-centered table-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Table
-                </h5>
+                <h5 class="modal-title" id="addTableTitle">Add Table</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -428,6 +427,7 @@
                 toastr.error("Unauthorized Access");
             }
         });
+        $("#addSectionModalTitle").text("Add Section");
     }
 
     function editSection(sectionId) {
@@ -440,6 +440,7 @@
                 document.getElementById("SectionName").value = response.name;
                 document.getElementById("SectionDescription").value = response.description;
                 document.getElementById("SectionIdModal").value = sectionId;
+                $("#addSectionModalTitle").text("Edit Section");
                 $("#addSectionModal").modal("show");
             },
             error: function (response) {
@@ -471,23 +472,41 @@
         });
     }
 
+    var isDeletingTables = false;
     function deleteSelectedTables() {
+        if (isDeletingTables) return;
+        isDeletingTables = true;
+
+        if (!deleteTableIds || deleteTableIds.length === 0) {
+            toastr.error("No tables selected for deletion.");
+            isDeletingTables = false;  
+            return;
+        }
+
         $.ajax({
             type: "DELETE",
             url: '@Url.Action("DeleteTables", "TableAndSection")',
             data: { tableIds: deleteTableIds },
             success: function (response) {
+                isDeletingTables = false;  
                 if (response.success) {
                     toastr.success(response.message);
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("TablesFilter", "TableAndSection")',
+                        data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: @Model.Tables[0].SectionId, searchValue: "" },
+                        success: function (data) {
+                            $("#tablePartialView").html(data);
+                        }
+                    });
                 } else {
                     toastr.error(response.message);
                 }
             },
             error: function (response) {
-                toastr.error("Unauthorized Access");
+                isDeletingTables = false;
+                toastr.error("An error occurred. Please try again.");
+                console.error("Error response: ", response);
             }
         });
     }
@@ -501,9 +520,14 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("TablesFilter", "TableAndSection")',
+                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: @Model.Tables[0].SectionId, searchValue: "" },
+                            success: function (data) {
+                                $("#tablePartialView").html(data);
+                            }
+                        });
                     } else {
                         toastr.error(response.message);
                     }
@@ -514,6 +538,26 @@
             });
         });
     }
+
+    $(document).ready(function () {
+        $("#TableName").on("input", function () {
+            if ($("#TableName").val() != "") {
+                document.getElementById("TableNameError").innerText = "";
+            } else {
+                document.getElementById("TableNameError").innerText = "Table Name is required.";
+            }
+        });
+
+        $("#TableCapacity").on("input", function () {
+            if ($("#TableCapacity").val() == "") {
+                document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
+            } else if ($("#TableCapacity").val() != "" && !/^[0-9]+$/.test($("#TableCapacity").val())) {
+                document.getElementById("TableCapacityError").innerText = "Table Capacity should be a number.";
+            } else {
+                document.getElementById("TableCapacityError").innerText = "";
+            }
+        });
+    });
 
     function addTable() {
         var tableName = document.getElementById("TableName").value;
@@ -533,10 +577,7 @@
             document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
             return;
         }
-        if (tableStatus == "") {
-            document.getElementById("TableStatusError").innerText = "Table Status is required.";
-            return;
-        }
+        var pageIndex = $("#PageIndex").val();
         $.ajax({
             type: "POST",
             url: '@Url.Action("AddTable", "TableAndSection")',
@@ -544,9 +585,15 @@
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("TablesFilter", "TableAndSection")',
+                        data: { pageIndex: pageIndex, pageSize: @Model.PageSize, sectionId: tableSection, searchValue: "" },
+                        success: function (data) {
+                            $("#tablePartialView").html(data);
+                        }
+                    });
+                    $("#addTableModal").modal("hide");
                 } else {
                     toastr.error(response.message);
                 }
@@ -557,5 +604,11 @@
         });
     }
 
+    
+    $(document).on('keydown', function (e) {
+        if (e.key === "Delete") {
+            deleteSelectedTables();
+        }
+    });
 
 </script>

@@ -302,7 +302,7 @@
                         {
                             <input type="hidden" id="ModifierGroupId"
                                 asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
-                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value=@Model.ModifierGroups[0].Id />
+                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value="-1"/>
                         }
                         <a onclick="openModalAllModifiers()" class="text-decoration-none cursor-pointer">+ Add Existing
                             Modifiers</a>
@@ -571,6 +571,8 @@
                             url: "/Menu/RefreshModifiersPartial",
                             success: function (data) {
                                 $("#modifiers-content").html(data);
+                                //clear selected modifiers
+                                selectedModifiers = [];
                             },
                             error: function (data) {
                                 console.log(data);
@@ -651,9 +653,15 @@
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
+                    $("#AddModifierModal").modal("hide");
+                    $.ajax({
+                        url: '@Url.Action("ModifiersFilter", "Menu")',
+                        type: 'GET',
+                        data: { pageIndex: 1, pageSize: 5, modifierGroupId: $("#modifierGroupId21").val() },
+                        success: function (data) {
+                            $("#ModifiersTablePartial").html(data);
+                        }
+                    });
                 } else {
                     toastr.error(data.message);
                 }
@@ -693,7 +701,8 @@
     });
 
     function editModifier(modifierId) {
-        var modifierGroupId = $("#ModifierGroupId").val();
+        var modifierGroupId = $("#modifierGroupId21").val();
+        console.log(modifierGroupId);
         $.ajax({
             url: '@Url.Action("EditModifier", "Menu")',
             type: 'GET',
@@ -707,4 +716,5 @@
             }
         });
     }
+
 </script>

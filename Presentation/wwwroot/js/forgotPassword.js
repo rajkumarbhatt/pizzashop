@@ -36,7 +36,7 @@ $(document).ready(function () {
       return;
     }
     var email = $('#email').val();
-
+    $('.loader-container').removeClass('d-none');
     $.ajax({
       url: '/api/forgotpassword',
       method: 'POST',
@@ -45,8 +45,13 @@ $(document).ready(function () {
       success: function (response) {
         if (response.success) {
           toastr.success(response.message); 
+          setTimeout(function () {
+            window.location.href = '/Home';
+            $('.loader-container').addClass('d-none');
+          }, 1000);
         } else {
           toastr.error(response.message); 
+          $('.loader-container').addClass('d-none');
         }
       },
       error: function (xhr) {
@@ -56,6 +61,7 @@ $(document).ready(function () {
         } else {
           toastr.error('An unexpected error occurred.'); 
         }
+        $('.loader-container').addClass('d-none');
       }
     });
   });

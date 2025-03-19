@@ -52,6 +52,10 @@ namespace BLL.Services
         {
             if (sectionId == -1)
             {
+                if (_context.Sections.Any(s => s.Name == sectionName))
+                {
+                    return new JsonResult(new { success = false, message = "Section already exists" });
+                }
                 Section section = new Section
                 {
                     Name = sectionName,

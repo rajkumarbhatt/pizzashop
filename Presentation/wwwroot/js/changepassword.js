@@ -40,26 +40,35 @@ $("#cancel-button").click(function () {
 
 $(document).ready(function () {
     $("#change-password-form").submit(function (e) {
+        debugger
         e.preventDefault();
         var currentPassword = $("#current-password").val();
         var newPassword = $("#new-password").val();
         var confirmPassword = $("#confirm-password").val();
-        console.log("submitting form");
-        
+        $('.loader-container').removeClass('d-none');
         $.ajax({
             type: "POST",
             url: "/account/changepassword",
             data: JSON.stringify({ CurrentPassword: currentPassword, NewPassword: newPassword, ConfirmPassword: confirmPassword }),
             contentType: "application/json",
             success: function (data) {
-                if (data.value.success) {
-                    toastr.success(data.value.message);
+                debugger
+                console.log(data);
+                if (data.success) {
+                    toastr.success(data.message);
                     setTimeout(function () {
                         window.location.href = "/Dashboard";
-                    }, 2000);
+                        $('.loader-container').addClass('d-none');
+                    }, 1000);
                 } else {
-                    toastr.error(data.value.message);
+                    toastr.error(data.message);
+                    $('.loader-container').addClass('d-none');
                 }
+            },
+            error: function (data) {
+                console.log(data);
+                toastr.error(data.message);
+                $('.loader-container').addClass('d-none');
             }
         });
     });

@@ -156,3 +156,21 @@ C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\BLL.genruntimeconfig.cache
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\ref\BLL.dll
 C:\Users\pci88\Downloads\pizzashop-user-module-menu-module\pizzashop-user-module-menu-module\BLL\obj\Debug\net8.0\BLL.sourcelink.json
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\BLL.deps.json
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\BLL.runtimeconfig.json
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\BLL.dll
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\BLL.pdb
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\DAL.dll
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\bin\Debug\net8.0\DAL.pdb
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.csproj.AssemblyReference.cache
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.AssemblyInfoInputs.cache
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.AssemblyInfo.cs
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.csproj.CoreCompileInputs.cache
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.sourcelink.json
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.csproj.Up2Date
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.dll
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\refint\BLL.dll
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.pdb
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\BLL.genruntimeconfig.cache
+C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\BLL\obj\Debug\net8.0\ref\BLL.dll

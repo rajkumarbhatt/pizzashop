@@ -54,9 +54,10 @@
 <script>
     var selectedModifiers = [];
     var selectModifierGroups = [];
+    var isItem = true;
+    var isModifier = false;
 
 
-    
     function openModalAllModifiers() {
         $("#AddModifierGroupModal2").modal("show");
         tickSelectedModifiers();
@@ -190,8 +191,8 @@
         return isMinMaxDataValid;
     }
 
-    
-    
+
+
 
     function editItem(id) {
         $.ajax({
@@ -212,6 +213,7 @@
                 toastr.error(response.message);
             }
         });
+        isEditCalled = true;
     }
 
     function addTag(value, text) {
@@ -245,6 +247,15 @@
         selectModifierGroups.forEach(function (modifierGroup) {
             document.getElementById(modifierGroup.Id).checked = true;
             addTag(modifierGroup.Id, modifierGroup.Name);
+        });
+    }
+
+    function UnSyncEditChanges() {
+        selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
+        selectModifierGroups.forEach(function (modifierGroup) {
+            document.getElementById(modifierGroup.Id).checked = false;
+            deleteSelectedModifierGroup(modifierGroup.Id);
+            removeTag(modifierGroup.Id);
         });
     }
 
@@ -302,10 +313,12 @@
             $("#ShortCode").prop("disabled", true);
         }
     }
-    
+
 
     function changeLine(item) {
         if (item == "modifiers-div") {
+            isItem = false;
+            isModifier = true;
             document.getElementById("underline-para").style.marginLeft = "120px";
             document.getElementById("underline-para").style.width = "90px";
             document.getElementById("modifiers-div").classList.add("active-menu-item");
@@ -317,6 +330,8 @@
             document.getElementById("items-content").classList.add("d-none");
             document.getElementById("modifiers-content").classList.remove("d-none");
         } else {
+            isItem = true;
+            isModifier = false;
             document.getElementById("underline-para").style.marginLeft = "30px";
             document.getElementById("underline-para").style.width = "70px";
             document.getElementById("items-div").classList.add("active-menu-item");

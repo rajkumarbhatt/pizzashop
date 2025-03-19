@@ -9,6 +9,8 @@
         permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
     }
 
+    var userId = Context.Session.GetInt32("UserId");
+    
 }
 
 <table id="userTable" class="table table-responsive"  style="white-space: nowrap;">
@@ -57,21 +59,24 @@
 
                                 </td>
                                 <td>
-                                    @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                                    @if (@userId != user.Id)
                                     {
-                                        <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
-                                    } else 
-                                    {
-                                        <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
-                                    }
-                                    @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
-                                    {
-                                        <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
-                                            <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
-                                    } else 
-                                    {
-                                        <button disabled type="button" class="delete-btn cursor-none" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
-                                            <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
+                                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                                        {
+                                            <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
+                                        } else 
+                                        {
+                                            <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
+                                        }
+                                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
+                                        {
+                                            <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
+                                        } else 
+                                        {
+                                            <button disabled type="button" class="delete-btn cursor-none" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
+                                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
+                                        }
                                     }
                                 </td>
                             </tr>

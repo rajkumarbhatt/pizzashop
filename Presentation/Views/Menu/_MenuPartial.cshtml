@@ -24,8 +24,7 @@
             {
                 <button type="button" class="delete-btn cursor-none" data-bs-toggle="modal" data-bs-target="#categoryModal"
                     disabled>
-                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none"
-                            alt=""></a>
+                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none" alt=""></a>
                 </button>
             }
         </div>
@@ -93,7 +92,8 @@
                     <div class="d-block d-lg-none p-3 col-lg-3 bg-menu-category">
                         <div class="d-flex justify-content-between">
                             <h4 class="font-blue">Category</h4>
-                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit ==
+                                                        true))
                             {
                                 <button type="button" class="delete-btn" data-bs-toggle="modal"
                                     data-bs-target="#categoryModal">
@@ -157,7 +157,8 @@
                                             id="sandwich-span">@category.Name</span>
                                     </div>
                                     <div>
-                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit
+                                                                            == true))
                                         {
                                             <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                                 data-bs-target="#editCategoryModal">
@@ -173,7 +174,8 @@
                                                         onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
                                             </button>
                                         }
-                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" &&
+                                                                            p.CanDelete == true))
                                         {
                                             <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                                 data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
@@ -208,7 +210,7 @@
                     <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
                 <p class="delete-styles d-bloack d-md-none" id="search-icon" onclick="showSearchBar()">
-                    <a   class="text-decoration-none text-black add-user-link">
+                    <a class="text-decoration-none text-black add-user-link">
                         <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
                     </a>
                 </p>
@@ -220,15 +222,15 @@
                 @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
                 {
                     <p class="delete-styles" data-bs-toggle="modal" data-bs-target="#deleteItems">
-                        <a   class="text-decoration-none text-black   add-user-link">
+                        <a class="text-decoration-none text-black   add-user-link">
                             <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete" alt="">
                         </a>
                     </p>
                 }
                 else
                 {
-                    <p class="delete-styles cursor-none"  disabled>
-                        <a   class="text-decoration-none text-black   add-user-link cursor-none">
+                    <p class="delete-styles cursor-none" disabled>
+                        <a class="text-decoration-none text-black   add-user-link cursor-none">
                             <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete cursor-none"
                                 alt="">
                         </a>
@@ -242,11 +244,11 @@
                             <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
                         </button>
                     </p>
-                } 
+                }
                 else
                 {
                     <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none"
-                         style="width: 49px; height: 49px;">
+                        style="width: 49px; height: 49px;">
                         <button class="text-decoration-none text-black btn  add-user-link cursor-none">
                             <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none"
                                 alt="">
@@ -255,8 +257,9 @@
                 }
                 @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
                 {
-                    <button id="AddItemModal" onclick="addItem()" class="d-none d-md-block button-styles-header w-100 add-item-button">
-                        <a   class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
+                    <button id="AddItemModal" onclick="addItem()"
+                        class="d-none d-md-block button-styles-header w-100 add-item-button">
+                        <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
                             <p>+</p>
                             <p class="d-none d-sm-block">Add Item</p>
                         </a>
@@ -264,8 +267,10 @@
                 }
                 else
                 {
-                    <button id="AddItemModal"  class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor: not-allowed;">
-                        <a   class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
+                    <button id="AddItemModal" class="d-none d-md-block button-styles-header w-100 add-item-button"
+                        style="cursor: not-allowed;">
+                        <a
+                            class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
                             <p>+</p>
                             <p class="d-none d-sm-block">Add Item</p>
                         </a>
@@ -341,7 +346,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button id="AddCategoryModal" type="submit" class="btn btn-primary px-3">Save</button>
+                <button onclick="AddCategory()" type="submit" class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
@@ -375,7 +380,8 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button id="EditCategoryModal" type="button" class="btn btn-primary px-3">Save</button>
+                <button onclick="EditCategory()" id="EditCategoryModal" type="button"
+                    class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
@@ -413,13 +419,38 @@
 </div>
 
 <script>
+    var isEditCalled = false;
 
     function addItem() {
         initializeFormSubmit();
-        triggerMultiSelect();
+        if (isEditCalled) {
+            UnSyncEditChanges();
+            $.ajax({
+                type: "GET",
+                url: "/Menu/ResetAddItemForm",
+                success: function (data) {
+                    $("#AddItemModalPartial").html(data);
+                    triggerMultiSelect();
+                    $("#AddItemModalHeading").text("Add Item");
+                    $("#AddItemButton").text("Save");
+                    $("#addItemModal").modal("show");
+                    $("#addItemModal").modal('show');
+                    initializeFormSubmit();
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+            return;
+        }
+        if (!isEditCalled) {
+            triggerMultiSelect();
+        }
+        $("#AddItemModalHeading").text("Add Item");
+        $("#AddItemButton").text("Save");
+        $("#addItemModal").modal("show");
         $("#addItemModal").modal('show');
-        $("#modifierGroupdata").html('');
-        $("#selectedTags").html('');
+        return;
     }
 
     function showDiv(divId) {
@@ -430,4 +461,86 @@
         divId.classList.add('d-none');
     }
 
+    function AddCategory() {
+        var Name = $("#CategoryName").val();
+        var Description = $("#CategoryDescription").val();
+        if (Name == "") {
+            $("#categoryNameError").text("Category Name is required");
+            return;
+        } else {
+            $("#categoryNameError").text("");
+        }
+        $.ajax({
+            url: '/Menu/AddCategory',
+            type: 'POST',
+            data: { categoryName: Name, categoryDescription: Description },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    $.ajax({
+                        type: "GET",
+                        url: "/Menu/RefreshItemsPartial",
+                        success: function (data) {
+                            $("#partialViewStarting").html(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                    $("#categoryModal").modal("hide");
+                } else {
+                    if (data.message != null) {
+                        toastr.error(data.message);
+                    } else {
+                        toastr.error("Not Authorized");
+                    }
+                }
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        });
+    }
+
+    function EditCategory() {
+        var Id = $("#EditCategoryId").val();
+        var Name = $("#EditCategoryName").val();
+        var Description = $("#EditCategoryDescription").val();
+        if (Name == "") {
+            $("#editCategoryNameError").text("Category Name is required");
+            return;
+        } else {
+            $("#editCategoryNameError").text("");
+        }
+        $.ajax({
+            url: '/Menu/UpdateCategory',
+            type: 'PUT',
+            data: { categoryId: Id, categoryName: Name, categoryDescription: Description },
+            success: function (data) {
+                if (data.success) {
+                    toastr.success(data.message);
+                    $.ajax({
+                        type: "GET",
+                        url: "/Menu/RefreshItemsPartial",
+                        success: function (data) {
+                            $("#partialViewStarting").html(data);
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                    $("#editCategoryModal").modal("hide");
+                } else {
+                    if (data.message != null) {
+                        toastr.error(data.message);
+                    } else {
+                        toastr.error("Not Authorized");
+                    }
+                }
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        });
+    }
 </script>

@@ -133,9 +133,13 @@
                 success: function (data) {
                     if (data.success) {
                         toastr.success(data.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("GetTaxes", "TaxAndFee")",
+                            success: function (data) {
+                                $("#partialViewStarting").html(data);
+                            }
+                        });
                     } else {
                         toastr.error("Unauthorized Access");
                     }

@@ -29,6 +29,7 @@ var changedPermissions = [];
 
 
 function changePermission (roleId, permissionId, permissionName) {
+    console.log("changePermission");
     var checked = document.getElementById(permissionName + roleId + permissionId).checked;
     var permission = {
         roleId: roleId,
@@ -36,17 +37,18 @@ function changePermission (roleId, permissionId, permissionName) {
         permissionName: permissionName,
         checked: checked
     };
-    var index = changedPermissions.findIndex(p => p.roleId === roleId && p.permissionId === permissionId);
+    var index = changedPermissions.findIndex(p => p.roleId === roleId && p.permissionId === permissionId && p.permissionName === permissionName);
+    console.log(index, permission);
     if (index === -1) {
         changedPermissions.push(permission);
     } else {
         changedPermissions[index] = permission;
     }
+    console.log(changedPermissions);
 }
 
 function savePermissions() {
-    console.log(changedPermissions);
-    
+    $('.loader-container').removeClass('d-none');    
     $.ajax({
         type: 'POST',
         url: '/RoleAndPermission/EditPermissions',
@@ -57,13 +59,16 @@ function savePermissions() {
                 toastr.success(response.message);
                 setTimeout(() => {
                     window.location.reload();
+                    $('.loader-container').addClass('d-none');
                 }, 1000);
             } else {
                 toastr.error(response.message);
+                $('.loader-container').addClass('d-none');
             }
         },
         error: function (response) {
             toastr.error(response.message);
+            $('.loader-container').addClass('d-none');
         }
     });
 }

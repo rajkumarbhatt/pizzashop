@@ -14,89 +14,9 @@ $(document).ready(function() {
             document.getElementById("search-icon").classList.remove("d-none");
         }
     });  
-    $("#AddCategoryModal").click(function() {
-        var Name = $("#CategoryName").val();
-        var Description = $("#CategoryDescription").val();
-        if (Name == "") {
-            $("#categoryNameError").text("Category Name is required");
-            return; 
-        } else {
-            $("#categoryNameError").text("");
-        }
-        $.ajax({
-            url: '/Menu/AddCategory',
-            type: 'POST',
-            data: { categoryName: Name, categoryDescription: Description },
-            success: function (data) {
-                if (data.success) {
-                    toastr.success(data.message);
-                    $.ajax({
-                        type: "GET",
-                        url: "/Menu/RefreshItemsPartial",
-                        success: function (data) {
-                            $("#partialViewStarting").html(data);
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
-                    $("#categoryModal").modal("hide");
-                } else {
-                    if(data.message != null) {
-                        toastr.error(data.message);
-                    } else {
-                        toastr.error("Not Authorized");
-                    }
-                }
-            },
-            error: function (data) {
-                toastr.error(data.message);
-            }
-        });
-    });
-
-    $("#EditCategoryModal").click(function() {
-        var Id = $("#EditCategoryId").val();
-        var Name = $("#EditCategoryName").val();
-        var Description = $("#EditCategoryDescription").val();
-        if (Name == "") {
-            $("#editCategoryNameError").text("Category Name is required");
-            return;
-        } else {
-            $("#editCategoryNameError").text("");    
-        }
-        $.ajax({
-            url: '/Menu/UpdateCategory',
-            type: 'PUT',
-            data: { categoryId: Id, categoryName: Name, categoryDescription: Description },
-            success: function (data) {
-                if (data.success) {
-                    toastr.success(data.message);
-                    $.ajax({
-                        type: "GET",
-                        url: "/Menu/RefreshItemsPartial",
-                        success: function (data) {
-                            $("#partialViewStarting").html(data);
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
-                    $("#editCategoryModal").modal("hide");
-                } else {
-                    if(data.message != null) {
-                        toastr.error(data.message);
-                    } else {
-                        toastr.error("Not Authorized");
-                    }
-                }
-            },
-            error: function (data) {
-                toastr.error(data.message);
-            }
-        });
-    });
 });
+   
+    
 
 
 function triggerMultiSelect(){
@@ -194,4 +114,3 @@ function triggerMultiSelect(){
             }, 200);
         });
 }
-

@@ -59,11 +59,19 @@ namespace Presentaion.Controllers
         }
 
         [HttpPost]
-        [Route("/api/resetpassword")]
-        public JsonResult ResetPassword([FromBody] ResetPasswordViewModel model)
+        [Route("/api/resetpassword1")]
+        public JsonResult ResetPassword1([FromBody] ResetPasswordViewModel model)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return new JsonResult(new { success = false, message = "Validation errors" });
+                }
+                if (_context.ResetPasswordLinks.Any(l => l.Link == model.Token))
+                {
+                    return new JsonResult(new { success = false, message = "Token already used" });
+                }
                 var userId = model.UserId;
                 var user = _resetPasswordService.GetUserDataById(userId);
                 if (user != null)

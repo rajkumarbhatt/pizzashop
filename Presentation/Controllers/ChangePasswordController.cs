@@ -40,7 +40,7 @@ namespace Presentaion.Controllers
 
             var token = Request.Cookies["token"];
             var userId = _jwtService.GetUserIdFromJwtToken(token ?? "");
-            return new JsonResult(_changePasswordService.ChangePassword(userId, model.NewPassword ?? "", model.CurrentPassword ?? ""));
+            return _changePasswordService.ChangePassword(userId, model.NewPassword ?? "", model.CurrentPassword ?? "");
         }
     }
 }

@@ -55,7 +55,7 @@ namespace BLL.Services
             return _context.Roles.ToList();
         }
 
-        public EditUserViewModel GetUserDataFromUserId(int userId, int userIdLoggedIn)
+        public EditUserViewModel GetUserDataFromUserId(int userId, int userIdLoggedIn) 
         {
             var usernameLoggedIn = _navBarService.GetUsernameFromUserId(userIdLoggedIn);
             var profileImageURLLoggedIn = _navBarService.GetProfileImageUrlFromUserId(userIdLoggedIn);
@@ -63,21 +63,22 @@ namespace BLL.Services
             var roleIdLoggedIn = _navBarService.GetRoleIdFromUserId(userIdLoggedIn);
             var userViewModel = new EditUserViewModel
             {
+                idLoggednin = userIdLoggedIn,
                 Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName ?? "",
                 Email = user.Email,
-                PhoneNumber = user.Phone,
-                Address = user.Address,
-                ZipCode = user.ZipCode,
+                PhoneNumber = user.Phone ?? "",
+                Address = user.Address ?? "",
+                ZipCode = user.ZipCode ?? "",
                 Status = user.Status ?? false,
                 Username = usernameLoggedIn,
                 RoleId = roleIdLoggedIn,
                 ProfileImageURL = profileImageURLLoggedIn,
                 RoleIdRequestedUser = user.RoleId,
-                CountryId = user.CountryId,
-                StateId = user.StateId,
-                CityId = user.CityId,
+                CountryId = user.CountryId ?? 0,
+                StateId = user.StateId ?? 0,
+                CityId = user.CityId ?? 0,
                 UsernameRequestedUSer = user.Username,
             };
             return userViewModel;
@@ -106,7 +107,7 @@ namespace BLL.Services
             user.ZipCode = userViewModel.ZipCode;
             user.Status = userViewModel.Status;
             user.Username = userViewModel.UsernameRequestedUSer;
-            user.RoleId = userViewModel.RoleIdRequestedUser ?? 0;
+            user.RoleId = userViewModel.RoleIdRequestedUser;
             user.CountryId = userViewModel.CountryId;
             user.StateId = userViewModel.StateId;
             user.CityId = userViewModel.CityId;
@@ -205,7 +206,7 @@ namespace BLL.Services
             var query = _context.Users.Where(u => u.IsDeleted == false);
             if (!string.IsNullOrEmpty(searchValue))
             {
-                query = query.Where(u => u.FirstName.ToLower().Contains(searchValue));
+                query = query.Where(u => (u.FirstName.ToLower().Contains(searchValue)) || (u.Email.ToLower().Contains(searchValue)) || (u.Phone.ToLower().Contains(searchValue)));
             }
             if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
             {

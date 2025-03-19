@@ -23,7 +23,7 @@ namespace BLL.Interfaces
         public MenuViewModel GetItemData(int itemId);
         public List<Modifier> GetModifiersBasedOnSearch(int modifierGroupId, string searchValue);
         public int GetModifierGroupId(int itemId);
-        public IActionResult DeleteModifier(int modifierId, int userId);
+        public IActionResult DeleteModifier(int modifierId, int userId, int modifierGroupId);
         public IActionResult DeleteModifierGroup(int modifierGroupId, int userId);
         public List<Modifier> GetAllModifiers(string searchValue);
         public JsonResult AddModifierGroup(CreateModifierGroupViewModel createModifierGroupViewModel, int userId);

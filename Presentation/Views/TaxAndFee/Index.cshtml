@@ -153,9 +153,14 @@
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1000);
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetTaxes", "TaxAndFee")',
+                        success: function (data) {
+                            $("#partialViewStarting").html(data);
+                        }
+                    });
+                    $("#addTax").modal("hide");
                 } else {
                     toastr.error("Unable to add tax");
                 }
@@ -179,6 +184,26 @@
                 }
             });
         }, 300));
+    });
+
+    $(document).ready(function () {
+        $("#TaxName").on("input", function () {
+            if ($("#TaxName").val() != "") {
+                $("#TaxNameError").text("");
+            } else {
+                $("#TaxNameError").text("Tax name is required");
+            }
+        });
+
+        $("#TaxAmount").on("input", function () {
+            if ($("#TaxAmount").val() == "0") {
+                $("#TaxAmountError").text("Tax amount is required");
+            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#TaxAmount").val())) {
+                $("#TaxAmountError").text("");
+            } else {
+                $("#TaxAmountError").text("Invalid amount");
+            }
+        });
     });
 
 </script>

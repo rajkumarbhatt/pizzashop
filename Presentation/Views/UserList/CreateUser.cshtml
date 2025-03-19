@@ -24,7 +24,7 @@
                 <label for="last-name" class="mx-2 mt-2">Last Name</label>
             </div>
             <div class="col-12 col-sm-6 p-2 form-floating">
-                <input type="text" class="form-control" asp-for="@Model.UsernameRequestedUser"
+                <input type="text" class="form-control" autocomplete="off" asp-for="@Model.UsernameRequestedUser"
                     name="UsernameRequestedUser" id="user-name" placeholder="user-name">
                 <span asp-validation-for="@Model.UsernameRequestedUser" class="text-danger"></span>
                 <label for="user-name" class="mx-2 mt-2">User Name</label>
@@ -99,11 +99,13 @@
                 <label for="select-city" class="mx-2 mt-2">City</label>
             </div>
             <div class="col-12 col-sm-4 p-2 form-floating">
-                <input type="text" class="form-control" name="ZipCode" id="zipcode" placeholder="Zipcode">
+                <input asp-for="@Model.ZipCode" type="text" class="form-control" name="ZipCode" id="zipcode" placeholder="Zipcode">
+                <span asp-validation-for="@Model.ZipCode" class="text-danger"></span>
                 <label for="first-name" class="mx-2 mt-2">Zipcode</label>
             </div>
             <div class="col-12 col-sm-4 p-2 form-floating">
-                <input type="text" class="form-control" name="Address" id="address" placeholder="Address">
+                <input asp-for="@Model.Address" type="text" class="form-control" name="Address" id="address" placeholder="Address">
+                <span asp-validation-for="@Model.Address" class="text-danger"></span>
                 <label for="address" class="mx-2 mt-2">Address</label>
             </div>
             <!-- phone-number -->

@@ -157,6 +157,10 @@ namespace Presentaion.Controllers
             }
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             var itemName = _categoryService.AddItem(addItemViewModel, userId);
+            if (itemName == null)
+            {
+                return new JsonResult(new { success = false, message = "Item already exists" });
+            }
             return _categoryService.UpdateItemModifierGroup(addItemViewModel, itemName, userId);
         }
 
@@ -185,10 +189,10 @@ namespace Presentaion.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteModifier(int modifierId)
+        public IActionResult DeleteModifier(int modifierId, int modifierGroupId)
         {
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _categoryService.DeleteModifier(modifierId, userId);
+            return _categoryService.DeleteModifier(modifierId, userId, modifierGroupId);
         }
 
         [HttpDelete]
@@ -229,7 +233,7 @@ namespace Presentaion.Controllers
             return _categoryService.AddModifierGroup(createModifierGroupViewModel, userId);
         }
 
-        [HttpGet]
+        [HttpGet] 
         public IActionResult EditModifierGroup(int modifierGroupId)
         {
             MenuViewModel menuViewModel = _categoryService.GetModifierGroupDetails(modifierGroupId);
@@ -345,6 +349,20 @@ namespace Presentaion.Controllers
                 AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList()
             };
             return PartialView("_ModifiersPartial", menuViewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ResetAddItemForm()
+        {
+            var categories = _categoryService.GetCategories();
+            var modifierGroups = _categoryService.GetModifierGroups();
+            MenuViewModel menuViewModel = new MenuViewModel
+            {
+                Categories = categories,
+                ModifierGroups = modifierGroups
+
+            };
+            return PartialView("_AddItemPartial", menuViewModel);
         }
     }
 }

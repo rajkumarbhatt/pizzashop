@@ -186,13 +186,20 @@
         }
     }
 
+    var isDeleting = false;
+
     function deleteSelectedItems() {
+        if (isDeleting) return; 
+        isDeleting = true;
+
         deleteItemsList = deleteItemsList.map(item => parseInt(item));
+
         $.ajax({
             url: '@Url.Action("DeleteSelectedItems", "Menu")',
             type: 'DELETE',
             data: { itemIds: deleteItemsList },
             success: function (data) {
+                isDeleting = false;  
                 if (data.success) {
                     toastr.success(data.message);
                     $.ajax({
@@ -210,10 +217,13 @@
                 } else {
                     toastr.error(data.message);
                 }
+            },
+            error: function (err) {
+                isDeleting = false;
+                console.log(err);
             }
         });
     }
-
 
     $("#nextButton").click(function () {
         const currentPageIndex = @Model.PageIndex;
@@ -357,6 +367,15 @@
             });
         });
     }
+
+
+
+    $(document).one('keydown', function (e) {
+        if (e.key === "Delete" && isItem) {
+            deleteSelectedItems();
+        }
+    });
+
 
 
 </script>

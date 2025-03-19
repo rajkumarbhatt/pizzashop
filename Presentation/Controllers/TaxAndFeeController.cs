@@ -65,5 +65,16 @@ namespace Presentaion.Controllers
         {
             return _taxAndFeeService.Edit(id);
         }
+
+        [HttpGet]
+        public IActionResult GetTaxes()
+        {
+            List<TaxesFee> taxes = _taxAndFeeService.GetTaxes();
+            TaxAndFeeViewModel taxAndFeeViewModel = new TaxAndFeeViewModel
+            {
+                Taxes = taxes
+            };
+            return PartialView("_TaxAndFeeTable", taxAndFeeViewModel);
+        }
     }
 }

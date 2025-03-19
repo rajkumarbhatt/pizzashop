@@ -69,54 +69,57 @@ $('#password').on('input', function () {
 });
 
 $(document).ready(function () {
-
-
   $('#login-form').submit(function (e) {
+      e.preventDefault();
 
-    e.preventDefault();
+      validateEmail();
+      validatePassword();
 
-    validateEmail();
-    validatePassword();
-
-    if (!isEmailValid || !isPasswordValid) {
-      return;
-    }
-
-    var email = $('#email').val();
-    var password = $('#password').val();
-    var rememberMe = $('#remember-me').is(':checked');
-
-    // send request to server
-    $.ajax({
-      url: '/api/validate',
-      type: 'POST',
-      contentType: 'application/json',
-      data: JSON.stringify({
-        email: email,
-        password: password
-      }),
-      success: function (response) {
-        if (response.success) {
-          if (rememberMe) {
-            document.cookie = `email=${email}; max-age=${60 * 60 * 24 * 7}`;
-          }
-          toastr.success(response.message);
-          document.cookie = `token=${response.token}; max-age=${60 * 60 * 24 * 7}; path=/; SameSite=Lax`;
-          window.location.href = '/Dashboard';
-        } else {
-          toastr.error(response.message);
-        }
-      },
-      error: function (xhr) {
-        console.log(xhr);
-        if (xhr.responseJSON && xhr.responseJSON.message) {
-          toastr.error(xhr.responseJSON.message);
-        } else {
-          toastr.error('An unexpected error occurred.');
-        }
+      if (!isEmailValid || !isPasswordValid) {
+          return;
       }
-    });
 
+      var email = $('#email').val();
+      var password = $('#password').val();
+      var rememberMe = $('#remember-me').is(':checked');
+
+      $('.loader-container').removeClass('d-none');
+
+      $.ajax({
+          url: '/api/validate',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({
+              email: email,
+              password: password
+          }),
+          success: function (response) {
+              if (response.success) {
+                  if (rememberMe) {
+                      document.cookie = `email=${email}; max-age=${60 * 60 * 24 * 7}`;
+                  }
+                  toastr.success(response.message);
+                  document.cookie = `token=${response.token}; max-age=${60 * 60 * 24 * 7}; path=/; SameSite=Lax`;
+
+                  setTimeout(function () {
+                      window.location.href = '/Dashboard';
+                      $('.loader-container').addClass('d-none');
+                  }, 1000);
+                 
+              } else {
+                  toastr.error(response.message);
+                  $('.loader-container').addClass('d-none'); 
+              }
+          },
+          error: function (xhr) {
+              console.log(xhr);
+              if (xhr.responseJSON && xhr.responseJSON.message) {
+                  toastr.error(xhr.responseJSON.message);
+              } else {
+                  toastr.error('An unexpected error occurred.');
+              }
+              $('.loader-container').addClass('d-none'); 
+          }
+      });
   });
-
 });

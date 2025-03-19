@@ -9,6 +9,11 @@
     }
 
 }
+@if (@Model.PageIndex > 0) {
+    <input type="hidden" id="PageIndex" value="@Model.PageIndex" />
+} else {
+    <input type="hidden" id="PageIndex" value="1" />
+}
 <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
     <thead class="color-head">
         <tr class="text-center">
@@ -104,6 +109,7 @@
                 $("#TableSection").val(data.sectionId);
                 $("#TableId").val(data.id);
                 console.log(data);
+                $("#addTableTitle").text("Edit Table");
                 $("#addTableModal").modal("show");
             }
         });

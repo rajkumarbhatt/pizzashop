@@ -48,10 +48,10 @@ $(document).ready(function () {
     // submit form
     $('#edit-user-form').submit(function (e) {
         e.preventDefault();
-        
         var form = $(this)[0]; 
         var formData = new FormData(form);
-        var userId = $('#userid').val(); 
+        var userId = $('#userid').val();
+        $('.loader-container').removeClass('d-none'); 
         $.ajax({
             url: '/UserList/EditUser/' + userId,
             type: 'PUT',
@@ -62,14 +62,17 @@ $(document).ready(function () {
                 if (data.success) {
                     toastr.success(data.message);
                     setTimeout(function () {
+                        $('.loader-container').addClass('d-none');
                         window.location.href = '/UserList';
                     }, 1000);
                 } else {
                     toastr.error(data.message);
+                    $('.loader-container').addClass('d-none');
                 }
             },
             error: function (error) {
                 toastr.error('An error occurred while processing your request');
+                $('.loader-container').addClass('d-none');
             }
         });
     });

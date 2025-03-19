@@ -6,14 +6,12 @@ namespace DAL.ViewModels
     {
         [Required]
         [DataType(DataType.Password)]
-        public required string Token { get; set; }
+        public required string Token { get; set; } 
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Password is required")]
         public required string NewPassword { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Confirm Password is required")]
         [Compare("NewPassword", ErrorMessage = "Passwords do not match")]
         public required string ConfirmPassword { get; set; }
 

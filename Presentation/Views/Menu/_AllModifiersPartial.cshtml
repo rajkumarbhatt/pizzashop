@@ -5,7 +5,7 @@
     <thead class="color-head">
         <tr class="text-center">
             <th class="text-start mx-2">
-                <input class="form-check-input intermediate-checkbox" type="checkbox" value=""
+                <input class="form-check-input intermediate-checkbox select-modifs-intermediate" type="checkbox" value=""
                     id="flexCheckIndeterminate">
                 <label class="form-check-label" for="flexCheckIndeterminate"></label>Name
             </th>
@@ -58,6 +58,30 @@
 
 
 <script>
+
+    $(".select-modifs-intermediate").click(function () {
+        if (this.checked) {
+            $(".all-modifiers-select").each(function () {
+                this.checked = true;
+                addToList(this.id);
+            });
+        } else {
+            $(".all-modifiers-select").each(function () {
+                this.checked = false;
+                addToList(this.id);
+            });
+        }
+        addModalsToList();
+    });
+
+    $(".all-modifiers-select").click(function () {
+        if ($(".all-modifiers-select:checked").length === $(".all-modifiers-select").length) {
+            $(".select-modifs-intermediate").prop("checked", true);
+        } else {
+            $(".select-modifs-intermediate").prop("checked", false);
+        }
+    });
+
     function addTagCustom(modifierId, modifierName) {
         var tagsDiv = document.getElementById("modifiersSelected");
         var tag = document.createElement("div");

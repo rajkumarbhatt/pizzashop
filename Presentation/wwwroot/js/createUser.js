@@ -51,7 +51,7 @@ $(document).ready(function () {
        
        var form = $(this)[0]; 
        var formData = new FormData(form);
-       
+       $('.loader-container').removeClass('d-none');
        var userId = $('#userid').val();
        $.ajax({
            url: '/UserList/CreateUser',
@@ -64,13 +64,16 @@ $(document).ready(function () {
                    toastr.success(data.message);
                    setTimeout(function () {
                        window.location.href = '/UserList';
+                        $('.loader-container').addClass('d-none');
                    }, 1000);
                } else {
                    toastr.error(data.message);
+                    $('.loader-container').addClass('d-none');
                }
            },
            error: function (error) {
                toastr.error('An error occurred while processing your request');
+               $('.loader-container').addClass('d-none');
            }
        });
    });

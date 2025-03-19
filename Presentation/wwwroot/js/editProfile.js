@@ -46,6 +46,7 @@ $(document).ready(function () {
         e.preventDefault();
         var form = $(this)[0]; 
         var formData = new FormData(form);
+        $('.loader-container').removeClass('d-none');
         $.ajax({
             url: '/Profile/EditProfile',
             type: 'POST',
@@ -57,13 +58,16 @@ $(document).ready(function () {
                     toastr.success(data.message);
                     setTimeout(function () {
                         window.location.href = '/Profile';
+                        $('.loader-container').addClass('d-none');
                     }, 1000);
                 } else {
                     toastr.error(data.message);
+                    $('.loader-container').addClass('d-none');
                 }
             },
             error: function (data) {
                 toastr.error('An error occurred. Please try again.');
+                $('.loader-container').addClass('d-none');
             }
         });
     });

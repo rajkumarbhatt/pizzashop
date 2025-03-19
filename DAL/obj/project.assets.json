@@ -9086,11 +9086,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-menu-module\\pizzashop-user-module-menu-module\\DAL\\DAL.csproj",
+      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship Tasks\\PizzaShop\\DAL\\DAL.csproj",
       "projectName": "DAL",
-      "projectPath": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-menu-module\\pizzashop-user-module-menu-module\\DAL\\DAL.csproj",
+      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship Tasks\\PizzaShop\\DAL\\DAL.csproj",
       "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci88\\Downloads\\pizzashop-user-module-menu-module\\pizzashop-user-module-menu-module\\DAL\\obj\\",
+      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship Tasks\\PizzaShop\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"

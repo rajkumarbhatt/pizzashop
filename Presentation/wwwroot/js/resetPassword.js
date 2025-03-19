@@ -28,46 +28,46 @@ function showAndHideConfirmPassword(flag) {
     }
 }
 
-// var isPasswordValid = true;
-// function validatePassword() {
-//     var password = $('#password').val();
-//     if (password.length <= 0) {
-//         isPasswordValid = false;
-//         $('#password-error').text('Password is required');
-//     } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
-//         isPasswordValid = false;
-//         $('#password-error').text('Password must contain at least one numeric digit, one uppercase and one lowercase letter, and at least 6 or more characters');
-//     } else {
-//         $('#password-error').text('');
-//         isPasswordValid = true;
-//     }
-// }
+var isPasswordValid = true;
+function validatePassword() {
+    var password = $('#password').val();
+    if (password.length <= 0) {
+        isPasswordValid = false;
+        $('#password-error').text('Password is required');
+    } else if (!password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
+        isPasswordValid = false;
+        $('#password-error').text('Password must contain at least one numeric digit, one uppercase and one lowercase letter, and at least 6 or more characters');
+    } else {
+        $('#password-error').text('');
+        isPasswordValid = true;
+    }
+}
 
-// var isConfirmPasswordValid = true;
-// function validateConfirmPassword() {
-//     var confirmPassword = $('#confirm-password').val();
-//     if (confirmPassword.length <= 0) {
-//         isConfirmPasswordValid = false;
-//         $('#confirm-password-error').text('Confirm Password is required');
-//     } else if (!confirmPassword.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
-//         isConfirmPasswordValid = false;
-//         $('#confirm-password-error').text('Confirm Password must contain at least one numeric digit, one uppercase and one lowercase letter, and at least 6 or more characters');
-//     } else if (confirmPassword !== $('#password').val()) {
-//         isConfirmPasswordValid = false;
-//         $('#confirm-password-error').text('Confirm Password must match Password');
-//     } else {
-//         $('#confirm-password-error').text('');
-//         isConfirmPasswordValid = true;
-//     }
-// }
+var isConfirmPasswordValid = true;
+function validateConfirmPassword() {
+    var confirmPassword = $('#confirm-password').val();
+    if (confirmPassword.length <= 0) {
+        isConfirmPasswordValid = false;
+        $('#confirm-password-error').text('Confirm Password is required');
+    } else if (!confirmPassword.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)) {
+        isConfirmPasswordValid = false;
+        $('#confirm-password-error').text('Confirm Password must contain at least one numeric digit, one uppercase and one lowercase letter, and at least 6 or more characters');
+    } else if (confirmPassword !== $('#password').val()) {
+        isConfirmPasswordValid = false;
+        $('#confirm-password-error').text('Confirm Password must match Password');
+    } else {
+        $('#confirm-password-error').text('');
+        isConfirmPasswordValid = true;
+    }
+}
 
-// $('#password').on('input', function () {
-//     validatePassword();
-// });
+$('#password').on('input', function () {
+    validatePassword();
+});
 
-// $('#confirm-password').on('input', function () {
-//     validateConfirmPassword();
-// });
+$('#confirm-password').on('input', function () {
+    validateConfirmPassword();
+});
 $(document).ready(function () {
     console.log('ready');
 
@@ -76,12 +76,17 @@ $(document).ready(function () {
 
         e.preventDefault();
         var password = $('#password').val();
+        validatePassword();
         var confirmPassword = $('#confirm-password').val();
+        validateConfirmPassword();
+        if (!isPasswordValid || !isConfirmPasswordValid) {
+            return;
+        }
         var token = $('#token').val();
         var userid = $('#userid').val();
-
+        $('.loader-container').removeClass('d-none');
         $.ajax({
-            url: '/api/resetpassword',
+            url: '/api/resetpassword1', 
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ NewPassword: password, Token: token, Userid: userid, ConfirmPassword: confirmPassword }),
@@ -90,9 +95,11 @@ $(document).ready(function () {
                     toastr.success(response.message);
                     setTimeout(function () {
                         window.location.href = '/Home';
-                    }, 2000);
+                        $('.loader-container').addClass('d-none');
+                    }, 1000);
                 } else {
                     toastr.error(response.message);
+                    $('.loader-container').addClass('d-none');
                 }
             },
             error: function (xhr) {
@@ -102,6 +109,7 @@ $(document).ready(function () {
                 } else {
                     toastr.error('An unexpected error occurred.');
                 }
+                $('.loader-container').addClass('d-none');
             }
         });
     });

@@ -35,6 +35,7 @@ namespace Presentaion.Controllers
             HttpContext.Session.SetString("Username", username);
             HttpContext.Session.SetString("ProfileImageURL", profileImageURL);
             HttpContext.Session.SetInt32("RoleId", roleId);
+            HttpContext.Session.SetInt32("UserId", userId); 
             return View();
         }
 
