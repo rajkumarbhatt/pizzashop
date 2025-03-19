@@ -70,7 +70,7 @@ namespace Presentaion.Controllers
                 }
                 if (_context.ResetPasswordLinks.Any(l => l.Link == model.Token))
                 {
-                    return new JsonResult(new { success = false, message = "Token already used" });
+                    return new JsonResult(new { success = false, message = "Link already used" });
                 }
                 var userId = model.UserId;
                 var user = _resetPasswordService.GetUserDataById(userId);
