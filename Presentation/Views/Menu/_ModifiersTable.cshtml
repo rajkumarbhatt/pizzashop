@@ -115,7 +115,8 @@
 
 <script>
 
-    var deleteModifierList = []; 
+    
+
 
     function addModifierToDeleteList(modifierId) {
         if (deleteModifierList.includes(modifierId)) {
@@ -129,13 +130,11 @@
     $("#modifiers-name-checkbox-intermediate").click(function () {
         if ($(this).is(":checked")) {
             $(".modifiers-name-checkbox").prop("checked", true);
-            deleteModifierList = [];
             $(".modifiers-name-checkbox").each(function () {
-                deleteModifierList.push($(this).val());
+                deleteModifierList.push(parseInt($(this).val()));
             });
         } else {
             $(".modifiers-name-checkbox").prop("checked", false);
-            deleteModifierList = [];
         }
         console.log(deleteModifierList);
     });
@@ -165,7 +164,7 @@
             type: 'DELETE',
             data: { modifierIds: deleteModifierList, modifierGroupId: modifierGroupId },
             success: function (data) {
-                isDeletingModifiers = false;  
+                isDeletingModifiers = false;
 
                 if (data.success) {
                     toastr.success(data.message);
@@ -185,13 +184,14 @@
                 }
             },
             error: function (err) {
-                isDeletingModifiers = false;  
+                isDeletingModifiers = false;
                 console.error("Error deleting modifiers", err);
             }
         });
     }
 
 
+    
     $("#nextButtonModifier").click(function () {
         const currentPageIndex = @Model.PageIndexModifier;
         const nextPageIndex = currentPageIndex + 1;
@@ -302,5 +302,14 @@
         }
     });
 
+    
+    
+    $(".modifiers-name-checkbox").each(function () {
+        console.log(deleteModifierList);
+        if (deleteModifierList.includes(parseInt($(this).val(), 10))) {
+            $(this).prop("checked", true);
+            console.log($(this).val());
+        }
+    });
 
 </script>

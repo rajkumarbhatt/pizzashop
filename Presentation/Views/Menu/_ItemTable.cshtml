@@ -329,6 +329,12 @@
             success: function (data) {
                 $("#categoryId").val(categoryId);
                 $("#partialViewStartingInner").html(data);
+                $(".menu-category-navigation-items").removeClass("active-nav-item");
+                $("#div" + categoryId + "4").addClass("active-nav-item");
+                $(".gray-dot").removeClass("d-none");
+                $("#grayDot" + categoryId).addClass("d-none");
+                $(".blue-dot").addClass("d-none");
+                $("#blueDot" + categoryId).removeClass("d-none");
             }
         });
     }

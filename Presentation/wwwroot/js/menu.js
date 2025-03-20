@@ -114,3 +114,8 @@ function triggerMultiSelect(){
             }, 200);
         });
 }
+
+function untriggerMultiSelect () {
+    const customMultiSelect = document.querySelector('.custom-multi-select');
+    customMultiSelect.innerHTML = '';
+}

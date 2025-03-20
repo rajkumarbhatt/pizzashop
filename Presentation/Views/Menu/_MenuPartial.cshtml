@@ -28,18 +28,22 @@
                 </button>
             }
         </div>
-        <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
+        <div class="d-flex flex-column  category-list-styles ">
             @foreach (var category in Model.Categories)
             {
                 var divCustomId = "div" + category.Id;
+                var divCustomId2 = "div" + category.Id + "2";
+                var divCustomId3 = "div" + category.Id + "3";
+                var divCustomId4 = "div" + category.Id + "4";
+                var blueDotId = "blueDot" + category.Id;
+                var grayDotId = "grayDot" + category.Id;
                 <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
-                    onclick="changeItems(@category.Id)"
-                    class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                    onclick="changeItems(@category.Id)" id="@divCustomId2"
+                    class="d-flex justify-content-between align-items-center cursor-pointer p-2" >
                     <div>
-                        <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots" class="small-image " alt="">
-                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots" class="small-image"
-                            alt="">
-                        <span class="menu-category-navigation-items" id="sandwich-span">@category.Name</span>
+                        <img src="~/images/icons/gray-six-dots.svg" id="@grayDotId" class="small-image gray-dot" alt="">
+                        <img src="~/images/icons/blue-six-dots.svg" id="@blueDotId" class="small-image blue-dot d-none" alt="">
+                        <span class="menu-category-navigation-items" id="@divCustomId4">@category.Name</span>
                     </div>
                     <div id="@divCustomId" class="d-none">
                         @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
@@ -151,8 +155,8 @@
                                     <div>
                                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots"
                                             class="small-image " alt="">
-                                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots"
-                                            class="small-image" alt="">
+                                        <img src="~/images/icons/blue-six-dots.svg" id="sandwich-blue-dots"
+                                            class="small-image d-none" alt="">
                                         <span class="menu-category-navigation-items"
                                             id="sandwich-span">@category.Name</span>
                                     </div>
@@ -240,7 +244,7 @@
                 {
                     <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
                         data-bs-toggle="modal" data-bs-target="#addItemModal" style="width: 49px; height: 49px;">
-                        <button class="text-decoration-none text-black btn  add-user-link">
+                        <button type="button" class="text-decoration-none text-black btn  add-user-link">
                             <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
                         </button>
                     </p>
@@ -249,7 +253,7 @@
                 {
                     <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none"
                         style="width: 49px; height: 49px;">
-                        <button class="text-decoration-none text-black btn  add-user-link cursor-none">
+                        <button type="button" class="text-decoration-none text-black btn  add-user-link cursor-none">
                             <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none"
                                 alt="">
                         </button>
@@ -257,7 +261,7 @@
                 }
                 @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
                 {
-                    <button id="AddItemModal" onclick="addItem()"
+                    <button type="button" id="AddItemModal" onclick="addItem()"
                         class="d-none d-md-block button-styles-header w-100 add-item-button">
                         <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
                             <p>+</p>
@@ -267,7 +271,7 @@
                 }
                 else
                 {
-                    <button id="AddItemModal" class="d-none d-md-block button-styles-header w-100 add-item-button"
+                    <button type="button" id="AddItemModal" class="d-none d-md-block button-styles-header w-100 add-item-button"
                         style="cursor: not-allowed;">
                         <a
                             class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
@@ -279,7 +283,7 @@
             </div>
         </div>
 
-        <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+        <div class="table-responsive col-12 form-bg mx-4 p-3 mb-3 mx-auto">
 
 
             <div id="partialViewStartingInner" class="">
@@ -380,7 +384,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button onclick="EditCategory()" id="EditCategoryModal" type="button"
+                <button  onclick="EditCategory()" id="EditCategoryModal" type="button"
                     class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
@@ -434,7 +438,7 @@
                     $("#AddItemModalHeading").text("Add Item");
                     $("#AddItemButton").text("Save");
                     $("#addItemModal").modal("show");
-                    $("#addItemModal").modal('show');
+                    $.validator.unobtrusive.parse("#AddItemForm");
                     initializeFormSubmit();
                 },
                 error: function (data) {
@@ -455,10 +459,14 @@
 
     function showDiv(divId) {
         divId.classList.remove('d-none');
+        var divId2 = divId.id + "2";
+        $("#" + divId2).addClass('active-category-div'); 
     }
 
     function hideDiv(divId) {
         divId.classList.add('d-none');
+        var divId2 = divId.id + "2";
+        $("#" + divId2).removeClass('active-category-div');
     }
 
     function AddCategory() {
@@ -477,6 +485,7 @@
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
+                    
                     $.ajax({
                         type: "GET",
                         url: "/Menu/RefreshItemsPartial",
@@ -522,6 +531,7 @@
                     $.ajax({
                         type: "GET",
                         url: "/Menu/RefreshItemsPartial",
+                        data: { categoryId: Id },
                         success: function (data) {
                             $("#partialViewStarting").html(data);
                         },

@@ -78,9 +78,9 @@
     <div class="modal-dialog modal-dialog-centered table-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Tax
+                <h5 class="modal-title" id="addTaxModalTitle">Add Tax
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button onclick="clearAddTaxModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row align-items-center">
@@ -122,7 +122,7 @@
             <div class="modal-footer d-flex justify-content-end ">
                 <button type="submit" id="AddTableButton" onclick="addTax()" type="button"
                     class="btn btn-primary px-3">Save</button>
-                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                <a onclick="clearAddTaxModal()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
     </div>
@@ -158,11 +158,12 @@
                         url: '@Url.Action("GetTaxes", "TaxAndFee")',
                         success: function (data) {
                             $("#partialViewStarting").html(data);
+                            clearAddTaxModal();
                         }
                     });
                     $("#addTax").modal("hide");
                 } else {
-                    toastr.error("Unable to add tax");
+                    toastr.error(data.message);
                 }
             },
             error: function (data) {
@@ -205,5 +206,44 @@
             }
         });
     });
+
+    function clearAddTaxModal() {
+        $("#TaxName").val("");
+        $("#TaxType").val("Percentage");
+        $("#TaxAmount").val("0");
+        $("#TaxId").val("-1");
+        $("#IsEnabled").prop("checked", false);
+        $("#addTaxModalTitle").text("Add Tax");
+    }
+
+    
+    
+    function deleteTax(id) {
+        $("#deleteTax").modal("show");
+        $("#deleteTaxButton").off("click").click(function () {
+            $.ajax({
+                type: "DELETE",
+                url: "@Url.Action("Delete", "TaxAndFee")",
+                data: { id: id },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        $.ajax({
+                            type: "GET",
+                            url: "@Url.Action("GetTaxes", "TaxAndFee")",
+                            success: function (data) {
+                                $("#partialViewStarting").html(data);
+                            }
+                        });
+                    } else {
+                        toastr.error("Unauthorized Access");
+                    }
+                },
+                error: function (data) {
+                    toastr.error("Unauthorized Access");
+                }
+            });
+        });
+    }
 
 </script>

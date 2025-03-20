@@ -41,7 +41,7 @@
             </div>
             <!-- email -->
             <div class="col-12 col-sm-6 p-2 form-floating">
-                <input disabled type="email" class="form-control" asp-for="@Model.Email" name="Email" id="email" placeholder="email" value=@Model.Email>
+                <input type="email" style="background-color: #E9ECEF" class="form-control cursor-none" readonly asp-for="@Model.Email" name="Email" id="email" placeholder="email" value=@Model.Email>
                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
                 <label for="email" class="mx-2 mt-2">Email</label>
             </div>

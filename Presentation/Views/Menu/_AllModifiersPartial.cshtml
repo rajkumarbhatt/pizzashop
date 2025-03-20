@@ -89,10 +89,21 @@
         tag.setAttribute("data-value", modifierId);
         tag.innerHTML = `
         ${modifierName}
-        <span class="tag-delete"></span>
+        <span class="tag-delete">x</span>
         `;
         tagsDiv.appendChild(tag);
     }
+
+    $(".tag-delete").click(function () {
+        const modifierId = this.parentElement.getAttribute("data-value");
+        const index = selectedModifiers.findIndex(x => x.id === parseInt(modifierId));
+        selectedModifiers.splice(index, 1);
+        this.parentElement.remove();
+        console.log(selectedModifiers);
+        //unchecked the checkbox
+        const customId = modifierId.replace(' ', '/') + "_" + modifierId;
+        document.getElementById(customId).checked = false;
+    });
     
 
     function addToList(id) {

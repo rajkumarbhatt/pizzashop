@@ -278,10 +278,10 @@ namespace Presentaion.Controllers
         }
 
         [HttpGet]
-        public IActionResult RefreshItemsPartial(int pageIndex = 1, int pageSize = 5, string? searchValue = null)
+        public IActionResult RefreshItemsPartial(int categoryId = -1,int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
              var categories = _categoryService.GetCategories();
-            int categoryId = categories.FirstOrDefault()?.Id ?? 0;
+            categoryId = categoryId == -1 ? categories.FirstOrDefault()?.Id ?? 0 : categoryId;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var modifierGroups = _categoryService.GetModifierGroups();
             var modifierId = modifierGroups.FirstOrDefault()?.Id ?? 0;

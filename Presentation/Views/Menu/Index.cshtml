@@ -64,7 +64,10 @@
     }
 
     function addModifierGroupToList(id) {
+        console.log(id);
+        console.log(document.getElementById(id));
         var isChecked = document.getElementById(id).checked;
+        console.log(isChecked);
         var idInt = parseInt(id);
         if (isChecked) {
             selectModifierGroups.push({
@@ -76,7 +79,7 @@
             selectModifierGroups = selectModifierGroups.filter((value) => value.Id !== idInt);
         }
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
-
+        console.log(selectModifierGroups);
         $.ajax({
             type: "GET",
             url: "/Menu/GetModifierGroupData",
@@ -92,6 +95,20 @@
         var index = selectModifierGroups.findIndex(x => x.Id === id);
         selectModifierGroups[index].MinimumQuantity = value;
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        var maximumSelect = document.getElementById(id + "max");
+        var minimumSelect = document.getElementById(id + "min");
+        var minimumValue = minimumSelect.value;
+        var maximumOptions = maximumSelect.options;
+        for (var i = 0; i < maximumOptions.length; i++) {
+            if (parseInt(maximumOptions[i].value) < minimumValue) {
+                maximumOptions[i].style.display = "none";
+            } else {
+                maximumOptions[i].style.display = "block";
+            }
+        }
+        if (parseInt(maximumSelect.value) < minimumValue) {
+            maximumSelect.value = minimumValue;
+        }
     }
 
     function addMaximum(id, value) {
@@ -208,6 +225,7 @@
                 initializeFormSubmit();
                 $("#addItemModal").modal("show");
                 $("IdItemEdit").val(id);
+                $.validator.unobtrusive.parse("#AddItemForm");
             },
             error: function (response) {
                 toastr.error(response.message);

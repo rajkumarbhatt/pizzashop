@@ -100,6 +100,7 @@
                 $("#TaxAmount").val(data.tax.amount);
                 $("#TaxId").val(data.tax.id);
                 $("#IsEnabled").prop("checked", data.tax.isEnabled);
+                $("#addTaxModalTitle").text("Edit Tax");
                 $("#addTax").modal("show");
             },
             error: function (data) {
@@ -120,34 +121,6 @@
             error: function (data) {
                 console.log(data);
             }
-        });
-    }
-
-    function deleteTax(id) {
-        $("#deleteTax").modal("show");
-        $("#deleteTaxButton").click(function () {
-            $.ajax({
-                type: "DELETE",
-                url: "@Url.Action("Delete", "TaxAndFee")",
-                data: { id: id },
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        $.ajax({
-                            type: "GET",
-                            url: "@Url.Action("GetTaxes", "TaxAndFee")",
-                            success: function (data) {
-                                $("#partialViewStarting").html(data);
-                            }
-                        });
-                    } else {
-                        toastr.error("Unauthorized Access");
-                    }
-                },
-                error: function (data) {
-                    toastr.error("Unauthorized Access");
-                }
-            });
         });
     }
 

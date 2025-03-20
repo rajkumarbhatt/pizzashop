@@ -18,29 +18,28 @@
                     @{
                         var minimumId = @selectedModifierGroup.Id + "min";
                         var maximumId = @selectedModifierGroup.Id + "max";
+                        var selectedModifiers = Model.SelectedModifierModifierGroupMappings.Where(x => x.ModifiergroupId == selectedModifierGroup.Id).Select(x => x.Modifier).ToList();
+                        var selectedModifiersCount = selectedModifiers.Count();
                     }
-                    <select onchange="addMinimum(@selectedModifierGroup.Id, this.value)" name="" id=@minimumId class="form-select"
-                        aria-label="Select Country">
+                    <select onchange="addMinimum(@selectedModifierGroup.Id, this.value)" id="@minimumId" class="form-select" aria-label="Select Country">
                         <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        @for (var i = 1; i <= selectedModifiersCount; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
                     </select>
                 </div>
                 <div class="col-6 p-2">
-                    <select onchange="addMaximum(@selectedModifierGroup.Id, this.value)" name="select-country" id=@maximumId class="form-select"
-                        aria-label="Select Country">
+                    <select onchange="addMaximum(@selectedModifierGroup.Id, this.value)" name="select-country" id=@maximumId class="form-select" aria-label="Select Country">
                         <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
+                        @for (var i = 1; i <= selectedModifiersCount; i++)
+                        {
+                            <option value="@i">@i</option>
+                        }
                     </select>
                 </div>
             </div>
             <ul class="list-group list-group-flush">
-                @{
-                    var selectedModifiers = Model.SelectedModifierModifierGroupMappings.Where(x => x.ModifiergroupId == selectedModifierGroup.Id).Select(x => x.Modifier).ToList();
-                }
                 @foreach(var selectedModifier in selectedModifiers)
                 {
                     <li class="d-flex justify-content-between align-items-center">

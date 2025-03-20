@@ -8,7 +8,7 @@ namespace DAL.ViewModels
         [Required(ErrorMessage = "Modifier name is required.")]
         public required string Name { get; set; }
         
-        public required int Rate { get; set; }
+        public required decimal Rate { get; set; }
         public required int Quantity { get; set; }
         public required string Unit { get; set; }
         public string? Description { get; set; }

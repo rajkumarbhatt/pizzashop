@@ -13,6 +13,7 @@
 {
     <script>
         var selectedModifiersGroupsAddModifier2 = @Html.Raw(Json.Serialize(Model.AddModifierViewModel.ModifierGroupIds));
+        debugger
         selectedModifiersGroupsAddModifier2 = selectedModifiersGroupsAddModifier2.map(x => parseInt(x));
         $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier2);
         selectedModifiersGroupsAddModifier2.forEach(x => {
@@ -37,15 +38,16 @@
             </button>
         }
     </div>
-    <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles">
+    <div class="d-flex flex-column  category-list-styles">
         @foreach (var modifierGroup in Model.ModifierGroups)
         {
             var divCustomId = "modifierGroup" + modifierGroup.Id;
-            <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)" onclick="changeModifiers(@modifierGroup.Id)"
+            var divCustomId2 = "modifierGroup" + modifierGroup.Id + "2";
+            <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)" onclick="changeModifiers(@modifierGroup.Id)" id="@divCustomId2"
                 class="d-flex justify-content-between align-items-center cursor-pointer p-2">
                 <div>
                     <img src="~/images/icons/gray-six-dots.svg" class="small-image " alt="">
-                    <img src="~/images/icons/blue-six-dots.svg d-none"  class="small-image" alt="">
+                    <img src="~/images/icons/blue-six-dots.svg"  class="small-image d-none" alt="">
                     <span class="menu-category-navigation-items" >@modifierGroup.Name</span>
                 </div>
                 <div id="@divCustomId" class="d-none">
@@ -114,7 +116,7 @@
                                     <div>
                                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots"
                                             class="small-image " alt="">
-                                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots"
+                                        <img src="~/images/icons/blue-six-dots.svg" id="sandwich-blue-dots d-none"
                                             class="small-image" alt="">
                                         <span class="menu-category-navigation-items" id="sandwich-span">@modifierGroup.Name</span>
                                     </div>
@@ -220,7 +222,7 @@
         </div>
     </div>
 
-    <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+    <div class="table-responsive col-12 form-bg mx-4 p-3 mb-3 mx-auto">
 
 
         <div id="ModifiersTablePartial" class="">
@@ -260,8 +262,8 @@
         <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Add Modifier Group</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="addModifierGroupModalTitle">Add Modifier Group</h5>
+                    <button onclick="clearSelectedModifiersList()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <form action="">
@@ -307,8 +309,7 @@
                         <a onclick="openModalAllModifiers()" class="text-decoration-none cursor-pointer">+ Add Existing
                             Modifiers</a>
                         <div id="modifiersSelected" class="d-flex flex-wrap mt-2 ">
-                            @if (Model.CreateModifierGroupViewModel != null &&
-                                                        Model.CreateModifierGroupViewModel.SelectedModifierIds != null)
+                            @if (Model.CreateModifierGroupViewModel != null && Model.CreateModifierGroupViewModel.SelectedModifierIds != null)
                             {
                                 foreach (var modifier in Model.CreateModifierGroupViewModel.Modifiers)
                                 {
@@ -324,7 +325,7 @@
                         </div>
                 <div class="modal-footer d-flex justify-content-end">
                     <button type="button" id="AddModifierButton2" class="btn btn-primary px-3" >Save</button>
-                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                    <a data-bs-dismiss="modal" onclick="clearSelectedModifiersList()"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
                 </div>
                     </form>
                 </div>
@@ -402,9 +403,9 @@
     <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add New Modifier
+                <h5 class="modal-title" id="AddModifierModalTitle">Add New Modifier
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button onclick="clearAddModifierModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
             <div class="modal-body">
@@ -436,17 +437,17 @@
                             @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Name != null)
                             {
                                 <input asp-for="@Model.AddModifierViewModel.Name" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Name" 
+                                    class="form-control" name="AddModifierViewModel.Name" 
                                     value="@Model.AddModifierViewModel.Name"
                                     id="AddModifierName21" required placeholder="name">
                             }
                             else
                             {
                                 <input asp-for="@Model.AddModifierViewModel.Name" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Name"
+                                    class="form-control" name="AddModifierViewModel.Name"
                                     id="AddModifierName21" required placeholder="name">
                             }
-                            <span asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
+                            <span id="AddModifierNameError" asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
                             <label for="AddModifierName21" class="">Name*</label>
                         </div>
                     </div>
@@ -456,18 +457,19 @@
                         <div class="form-floating pe-2 my-auto col-12 col-md-4">
                             @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
                             {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="number"
                                     class="form-control" name="Model.AddModifierViewModel.Rate"
                                     value="@Model.AddModifierViewModel.Rate"
                                     id="AddModifierRate" required placeholder="name">
                             }
                             else
                             {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="number"
                                     class="form-control" name="Model.AddModifierViewModel.Rate"
                                     id="AddModifierRate" required placeholder="name">
                             }
                             <label for="AddModifierRate" class="">Rate*</label>
+                            <span id="AddModifierRateError" asp-validation-for="@Model.AddModifierViewModel.Rate" class="text-danger"></span>
                         </div>
                         <div class="form-floating pe-2 my-auto col-12 col-md-4">
                             @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Quantity != null)
@@ -484,12 +486,12 @@
                                     id="AddModifierQuantity" required placeholder="name">
                             }
                             <label for="AddModifierQuantity" class="">Quantity</label>
+                            <span id="AddModifierQuantityError" asp-validation-for="@Model.AddModifierViewModel.Quantity" class="text-danger"></span>
                         </div>
                         <div class="col-12 col-md-4 p-2 form-floating">
                             <select asp-for="@Model.AddModifierViewModel.Unit"
                                 name="Model.AddModifierViewModel.Unit" id="AddModifierUnit"
                                 class="form-select" aria-label="Select Country">
-                                <option value="" disabled selected hidden>Select Units</option>
                                 <option value="pcs">Pcs</option>
                                 <option value="plate">Plate</option>
                                 <option value="gm">Gm</option>
@@ -535,7 +537,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end">
                 <button type="submit" onclick="addModifier()" id="AddModifierButton" class="btn btn-primary px-3">Save</button>
-                <a onclick="closeModal('AddModifierModal')"><button type="button"
+                <a onclick="clearAddModifierModal()"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
@@ -543,9 +545,49 @@
 </div>
 
 
+
 <script>
 
-    
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+
+    var deleteModifierList = [];
+
+   
+
+    $(document).ready(function () {
+        $("#AddModifierName21").on("input", function () {
+            if ($("#AddModifierName21").val().length <= 0) {
+                $("#AddModifierNameError").text("Modifier's name is required.")
+            } else {
+                $("#AddModifierNameError").text("")
+            }
+        });
+
+        $("#AddModifierRate").on("input", function () {
+            if ($("#AddModifierRate").val().length <= 0) {
+                $("#AddModifierRateError").text("Modifier's rate is required.")
+            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#AddModifierRate").val()) == false) {
+                $("#AddModifierRateError").text("Rate must be a number.")
+            } else {
+                $("#AddModifierRateError").text("")
+            }
+        });
+
+        $("#AddModifierQuantity").on("input", function () {
+            if ($("#AddModifierQuantity").val().length <= 0) {
+                $("#AddModifierQuantityError").text("Modifier's quantity is required.")
+            } else if (/^[0-9]+$/.test($("#AddModifierQuantity").val()) == false) {
+                $("#AddModifierQuantityError").text("Quantity must be a number.")
+            } else {
+                $("#AddModifierQuantityError").text("")
+            }
+        });
+    });
+
 
     function addModigierGroupFunc() {
         $("#AddModifierButton2").click(function () {
@@ -566,13 +608,16 @@
                     if (data.success) {
                         toastr.success(data.message);
                         $("#AddModifierGroupModal").modal("hide");
+                        $("#addModifierGroupModalTitle").text("Add Modifier Group");
                         $.ajax({
                             type: "GET",
                             url: "/Menu/RefreshModifiersPartial",
                             success: function (data) {
                                 $("#modifiers-content").html(data);
-                                //clear selected modifiers
                                 selectedModifiers = [];
+                                $("#AddModifierName").val("");
+                                $("#AddModifierDescription").val("");
+                                $("#ModifierGroupId").val("-1");
                             },
                             error: function (data) {
                                 console.log(data);
@@ -615,11 +660,6 @@
     }
 
     var selectedModifiersGroupsAddModifier = [];
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
     if (selectedModifiersGroupsAddModifier2) {
         selectedModifiersGroupsAddModifier = selectedModifiersGroupsAddModifier2;
     }
@@ -636,10 +676,52 @@
         }
     }
 
+    $(document).ready(function () {
+        $("#AddModifierName21").on("input", function () {
+            if ($("#AddModifierName21").val().length <= 0) {
+                $("#AddModifierNameError").text("Modifier's name is required.")
+            } else {
+                $("#AddModifierNameError").text("")
+            }
+        });
+
+        $("#AddModifierRate").on("input", function () {
+            if ($("#AddModifierRate").val().length <= 0) {
+                $("#AddModifierRateError").text("Modifier's rate is required.")
+            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#AddModifierRate").val()) == false) {
+                $("#AddModifierRateError").text("Rate must be a number.")
+            } else {
+                $("#AddModifierRateError").text("")
+            }
+        });
+
+        $("#AddModifierQuantity").on("input", function () {
+            if ($("#AddModifierQuantity").val().length <= 0) {
+                $("#AddModifierQuantityError").text("Modifier's quantity is required.")
+            } else if (!/^[0-9]+$/.test($("#AddModifierQuantity").val()) == false) {
+                $("#AddModifierQuantityError").text("Quantity must be a number.")
+            } else {
+                $("#AddModifierQuantityError").text("")
+            }
+        });
+    });
+
     function addModifier() {
         var name = $("#AddModifierName21").val();
+        if (name.length <= 0) {
+            $("#AddModifierNameError").text("Modifier's name is required.")
+            return;
+        }
         var rate = $("#AddModifierRate").val();
+        if (rate.length <= 0) {
+            $("#AddModifierRateError").text("Modifier's rate is required.")
+            return;
+        }
         var quantity = $("#AddModifierQuantity").val();
+        if (quantity.length <= 0) {
+            $("#AddModifierQuantityError").text("Modifier's quantity is required.")
+            return;
+        }
         var unit = $("#AddModifierUnit").val();
         var description = $("#AddModifierDescription21").val();
         var id = $("#AddModifierId").val();
@@ -660,6 +742,8 @@
                         data: { pageIndex: 1, pageSize: 5, modifierGroupId: $("#modifierGroupId21").val() },
                         success: function (data) {
                             $("#ModifiersTablePartial").html(data);
+                            clearAddModifierModal()
+                            $("#AddModifierModal").modal("hide");
                         }
                     });
                 } else {
@@ -677,7 +761,8 @@
             success: function (data) {
                 $("#modifiers-content").html(data);
                 $("#AddModifierGroupModal").modal("show");
-                addModigierGroupFunc()
+                $("#addModifierGroupModalTitle").text("Edit Modifier Group");
+                addModigierGroupFunc();
             },
             error: function (error) {
                 console.log(error);
@@ -709,12 +794,40 @@
             data: { modifierId: modifierId, modifierGroupId: modifierGroupId },
             success: function (data) {
                 $("#modifiers-content").html(data);
+                $("#AddModifierModalTitle").text("Edit Modifier");
                 $("#AddModifierModal").modal('show');
+                $("#modifierGroupId21").val(modifierGroupId);
             },
             error: function (error) {
                 console.log(error);
             }
         });
+    }
+
+    function clearSelectedModifiersList() {
+        selectedModifiers = [];
+        $("#modifiersSelected").html("");
+        $("#AddModifierName").val("");
+        $("#AddModifierDescription").val("");
+        $("#ModifierGroupId").val("-1");
+        $("#addModifierGroupModalTitle").text("Add Modifier Group");
+    }
+
+    function clearAddModifierModal() {
+        $("#AddModifierModal").modal("hide");
+        $("#AddModifierModalTitle").text("Add New Modifier");
+        $("#AddModifierName21").val("");
+        $("#AddModifierRate").val("");
+        $("#AddModifierQuantity").val("");
+        $("#AddModifierUnit").val("");
+        $("#AddModifierDescription21").val("");
+        selectedModifiersGroupsAddModifier.forEach(x => {
+            var customId = "AddModifier" + x;
+            $("#" + customId).prop("checked", false);
+        });
+        selectedModifiersGroupsAddModifier = [];
+        $("#AddModifierModifierGroupIds").val("");
+        $("#AddModifierId").val("-1");
     }
 
 </script>

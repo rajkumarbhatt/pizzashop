@@ -73,6 +73,10 @@ namespace BLL.Services
         {
             if (taxId == -1)
             {
+                if (_context.TaxesFees.Any(t => t.Name == taxName && t.IsDeleted == false))
+                {
+                    return new JsonResult(new { success = false, message = "Tax already exists" });
+                }
                 TaxesFee tax = new TaxesFee
                 {
                     Name = taxName,
@@ -86,6 +90,10 @@ namespace BLL.Services
                 _context.SaveChanges();
                 return new JsonResult(new { success = true, message = "Tax added successfully" });
             } else {
+                if (_context.TaxesFees.Any(t => t.Name == taxName && t.Id != taxId && t.IsDeleted == false))
+                {
+                    return new JsonResult(new { success = false, message = "Tax already exists" });
+                }
                 TaxesFee tax = _context.TaxesFees.Find(taxId);
                 tax.Name = taxName;
                 tax.IsEnabled = isEnabled;

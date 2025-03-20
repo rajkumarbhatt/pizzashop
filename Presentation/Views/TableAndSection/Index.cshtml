@@ -30,7 +30,7 @@
                 </button>
             }
         </div>
-        <div class="d-flex flex-column  mt-2 mt-sm-3 mt-md-4 category-list-styles ">
+        <div class="d-flex flex-column  category-list-styles ">
             @foreach (var Section in Model.Sections)
             {
                 var divCustomId = "div" + @Section.Id;
@@ -39,7 +39,7 @@
                     class="d-flex justify-content-between align-items-center cursor-pointer p-2">
                     <div>
                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots" class="small-image " alt="">
-                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots" class="small-image"
+                        <img src="~/images/icons/blue-six-dots.svg" id="sandwich-blue-dots" class="small-image d-none"
                             alt="">
                         <span class="menu-category-navigation-items" id="sandwich-span">@Section.Name</span>
                     </div>
@@ -106,7 +106,7 @@
                                     <div>
                                         <img src="~/images/icons/gray-six-dots.svg" id="sandwich-black-dots"
                                             class="small-image " alt="">
-                                        <img src="~/images/icons/blue-six-dots.svg d-none" id="sandwich-blue-dots"
+                                        <img src="~/images/icons/blue-six-dots.svg" id="sandwich-blue-dots d-none"
                                             class="small-image" alt="">
                                         <span class="menu-category-navigation-items" id="sandwich-span">@Section.Name</span>
                                     </div>
@@ -217,7 +217,7 @@
             </div>
         </div>
 
-        <div class="table-responsive col-12 form-bg mx-4 p-3 my-3 mx-auto">
+        <div class="table-responsive col-12 form-bg mx-4 p-3 mb-3 mx-auto">
             <div id="tablePartialView" class="">
                 <partial name="_TablePartial" model="@Model" />
             </div>
@@ -234,7 +234,7 @@
             <div class="modal-header">
                 <h5 id="addSectionModalTitle" class="modal-title" id="staticBackdropLabel">Add Section
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button onclick="clearAddSectionForm()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="form-floating mb-3">
@@ -252,8 +252,7 @@
             <div class="modal-footer d-flex justify-content-end">
                 <button id="AddSectionButton" onclick="addSection()" type="submit"
                     class="btn btn-primary px-3">Save</button>
-                <a data-bs-dismiss="modal"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
+                <a onclick="clearAddSectionForm()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
     </div>
@@ -338,7 +337,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="addTableTitle">Add Table</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button onclick="clearAddTableForm()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row align-items-center">
@@ -351,7 +350,7 @@
                             <label for="ItemName" class="">Name*</label>
                         </div>
                         <div class="col-12 col-md-6 p-2 form-floating">
-                            <select id="TableSection" class="form-select" aria-label="CategoryId">
+                            <select id="TableSection" class="form-select" aria-label="CategoryId" style="background-color: #E9ECEF">
                                 @foreach (var Section in Model.Sections)
                                 {
                                     <option value="@Section.Id">@Section.Name</option>
@@ -369,7 +368,7 @@
                             <label for="ItemName" class="">Capacity*</label>
                         </div>
                         <div class="col-12 col-md-6 p-2 form-floating">
-                            <select id="TableStatus" class="form-select" aria-label="CategoryId">
+                            <select id="TableStatus" class="form-select" aria-label="CategoryId" style="background-color: #E9ECEF">
                                 <option value="Available">Available</option>
                                 <option value="Occupied">Occupied</option>
                             </select>
@@ -382,7 +381,7 @@
             <div class="modal-footer d-flex justify-content-end ">
                 <button id="AddTableButton" onclick="addTable()" type="button"
                     class="btn btn-primary px-3">Save</button>
-                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                <a onclick="clearAddTableForm()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
     </div>
@@ -395,6 +394,8 @@
 
     function showDiv(divId) {
         divId.classList.remove('d-none');
+        var divId2 = divId.id + "2";
+        $("#" + divId2).addClass('active-category-div'); 
     }
 
     function hideDiv(divId) {
@@ -418,6 +419,7 @@
                     toastr.success(response.message);
                     setTimeout(function () {
                         location.reload();
+                        clearAddSectionForm();
                     }, 1000);
                 } else {
                     toastr.error(response.message);
@@ -427,7 +429,6 @@
                 toastr.error("Unauthorized Access");
             }
         });
-        $("#addSectionModalTitle").text("Add Section");
     }
 
     function editSection(sectionId) {
@@ -449,30 +450,34 @@
         });
     }
 
+    let isDeletingSections = false;
     function deleteSection(sectionId) {
-        $("#deleteSectionButton").click(function () {
-            $.ajax({
-                type: "DELETE",
-                url: '@Url.Action("DeleteSection", "TableAndSection")',
-                data: { sectionId: sectionId },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function (response) {
-                    toastr.error("Unauthorized Access");
+        if (isDeletingSections) return;
+        isDeletingSections = true;
+
+        $.ajax({
+            type: "DELETE",
+            url: '@Url.Action("DeleteSection", "TableAndSection")',
+            data: { sectionId: sectionId },
+            success: function (response) {
+                isDeletingSections = false;
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
                 }
-            });
+            },
+            error: function (response) {
+                isDeletingSections = false;
+                toastr.error("Unauthorized Access");
+            }
         });
     }
 
-    var isDeletingTables = false;
+    let isDeletingTables = false;
     function deleteSelectedTables() {
         if (isDeletingTables) return;
         isDeletingTables = true;
@@ -494,7 +499,7 @@
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("TablesFilter", "TableAndSection")',
-                        data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: @Model.Tables[0].SectionId, searchValue: "" },
+                        data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: "" },
                         success: function (data) {
                             $("#tablePartialView").html(data);
                         }
@@ -511,8 +516,9 @@
         });
     }
 
+    
     function deleteTableId(id) {
-        $("#deleteTableButton").click(function () {
+        $("#deleteTableButton").off("click").click(function () {
             $.ajax({
                 type: "DELETE",
                 url: '@Url.Action("DeleteTable", "TableAndSection")',
@@ -523,7 +529,7 @@
                         $.ajax({
                             type: "GET",
                             url: '@Url.Action("TablesFilter", "TableAndSection")',
-                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: @Model.Tables[0].SectionId, searchValue: "" },
+                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: "" },
                             success: function (data) {
                                 $("#tablePartialView").html(data);
                             }
@@ -585,6 +591,7 @@
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
+                    clearAddTableForm();
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("TablesFilter", "TableAndSection")',
@@ -610,5 +617,26 @@
             deleteSelectedTables();
         }
     });
+
+    function clearAddTableForm() {
+        document.getElementById("TableId").value = "-1";
+        document.getElementById("TableName").value = "";
+        document.getElementById("TableSection").value = 1;
+        document.getElementById("TableCapacity").value = "";
+        document.getElementById("TableStatus").value = "Available";
+        document.getElementById("TableNameError").innerText = "";
+        document.getElementById("TableSectionError").innerText = "";
+        document.getElementById("TableCapacityError").innerText = "";
+        document.getElementById("TableStatusError").innerText = "";
+        document.getElementById("addTableTitle").innerText = "Add Table";   
+    }
+
+    function clearAddSectionForm() {
+        document.getElementById("SectionIdModal").value = "-1";
+        document.getElementById("SectionName").value = "";
+        document.getElementById("SectionDescription").value = "";
+        document.getElementById("SectionNameError").innerText = "";
+        document.getElementById("addSectionModalTitle").innerText = "Add Section";
+    }
 
 </script>
