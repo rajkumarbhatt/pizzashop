@@ -144,3 +144,18 @@ C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\DAL\obj\Debug\net8.0\refint\DA
 C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\DAL\obj\Debug\net8.0\DAL.pdb
 C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
 C:\Users\pci88\Desktop\Internship Tasks\PizzaShop\DAL\obj\Debug\net8.0\ref\DAL.dll
+C:\Users\Raj\Desktop\rms\DAL\bin\Debug\net8.0\DAL.deps.json
+C:\Users\Raj\Desktop\rms\DAL\bin\Debug\net8.0\DAL.runtimeconfig.json
+C:\Users\Raj\Desktop\rms\DAL\bin\Debug\net8.0\DAL.dll
+C:\Users\Raj\Desktop\rms\DAL\bin\Debug\net8.0\DAL.pdb
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.csproj.AssemblyReference.cache
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.AssemblyInfoInputs.cache
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.AssemblyInfo.cs
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.csproj.CoreCompileInputs.cache
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.sourcelink.json
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.dll
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\refint\DAL.dll
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.pdb
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\DAL.genruntimeconfig.cache
+C:\Users\Raj\Desktop\rms\DAL\obj\Debug\net8.0\ref\DAL.dll

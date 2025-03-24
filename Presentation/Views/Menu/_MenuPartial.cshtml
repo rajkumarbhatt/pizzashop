@@ -424,8 +424,10 @@
 
 <script>
     var isEditCalled = false;
+    var deleteItemsList = [];
 
     function addItem() {
+        console.log(selectModifierGroups);
         initializeFormSubmit();
         if (isEditCalled) {
             UnSyncEditChanges();
@@ -433,6 +435,7 @@
                 type: "GET",
                 url: "/Menu/ResetAddItemForm",
                 success: function (data) {
+                    selectModifierGroups = [];
                     $("#AddItemModalPartial").html(data);
                     triggerMultiSelect();
                     $("#AddItemModalHeading").text("Add Item");

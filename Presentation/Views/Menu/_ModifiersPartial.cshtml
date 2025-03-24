@@ -457,14 +457,14 @@
                         <div class="form-floating pe-2 my-auto col-12 col-md-4">
                             @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
                             {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="number"
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
                                     class="form-control" name="Model.AddModifierViewModel.Rate"
                                     value="@Model.AddModifierViewModel.Rate"
                                     id="AddModifierRate" required placeholder="name">
                             }
                             else
                             {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="number"
+                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
                                     class="form-control" name="Model.AddModifierViewModel.Rate"
                                     id="AddModifierRate" required placeholder="name">
                             }
@@ -793,6 +793,7 @@
             type: 'GET',
             data: { modifierId: modifierId, modifierGroupId: modifierGroupId },
             success: function (data) {
+                console.log(data);
                 $("#modifiers-content").html(data);
                 $("#AddModifierModalTitle").text("Edit Modifier");
                 $("#AddModifierModal").modal('show');

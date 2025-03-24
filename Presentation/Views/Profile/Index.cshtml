@@ -20,15 +20,9 @@
                 <img src=@profileImagePath class="object-fit-cover my-profile-image profile-image-border"
                     id="profile-pic" class="" alt="">
 
-                <div class="file upload position-relative overflow-hidden btn-custom2" id="file-upload-div">
-                    <input asp-for=@Model.UserProfileImage name="UserProfileImage" type="file"
-                        class="position-absolute top-0 start-0 opacity-0" id="file-upload" />
-                    <label for="file-upload" class="d-flex flex-column justify-content-center align-items-center my-3">
-                        <img src="~/images/icons/cloud.svg" class="small-image" id="cloud-icon" alt="">
-                    </label>
-                </div>
+                
 
-                <div class="my-profile-heading-name" style="left: 15px;">
+                <div class="my-profile-heading-name ps-3" style="left: 15px;">
                     <h3>@Model.FirstName @Model.LastName</h3>
                     <h6>@Model.Role</h6>
                 </div>

@@ -135,6 +135,9 @@
             });
         } else {
             $(".modifiers-name-checkbox").prop("checked", false);
+            $('.modifiers-name-checkbox').each(function () {
+                deleteModifierList = deleteModifierList.filter(item => item !== parseInt($(this).val()));
+            });
         }
         console.log(deleteModifierList);
     });
@@ -168,6 +171,7 @@
 
                 if (data.success) {
                     toastr.success(data.message);
+                    deleteModifierList = [];
                     $.ajax({
                         url: '@Url.Action("ModifiersFilter", "Menu")',
                         type: 'GET',
@@ -310,6 +314,12 @@
             $(this).prop("checked", true);
             console.log($(this).val());
         }
-    });
+    }); 
+
+    if ($(".modifiers-name-checkbox:checked").length === $(".modifiers-name-checkbox").length) {
+        $("#modifiers-name-checkbox-intermediate").prop("checked", true);
+    } else {
+        $("#modifiers-name-checkbox-intermediate").prop("checked", false);
+    }
 
 </script>

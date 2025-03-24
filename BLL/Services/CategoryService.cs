@@ -145,6 +145,12 @@ namespace BLL.Services
             }
             item.IsDeleted = true;
             item.UpdatedBy = userId;
+            List<ItemModifiergroup> itemModifierGroups = _context.ItemModifiergroups.Where(i => i.ItemId == itemId).ToList();   
+            foreach (ItemModifiergroup itemModifierGroup in itemModifierGroups)
+            {
+                _context.ItemModifiergroups.Remove(itemModifierGroup);
+                _context.SaveChanges();
+            }
             _context.SaveChanges();
             return new JsonResult(new { success = true, message = "Item deleted successfully" });
         }

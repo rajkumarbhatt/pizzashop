@@ -28,6 +28,9 @@ function triggerMultiSelect(){
         const clearAllButton = customMultiSelect.querySelector('.clear-all');
         const dropdownToggle = customMultiSelect.querySelector('.dropdown-toggle');
 
+        // Empty the dropdown options container
+        dropdownOptions.innerHTML = '';
+
         // Build the custom dropdown options from the <select> element
         selectElement.querySelectorAll('option').forEach(option => {
             const value = option.value;

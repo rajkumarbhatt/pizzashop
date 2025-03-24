@@ -118,14 +118,16 @@
     $("#DeleteTablesIntermediateCheckbox").click(function () {
         if ($(this).is(":checked")) {
             $(".table-name-checkbox").prop("checked", true);
-            deleteTableIds = [];
             $(".table-name-checkbox").each(function () {
                 deleteTableIds.push(parseInt($(this).val()));
             });
         } else {
             $(".table-name-checkbox").prop("checked", false);
-            deleteTableIds = [];
+            $(".table-name-checkbox").each(function () {
+                deleteTableIds = deleteTableIds.filter(id => id !== parseInt($(this).val()));
+            });
         }
+        console.log(deleteTableIds);
     });
 
     $(".table-name-checkbox").click(function () {
@@ -142,6 +144,7 @@
         } else {
             deleteTableIds.push(tableId);
         }
+        console.log(deleteTableIds);
     }
 
     function changeTables(sectionId) {
@@ -220,4 +223,16 @@
             });
         }, 300));
     });
+
+    $('.table-name-checkbox').each(function () {
+        if (deleteTableIds.includes(parseInt($(this).val()))) {
+            $(this).prop('checked', true);
+        }
+    });
+
+    if ($(".table-name-checkbox:checked").length === $(".table-name-checkbox").length) {
+        $("#DeleteTablesIntermediateCheckbox").prop("checked", true);
+    } else {
+        $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
+    }
 </script>

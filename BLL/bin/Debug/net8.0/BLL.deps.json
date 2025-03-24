@@ -2865,10 +2865,7 @@
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3"
         },
         "runtime": {
-          "DAL.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
+          "DAL.dll": {}
         }
       }
     }

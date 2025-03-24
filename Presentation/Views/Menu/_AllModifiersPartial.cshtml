@@ -220,4 +220,21 @@
         }, 300));
     });
 
+    selectedModifiers.forEach(modifier => {
+        const customId = modifier.name.replace(' ', '/') + "_" + modifier.id;
+        if(document.getElementById(customId) != null){
+            document.getElementById(customId).checked = true;
+        }
+    });
+
+    if ($(".all-modifiers-select:checked").length === $(".all-modifiers-select").length) {
+        $(".select-modifs-intermediate").prop("checked", true);
+    } else {
+        $(".select-modifs-intermediate").prop("checked", false);
+    }
+    console.log($(".all-modifiers-select:checked").length);
+    console.log($(".all-modifiers-select").length);
+    console.log($(selectedModifiers));
+
+
 </script>

@@ -151,19 +151,21 @@
 
 <script>
 
-    var deleteItemsList = [];
-
     $("#DeleteItemsIntermediateCheckbox").click(function () {
         if (this.checked) {
             $(".item-name-checkbox").prop("checked", true);
-            deleteItemsList = [];
             $(".item-name-checkbox").each(function () {
                 var itemIdTemp = parseInt($(this).val());
-                deleteItemsList.push(itemIdTemp);
+                if (!deleteItemsList.includes(itemIdTemp)) {
+                    deleteItemsList.push(itemIdTemp);
+                }
             });
         } else {
             $(".item-name-checkbox").prop("checked", false);
-            deleteItemsList = [];
+            $(".item-name-checkbox").each(function () {
+                var itemIdTemp = parseInt($(this).val());
+                deleteItemsList = deleteItemsList.filter(item => item !== itemIdTemp);
+            });
         }
         console.log(deleteItemsList);
     });
@@ -184,6 +186,7 @@
         } else {
             deleteItemsList.push(itemId);
         }
+        console.log(deleteItemsList);
     }
 
     var isDeleting = false;
@@ -202,6 +205,7 @@
                 isDeleting = false;  
                 if (data.success) {
                     toastr.success(data.message);
+                    deleteItemsList = [];
                     $.ajax({
                         type: "GET",
                         url: "/Menu/ItemsFilter",
@@ -382,6 +386,20 @@
         }
     });
 
+    
 
+    deleteItemsList.forEach(item => {
+        $(".item-name-checkbox").each(function () {
+            if (parseInt($(this).val()) === item) {
+                $(this).prop("checked", true);
+            }
+        });
+    });
+
+    if ($(".item-name-checkbox:checked").length === $(".item-name-checkbox").length) {
+        $("#DeleteItemsIntermediateCheckbox").prop("checked", true);
+    } else {
+        $("#DeleteItemsIntermediateCheckbox").prop("checked", false);
+    }
 
 </script>

@@ -496,6 +496,7 @@
                 isDeletingTables = false;  
                 if (response.success) {
                     toastr.success(response.message);
+                    deleteTableIds = [];
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("TablesFilter", "TableAndSection")',
