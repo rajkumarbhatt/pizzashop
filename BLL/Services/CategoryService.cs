@@ -416,6 +416,12 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Modifier group not found" });
             }
             modifierGroup.IsDeleted = true;
+            List<ModifierModifiergroupMapping> modifierModifierGroupMappings = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).ToList();
+            foreach (ModifierModifiergroupMapping modifierModifierGroupMapping in modifierModifierGroupMappings)
+            {
+                _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
+                _context.SaveChanges();
+            }
             modifierGroup.UpdatedBy = userId;
             modifierGroup.UpdatedAt = DateTime.Now;
             _context.SaveChanges();

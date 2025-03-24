@@ -14,76 +14,76 @@
 }
 
 <table id="userTable" class="table table-responsive"  style="white-space: nowrap;">
-                    <thead class="color-head">
-                        <tr class="text-start">
-                            <th>Name <img src="~/images/icons/sorting-icon.svg" id="sortNames" class="small-image"></th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Role <img src="~/images/icons/sorting-icon.svg" id="sortRoles" class="small-image"></th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        @foreach(var user in Model.Users) 
-                        {
-                            <tr class="text-start">
-                                @{
-                                    string profileImagePath = string.IsNullOrEmpty(@user.ProfileImage) 
-                                        ? "/images/default-profile.png" 
-                                        : $"/images/profile-images/{@user.ProfileImage}";
-                                }
-                                <td><img src=@profileImagePath class="table-name-image profile-image-border object-fit-cover"> @user.FirstName @user.LastName</td>
-                                <td>@user.Email</td>
-                                <td>@user.Phone</td>
-                                <td>@if(user.RoleId == 1)
-                                    {
-                                        <span class="">Super Admin</span>
-                                    }
-                                    else if(user.RoleId == 2)
-                                    {
-                                        <span class="">Account Manager</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="">Chef</span>
-                                    }</td>
-                                <td>@if(user.Status == true)
-                                    {
-                                        <span class="active-user">Active</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="inactive-user">Inactive</span>
-                                    }
+    <thead class="color-head">
+        <tr class="text-start">
+            <th>Name <img src="~/images/icons/sorting-icon.svg" id="sortNames" class="small-image"></th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role <img src="~/images/icons/sorting-icon.svg" id="sortRoles" class="small-image"></th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody class="">
+        @foreach(var user in Model.Users) 
+        {
+            <tr class="text-start">
+                @{
+                    string profileImagePath = string.IsNullOrEmpty(@user.ProfileImage) 
+                        ? "/images/default-profile.png" 
+                        : $"/images/profile-images/{@user.ProfileImage}";
+                }
+                <td><img src=@profileImagePath class="table-name-image profile-image-border object-fit-cover"> @user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Phone</td>
+                <td>@if(user.RoleId == 1)
+                    {
+                        <span class="">Super Admin</span>
+                    }
+                    else if(user.RoleId == 2)
+                    {
+                        <span class="">Account Manager</span>
+                    }
+                    else
+                    {
+                        <span class="">Chef</span>
+                    }</td>
+                <td>@if(user.Status == true)
+                    {
+                        <span class="active-user">Active</span>
+                    }
+                    else
+                    {
+                        <span class="inactive-user">Inactive</span>
+                    }
 
-                                </td>
-                                <td>
-                                    @if (@userId != user.Id)
-                                    {
-                                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
-                                        {
-                                            <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
-                                        } else 
-                                        {
-                                            <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
-                                        }
-                                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
-                                        {
-                                            <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
-                                                <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
-                                        } else 
-                                        {
-                                            <button disabled type="button" class="delete-btn cursor-none" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
-                                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
-                                        }
-                                    }
-                                </td>
-                            </tr>
-                        }                   
-                    </tbody>
-                </table>
-            <div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
+                </td>
+                <td>
+                    @if (@userId != user.Id)
+                    {
+                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+                        {
+                            <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
+                        } else 
+                        {
+                            <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
+                        }
+                        @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
+                        {
+                            <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
+                        } else 
+                        {
+                            <button disabled type="button" class="delete-btn cursor-none" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
+                        }
+                    }
+                </td>
+            </tr>
+        }                   
+    </tbody>
+</table>
+<div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
     <p>Items per page: </p>
     <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
         onchange="changePageSize(this.value)">

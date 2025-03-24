@@ -119,7 +119,9 @@
         if ($(this).is(":checked")) {
             $(".table-name-checkbox").prop("checked", true);
             $(".table-name-checkbox").each(function () {
-                deleteTableIds.push(parseInt($(this).val()));
+                if (!deleteTableIds.includes(parseInt($(this).val()))) {
+                    deleteTableIds.push(parseInt($(this).val()));
+                }
             });
         } else {
             $(".table-name-checkbox").prop("checked", false);
@@ -157,6 +159,12 @@
             success: function (data) {
                 $("#tablePartialView").html(data);
                 $("#SectionId").val(sectionId);
+                $(".menu-category-navigation-items-table").removeClass("active-nav-item");
+                $("#divTable" + sectionId + "4").addClass("active-nav-item");
+                $(".gray-dot-table").removeClass("d-none");
+                $("#grayDotTable" + sectionId).addClass("d-none");
+                $(".blue-dot-table").addClass("d-none");
+                $("#blueDotTable" + sectionId).removeClass("d-none");
             }
         });
     }
@@ -233,6 +241,10 @@
     if ($(".table-name-checkbox:checked").length === $(".table-name-checkbox").length) {
         $("#DeleteTablesIntermediateCheckbox").prop("checked", true);
     } else {
+        $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
+    }
+
+    if ($(".table-name-checkbox:checked").length === 0) {
         $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
     }
 </script>

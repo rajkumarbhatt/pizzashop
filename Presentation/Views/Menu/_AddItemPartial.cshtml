@@ -156,12 +156,14 @@
                                                 <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" value="@Model.AddItemViewModel.TaxPercentage"
                                                     id="TaxPercentage" required placeholder="name">
                                                 <label for="TaxPercentage" class="">Tax Percentage</label>
+                                                <span asp-validation-for="AddItemViewModel.TaxPercentage" class="text-danger"></span>
                                             </div>
                                         } else
                                         {
                                             <div class="form-floating pe-2 my-auto col-12 col-md-3">
                                                 <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" value="@Model.AddItemViewModel.TaxPercentage" id="TaxPercentage" required placeholder="name" disabled>
                                                 <label for="TaxPercentage" class="">Tax Percentage</label>
+                                                <span asp-validation-for="AddItemViewModel.TaxPercentage" class="text-danger"></span>
                                             </div>
                                         }
                                     } else
@@ -172,6 +174,7 @@
                                                 <input asp-for="@Model.AddItemViewModel.TaxPercentage"  type="text" class="form-control" name="AddItemViewModel.TaxPercentage" id="TaxPercentage"
                                                     required placeholder="name">
                                                 <label for="TaxPercentage" class="">Tax Percentage</label>
+                                                <span asp-validation-for="AddItemViewModel.TaxPercentage" class="text-danger"></span>
                                             </div>
                                         } else
                                         {
@@ -179,6 +182,7 @@
                                                 <input asp-for="@Model.AddItemViewModel.TaxPercentage" type="text" class="form-control" name="AddItemViewModel.TaxPercentage" id="TaxPercentage"
                                                     required placeholder="name" disabled>
                                                 <label for="TaxPercentage" class="">Tax Percentage</label>
+                                                <span asp-validation-for="AddItemViewModel.TaxPercentage" class="text-danger"></span>
                                             </div>
                                         }
                                     }
@@ -305,6 +309,7 @@
     
     function closeModal(modalId) {
         $('#' + modalId).modal('hide');
+        $("#modifierGroupdata").html("");
     }
 
     @* var parentCheckbox = document.getElementById('flexCheckIndeterminate');

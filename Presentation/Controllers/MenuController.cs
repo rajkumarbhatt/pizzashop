@@ -315,13 +315,13 @@ namespace Presentaion.Controllers
         }
 
         [HttpGet]
-        public IActionResult RefreshModifiersPartial(int pageIndex = 1, int pageSize = 5, string? searchValue = null)
+        public IActionResult RefreshModifiersPartial(int modifierGroupId, int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
              var categories = _categoryService.GetCategories();
             int categoryId = categories.FirstOrDefault()?.Id ?? 0;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var modifierGroups = _categoryService.GetModifierGroups();
-            var modifierId = modifierGroups.FirstOrDefault()?.Id ?? 0;
+            var modifierId = modifierGroupId != 0 ? modifierGroupId : modifierGroups.FirstOrDefault()?.Id ?? 0;
             var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue ?? "");
             var pageIndexModifier = 1;
             var pageSizeModifier = 5;

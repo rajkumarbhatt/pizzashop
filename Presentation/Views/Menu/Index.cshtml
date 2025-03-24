@@ -113,7 +113,13 @@
     function addMaximum(id, value) {
         var index = selectModifierGroups.findIndex(x => x.Id === id);
         selectModifierGroups[index].MaximumQuantity = value;
+        var minimumSelect = document.getElementById(id + "min");
+        var minimumValue = minimumSelect.value;
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
+        if (value < minimumValue) {
+            minimumSelect.value = value;
+            addMinimum(id, value);
+        }
     }
 
     document.getElementById('Image').addEventListener('change', (e) => {
@@ -152,7 +158,7 @@
     }
 
     function initializeFormSubmit() {
-        $("#AddItemForm").submit(function (e) {
+        $("#AddItemForm").off("submit").submit(function (e) {
             e.preventDefault();
             if (!checkMinMaxData()) {
                 toastr.error("Please enter valid minimum and maximum values");
@@ -266,16 +272,46 @@
             document.getElementById(modifierGroup.Id).checked = true;
             addTag(modifierGroup.Id, modifierGroup.Name);
         });
+
+        selectModifierGroups.forEach(function (modifierGroup) {
+            var minimumSelect = document.getElementById(modifierGroup.Id + "min");
+            var maximumSelect = document.getElementById(modifierGroup.Id + "max");
+            minimumSelect.value = modifierGroup.MinimumQuantity;
+            maximumSelect.value = modifierGroup.MaximumQuantity;
+            var maximumOptions = maximumSelect.options;
+            for (var i = 0; i < maximumOptions.length; i++) {
+                if (parseInt(maximumOptions[i].value) < modifierGroup.MinimumQuantity) {
+                    maximumOptions[i].style.display = "none";
+                } else {
+                    maximumOptions[i].style.display = "block";
+                }
+            }
+        });
     }
 
     function UnSyncEditChanges() {
-        selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
-        selectModifierGroups.forEach(function (modifierGroup) {
-            document.getElementById(modifierGroup.Id).checked = false;
-            deleteSelectedModifierGroup(modifierGroup.Id);
-            removeTag(modifierGroup.Id);
-        });
+        let value = $("#ModifierGroupIdsEdit").val();
+        
+        if (!value) {
+            console.error("ModifierGroupIdsEdit value is empty or undefined.");
+            return;
+        }
+        
+        try {
+            selectModifierGroups = JSON.parse(value);
+            
+            selectModifierGroups.forEach(function (modifierGroup) {
+                if (modifierGroup.Id) {
+                    document.getElementById(modifierGroup.Id).checked = false;
+                    deleteSelectedModifierGroup(modifierGroup.Id);
+                    removeTag(modifierGroup.Id);
+                }
+            });
+        } catch (error) {
+            console.error("Invalid JSON in ModifierGroupIdsEdit:", value, error);
+        }
     }
+
 
     //edit category
     function editCategory(categoryId, categoryName, categoryDescription) {

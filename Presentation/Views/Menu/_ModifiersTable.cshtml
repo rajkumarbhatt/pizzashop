@@ -268,10 +268,24 @@
             data: { pageIndex: 1, pageSize: 5, modifierGroupId: modifierGroupId },
             success: function (data) {
                 $("#modifierGroupId21").val(modifierGroupId);
-                console.log($("#modifierGroupId21").val());
                 $("#ModifiersTablePartial").html(data);
+                $(".menu-category-navigation-items-modifier").removeClass("active-nav-item");
+                $("#modifierGroup" + modifierGroupId + "4").addClass("active-nav-item");
+                $(".gray-dot").removeClass("d-none");
+                $("#gray-dot" + modifierGroupId).addClass("d-none");
+                $(".blue-dot").addClass("d-none");
+                $("#blue-dot" + modifierGroupId).removeClass("d-none");
             }
         });
+    }
+
+    function makeThisModifierGroupActive(modifierGroupId) {
+        $(".menu-category-navigation-items-modifier").removeClass("active-nav-item");
+        $("#modifierGroup" + modifierGroupId + "4").addClass("active-nav-item");
+        $(".gray-dot").removeClass("d-none");
+        $("#gray-dot" + modifierGroupId).addClass("d-none");
+        $(".blue-dot").addClass("d-none");
+        $("#blue-dot" + modifierGroupId).removeClass("d-none");
     }
 
     function deleteModifierFunc(modifierId) {
@@ -319,6 +333,10 @@
     if ($(".modifiers-name-checkbox:checked").length === $(".modifiers-name-checkbox").length) {
         $("#modifiers-name-checkbox-intermediate").prop("checked", true);
     } else {
+        $("#modifiers-name-checkbox-intermediate").prop("checked", false);
+    }
+
+    if ($(".modifiers-name-checkbox:checked").length === 0) {
         $("#modifiers-name-checkbox-intermediate").prop("checked", false);
     }
 

@@ -1,0 +1,94 @@
+@model DAL.ViewModels.OrderViewModal
+
+<table id="userTable" class="table table-responsive"  style="white-space: nowrap;">
+    <thead class="color-head-order">
+        <tr class="text-start">
+            <th>Order <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
+            <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
+            <th>Customer <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
+            <th>Status</th>
+            <th>Payment Mode</th>
+            <th>Rating</th>
+            <th>Total Amount <img src="~/images/icons/sorting-icon-table.svg" id="sortRoles" class="small-image"></th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var order in @Model.Orders)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.Date</td>
+                <td>@order.CustomerName</td>
+                <td>@order.Status</td>
+                <td>@order.PaymentMode</td>
+                <td class="rating" data-rating="@order.AvgRating"></td>
+                <td>@order.TotalAmount</td>
+                <td>
+                    <img src="~/images/icons/edit.svg" class="small-image" alt="">
+                    <img src="~/images/icons/delete.svg" class="small-image" alt="">
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
+    <p>Items per page: </p>
+    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+        onchange="changePageSize(this.value)">
+        @* <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option> *@
+        <option>5</option>
+    </select>
+    <p class="px-1">
+        @* Showing @((Model.PageIndex - 1) * Model.PageSize + 1) - 
+        @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalUsers)) of 
+        @Model.TotalUsers *@
+        Showing 1 - 5 of 5
+    </p>
+
+
+    <div>
+            </div>
+    @* <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
+
+    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndex == Model.TotalPages ? "disabled" : "")>&gt;</button> *@
+    <button id="previousButton" class="p-1 px-2" disabled>&lt;</button>
+    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" disabled>&gt;</button>
+    </div>
+</div>
+
+<script>
+    function renderStars() {
+        document.querySelectorAll(".rating").forEach(td => {
+            let rating = parseFloat(td.getAttribute("data-rating"));
+            let percentage = (rating / 5) * 100; // Convert rating to percentage fill
+            
+            let starsHtml = `
+                <div class="star-container">
+                    <div class="stars">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <div class="stars stars-fill" style="width: ${percentage}%;">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                </div>
+            `;
+            
+            td.innerHTML = starsHtml;
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", renderStars);
+</script>

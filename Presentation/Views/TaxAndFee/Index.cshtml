@@ -27,15 +27,15 @@
         </p>
         @if (permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true))
         {
-            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2">
+            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
                 <a class="text-decoration-none text-white add-user-link">+
-                    Add User</a></button>
+                    Add Tax</a></button>
         }
         else
         {
             <button class="d-none d-md-block button-styles py-1 py-sm-2  cursor-none" style="cursor: not-allowed;">
                 <a class="text-decoration-none cursor-none text-white add-user-link">+
-                    Add User</a></button>
+                    Add Tax</a></button>
         }
     </div>
 </div>

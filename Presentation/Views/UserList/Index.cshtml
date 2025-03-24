@@ -26,8 +26,8 @@
                     </p>
                     @if(permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
                     {
-                        <button class="d-none d-md-block button-styles py-1 py-sm-2">
-                        <a asp-controller="UserList" asp-action="CreateUser" class="text-decoration-none text-white add-user-link">+
+                        <button id="redirectToCreateUser" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
+                        <a class="text-decoration-none text-white add-user-link">+
                             Add User</a></button>
                     }
                     else

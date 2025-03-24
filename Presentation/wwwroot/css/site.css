@@ -129,6 +129,14 @@
   font-weight: 700;
   color: #81757D;
 }
+.menu-category-navigation-items-modifier {
+  font-weight: 700;
+  color: #81757D;
+}
+.menu-category-navigation-items-table {
+  font-weight: 700;
+  color: #81757D;
+}
 .active-nav-item {
   color: #0066A7;
 }
@@ -259,6 +267,9 @@ td{
 }
 .color-head {
   color: #0066A7;
+}
+.color-head-order {
+  color: #817D75;
 }
 .table>:not(caption)>*>* {
   padding: .5rem .5rem;
@@ -728,4 +739,37 @@ td{
   content: "";
   background-color: inherit;
   border-radius: var(--bs-border-radius);
+}
+
+/* start styles */
+.star-container {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+}
+
+.stars {
+  display: flex;
+  position: relative;
+  color: white;
+  margin: 0 5px;
+}
+
+.stars i {
+  text-shadow: 0 0 2px gold; /* Adds a subtle glow effect */
+  -webkit-text-stroke: 1px gold; /* Adds a yellow border */
+}
+
+.stars-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  color: gold; /* Filled stars color */
+}
+
+.stars-fill i {
+  text-shadow: 0 0 2px gold; /* Keeps the filled stars sharp */
+  -webkit-text-stroke: 1px gold; /* Yellow border for filled stars */
 }

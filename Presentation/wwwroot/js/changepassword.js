@@ -40,7 +40,6 @@ $("#cancel-button").click(function () {
 
 $(document).ready(function () {
     $("#change-password-form").submit(function (e) {
-        debugger
         e.preventDefault();
         var currentPassword = $("#current-password").val();
         var newPassword = $("#new-password").val();
@@ -52,7 +51,6 @@ $(document).ready(function () {
             data: JSON.stringify({ CurrentPassword: currentPassword, NewPassword: newPassword, ConfirmPassword: confirmPassword }),
             contentType: "application/json",
             success: function (data) {
-                debugger
                 console.log(data);
                 if (data.success) {
                     toastr.success(data.message);

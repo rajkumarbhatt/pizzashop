@@ -13,7 +13,6 @@
 {
     <script>
         var selectedModifiersGroupsAddModifier2 = @Html.Raw(Json.Serialize(Model.AddModifierViewModel.ModifierGroupIds));
-        debugger
         selectedModifiersGroupsAddModifier2 = selectedModifiersGroupsAddModifier2.map(x => parseInt(x));
         $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier2);
         selectedModifiersGroupsAddModifier2.forEach(x => {
@@ -41,43 +40,88 @@
     <div class="d-flex flex-column  category-list-styles">
         @foreach (var modifierGroup in Model.ModifierGroups)
         {
-            var divCustomId = "modifierGroup" + modifierGroup.Id;
-            var divCustomId2 = "modifierGroup" + modifierGroup.Id + "2";
-            <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)" onclick="changeModifiers(@modifierGroup.Id)" id="@divCustomId2"
-                class="d-flex justify-content-between align-items-center cursor-pointer p-2">
-                <div>
-                    <img src="~/images/icons/gray-six-dots.svg" class="small-image " alt="">
-                    <img src="~/images/icons/blue-six-dots.svg"  class="small-image d-none" alt="">
-                    <span class="menu-category-navigation-items" >@modifierGroup.Name</span>
-                </div>
-                <div id="@divCustomId" class="d-none">
-                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
-                    {
-                        <button type="button" class="delete-btn bg-white">
-                            <a> <img src="~/images/icons/edit.svg" class="small-image " alt="" onclick="editModifierGroup(@modifierGroup.Id)"></a>
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="button" class="delete-btn bg-white cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a>
-                        </button>
-                    }
-                    @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
-                    {
-                        <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                            data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
-                            <a> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="button" class="delete-btn bg-white cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt="" id="delete-icon"></a>
-                        </button>
-                    }
-                </div>
-            </div>
+            var divCustomIdModifier = "modifierGroup" + modifierGroup.Id;
+            var divCustomIdModifier2 = "modifierGroup" + modifierGroup.Id + "2";
+            var divCustomIdModifier4 = "modifierGroup" + modifierGroup.Id + "4";
+            var bluedotModifier = "blue-dot" + modifierGroup.Id;
+            var graydotModifier = "gray-dot" + modifierGroup.Id;
+
+            @if (Model.ModifierGroups[0].Id == modifierGroup.Id)    
+            {
+                <div onmouseenter="showDivM(@divCustomIdModifier)" onmouseleave="hideDivM(@divCustomIdModifier)" onclick="changeModifiers(@modifierGroup.Id)" id="@divCustomIdModifier2"
+                    class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                    <div>
+                        <img src="~/images/icons/gray-six-dots.svg" id="@graydotModifier" class="small-image d-none gray-dot" alt="">
+                        <img src="~/images/icons/blue-six-dots.svg" id="@bluedotModifier" class="small-image blue-dot" alt="">
+                        <span class="menu-category-navigation-items-modifier active-nav-item" id="@divCustomIdModifier4">@modifierGroup.Name</span>
+                    </div>
+                    <div id="@divCustomIdModifier" class="d-none">
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                        {
+                            <button type="button" class="delete-btn bg-white">
+                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt="" onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a>
+                            </button>
+                        }
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt="" id="delete-icon"></a>
+                            </button>
+                        }
+                    </div>
+                </div>               
+            } 
+            else
+            {
+                <div onmouseenter="showDivM(@divCustomIdModifier)" onmouseleave="hideDivM(@divCustomIdModifier)" onclick="changeModifiers(@modifierGroup.Id)" id="@divCustomIdModifier2"
+                    class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                    <div>
+                        <img src="~/images/icons/gray-six-dots.svg" id="@graydotModifier" class="small-image gray-dot" alt="">
+                        <img src="~/images/icons/blue-six-dots.svg" id="@bluedotModifier" class="small-image d-none blue-dot" alt="">
+                        <span class="menu-category-navigation-items-modifier" id="@divCustomIdModifier4">@modifierGroup.Name</span>
+                    </div>
+                    <div id="@divCustomIdModifier" class="d-none">
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                        {
+                            <button type="button" class="delete-btn bg-white">
+                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt="" onclick="editModifierGroup(@modifierGroup.Id)"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a>
+                            </button>
+                        }
+                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                        {
+                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                data-bs-target="#deleteModifierGroup" onclick="deleteModifierGroupFunc(@modifierGroup.Id)">
+                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt="" id="delete-icon"></a>
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="delete-btn bg-white cursor-none">
+                                <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt="" id="delete-icon"></a>
+                            </button>
+                        }
+                    </div>
+                </div>            
+            }
         }
     </div>
 </div>
@@ -590,7 +634,7 @@
 
 
     function addModigierGroupFunc() {
-        $("#AddModifierButton2").click(function () {
+        $("#AddModifierButton2").off("click").click(function () {
             var name = $("#AddModifierName").val();
             if (name.length <= 0) {
                 $("#addMGName").text("Modifier Group's name is required.")
@@ -612,12 +656,15 @@
                         $.ajax({
                             type: "GET",
                             url: "/Menu/RefreshModifiersPartial",
+                            data: { modifierGroupId: modifierGroupId },
                             success: function (data) {
                                 $("#modifiers-content").html(data);
                                 selectedModifiers = [];
                                 $("#AddModifierName").val("");
                                 $("#AddModifierDescription").val("");
                                 $("#ModifierGroupId").val("-1");
+                                $("#modifierGroupId21").val(modifierGroupId);
+                                makeThisModifierGroupActive(modifierGroupId);
                             },
                             error: function (data) {
                                 console.log(data);
@@ -763,6 +810,7 @@
                 $("#AddModifierGroupModal").modal("show");
                 $("#addModifierGroupModalTitle").text("Edit Modifier Group");
                 addModigierGroupFunc();
+                makeThisModifierGroupActive(modifierGroupId);
             },
             error: function (error) {
                 console.log(error);
@@ -829,6 +877,19 @@
         selectedModifiersGroupsAddModifier = [];
         $("#AddModifierModifierGroupIds").val("");
         $("#AddModifierId").val("-1");
+    }
+
+    function showDivM (modifierGroupId) {
+        modifierGroupId.classList.remove('d-none');
+        var divId2 = modifierGroupId.id + "2";
+        console.log(divId2);
+        $("#" + divId2).addClass('active-category-div');
+    }
+
+    function hideDivM (modifierGroupId) {
+        modifierGroupId.classList.add('d-none');
+        var divId2 = modifierGroupId.id + "2";
+        $("#" + divId2).removeClass('active-category-div');
     }
 
 </script>

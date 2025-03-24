@@ -33,53 +33,105 @@
             {
                 var divCustomId = "div" + category.Id;
                 var divCustomId2 = "div" + category.Id + "2";
-                var divCustomId3 = "div" + category.Id + "3";
                 var divCustomId4 = "div" + category.Id + "4";
                 var blueDotId = "blueDot" + category.Id;
                 var grayDotId = "grayDot" + category.Id;
-                <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
-                    onclick="changeItems(@category.Id)" id="@divCustomId2"
-                    class="d-flex justify-content-between align-items-center cursor-pointer p-2" >
-                    <div>
-                        <img src="~/images/icons/gray-six-dots.svg" id="@grayDotId" class="small-image gray-dot" alt="">
-                        <img src="~/images/icons/blue-six-dots.svg" id="@blueDotId" class="small-image blue-dot d-none" alt="">
-                        <span class="menu-category-navigation-items" id="@divCustomId4">@category.Name</span>
+ 
+                @if (Model.Categories[0].Id == category.Id)
+                {
+                    <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
+                        onclick="changeItems(@category.Id)" id="@divCustomId2"
+                        class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                        <div>
+                            <img src="~/images/icons/gray-six-dots.svg" id="@grayDotId" class="small-image gray-dot d-none"
+                                alt="">
+                            <img src="~/images/icons/blue-six-dots.svg" id="@blueDotId" class="small-image blue-dot " alt="">
+                            <span class="menu-category-navigation-items active-nav-item"
+                                id="@divCustomId4">@category.Name</span>
+                        </div>
+                        <div id="@divCustomId" class="d-none">
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                            {
+                                <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal">
+                                    <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal" disabled>
+                                    <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
+                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                </button>
+                            }
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                            {
+                                <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                    data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
+                                    <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
+                                            id="sandwich-delete-icon"></a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                    data-bs-target="#categoryDeleteModal" disabled>
+                                    <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
+                                            id="sandwich-delete-icon"></a>
+                                </button>
+                            }
+                        </div>
                     </div>
-                    <div id="@divCustomId" class="d-none">
-                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
-                        {
-                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                                data-bs-target="#editCategoryModal">
-                                <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                data-bs-target="#editCategoryModal" disabled>
-                                <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
-                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                            </button>
-                        }
-                        @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
-                        {
-                            <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
-                                data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
-                                <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                        id="sandwich-delete-icon"></a>
-                            </button>
-                        }
-                        else
-                        {
-                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                data-bs-target="#categoryDeleteModal" disabled>
-                                <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
-                                        id="sandwich-delete-icon"></a>
-                            </button>
-                        }
+                }
+                else
+                {
+                    <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
+                        onclick="changeItems(@category.Id)" id="@divCustomId2"
+                        class="d-flex justify-content-between align-items-center cursor-pointer p-2">
+                        <div>
+                            <img src="~/images/icons/gray-six-dots.svg" id="@grayDotId" class="small-image gray-dot" alt="">
+                            <img src="~/images/icons/blue-six-dots.svg" id="@blueDotId" class="small-image blue-dot d-none"
+                                alt="">
+                            <span class="menu-category-navigation-items" id="@divCustomId4">@category.Name</span>
+                        </div>
+                        <div id="@divCustomId" class="d-none">
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
+                            {
+                                <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal">
+                                    <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
+                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                    data-bs-target="#editCategoryModal" disabled>
+                                    <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
+                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                </button>
+                            }
+                            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
+                            {
+                                <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
+                                    data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
+                                    <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
+                                            id="sandwich-delete-icon"></a>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
+                                    data-bs-target="#categoryDeleteModal" disabled>
+                                    <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
+                                            id="sandwich-delete-icon"></a>
+                                </button>
+                            }
+                        </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
@@ -271,8 +323,8 @@
                 }
                 else
                 {
-                    <button type="button" id="AddItemModal" class="d-none d-md-block button-styles-header w-100 add-item-button"
-                        style="cursor: not-allowed;">
+                    <button type="button" id="AddItemModal"
+                        class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor: not-allowed;">
                         <a
                             class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
                             <p>+</p>
@@ -384,7 +436,7 @@
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end">
-                <button  onclick="EditCategory()" id="EditCategoryModal" type="button"
+                <button onclick="EditCategory()" id="EditCategoryModal" type="button"
                     class="btn btn-primary px-3">Save</button>
                 <a asp-controller="Menu" asp-action="Index"><button type="button"
                         class="btn btn-contrast px-3">Cancel</button></a>
@@ -430,6 +482,7 @@
         console.log(selectModifierGroups);
         initializeFormSubmit();
         if (isEditCalled) {
+            console.log("in if");
             UnSyncEditChanges();
             $.ajax({
                 type: "GET",
@@ -438,32 +491,46 @@
                     selectModifierGroups = [];
                     $("#AddItemModalPartial").html(data);
                     triggerMultiSelect();
+                    initializeFormSubmit();                   
                     $("#AddItemModalHeading").text("Add Item");
                     $("#AddItemButton").text("Save");
                     $("#addItemModal").modal("show");
-                    $.validator.unobtrusive.parse("#AddItemForm");
-                    initializeFormSubmit();
+                    $.validator.unobtrusive.parse("#AddItemForm"); 
                 },
                 error: function (data) {
                     console.log(data);
                 }
             });
             return;
-        }
-        if (!isEditCalled) {
+        } else {
+            console.log("in else");
             triggerMultiSelect();
+            $.ajax({
+                type: "GET",
+                url: "/Menu/ResetAddItemForm",
+                success: function (data) {
+                    selectModifierGroups = [];
+                    $("#AddItemModalPartial").html(data);
+                    triggerMultiSelect();
+                    initializeFormSubmit();                   
+                    $("#AddItemModalHeading").text("Add Item");
+                    $("#AddItemButton").text("Save");
+                    $("#addItemModal").modal("show");
+                    $.validator.unobtrusive.parse("#AddItemForm"); 
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
         }
-        $("#AddItemModalHeading").text("Add Item");
-        $("#AddItemButton").text("Save");
-        $("#addItemModal").modal("show");
-        $("#addItemModal").modal('show');
         return;
     }
 
+    
     function showDiv(divId) {
         divId.classList.remove('d-none');
         var divId2 = divId.id + "2";
-        $("#" + divId2).addClass('active-category-div'); 
+        $("#" + divId2).addClass('active-category-div');
     }
 
     function hideDiv(divId) {
@@ -488,7 +555,7 @@
             success: function (data) {
                 if (data.success) {
                     toastr.success(data.message);
-                    
+
                     $.ajax({
                         type: "GET",
                         url: "/Menu/RefreshItemsPartial",
@@ -537,6 +604,7 @@
                         data: { categoryId: Id },
                         success: function (data) {
                             $("#partialViewStarting").html(data);
+                            makeThisCategoryActive(Id);
                         },
                         error: function (data) {
                             console.log(data);

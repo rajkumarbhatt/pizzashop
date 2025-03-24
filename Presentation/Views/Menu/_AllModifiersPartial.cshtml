@@ -63,12 +63,18 @@
         if (this.checked) {
             $(".all-modifiers-select").each(function () {
                 this.checked = true;
-                addToList(this.id);
+                selectedModifiers.push({
+                    id: parseInt(this.id.split("_")[1]),
+                    name: this.id.split("_")[0]
+                });
+                selectedModifiers = selectedModifiers.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i);
             });
         } else {
             $(".all-modifiers-select").each(function () {
                 this.checked = false;
-                addToList(this.id);
+                const modifierId = this.id.split("_")[1];
+                const index = selectedModifiers.findIndex(x => x.id === parseInt(modifierId));
+                selectedModifiers.splice(index, 1);
             });
         }
         addModalsToList();
@@ -89,21 +95,29 @@
         tag.setAttribute("data-value", modifierId);
         tag.innerHTML = `
         ${modifierName}
-        <span class="tag-delete">x</span>
+        <span class="tag-delete-modifier-group" style="cursor:pointer;">x</span>
         `;
         tagsDiv.appendChild(tag);
     }
 
-    $(".tag-delete").click(function () {
-        const modifierId = this.parentElement.getAttribute("data-value");
-        const index = selectedModifiers.findIndex(x => x.id === parseInt(modifierId));
-        selectedModifiers.splice(index, 1);
+    $(document).on('click', '.tag-delete-modifier-group', function () {
+        var modifierId = this.parentElement.getAttribute("data-value");
+        var index = selectedModifiers.findIndex(x => x.id.toString() === modifierId);
+        if (index !== -1) { 
+            var nameFormatted = selectedModifiers[index].name.replace(/\s+/g, '/'); 
+            var customId = `${nameFormatted}_${selectedModifiers[index].id}`;
+
+            var checkbox = document.getElementById(customId);
+            if (checkbox) {
+                checkbox.checked = false;
+            } else {
+                console.error("Checkbox not found:", customId);
+            }
+            selectedModifiers.splice(index, 1);
+        }
         this.parentElement.remove();
-        console.log(selectedModifiers);
-        //unchecked the checkbox
-        const customId = modifierId.replace(' ', '/') + "_" + modifierId;
-        document.getElementById(customId).checked = false;
     });
+
     
 
     function addToList(id) {
@@ -204,7 +218,6 @@
     $("#searchInputAllModifiers").on("keyup", function () {
         clearTimeout($.data(this, 'timer'));
         var searchValue = $(this).val().toLowerCase();
-        debugger;
         $(this).data('timer', setTimeout(function () {
             const currentPageIndex = 1;
             const pageSize = @Model.PageSizeAllModifiers;
@@ -232,9 +245,10 @@
     } else {
         $(".select-modifs-intermediate").prop("checked", false);
     }
-    console.log($(".all-modifiers-select:checked").length);
-    console.log($(".all-modifiers-select").length);
-    console.log($(selectedModifiers));
+    
+    if ($(".all-modifiers-select:checked").length === 0) {
+        $(".select-modifs-intermediate").prop("checked", false);
+    }
 
 
 </script>
