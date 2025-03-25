@@ -11,8 +11,6 @@ public partial class OrderModifier
 
     public int ModifierId { get; set; }
 
-    public decimal Price { get; set; }
-
     public int CreatedBy { get; set; }
 
     public int UpdatedBy { get; set; }

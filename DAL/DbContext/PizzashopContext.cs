@@ -28,6 +28,8 @@ public partial class PizzaShopContext : DbContext
 
     public virtual DbSet<CustomerReview> CustomerReviews { get; set; }
 
+    public virtual DbSet<Invoice> Invoices { get; set; }
+
     public virtual DbSet<Item> Items { get; set; }
 
     public virtual DbSet<ItemModifiergroup> ItemModifiergroups { get; set; }
@@ -43,6 +45,8 @@ public partial class PizzaShopContext : DbContext
     public virtual DbSet<OrderItem> OrderItems { get; set; }
 
     public virtual DbSet<OrderModifier> OrderModifiers { get; set; }
+
+    public virtual DbSet<OrderTableMapping> OrderTableMappings { get; set; }
 
     public virtual DbSet<OrderTaxis> OrderTaxes { get; set; }
 
@@ -163,7 +167,6 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(50)
                 .HasColumnName("name");
-            entity.Property(e => e.NumberOfPeople).HasColumnName("number_of_people");
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
@@ -247,6 +250,21 @@ public partial class PizzaShopContext : DbContext
                 .HasForeignKey(d => d.UpdatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("customer_reviews_updated_by_fkey");
+        });
+
+        modelBuilder.Entity<Invoice>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("invoice_pkey");
+
+            entity.ToTable("invoice");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.Invoices)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("invoice_order_id_fkey");
         });
 
         modelBuilder.Entity<Item>(entity =>
@@ -498,7 +516,6 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
-            entity.Property(e => e.TableId).HasColumnName("table_id");
             entity.Property(e => e.TotalAmount)
                 .HasPrecision(10, 2)
                 .HasColumnName("total_amount");
@@ -516,11 +533,6 @@ public partial class PizzaShopContext : DbContext
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("orders_customer_id_fkey");
 
-            entity.HasOne(d => d.Table).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.TableId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("orders_table_id_fkey");
-
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.OrderUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -536,9 +548,6 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasColumnName("price");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Item).WithMany(p => p.OrderItems)
@@ -560,9 +569,6 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.ModifierId).HasColumnName("modifier_id");
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
-            entity.Property(e => e.Price)
-                .HasPrecision(10, 2)
-                .HasColumnName("price");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.OrderModifierCreatedByNavigations)
@@ -584,6 +590,43 @@ public partial class PizzaShopContext : DbContext
                 .HasConstraintName("order_modifiers_updated_by_fkey");
         });
 
+        modelBuilder.Entity<OrderTableMapping>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("tableordermapping_pkey");
+
+            entity.ToTable("order_table_mapping");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("nextval('tableordermapping_id_seq'::regclass)")
+                .HasColumnName("id");
+            entity.Property(e => e.Createdat)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("createdat");
+            entity.Property(e => e.Createdby)
+                .HasMaxLength(50)
+                .HasColumnName("createdby");
+            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
+            entity.Property(e => e.Noofpersons).HasColumnName("noofpersons");
+            entity.Property(e => e.Orderid).HasColumnName("orderid");
+            entity.Property(e => e.Tableid).HasColumnName("tableid");
+            entity.Property(e => e.Updatedat)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updatedat");
+            entity.Property(e => e.Updatedby)
+                .HasMaxLength(50)
+                .HasColumnName("updatedby");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderTableMappings)
+                .HasForeignKey(d => d.Orderid)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("tableordermapping_orderid_fkey");
+
+            entity.HasOne(d => d.Table).WithMany(p => p.OrderTableMappings)
+                .HasForeignKey(d => d.Tableid)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("tableordermapping_tableid_fkey");
+        });
+
         modelBuilder.Entity<OrderTaxis>(entity =>
         {
             entity.HasKey(e => new { e.OrderId, e.TaxId }).HasName("order_taxes_pkey");
@@ -592,16 +635,9 @@ public partial class PizzaShopContext : DbContext
 
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.TaxId).HasColumnName("tax_id");
-            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.TaxAmount)
                 .HasPrecision(10, 2)
                 .HasColumnName("tax_amount");
-            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
-
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.OrderTaxisCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("order_taxes_created_by_fkey");
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderTaxes)
                 .HasForeignKey(d => d.OrderId)
@@ -610,11 +646,6 @@ public partial class PizzaShopContext : DbContext
             entity.HasOne(d => d.Tax).WithMany(p => p.OrderTaxes)
                 .HasForeignKey(d => d.TaxId)
                 .HasConstraintName("order_taxes_tax_id_fkey");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.OrderTaxisUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("order_taxes_updated_by_fkey");
         });
 
         modelBuilder.Entity<Permission>(entity =>

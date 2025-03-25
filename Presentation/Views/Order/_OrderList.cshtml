@@ -1,18 +1,17 @@
 @model DAL.ViewModels.OrderViewModal
-
-<table id="userTable" class="table table-responsive"  style="white-space: nowrap;">
-    <thead class="color-head-order">
-        <tr class="text-start">
-            <th>Order <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
-            <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
-            <th>Customer <img src="~/images/icons/sorting-icon-table.svg" id="sortNames" class="small-image"></th>
-            <th>Status</th>
-            <th>Payment Mode</th>
-            <th>Rating</th>
-            <th>Total Amount <img src="~/images/icons/sorting-icon-table.svg" id="sortRoles" class="small-image"></th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+<table id="ordersTable" class="table table-responsive"  style="white-space: nowrap;">
+        <thead class="color-head-order">
+            <tr class="text-start">
+                <th>Order <img src="~/images/icons/sorting-icon-table.svg" id="sortOrderId" class="small-image"></th>
+                <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortDate" class="small-image"></th>
+                <th>Customer <img src="~/images/icons/sorting-icon-table.svg" id="sortCustomerNames" class="small-image"></th>
+                <th>Status</th>
+                <th>Payment Mode</th>
+                <th>Rating</th>
+                <th>Total Amount <img src="~/images/icons/sorting-icon-table.svg" id="sortTotalAmount" class="small-image"></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
     <tbody>
         @foreach(var order in @Model.Orders)
         {
@@ -25,8 +24,8 @@
                 <td class="rating" data-rating="@order.AvgRating"></td>
                 <td>@order.TotalAmount</td>
                 <td>
-                    <img src="~/images/icons/edit.svg" class="small-image" alt="">
-                    <img src="~/images/icons/delete.svg" class="small-image" alt="">
+                    <img src="~/images/icons/pdf-icon.svg" class="small-image" alt="">
+                    <img onclick="viewOrderDetails(@order.Id)" src="~/images/icons/view-eye.svg" class="small-image" alt="">
                 </td>
             </tr>
         }
@@ -37,36 +36,37 @@
 <div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
     <p>Items per page: </p>
     <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
-        onchange="changePageSize(this.value)">
-        @* <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
-        <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
-        <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option> *@
-        <option>5</option>
+        onchange="changePageSizeOrders(this.value)" id="pageSizeSelectOrders">
+        <option value="5" selected="@(Model.pageSize == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.pageSize == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        @* Showing @((Model.PageIndex - 1) * Model.PageSize + 1) - 
-        @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalUsers)) of 
-        @Model.TotalUsers *@
-        Showing 1 - 5 of 5
+        Showing @((Model.pageIndex - 1) * Model.pageSize + 1) - 
+        @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalOrders)) of 
+        @Model.totalOrders
     </p>
 
 
     <div>
             </div>
-    @* <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
+    <button id="previousButtonOrders" class="p-1 px-2" @(Model.pageIndex == 1 ? "disabled" : "")>&lt;</button>
 
-    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndex == Model.TotalPages ? "disabled" : "")>&gt;</button> *@
-    <button id="previousButton" class="p-1 px-2" disabled>&lt;</button>
-    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" disabled>&gt;</button>
+    <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.pageIndex == Model.totalPages ? "disabled" : "")>&gt;</button>
     </div>
 </div>
 
 <script>
+
+    function viewOrderDetails(orderId) {
+        console.log(orderId);
+        window.location.href = "/Order/OrderDetails/" + orderId;
+    }
+
     function renderStars() {
         document.querySelectorAll(".rating").forEach(td => {
             let rating = parseFloat(td.getAttribute("data-rating"));
-            let percentage = (rating / 5) * 100; // Convert rating to percentage fill
-            
+            let percentage = (rating / 5) * 100;
             let starsHtml = `
                 <div class="star-container">
                     <div class="stars">
@@ -91,4 +91,189 @@
     }
 
     document.addEventListener("DOMContentLoaded", renderStars);
+
+    $("#previousButtonOrders").click(function () {
+        var pageIndex = @Model.pageIndex - 1;
+        var pageSize = @Model.pageSize;
+        var searchValue = $("#searchInputOrders").val();
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    $("#nextButtonOrders").click(function () {
+        var pageIndex = @Model.pageIndex + 1;
+        var pageSize = @Model.pageSize;
+        var searchValue = $("#searchInputOrders").val();
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    function changePageSizeOrders(pageSize) {
+        var status = $("#OrderStatusSelect").val();
+        var searchValue = $("#searchInputOrders").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    }
+
+    $("#searchInputOrders").on("input", function () {
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(function () {
+            var searchValue = $("#searchInputOrders").val();
+            var pageSize = @Model.pageSize;
+            var status = $("#OrderStatusSelect").val();
+            var time = $("#OrderTimeSelect").val();
+            var fromDate = $("#fromDate").val();
+            var toDate = $("#toDate").val();
+            $.ajax({
+                url: '@Url.Action("FilterOrders", "Order")', 
+                type: "GET",
+                data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+                success: function (data) {
+                    $("#orderTablePartial").html(data);
+                    renderStars();
+                }
+            });
+        }, 500);
+    });
+
+    $("#sortOrderId").click(function () {
+        console.log("sortOrderId");
+        sortColumn = "id";
+        if (isOrderIdAsc) {
+            sortDirection = "desc";
+            isOrderIdAsc = false;
+        } else {
+            isOrderIdAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = @Model.pageSize;
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    $("#sortDate").click(function () {
+        console.log("sortDate");
+        sortColumn = "date";
+        if (isDateAsc) {
+            sortDirection = "desc";
+            isDateAsc = false;
+        } else {
+            isDateAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = @Model.pageSize;
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    $("#sortCustomerNames").click(function () {
+        console.log("sortCustomerNames");
+        sortColumn = "customerName";
+        if (isCustomerNamesAsc) {
+            sortDirection = "desc";
+            isCustomerNamesAsc = false;
+        } else {
+            isCustomerNamesAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = @Model.pageSize;
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    $("#sortTotalAmount").click(function () {
+        console.log("sortTotalAmount");
+        sortColumn = "totalAmount";
+        if (isTotalAmountAsc) {
+            sortDirection = "desc";
+            isTotalAmountAsc = false;
+        } else {
+            isTotalAmountAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = @Model.pageSize;
+        var status = $("#OrderStatusSelect").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
 </script>

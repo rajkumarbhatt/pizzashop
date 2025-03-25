@@ -752,12 +752,11 @@ td{
   display: flex;
   position: relative;
   color: white;
-  margin: 0 5px;
 }
 
 .stars i {
-  text-shadow: 0 0 2px gold; /* Adds a subtle glow effect */
-  -webkit-text-stroke: 1px gold; /* Adds a yellow border */
+  text-shadow: 0 0 2px gold; 
+  -webkit-text-stroke: 1px gold; 
 }
 
 .stars-fill {
@@ -766,10 +765,10 @@ td{
   left: 0;
   white-space: nowrap;
   overflow: hidden;
-  color: gold; /* Filled stars color */
+  color: gold;
 }
 
 .stars-fill i {
-  text-shadow: 0 0 2px gold; /* Keeps the filled stars sharp */
-  -webkit-text-stroke: 1px gold; /* Yellow border for filled stars */
+  text-shadow: 0 0 2px gold; 
+  -webkit-text-stroke: 1px gold; 
 }

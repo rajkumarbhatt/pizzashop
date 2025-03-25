@@ -13,8 +13,6 @@ public partial class Customer
 
     public string? Phone { get; set; }
 
-    public int NumberOfPeople { get; set; }
-
     public DateTime? CreatedAt { get; set; }
 
     public int CreatedBy { get; set; }

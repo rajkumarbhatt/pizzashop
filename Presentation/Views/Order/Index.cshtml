@@ -2,9 +2,211 @@
 
 <div class="d-flex justify-content-between align-items-center">
     <h1 class="main-page-heading">Orders</h1>
+    <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box">
+            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInputOrders" placeholder="Search">
+            <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+        </div>
+        <p class="delete-styles d-block d-md-none">
+            <a id="exportBtnMobile" class="text-decoration-none text-black   add-user-link">
+                <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
+            </a>
+        </p>
+        <div class="d-none d-md-block">
+            <select name="" onchange="FilerOrdersBasedOnStatus(this.value)" id="OrderStatusSelect" class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;" >
+                <option value="All Status">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <div class="d-none d-md-block">
+            <select name="" onchange="FilerOrdersBasedOnTime(this.value)" id="OrderTimeSelect" class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;" >
+                <option value="All Time">All Time</option>
+                <option value="Today">Today</option>
+                <option value="This Week">This Week</option>
+                <option value="This Month">This Month</option>
+            </select>
+        </div>
+        <button id="exportOrdersBtn" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
+            <a class="text-decoration-none text-white add-user-link">
+                <img src="~/images/icons/export.svg" class="p-1" style="width: 40px;" alt="">
+                <span class="text-white fw-bold">Export</span>
+            </a>
+        </button>
+    </div>
+</div>
+
+<div class="d-flex justify-content-end mt-2 gap-2 align-items-center mx-3">
+    <div class="input-group search-box cursor-pointer" style="width: 200px;">
+        <div class="form-floating">
+            <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;" id="fromDate" value="dd-mm-yyyy">
+            <label for="fromDate" class="form-label cursor-pointer">From Date</label>
+        </div>
+        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
+    </div>
+    <div class="input-group search-box cursor-pointer" style="width: 200px;">
+        <div class="form-floating">
+            <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;" id="toDate" value="dd-mm-yyyy">
+            <label for="toDate" class="form-label cursor-pointer">To Date</label>
+        </div>
+        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
+    </div>
+
+    <div class="d-none d-md-block">
+    <p class="delete-styles d-block d-md-none">
+        <a asp-controller="UserList" asp-action="CreateUser"
+            class="text-decoration-none text-black   add-user-link">
+            <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
+        </a>
+    </p>
+    </div>
+    <button id="SearchDate" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 44px; width: 100px;">
+        <a class="text-decoration-none text-white add-user-link">
+            <span class="text-white fw-bold">Search</span>
+        </a>
+    </button>
+    <button id="ClearFilters" class="d-none d-md-block button-styles-contrast py-1 py-sm-2" style="height: 44px; width: 100px;">
+        <a class="text-decoration-none add-user-link">
+            <span class=" fw-bold">Clear</span>
+        </a>
 </div>
 
 <!-- table partial-->
-<div class="d-none d-md-block form-bg p-2 my mx-4" id="orderTablePartial">
+<div class="form-bg p-2 my mx-4 table-responsive" id="orderTablePartial">
     <partial name="_OrderList" model="@Model" />
 </div>
+
+<script>
+
+    var isOrderIdAsc = true;
+    var isDateAsc = true;
+    var isCustomerNamesAsc = true;
+    var isTotalAmountAsc = true;
+    var sortColumn = "id";
+    var sortDirection = "asc";
+
+    function FilerOrdersBasedOnStatus(status) {
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = $("#pageSizeSelectOrders").val();
+        var time = $("#OrderTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        console.log(status, pageSize, searchValue);
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")',
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, status: status, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    }
+
+    function FilerOrdersBasedOnTime(time) {
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = $("#pageSizeSelectOrders").val();
+        var status = $("#OrderStatusSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        console.log(time, pageSize, searchValue);
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")',
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, time: time, searchValue: searchValue, status: status, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    }
+
+    document.getElementById("exportOrdersBtn").addEventListener("click", function () {
+        const status = encodeURIComponent($("#OrderStatusSelect").val());
+        const time = encodeURIComponent($("#OrderTimeSelect").val());
+        const searchValue = encodeURIComponent($("#searchInputOrders").val());
+
+        const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}`;
+
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Orders.xlsx";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("Error exporting data:", error));
+    });
+
+    document.getElementById("exportBtnMobile").addEventListener("click", function () {
+        const status = encodeURIComponent($("#OrderStatusSelect").val());
+        const time = encodeURIComponent($("#OrderTimeSelect").val());
+        const searchValue = encodeURIComponent($("#searchInputOrders").val());
+
+        const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}`;
+
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Orders.xlsx";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("Error exporting data:", error));
+    });
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true
+        }).on('show', function () {
+            $(this).attr('readonly', true); 
+        });
+    });
+
+    $("#SearchDate").click(function () {
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        var searchValue = $("#searchInputOrders").val();
+        var pageSize = $("#pageSizeSelectOrders").val();
+        var status = $("#OrderStatusSelect").val();
+        console.log(typeof fromDate, toDate, pageSize, searchValue);
+        var time = $("#OrderTimeSelect").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")',
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, fromDate: fromDate, toDate: toDate, searchValue: searchValue, status: status, time: time, sort: sortColumn, order: sortDirection },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+
+    $("#ClearFilters").click(function () {
+        $("#fromDate").val("dd-mm-yyyy");
+        $("#toDate").val("dd-mm-yyyy");
+        $("#searchInputOrders").val("");
+        $("#OrderStatusSelect").val("All Status");
+        $("#OrderTimeSelect").val("All Time");
+        var pageSize = $("#pageSizeSelectOrders").val();
+        $.ajax({
+            url: '@Url.Action("FilterOrders", "Order")',
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, sort: sortColumn, order: sortDirection },
+            success: function (data) {
+                $("#orderTablePartial").html(data);
+                renderStars();
+            }
+        });
+    });
+    
+</script>

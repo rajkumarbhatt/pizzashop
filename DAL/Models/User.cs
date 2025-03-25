@@ -91,10 +91,6 @@ public partial class User
 
     public virtual ICollection<OrderModifier> OrderModifierUpdatedByNavigations { get; set; } = new List<OrderModifier>();
 
-    public virtual ICollection<OrderTaxis> OrderTaxisCreatedByNavigations { get; set; } = new List<OrderTaxis>();
-
-    public virtual ICollection<OrderTaxis> OrderTaxisUpdatedByNavigations { get; set; } = new List<OrderTaxis>();
-
     public virtual ICollection<Order> OrderUpdatedByNavigations { get; set; } = new List<Order>();
 
     public virtual ICollection<Permission> PermissionCreatedByNavigations { get; set; } = new List<Permission>();

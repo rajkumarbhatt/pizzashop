@@ -23,7 +23,7 @@ public partial class Table
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<OrderTableMapping> OrderTableMappings { get; set; } = new List<OrderTableMapping>();
 
     public virtual Section Section { get; set; } = null!;
 

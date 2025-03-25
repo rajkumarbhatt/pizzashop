@@ -9,8 +9,6 @@ public partial class Order
 
     public int CustomerId { get; set; }
 
-    public int? TableId { get; set; }
-
     public decimal TotalAmount { get; set; }
 
     public string? Status { get; set; }
@@ -31,11 +29,13 @@ public partial class Order
 
     public virtual ICollection<CustomerReview> CustomerReviews { get; set; } = new List<CustomerReview>();
 
+    public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
+
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-    public virtual ICollection<OrderTaxis> OrderTaxes { get; set; } = new List<OrderTaxis>();
+    public virtual ICollection<OrderTableMapping> OrderTableMappings { get; set; } = new List<OrderTableMapping>();
 
-    public virtual Table? Table { get; set; }
+    public virtual ICollection<OrderTaxis> OrderTaxes { get; set; } = new List<OrderTaxis>();
 
     public virtual User UpdatedByNavigation { get; set; } = null!;
 }
