@@ -198,6 +198,7 @@ public class OrderService : IOrderService
         {
             subTotal += invoiceItem.TotalAmount;
         }
+        List<InvoiceTax> invoiceTaxes = GetInvoiceTaxes(orderId, subTotal);
         int invoiceId = _context.Invoices.Where(i => i.OrderId == order.Id).Select(i => i.Id).FirstOrDefault();
         DateTime invoiceCreatedOn = order.CreatedAt.HasValue ? order.CreatedAt.Value : DateTime.Now;
         TimeSpan? orderDuration = DateTime.Now - order.CreatedAt;
@@ -205,6 +206,11 @@ public class OrderService : IOrderService
         customInvoiceNumber = customInvoiceNumber.Replace(" ", "").Replace("-", "").Replace(":", "").Replace("/", "");
         int? tableId = _context.OrderTableMappings.Where(otm => otm.Orderid == order.Id).Select(otm => otm.Tableid).FirstOrDefault();
         int? sectionId = _context.Tables.Find(tableId).SectionId;   
+        double total = subTotal;
+        foreach (InvoiceTax invoiceTax in invoiceTaxes)
+        {
+            total += invoiceTax.TaxAmount;
+        }
         OrderDetailsViewModel orderDetailsViewModel = new OrderDetailsViewModel
         {
             Id = order.Id,
@@ -221,7 +227,9 @@ public class OrderService : IOrderService
             Table = _context.OrderTableMappings.Where(otm => otm.Orderid == order.Id).Select(otm => otm.Table).FirstOrDefault().Name ?? "N/A",
             Section = _context.Sections.Find(sectionId).Name ?? "N/A",
             InvoiceItems = invoiceItems,
-            SubTotal = subTotal
+            SubTotal = subTotal,
+            InvoiceTaxes = invoiceTaxes,
+            Total = Math.Round(total, 2)
         };
         return orderDetailsViewModel;
     }
@@ -230,6 +238,7 @@ public class OrderService : IOrderService
     {
         List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
         List<OrderItem> orderItems = _context.OrderItems.Where(oi => oi.OrderId == orderId).ToList();
+        int srNo = 1;
         foreach (OrderItem orderItem in orderItems)
         {
             Item item = _context.Items.Find(orderItem.ItemId) ?? new Item();
@@ -238,12 +247,12 @@ public class OrderService : IOrderService
             double totalAmount = orderItem.Quantity * price;
             InvoiceItem invoiceItem = new InvoiceItem
             {
-                SrNo = orderItem.Id,
+                SrNo = srNo++,
                 Item = item.Name ?? "N/A",
                 Quantity = orderItem.Quantity,
                 Price = price,
                 TotalAmount = totalAmount,
-                InvoiceModifiers = invoiceModifiers
+                InvoiceModifiers = invoiceModifiers,
             };
             invoiceItems.Add(invoiceItem);
         }
@@ -268,5 +277,34 @@ public class OrderService : IOrderService
             invoiceModifiers.Add(invoiceModifier);
         }
         return invoiceModifiers;
+    }
+
+    public List<InvoiceTax> GetInvoiceTaxes(int orderId, double subTotal)
+    {
+        List<InvoiceTax> invoiceTaxes = new List<InvoiceTax>();
+        List<TaxesFee> taxesFees = _context.TaxesFees.Where(tf => tf.IsDeleted == false && tf.IsEnabled == true).ToList();
+        foreach (TaxesFee taxesFee in taxesFees)
+        {
+            if (taxesFee.TaxType == "Percentage")
+            {
+                double taxAmount = subTotal * (double)taxesFee.Amount / 100;
+                InvoiceTax invoiceTax = new InvoiceTax
+                {
+                    TaxName = taxesFee.Name ?? "N/A",
+                    TaxAmount = taxAmount
+                };
+                invoiceTaxes.Add(invoiceTax);
+            }
+            else if (taxesFee.TaxType == "Fixed")
+            {
+                InvoiceTax invoiceTax = new InvoiceTax
+                {
+                    TaxName = taxesFee.Name ?? "N/A",
+                    TaxAmount = (double)taxesFee.Amount
+                };
+                invoiceTaxes.Add(invoiceTax);
+            }
+        }
+        return invoiceTaxes;
     }
 }

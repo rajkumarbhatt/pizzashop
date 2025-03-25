@@ -19,5 +19,7 @@ namespace DAL.ViewModels
         public string? Section { get; set; }
         public List<InvoiceItem>? InvoiceItems { get; set; }
         public double? SubTotal { get; set; }
+        public List<InvoiceTax>? InvoiceTaxes { get; set; }
+        public double? Total { get; set; }
     }
 }

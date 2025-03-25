@@ -42,7 +42,6 @@ public class OrderController : Controller
             {
                 var worksheet = workbook.Worksheets.Add("Orders");
 
-                // Adding header information
                 worksheet.Range("A2:B3").Merge();
                 worksheet.Range("C2:F3").Merge();
                 worksheet.Range("H2:I3").Merge();
@@ -83,7 +82,6 @@ public class OrderController : Controller
                 worksheet.Cell("H5").Value = "No. Of Records:";
                 worksheet.Cell("J5").Value = orders.Count;
 
-                // Styling header information
                 worksheet.Range("A2:B3").Style.Fill.BackgroundColor = XLColor.FromHtml("#0066A7");
                 worksheet.Range("A2:B3").Style.Font.FontColor = XLColor.White;
                 worksheet.Range("A2:B3").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
@@ -133,7 +131,6 @@ public class OrderController : Controller
                 worksheet.Range("J5:M6").Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                 worksheet.Range("J5:M6").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
 
-                // Adding table headers
                 worksheet.Cell("A9").Value = "Id";
                 worksheet.Cell("B9").Value = "Date";
                 worksheet.Cell("E9").Value = "Customer";
@@ -142,7 +139,6 @@ public class OrderController : Controller
                 worksheet.Cell("M9").Value = "Rating";
                 worksheet.Cell("O9").Value = "Total Amount";
 
-                // Styling table headers
                 var headerRange = worksheet.Range("A9:O9");
                 headerRange.Style.Fill.BackgroundColor = XLColor.FromHtml("#0066A7");
                 headerRange.Style.Font.FontColor = XLColor.White;
@@ -150,7 +146,6 @@ public class OrderController : Controller
                 headerRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                 headerRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-                // Adding order data
                 int row = 10;
                 foreach (var order in orders)
                 {
@@ -162,12 +157,10 @@ public class OrderController : Controller
                     worksheet.Cell(row, 13).Value = order.AvgRating;
                     worksheet.Cell(row, 15).Value = order.TotalAmount;
 
-                    // Styling the data rows
                     var dataRowRange = worksheet.Range(row, 1, row, 15);
                     dataRowRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     dataRowRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
 
-                    //aligning the data
                     dataRowRange.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
                     dataRowRange.Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
                     
@@ -179,11 +172,6 @@ public class OrderController : Controller
 
                 worksheet.Cell(row - 1, 16).Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
-
-                //add border to last column
-                worksheet.Columns().AdjustToContents();
-
-                // Adding the logo (adjust path accordingly)
                 var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "logos", "pizzashop_logo.png");
                 if (System.IO.File.Exists(imagePath))
                 {

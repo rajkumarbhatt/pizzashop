@@ -10,4 +10,5 @@ public interface IOrderService
     public OrderDetailsViewModel GetOrderDetails(int orderId);
     public List<InvoiceItem> GetInvoiceItems(int orderId);
     public List<InvoiceModifiers> GetInvoiceModifiers(int invoiceItemId);
+    public List<InvoiceTax> GetInvoiceTaxes(int orderId, double subTotal);
 }
