@@ -183,6 +183,10 @@ namespace BLL.Services
                 if (addItemViewModel.Image != null)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                    if (!addItemViewModel.Image.ContentType.Contains("image"))
+                    {
+                        return "thisisnotacceptable";
+                    }
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
@@ -216,6 +220,10 @@ namespace BLL.Services
                 if (addItemViewModel.Image != null)
                 {
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                    if (!addItemViewModel.Image.ContentType.Contains("image"))
+                    {
+                        return "thisisnotacceptable";
+                    }
                     var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
                     using (var fileStream = new FileStream(path, FileMode.Create))
                     {
@@ -231,6 +239,10 @@ namespace BLL.Services
 
         public IActionResult UpdateItemModifierGroup(AddItemViewModel addItemViewModel, string itemName, int userId)
         {
+            if (itemName == null)
+            {
+                return new JsonResult(new { success = false, message = "Invalid Image" });
+            }
             if (addItemViewModel.Id == -1)
             {
                 if (string.IsNullOrEmpty(addItemViewModel.ModifierGroupIds))
