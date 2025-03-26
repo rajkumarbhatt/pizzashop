@@ -548,6 +548,7 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Item).WithMany(p => p.OrderItems)
@@ -569,6 +570,7 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.ModifierId).HasColumnName("modifier_id");
             entity.Property(e => e.OrderItemId).HasColumnName("order_item_id");
+            entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.OrderModifierCreatedByNavigations)

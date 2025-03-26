@@ -15,6 +15,8 @@ public partial class OrderModifier
 
     public int UpdatedBy { get; set; }
 
+    public double? Price { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Modifier Modifier { get; set; } = null!;

@@ -15,7 +15,7 @@
             <div class="custom-order-border">@Model.OrderStatus</div>
         </div>
         <div>
-            <button id="exportOrdersBtn" class="d-none d-md-block button-styles" style="height: 44px; width: 120px;">
+            <button id="downloadInvoice" onclick="downloadPdfInvoice(@Model.Id)" class="d-none d-md-block button-styles" style="height: 44px; width: 120px;">
                 <a class="text-decoration-none text-white add-user-link">
                     <img src="~/images/icons/export.svg" class="p-1" style="width: 40px;" alt="">
                     <span class="text-white fw-bold">Export</span>
@@ -66,7 +66,15 @@
             </span>
         </div>
         <div>
-            <p>Table: @Model.Table</p>
+            @{
+                string tables = "";
+                foreach (var table in Model.Tables)
+                {
+                    tables += table.Name + ", ";
+                }
+                tables = tables.Remove(tables.Length - 2);
+            }
+            <p>Table: @tables</p>
             <p>Section: @Model.Section</p>
         </div>
     </div>
@@ -89,10 +97,40 @@
             {
                 <tr>
                     <td>@item.SrNo</td>
-                    <td>@item.Item</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price</td>
-                    <td class="text-end">@item.TotalAmount</td>
+                    <td>
+                        @item.Item
+                        <ul>
+                            @foreach (var modifier in item.InvoiceModifiers)
+                            {
+                                <li>@modifier.Item</li>
+                            }
+                        </ul>
+                    </td>
+                    <td class="d-flex flex-column">
+                        <span>@item.Quantity</span>
+                        @foreach (var modifier in item.InvoiceModifiers)
+                        {
+                            <span>@modifier.Quantity</span>
+                        }
+                    </td>
+                    <td class="">
+                        <div class="d-flex flex-column ">
+                            <span>₹@item.Price</span>
+                            @foreach (var modifier in item.InvoiceModifiers)
+                            {
+                                <span>₹@modifier.Price</span>
+                            }
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex flex-column">
+                            <span>₹@item.TotalAmount</span>
+                            @foreach (var modifier in item.InvoiceModifiers)
+                            {
+                                <span>₹@modifier.TotalAmount</span>
+                            }
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -100,19 +138,38 @@
     <div class="d-flex flex-column align-items-end">
         <table ">
             <tr>
-                <td style="font-weight: 550;">Sub Total:</td>
-                <td>@Model.SubTotal</td>
+                <td style=" font-weight: 550;">Sub Total:</td>
+            <td class="text-end">₹@Model.SubTotal</td>
             </tr>
             @foreach (var tax in @Model.InvoiceTaxes)
             {
                 <tr>
                     <td style="font-weight: 550;">@tax.TaxName:</td>
-                    <td>@tax.TaxAmount</td>
+                    <td class="text-end">₹@tax.TaxAmount</td>
                 </tr>
             }
             <tr>
                 <td style="font-weight: 550; ">Total:</td>
-                <td>@Model.Total</td>
+                <td class="text-end">₹@Model.Total</td>
             </tr>
         </table>
-</div>
+    </div>
+
+    <script>
+        function downloadPdfInvoice(orderId) {
+            console.log(orderId);
+            const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
+            fetch(url, { method: "GET" })
+                .then(response => response.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Order_${orderId}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => console.error(error));
+        }
+    </script>

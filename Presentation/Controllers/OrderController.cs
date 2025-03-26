@@ -1,7 +1,6 @@
 using BLL.Interfaces;
 using ClosedXML.Excel;
 using DAL.DBContext;
-using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -197,5 +196,11 @@ public class OrderController : Controller
     public IActionResult OrderDetails (int orderId) {
         OrderDetailsViewModel orderDetailsViewModel = _orderService.GetOrderDetails(orderId);
         return View(orderDetailsViewModel);
+    }
+
+    [HttpGet]
+    public IActionResult DownloadInvoice (int orderId) {
+        var pdfBytes =_orderService.GenerateInvoice(orderId);
+        return File(pdfBytes, "application/pdf", "Invoice.pdf");
     }
 }

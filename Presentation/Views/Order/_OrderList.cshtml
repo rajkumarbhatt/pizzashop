@@ -24,7 +24,7 @@
                 <td class="rating" data-rating="@order.AvgRating"></td>
                 <td>@order.TotalAmount</td>
                 <td>
-                    <img src="~/images/icons/pdf-icon.svg" class="small-image" alt="">
+                    <img onclick="downloadPdfInvoice(@order.Id)" src="~/images/icons/pdf-icon.svg" class="small-image" alt="">
                     <img onclick="viewOrderDetails(@order.Id)" src="~/images/icons/view-eye.svg" class="small-image" alt="">
                 </td>
             </tr>
@@ -57,6 +57,23 @@
 </div>
 
 <script>
+
+    function downloadPdfInvoice(orderId) {
+        console.log(orderId);
+        const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Order_${orderId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error(error));
+    }
 
     function viewOrderDetails(orderId) {
         console.log(orderId);

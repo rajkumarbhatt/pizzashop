@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="font-family: sans-serif">
+    <div>
+        <div style="display: flex; align-items:center; justify-content:center">
+            <img src="C:/Users/pci88/Desktop/Internship-Tasks/PizzaShop/Presentation/wwwroot/images/logos/pizzashop_logo.png" alt="PIZZASHOP" style="width: 70px; display: inline-block;" />
+            <p style="color: #0066a7; font-size: 25px; font-weight: 600; display: inline-block; vertical-align: middle; margin-left: 10px;">PIZZASHOP</p>
+        </div>
+        <table style="width: 100%; margin-top: 20px;">
+            <tr>
+                <td style="vertical-align: top; padding-left: 30px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #0066a7">Customer Details</p>
+                    <div style="line-height: 5px">
+                        <p>Name: {{customerName}}</p>
+                        <p>Phone: {{customerPhone}}</p>
+                    </div>
+                </td>
+                <td style="vertical-align: top; padding-left: 200px;">
+                    <p style="font-size: 16px; font-weight: 600; color: #0066a7">Order Details</p>
+                    <div style="line-height: 5px; ">
+                        <p>Invoice Number: {{invoiceNumber}}</p>
+                        <p>Date: {{invoiceDate}}</p>
+                        <p>Section: {{section}}</p>
+                        <p>Table: {{table}}</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <!-- array of size of columns -->
+         <div style="margin-top: 20px;">
+               <table style="border: none; padding-left: 30px; width: 100%; padding-right: 30px;">
+                  <thead>
+                     <tr style="color: white;">
+                           <th style="background-color: #0066a7; padding: 5px;">Sr.No.</th>
+                           <th style="background-color: #0066a7; padding: 5px;">Product</th>
+                           <th style="background-color: #0066a7; padding: 5px;">Quantity</th>
+                           <th style="background-color: #0066a7; padding: 5px;">Unit Price</th>
+                           <th style="background-color: #0066a7; padding: 5px;">Total</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     {{invoiceItems}}
+                  </tbody>
+               </table>
+               <table style="border: none; padding-left: 30px; width: 100%; padding-right: 30px;">
+                  <tbody>
+                     {{invoiceTaxes}}
+                  </tbody>
+               </table>
+               <div>
+                  <p style="font-size: 16px; font-weight: 600; color: #0066a7; padding-left: 30px;">Payment Information:</p> 
+                  <p style="padding-left: 30px;">Payment Method: {{paymentType}}</p>
+               </div>
+         </div>
+    </div>
+    <div style="display: flex; align-items:center; justify-content:center">
+      <p style="color: #0066a7; font-size: 18px; font-weight: 600; display: inline-block; vertical-align: middle; margin-left: 10px;">THANK YOU!</p>
+    </div>
+</body>
+</html>
