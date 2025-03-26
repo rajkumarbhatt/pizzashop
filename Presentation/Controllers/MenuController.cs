@@ -161,6 +161,10 @@ namespace Presentaion.Controllers
             {
                 return new JsonResult(new { success = false, message = "Item already exists" });
             }
+            if (itemName == "thisisnotacceptable")
+            {
+                return new JsonResult(new { success = false, message = "Invalid Image " });
+            }
             return _categoryService.UpdateItemModifierGroup(addItemViewModel, itemName, userId);
         }
 
