@@ -1,7 +1,0 @@
-# pack-refs with: peeled fully-peeled sorted 
-00acdd61252d1aed5484e8bad575dd73610c4c03 refs/heads/customer-module
-ed35e1705093fd2806843346fca42ac0e6402cf4 refs/heads/main
-1db2e0573f7e12caccb4124d957c7cc1318c6d4e refs/heads/menu-module
-00acdd61252d1aed5484e8bad575dd73610c4c03 refs/heads/order-module
-b5eca7cdbc2718c9a0acb67bc40123a7ed692580 refs/heads/table-module
-795770ac5c10b3dc565d628c9c2b9a1ff3a33498 refs/heads/tax-module
