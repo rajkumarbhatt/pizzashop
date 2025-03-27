@@ -1,0 +1,74 @@
+@model DAL.ViewModels.CustomerHistory
+
+@if (Model != null)
+{
+    <div class="modal fade" id="CustomerDetailsModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered customer-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTableTitle">Customer History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        <div class="col-12 row justify-content-between">
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers " style="border: 1px solid gray;">
+                                <p class="">Name</p>
+                                <p class="fw-bold">@Model.Name</p>
+                            </div>
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers mt-2 mt-sm-0" style="border: 1px solid gray;">
+                                <p class="">Average Bill</p>
+                                <p class="fw-bold">@Model.AverageBill</p>
+                            </div>
+                        </div>
+                        <div class="col-12 row justify-content-between mt-2">
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers" style="border: 1px solid gray;">
+                                <p class="">Mobile Number</p>
+                                <p class="fw-bold">@Model.PhoneNumber</p>
+                            </div>
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers mt-2 mt-sm-0" style="border: 1px solid gray;">
+                                <p class="">Coming Since</p>
+                                <p class="fw-bold">@Model.ComingSince</p>
+                            </div>
+                        </div>
+                        <div class="col-12 row justify-content-between mt-2">
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers" style="border: 1px solid gray;">
+                                <p class="">Maximum Order</p>
+                                <p class="fw-bold">@Model.MaxOrderAmount</p>
+                            </div>
+                            <div class=" d-flex justify-content-between p-2 custom-width-customers mt-2 mt-sm-0" style="border: 1px solid gray;">
+                                <p class="">Visits</p>
+                                <p class="fw-bold">@Model.Visits</p>
+                            </div>
+                        </div>
+                        <div class="col-12 row justify-content-between mt-2 table-responsive">
+                            <table id="ordersTable" class="table table-responsive table-hover" style="white-space: nowrap;">
+                                <thead class="color-head-order" style="font-size: large;">
+                                    <tr class="text-start">
+                                        <th>Order Date</th>
+                                        <th>Order Type</th>
+                                        <th>Payment</th>
+                                        <th>Items</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.Orders)
+                                    {
+                                        <tr>
+                                            <td>@order.OrderDate</td>
+                                            <td>@order.OrderType</td>
+                                            <td>@order.PaymentType</td>
+                                            <td>@order.NumberOfItems</td>
+                                            <td>@order.OrderAmount</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

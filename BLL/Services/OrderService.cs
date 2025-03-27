@@ -203,7 +203,7 @@ public class OrderService : IOrderService
             CustomerName = o.Customer.Name ?? "N/A",
             CustomerEmail = o.Customer.Email ?? "N/A",
             CustomerPhone = o.Customer.Phone ?? "N/A",
-            NumberOfPeople = o.OrderTableMappings.Select(otm => otm.Noofpersons).FirstOrDefault().ToString() ?? "N/A",
+            NumberOfPeople = "0",
             Tables = o.OrderTableMappings.Select(otm => otm.Table).ToList(),
             Section = o.OrderTableMappings.Select(otm => otm.Table.Section.Name).FirstOrDefault() ?? "N/A",
             InvoiceItems = o.OrderItems.Select(oi => new InvoiceItem
@@ -238,6 +238,13 @@ public class OrderService : IOrderService
                 orderDetailsViewModel.SubTotal += im.TotalAmount;
             }
         }
+        List<OrderTableMapping>otmap = _context.OrderTableMappings.Where(otm => otm.Orderid == orderId).ToList();
+        int NumberOfPeople = 0;
+        foreach (OrderTableMapping otm in otmap)
+        {
+            NumberOfPeople += otm.Noofpersons;
+        }
+        orderDetailsViewModel.NumberOfPeople = NumberOfPeople.ToString();
         orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
         orderDetailsViewModel.OrderDuration = orderDetailsViewModel.OrderDuration.Substring(0, orderDetailsViewModel.OrderDuration.LastIndexOf("."));
         var days = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
@@ -310,8 +317,8 @@ public class OrderService : IOrderService
             }
             tables = tables.TrimEnd(',');
             htmlContent = htmlContent.Replace("{{table}}", tables);
-            //for loop for invoice items
             string invoiceItems = "";
+            int srNo = 1;
             foreach (InvoiceItem invoiceItem in orderDetailsViewModel.InvoiceItems)
             {
                 string invoiceModifiers = "";
@@ -319,7 +326,7 @@ public class OrderService : IOrderService
                 {
                     invoiceModifiers += "<tr><td></td><td>" + invoiceModifier.Item + "</td><td>" + invoiceModifier.Quantity + "</td><td >" + invoiceModifier.Price + "</td><td style='text-align: right;'>" + invoiceModifier.TotalAmount + "</td></tr>";
                 }
-                invoiceItems += "<tr><td>" + invoiceItem.SrNo + "</td><td>" + invoiceItem.Item + "</td><td>" + invoiceItem.Quantity + "</td><td> " + invoiceItem.Price + "</td><td style='text-align: right;'>" + invoiceItem.TotalAmount + "</td></tr>" + invoiceModifiers;
+                invoiceItems += "<tr><td>" + srNo++ + "</td><td>" + invoiceItem.Item + "</td><td>" + invoiceItem.Quantity + "</td><td> " + invoiceItem.Price + "</td><td style='text-align: right;'>" + invoiceItem.TotalAmount + "</td></tr>" + invoiceModifiers;
             }
             htmlContent = htmlContent.Replace("{{invoiceItems}}", invoiceItems);
             string invoiceTaxes = "<tr><td></td><td>SubTotal</td><td></td><td></td><td style='text-align: right;'>" + orderDetailsViewModel.SubTotal + "</td></tr>";

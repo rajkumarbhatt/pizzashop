@@ -93,10 +93,11 @@
             </tr>
         </thead>
         <tbody class="">
+            @{var row = 1;}
             @foreach (var item in Model.InvoiceItems)
             {
                 <tr>
-                    <td>@item.SrNo</td>
+                    <td>@row</td>
                     <td>
                         @item.Item
                         <ul>
@@ -131,6 +132,7 @@
                             }
                         </div>
                     </td>
+                    @{row++;}
                 </tr>
             }
         </tbody>

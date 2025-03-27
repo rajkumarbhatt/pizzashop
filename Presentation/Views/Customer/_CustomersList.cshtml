@@ -1,0 +1,229 @@
+@model DAL.ViewModels.CustomerViewModel
+<table id="ordersTable" class="table table-responsive table-hover"  style="white-space: nowrap;">
+        <thead class="color-head-order">
+            <tr class="text-start">
+                <th>Name <img src="~/images/icons/sorting-icon-table.svg" id="sortNameCustomer" class="small-image"></th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortCustomerDate" class="small-image"></th>
+                <th>Total Order <img src="~/images/icons/sorting-icon-table.svg" id="sortTotalOrdersCustomers" class="small-image"></th>
+            </tr>
+        </thead>
+    <tbody>
+        @foreach(var customer in @Model.Customers)
+        {
+            <tr class="cursor-pointer" onclick="showCustomerDetails(@customer.Id)">
+                <td>@customer.Name</td>
+                <td>@customer.Email</td>
+                <td>@customer.PhoneNumber</td>
+                <td>@customer.Date</td>
+                <td>@customer.TotalOrders</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
+    <p>Items per page: </p>
+    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+        onchange="changePageSizeOrders(this.value)" id="pageSizeSelectOrders">
+        <option value="5" selected="@(Model.pageSize == 5 ? "selected" : null)">5</option>
+        <option value="10" selected="@(Model.pageSize == 10 ? "selected" : null)">10</option>
+        <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
+    </select>
+    <p class="px-1">
+        Showing @((Model.pageIndex - 1) * Model.pageSize + 1) - 
+        @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalCustomers)) of 
+        @Model.totalCustomers
+    </p>
+
+
+    <div>
+            </div>
+    <button id="previousButtonOrders" class="p-1 px-2" @(Model.pageIndex == 1 ? "disabled" : "")>&lt;</button>
+
+    <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.pageIndex == Model.totalPages ? "disabled" : "")>&gt;</button>
+    </div>
+</div>
+
+<script>
+
+    $("#previousButtonOrders").click(function () {
+        var pageIndex = @Model.pageIndex - 1;
+        var pageSize = @Model.pageSize;
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue,  time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate},
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    $("#nextButtonOrders").click(function () {
+        var pageIndex = @Model.pageIndex + 1;
+        var pageSize = @Model.pageSize;
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    function changePageSizeOrders(pageSize) {
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    }
+
+    $("#searchInputCustomers").on("input", function () {
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(function () {
+            var searchValue = $("#searchInputCustomers").val().toLowerCase();
+            var pageSize = @Model.pageSize;
+            var time = $("#CustomersTimeSelect").val();
+            var fromDate = $("#fromDate").val();
+            var toDate = $("#toDate").val();
+            $.ajax({
+                url: '@Url.Action("FilterCustomers", "Customer")', 
+                type: "GET",
+                data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+                success: function (data) {
+                    $("#customersTablePartial").html(data);
+                }
+            });
+        }, 500);
+    });
+
+    $("#sortNameCustomer").click(function () {
+        sortColumn = "name";
+        if (isNameAsc) {
+            sortDirection = "desc";
+            isNameAsc = false;
+        } else {
+            isNameAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var pageSize = @Model.pageSize;
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    $("#sortCustomerDate").click(function () {
+        sortColumn = "date";
+        if (isDateAsc) {
+            sortDirection = "desc";
+            isDateAsc = false;
+        } else {
+            isDateAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var pageSize = @Model.pageSize;
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    $("#sortTotalOrdersCustomers").click(function () {
+        sortColumn = "totalOrders";
+        if (isTotalOrdersAsc) {
+            sortDirection = "desc";
+            isTotalOrdersAsc = false;
+        } else {
+            isTotalOrdersAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var pageSize = @Model.pageSize;
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    $("#sortTotalAmount").click(function () {
+        console.log("sortTotalAmount");
+        sortColumn = "totalAmount";
+        if (isTotalAmountAsc) {
+            sortDirection = "desc";
+            isTotalAmountAsc = false;
+        } else {
+            isTotalAmountAsc = true;
+            sortDirection = "asc";
+        }
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var pageSize = @Model.pageSize;
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: 1, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    });
+
+    function showCustomerDetails(id) {
+        console.log(id);
+        $.ajax({
+            url: '@Url.Action("GetCustomerDetails", "Customer")',
+            type: "GET",
+            data: { id: id },
+            success: function (data) {
+                $("#customerDetailsModal").html(data);
+                $("#CustomerDetailsModal").modal("show");
+            }
+        });
+    }
+</script>

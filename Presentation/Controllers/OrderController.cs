@@ -3,9 +3,11 @@ using ClosedXML.Excel;
 using DAL.DBContext;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Presentaion.Controllers;
 
 namespace Presentation.Controllers;
 
+[CustomAuth]
 public class OrderController : Controller
 {
     private readonly IOrderService _orderService;

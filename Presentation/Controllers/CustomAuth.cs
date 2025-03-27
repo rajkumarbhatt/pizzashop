@@ -33,6 +33,8 @@ namespace Presentaion.Controllers
                 { "Menu", "Menu" },
                 { "TableAndSection", "TableAndSection" },
                 { "TaxAndFee", "TaxAndFee" },
+                { "Order", "Order" },
+                { "Customer", "Customers" },
                 { "account", "Dashboard"}
             };
             PizzaShopContext db = new PizzaShopContext();

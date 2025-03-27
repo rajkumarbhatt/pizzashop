@@ -473,6 +473,9 @@ td{
   .table-modal {
       max-width: 70%;
   }
+  .customer-modal {
+      max-width: 80%;
+  }
 }
 
 @media (min-width: 768px) {
@@ -482,6 +485,9 @@ td{
   .table-modal {
       max-width: 55%;
   }
+  .customer-modal {
+      max-width: 65%;
+  }
 }
 @media (min-width: 1000px) {
   .modal-add-item {
@@ -490,6 +496,9 @@ td{
   .table-modal {
       max-width: 45%;
   }
+  .customer-modal {
+      max-width: 55%;
+  }
 }
 @media (min-width: 1200px) {
   .modal-add-item {
@@ -497,6 +506,9 @@ td{
   }
   .table-modal {
       max-width: 35%;
+  }
+  .customer-modal {
+      max-width: 50%;
   }
 }
 
@@ -782,4 +794,15 @@ td{
 
 .fw-bold23 {
   font-weight: 500;
+}
+
+/* Customer Styles */
+.custom-width-customers {
+  width: 49.5%;
+}
+
+@media (max-width: 576px) {
+  .custom-width-customers {
+      width: 99%;
+  }
 }

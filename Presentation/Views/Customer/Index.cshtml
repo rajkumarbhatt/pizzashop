@@ -1,1 +1,179 @@
-<h1>Customers</h1>
+@model DAL.ViewModels.CustomerViewModel
+
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">Customers</h1>
+    <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box">
+            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInputCustomers"
+                placeholder="Search">
+            <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+        </div>
+        <p id="exportOrdersBtn2" class="delete-styles d-block d-md-none">
+            <a id="exportBtnMobile" class="text-decoration-none text-black   add-user-link">
+                <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
+            </a>
+        </p>
+        <div class="d-none d-md-block">
+            <select name="" onchange="FilerOrdersBasedOnTime(this.value)" id="CustomersTimeSelect"
+                class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;">
+                <option value="All Time">All Time</option>
+                <option value="Today">Today</option>
+                <option value="This Week">This Week</option>
+                <option value="This Month">This Month</option>
+                <option value="Custom Date">Custom Date</option>
+            </select>
+        </div>
+        <button id="exportOrdersBtn" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
+            <a class="text-decoration-none text-white add-user-link">
+                <img src="~/images/icons/export.svg" class="p-1" style="width: 40px;" alt="">
+                <span class="text-white fw-bold">Export</span>
+            </a>
+        </button>
+    </div>
+</div>
+
+<!-- table partial-->
+<div class="form-bg p-2 my mx-4 table-responsive my-3 shadow" id="customersTablePartial">
+    <partial name="_CustomersList" model="@Model" />
+</div>
+
+
+@* custom datepicker modal *@
+<div class="modal fade" id="CustomDatepickerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex mx-auto gap-3">
+                <div class="input-group search-box cursor-pointer" style="width: 200px;">
+                    <div class="form-floating">
+                        <input type="text" class="form-control cursor-pointer search-input datepicker"
+                            style="height: 44px;" id="fromDate" value="dd-mm-yyyy">
+                        <label for="fromDate" class="form-label cursor-pointer">From Date</label>
+                    </div>
+                    <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon"
+                        alt="">
+                </div>
+                <div class="input-group search-box cursor-pointer" style="width: 200px;">
+                    <div class="form-floating">
+                        <input type="text" class="form-control cursor-pointer search-input datepicker"
+                            style="height: 44px;" id="toDate" value="dd-mm-yyyy">
+                        <label for="toDate" class="form-label cursor-pointer">To Date</label>
+                    </div>
+                    <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon"
+                        alt="">
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button id="ApplyDateChangesButton" type="submit" class="btn btn-primary px-3">Submit</button>
+                <a><button data-bs-dismiss="modal" aria-label="Close" type="button" class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* customer detials modal *@
+<div id="customerDetailsModal">
+    <partial name="_CustomerDetails" model="@Model.CustomerHistory" />
+</div>
+
+<script>
+
+    var isNameAsc = true;
+    var isDateAsc = true;
+    var isTotalOrdersAsc = true;
+    
+    var sortColumn = "name";
+    var sortDirection = "asc";
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true
+        }).on('show', function () {
+            $(this).attr('readonly', true); 
+        });
+    });
+
+    function FilerOrdersBasedOnTime (value) {
+        if (value == "Custom Date") {
+            $("#CustomDatepickerModal").modal("show");
+            $("#ApplyDateChangesButton").off("click").click(function () {
+                var pageIndex = 1;
+                var pageSize = $("#pageSizeSelectOrders").val();
+                var searchValue = $("#searchInputCustomers").val().toLowerCase();
+                var time = $("#CustomersTimeSelect").val();
+                var fromDate = $("#fromDate").val();
+                var toDate = $("#toDate").val();
+                $.ajax({
+                    url: '@Url.Action("FilterCustomers", "Customer")', 
+                    type: "GET",
+                    data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue,  time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate},
+                    success: function (data) {
+                        $("#customersTablePartial").html(data);
+                        $("#CustomDatepickerModal").modal("hide");
+                    }
+                });
+                return;
+            });
+        }
+        var pageIndex = 1;
+        var pageSize = $("#pageSizeSelectOrders").val();
+        var searchValue = $("#searchInputCustomers").val().toLowerCase();
+        var time = $("#CustomersTimeSelect").val();
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        $.ajax({
+            url: '@Url.Action("FilterCustomers", "Customer")', 
+            type: "GET",
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue,  time: time, sort: sortColumn, order: sortDirection},
+            success: function (data) {
+                $("#customersTablePartial").html(data);
+            }
+        });
+    }
+
+    document.getElementById("exportOrdersBtn").addEventListener("click", function () {
+        const time = encodeURIComponent($("#CustomersTimeSelect").val());
+        const searchValue = encodeURIComponent($("#searchInputCustomers").val().toLowerCase());
+        const fromDate = encodeURIComponent($("#fromDate").val());
+        const toDate = encodeURIComponent($("#toDate").val());
+        const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
+
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Orders.xlsx";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("Error exporting data:", error));
+    });
+
+    document.getElementById("exportOrdersBtn2").addEventListener("click", function () {
+        const time = encodeURIComponent($("#CustomersTimeSelect").val());
+        const searchValue = encodeURIComponent($("#searchInputCustomers").val().toLowerCase());
+        const fromDate = encodeURIComponent($("#fromDate").val());
+        const toDate = encodeURIComponent($("#toDate").val());
+        const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
+
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const link = document.createElement("a");
+                link.href = window.URL.createObjectURL(blob);
+                link.download = "Orders.xlsx";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            })
+            .catch(error => console.error("Error exporting data:", error));
+    });
+</script>
