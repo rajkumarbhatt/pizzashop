@@ -510,6 +510,7 @@ public partial class PizzaShopContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.IsDeleted).HasColumnName("is_deleted");
             entity.Property(e => e.PaymentMode)
                 .HasMaxLength(50)
                 .HasColumnName("payment_mode");
