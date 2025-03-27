@@ -1,4 +1,0 @@
-Presentation/bin/Debug/net8.0/runtimes/win-x64/native/libcef.dll filter=lfs diff=lfs merge=lfs -text
-Presentation/bin/Debug/net8.0/runtimes/win-x86/native/libcef.dll filter=lfs diff=lfs merge=lfs -text
-Presentation/bin/Debug/net8.0/runtimes/x86_64/native/IronPdfInterop.so filter=lfs diff=lfs merge=lfs -text
-Presentation/bin/Debug/net8.0/runtimes/arm64-v8a/native/IronPdfInterop.so filter=lfs diff=lfs merge=lfs -text
