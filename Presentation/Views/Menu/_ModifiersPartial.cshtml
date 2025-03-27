@@ -846,6 +846,7 @@
                 $("#AddModifierModalTitle").text("Edit Modifier");
                 $("#AddModifierModal").modal('show');
                 $("#modifierGroupId21").val(modifierGroupId);
+                makeThisModifierGroupActive(modifierGroupId);
             },
             error: function (error) {
                 console.log(error);

@@ -202,7 +202,7 @@ public class OrderController : Controller
 
     [HttpGet]
     public IActionResult DownloadInvoice (int orderId) {
-        var pdfBytes =_orderService.GenerateInvoice(orderId);
+        byte[] pdfBytes =_orderService.GenerateInvoice(orderId);
         return File(pdfBytes, "application/pdf", "Invoice.pdf");
     }
 }

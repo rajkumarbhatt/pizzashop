@@ -615,6 +615,22 @@
         });
     });
 
+    function makeThisSectionActive (sectionId) {
+        var divCustomIdTable = "divTable" + sectionId;
+        var divCustomIdTable2 = "divTable" + sectionId + "2";
+        var divCustomId4 = "divTable" + sectionId + "4";
+        var blueDotId = "blueDotTable" + sectionId;
+        var grayDotId = "grayDotTable" + sectionId;
+        $(".blue-dot-table").addClass('d-none');
+        $(".gray-dot-table").removeClass('d-none');
+        $(".active-category-div").removeClass('active-category-div');
+        $(".active-nav-item").removeClass('active-nav-item');
+        $("#" + divCustomId4).addClass('active-nav-item');
+        $("#" + blueDotId).removeClass('d-none');
+        $("#" + grayDotId).addClass('d-none');
+        $("#SectionId").val(sectionId);
+    }
+
     function addTable() {
         var tableName = document.getElementById("TableName").value;
         var tableSection = document.getElementById("TableSection").value;
@@ -648,6 +664,7 @@
                         data: { pageIndex: pageIndex, pageSize: @Model.PageSize, sectionId: tableSection, searchValue: "" },
                         success: function (data) {
                             $("#tablePartialView").html(data);
+                            makeThisSectionActive(tableSection);
                         }
                     });
                     $("#addTableModal").modal("hide");

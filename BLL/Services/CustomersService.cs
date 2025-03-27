@@ -37,6 +37,7 @@ public class CustomersService : ICustomerService
             };
             customers.Add(customerTable);
         }
+        customers = customers.OrderBy(c => c.Name).ToList();
         return customers;
     }
 
