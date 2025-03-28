@@ -10,4 +10,5 @@ public interface IOrderService
     public OrderDetailsViewModel GetOrderDetails(int orderId);
     public List<InvoiceTax> GetInvoiceTaxes(int orderId, OrderDetailsViewModel orderDetailsViewModel);
     public byte[] GenerateInvoice(int orderId);
+    public byte[] ExportOrders(string status, string time, string searchValue);
 }

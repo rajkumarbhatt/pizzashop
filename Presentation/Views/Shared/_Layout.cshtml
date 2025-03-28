@@ -19,7 +19,7 @@
 
 
 </head>
-
+@{var RoleId = Context.Session.GetInt32("RoleId");}
 <body>
     @* toaster *@
     <div class="loader-container d-none">
@@ -65,7 +65,6 @@
                             <span class="fw-bold sidebar-font " id="UserList-span">Users</span>
                         </a>
                     }
-                    var RoleId = Context.Session.GetInt32("RoleId");
 
                     @if (permission.Name == "RoleAndPermission" && permission.CanView && @RoleId == 1)
                     {
@@ -162,7 +161,6 @@
                                     <span class="fw-bold sidebar-font " id="UserList-span-mobile">Users</span>
                                 </a>
                             }
-                            var RoleId = Context.Session.GetInt32("RoleId");
 
                             @if (permission.Name == "RoleAndPermission" && permission.CanView && @RoleId == 1)
                             {
@@ -231,6 +229,10 @@
                         <img src="~/images/icons/hamburger.svg" alt="" class=" hamburger-image">
                     </button>
                 </div>
+                        @if(@RoleId == 2)
+                        {
+                            <img id="redirectToOrderApp" src="~/images/icons/order-app-mobile-icon.svg" class="object-fit-cover navbar-image profile-image-border cursor-pointer" alt="">
+                        }
                 <div class="dropdown">
                     <button class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                         @{

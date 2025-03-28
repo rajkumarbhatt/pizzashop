@@ -18,37 +18,7 @@ namespace Presentaion.Controllers
         }
         public IActionResult Index(int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
-            var categories = _categoryService.GetCategories();
-            int categoryId = categories.FirstOrDefault()?.Id ?? 0;
-            var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
-            var modifierGroups = _categoryService.GetModifierGroups();
-            var modifierId = modifierGroups.FirstOrDefault()?.Id ?? 0;
-            var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue ?? "");
-            var pageIndexModifier = 1;
-            var pageSizeModifier = 5;
-            var totalModifiers = modifiers.Count;
-            var allModifiers = _categoryService.GetAllModifiers(searchValue ?? "");
-            var TotalPagesModifier = (int)Math.Ceiling(totalModifiers / (double)pageSizeModifier);
-            var menuViewModel = new MenuViewModel
-            {
-                Categories = categories,
-                Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
-                TotalItems = items.Count,
-                ModifierGroups = modifierGroups,
-                Modifiers = modifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
-                PageIndexModifier = pageIndexModifier,
-                PageSizeModifier = pageSizeModifier,
-                TotalPagesModifier = TotalPagesModifier,
-                TotalModifiers = totalModifiers,
-                PageIndexAllModifiers = 1,
-                PageSizeAllModifiers = 5,
-                TotalPagesAllModifiers = (int)Math.Ceiling(allModifiers.Count / (double)pageSize),
-                TotalAllModifiers = allModifiers.Count,
-                AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList()
-            };
+            MenuViewModel menuViewModel = _categoryService.GetMenuViewModel(pageIndex, pageSize, searchValue ?? "");
             return View(menuViewModel);
         }
 
@@ -284,7 +254,7 @@ namespace Presentaion.Controllers
         [HttpGet]
         public IActionResult RefreshItemsPartial(int categoryId = -1,int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
-             var categories = _categoryService.GetCategories();
+            var categories = _categoryService.GetCategories();
             categoryId = categoryId == -1 ? categories.FirstOrDefault()?.Id ?? 0 : categoryId;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var modifierGroups = _categoryService.GetModifierGroups();
@@ -321,11 +291,13 @@ namespace Presentaion.Controllers
         [HttpGet]
         public IActionResult RefreshModifiersPartial(int modifierGroupId, int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
-             var categories = _categoryService.GetCategories();
+            var categories = _categoryService.GetCategories();
             int categoryId = categories.FirstOrDefault()?.Id ?? 0;
             var items = _categoryService.GetItemsBasedOnSearch(categoryId, searchValue ?? "");
             var modifierGroups = _categoryService.GetModifierGroups();
-            var modifierId = modifierGroupId != 0 ? modifierGroupId : modifierGroups.FirstOrDefault()?.Id ?? 0;
+            var modifierId = modifierGroupId == -1 || modifierGroupId == 0
+                ? (modifierGroups.FirstOrDefault()?.Id ?? 1) 
+                : modifierGroupId;
             var modifiers = _categoryService.GetModifiersBasedOnSearch(modifierId, searchValue ?? "");
             var pageIndexModifier = 1;
             var pageSizeModifier = 5;

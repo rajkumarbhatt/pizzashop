@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets\\images\\icons\\change-password.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\clock-table-card.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\clock-table-card.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\cloud.svg",
       "PackagePath": "staticwebassets\\images\\icons\\cloud.svg"
     },
@@ -105,6 +109,22 @@
       "PackagePath": "staticwebassets\\images\\icons\\hide-password.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-clock.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-clock.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-kot.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-kot.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-menu.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-menu.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-tables.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-tables.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\logout.svg",
       "PackagePath": "staticwebassets\\images\\icons\\logout.svg"
     },
@@ -119,6 +139,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\non-veg-icon.svg",
       "PackagePath": "staticwebassets\\images\\icons\\non-veg-icon.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\order-app-mobile-icon.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\order-app-mobile-icon.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\order-value.svg",
@@ -159,6 +183,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\sorting-icon.svg",
       "PackagePath": "staticwebassets\\images\\icons\\sorting-icon.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\table-capacity-kot.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\table-capacity-kot.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\table-details.svg",
@@ -457,6 +485,10 @@
       "PackagePath": "staticwebassets\\images\\item-images\\9d2d8f4a-0fb2-441f-8e28-b67f2dc97a49.jfif"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\a998b806-09f9-4322-a578-c5cb23843da2.jfif",
+      "PackagePath": "staticwebassets\\images\\item-images\\a998b806-09f9-4322-a578-c5cb23843da2.jfif"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\ae5ab747-aa7d-4fa7-8511-18ba5df70d76.jfif",
       "PackagePath": "staticwebassets\\images\\item-images\\ae5ab747-aa7d-4fa7-8511-18ba5df70d76.jfif"
     },
@@ -637,6 +669,10 @@
       "PackagePath": "staticwebassets\\images\\profile-images\\16d8df4f-fa78-437a-8b7a-c4cd45533159.jpg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\19ed1def-328f-4f38-8514-64a10cdf3d3d.jpg",
+      "PackagePath": "staticwebassets\\images\\profile-images\\19ed1def-328f-4f38-8514-64a10cdf3d3d.jpg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\1d4e3542-da46-45cd-959e-21a95b60bce5.jpg",
       "PackagePath": "staticwebassets\\images\\profile-images\\1d4e3542-da46-45cd-959e-21a95b60bce5.jpg"
     },
@@ -655,6 +691,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\2a24592b-7bd5-4edd-8395-0e27309b370d.jfif",
       "PackagePath": "staticwebassets\\images\\profile-images\\2a24592b-7bd5-4edd-8395-0e27309b370d.jfif"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\2c310e6d-1cb2-4edb-8343-cef303fb1c26.svg",
+      "PackagePath": "staticwebassets\\images\\profile-images\\2c310e6d-1cb2-4edb-8343-cef303fb1c26.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\2c9d36a3-0fd5-4ab6-9313-2137ad9be7b3.png",
@@ -791,6 +831,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\84cc32e5-1e14-4965-b541-025f82136016.png",
       "PackagePath": "staticwebassets\\images\\profile-images\\84cc32e5-1e14-4965-b541-025f82136016.png"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\8787bd08-d0f6-40ed-ae28-e64a7da4ad49.svg",
+      "PackagePath": "staticwebassets\\images\\profile-images\\8787bd08-d0f6-40ed-ae28-e64a7da4ad49.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\8d3e702f-c971-4091-9d26-a7be9ffba011.png",

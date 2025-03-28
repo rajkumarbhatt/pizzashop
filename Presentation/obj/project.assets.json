@@ -5992,6 +5992,7 @@
         "dependencies": {
           "AspNetCoreHero.ToastNotification": "1.1.0",
           "BCrypt.Net-Next": "4.0.3",
+          "ClosedXML": "0.104.2",
           "DAL": "1.0.0",
           "MailKit": "4.10.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.0",

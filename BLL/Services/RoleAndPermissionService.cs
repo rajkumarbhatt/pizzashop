@@ -22,7 +22,10 @@ namespace BLL.Services
 
         public List<Permission> GetPermissions()
         {
-            return _context.Permissions.OrderBy(p => p.Id).ToList();
+            List<Permission> permissions = _context.Permissions.OrderBy(p => p.Id).ToList();
+            permissions.RemoveAt(8);
+            permissions.RemoveAt(7);
+            return permissions;
         }
 
         public List<RolePermission> GetRolePermissions(int roleId)

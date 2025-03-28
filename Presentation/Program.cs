@@ -13,9 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession(opt=>{
-    opt.IdleTimeout = TimeSpan.FromMinutes(30);
-});
+builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor(); // Register IHttpContextAccessor here
 builder.Services.AddDbContext<PizzaShopContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ILoginService, LoginService>();
@@ -32,6 +30,7 @@ builder.Services.AddScoped<ITableAndSectionService, TableAndSectionService>();
 builder.Services.AddScoped<ITaxAndFeeService, TaxAndFeeService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICustomerService, CustomersService>();
+builder.Services.AddScoped<IOrderAppService, OrderAppService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;
@@ -50,6 +49,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = "http://localhost:5125",
             ValidAudience = "http://localhost:5125",
+            // ClockSkew = TimeSpan.Zero,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"))
         };
         options.Events = new JwtBearerEvents

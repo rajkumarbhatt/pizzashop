@@ -24,6 +24,10 @@ namespace Presentaion.Controllers
             var hasLoggedInBefore = _navBarService.IsFirstTimeLogin(userId);
             var username = _navBarService.GetUsernameFromUserId(userId);
             var roleId  = _navBarService.GetRoleIdFromUserId(userId);
+            if (roleId == 3)
+            {
+                return RedirectToAction("Index", "OrderApp");
+            }
             if (hasLoggedInBefore == false)
             {
                 return RedirectToAction("NewPassword","ResetPassword");

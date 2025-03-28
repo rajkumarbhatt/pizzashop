@@ -8,4 +8,5 @@ public interface ICustomerService
     public CustomerViewModel FilterCustomers (int pageIndex, int pageSize, string searchValue, string time, string sort, string order, string fromDate, string toDate);
     public List<CustomerTable> GetCustomersBassedOnFilters (string time, string searchValue, string fromDate, string toDate);
     public CustomerHistory GetCustomerDetails (int customerId);
+    public byte[] ExportCustomers (string time, string searchValue, string fromDate, string toDate);
 }

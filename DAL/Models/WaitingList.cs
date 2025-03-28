@@ -9,9 +9,7 @@ public partial class WaitingList
 
     public int CustomerId { get; set; }
 
-    public int? TableId { get; set; }
-
-    public string? Status { get; set; }
+    public int? SectionId { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
@@ -19,11 +17,15 @@ public partial class WaitingList
 
     public int UpdatedBy { get; set; }
 
+    public short NoOfPersons { get; set; }
+
+    public bool? IsDeleted { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Customer Customer { get; set; } = null!;
 
-    public virtual Table? Table { get; set; }
+    public virtual Section? Section { get; set; }
 
     public virtual User UpdatedByNavigation { get; set; } = null!;
 }

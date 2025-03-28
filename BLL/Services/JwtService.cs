@@ -29,7 +29,7 @@ namespace BLL.Services
                 issuer: "http://localhost:5125",
                 audience: "http://localhost:5125",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMonths(1),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

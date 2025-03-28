@@ -1,0 +1,148 @@
+@using DAL.ViewModels
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PizzaShop</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+
+</head>
+@{
+    var RoleId = Context.Session.GetInt32("RoleId");
+}
+
+<body>
+    @* toaster *@
+    <div class="loader-container d-none">
+        <div class="loader"></div>
+    </div>
+    <!-- main div -->
+    <div class="container-fluid row w-100">
+
+        <!-- main content -->
+        <div class="col-12  main-content-background">
+
+            <!-- navbar -->
+            <nav class="navbar d-flex  justify-content-md-between align-items-center">
+                <div class="ms-3 d-flex justify-content-center gap-1 align-items-center">
+                    <a asp-controller="OrderApp" asp-action="Index" class="navbar-brand bg-white w-auto">
+                        <img src="~/images/logos/pizzashop_logo.png" class="logo navbar-image" alt="">
+                    </a>
+                    <h3 class="text-white">PIZZASHOP</h3>
+                </div>
+                <div class="d-flex justify-content-center gap-1 align-items-center">
+                    <div class="d-flex justify-content-center gap-2 align-items-center">
+                        <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar" id="kotKot">
+                            <img src="~/images/icons/kot-navbar-kot.svg" class="small-image" alt="">
+                            <p class="text-white">KOT</p>
+                        </div>
+                        <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar" id="kotWaitingList">
+                            <img src="~/images/icons/kot-navbar-clock.svg" class="small-image" alt="">
+                            <p class="text-white">Waiting List</p>
+                        </div>
+                        <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar active-kot-navbar" id="kotTables">
+                            <img src="~/images/icons/kot-navbar-tables.svg" class="small-image" alt="">
+                            <p class="text-white">Tables</p>
+                        </div>
+                        <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar" id="kotMenu">
+                            <img src="~/images/icons/kot-navbar-menu.svg" class="small-image" alt="">
+                            <p class="text-white">Menu</p>
+                        </div>
+                    </div>
+                    <div class="dropdown">
+                        <button class="btn" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            @{
+                                var profileImageUrl = Context.Session.GetString("ProfileImageURL");
+                                string profileImagePath = string.IsNullOrEmpty(@profileImageUrl)
+                                ? "/images/default-profile.png"
+                                : $"/images/profile-images/{@profileImageUrl}";
+                            }
+                            <img src="@profileImagePath" class="object-fit-cover navbar-image profile-image-border"
+                                alt="">
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a href=""
+                                    class="dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-center align-items-center gap-1 pb-2">
+                                    <img src="@profileImagePath"
+                                        class="profile-image-border navbar-image object-fit-cover" alt="">
+                                    <p>@Context.Session.GetString("Username")</p>
+                                </a></li>
+                            <p class="border border-1 border-light-subtle"></p>
+                            <li><a asp-controller="Profile" asp-action="Index"
+                                    class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                    <img src="~/images/default-profile.png" class="small-image"
+                                        style="margin-left: -12px;" alt="">
+                                    <p style="margin-right: 38px;">My Profile</p>
+                                </a></li>
+                            <li><a asp-controller="ChangePassword" asp-action="Index"
+                                    class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                    <img src="~/images/icons/change-password.svg" style="margin-right: 2px;"
+                                        class="small-image" alt="">
+                                    <p style="margin-left: 16px;">Change Password</p>
+                                </a></li>
+                            <li><a data-bs-toggle="modal" data-bs-target="#logoutModal"
+                                    class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                    <img src="~/images/icons/logout.svg" class="small-image" style="margin-left: -8px;"
+                                        alt="">
+                                    <p style="margin-right: 58px;">Logout</p>
+                                </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            @RenderBody()
+
+        </div>
+        <!-- logout confirmation modal -->
+        <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-body d-flex flex-column gap-3 align-items-center">
+                        <img src="~/images/icons/warning.svg" class="medium-image align-self-center" alt="">
+                        <p>Are you sure you want to logout?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
+                        <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @section Scripts {
+        @Html.Partial("_ValidationScriptsPartial")
+    }
+    @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await Component.InvokeAsync("Notyf")
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+
+<script>
+    var kotNavbarItems = ["kotKot", "kotWaitingList", "kotTables", "kotMenu"];
+    kotNavbarItems.forEach(function (item) {
+        $("#" + item).click(function () {
+            $('.custom-border-kot-navbar').removeClass("active-kot-navbar");
+            $("#" + item).addClass("active-kot-navbar");
+        });
+    });
+</script>

@@ -1,0 +1,391 @@
+<div class="accordion mx-auto" id="accordionExample" style="width: 95%;">
+    @foreach (var accordianSection in @Model.Sections)
+    {
+        var customAccordianId = "accordion" + accordianSection.SectionId;
+        <div class="accordion-item mt-3">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                    data-bs-target="#@customAccordianId" aria-expanded="true" aria-controls="@customAccordianId">
+                    <div class="d-flex justify-content-between align-items-center" style="width: 100%;">
+                        <div class="section-name">@accordianSection.SectionName</div>
+                        <div class="d-flex gap-3">
+                            <div class="d-flex gap-2">
+                                <div class="d-flex gap-1 justify-content-center align-items-center">
+                                    <p class="available-kot small-image-kot"></p>
+                                    <p>@accordianSection.NumberOfAvailableTables</p>
+                                </div>
+                                <div class="d-flex gap-1 justify-content-center align-items-center">
+                                    <p class="selected-kot small-image-kot"></p>
+                                    <p>0</p>
+                                </div>
+                                <div class="d-flex gap-1 justify-content-center align-items-center">
+                                    <p class="assigned-kot small-image-kot"></p>
+                                    <p>@accordianSection.NumberOfAssignedTables</p>
+                                </div>
+                                <div class="d-flex gap-1 justify-content-center align-items-center">
+                                    <p class="running-kot small-image-kot"></p>
+                                    <p>@accordianSection.NumberOfRunningTables</p>
+                                </div>
+                            </div>
+                            <div>
+                                @{
+                                    var waitingTokenButtonId = "section" + accordianSection.SectionId + "name" + accordianSection.SectionName;
+                                }
+                                <p class="waiting-token-button-kot" id="@waitingTokenButtonId" onclick="openWaitingTokenModal(id)"> + Waiting Token</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+            </h2>
+            @if (accordianSection == @Model.Sections[0])
+            {
+                <div id=@customAccordianId class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex justify-content-start align-items-center flex-wrap gap-3" style="width: 100%;">
+                            @{var assignButtonId = "section" + accordianSection.SectionId;}
+                            @foreach (var tableCard in accordianSection.TableCards)
+                            {
+                                var tableCustomId = "table" + tableCard.TableId + "section" + accordianSection.SectionId;
+                                @if (tableCard.TableStatus == "Available")
+                                {
+                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5>@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (tableCard.TableStatus == "Assigned")
+                                {
+                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5 style="color: #66A030;">@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (tableCard.TableStatus == "Running")
+                                {
+                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5 style="color: #5080D4;">@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                        <div class="d-flex justify-content-end  px-4 pb-3" id="@assignButtonId" onclick="assignTables(id)"><button type="button"
+                                class="button-styles py-2 px-4 rounded" style="width: 90px;">Assign</button></div>
+                    </div>
+                </div>
+            }
+            else
+            {
+
+                <div id=@customAccordianId class="accordion-collapse collapse" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex justify-content-start align-items-center flex-wrap gap-3" style="width: 100%;">
+                            @{var assignButtonId = "section" + accordianSection.SectionId;}
+                            @foreach (var tableCard in accordianSection.TableCards)
+                            {
+                                var tableCustomId = "table" + tableCard.TableId + "section" + accordianSection.SectionId;
+                                @if (tableCard.TableStatus == "Available")
+                                {
+                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5>@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (tableCard.TableStatus == "Assigned")
+                                {
+                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5 style="color: #66A030;">@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else if (tableCard.TableStatus == "Running")
+                                {
+                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                        <h5 style="color: #5080D4;">@tableCard.TableName</h5>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <img src="~/images/icons/table-capacity-kot.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-left: 0.4em;">@tableCard.TableCapacity</p>
+                                            </div>
+                                            <div class="d-flex flex-column justify-content-center align-tems-center">
+                                                <img src="~/images/icons/clock-table-card.svg" class="table-card-kot-image" alt="">
+                                                <p style="margin-right: 0.1em;">@tableCard.CurentOrderTime</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                        </div>
+                        <div class="d-flex justify-content-end  px-4 pb-3" id="@assignButtonId" onclick="assignTables(id)"><button type="button"
+                                class="button-styles py-2 px-4 rounded" style="width: 90px;">Assign</button></div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@* waiting token modal *@
+<div class="modal fade" id="waitingTokenModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered waiting-list-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTableTitle">Waiting Token Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row align-items-center">
+                    <div class="col-12 row">
+                        <div class="form-floating my-auto col-12">
+                            <input type="text" class="form-control" name="" id="EmailWaitingToken" required
+                                placeholder="ItemName">
+                            <span id="EmailWaitingTokenError" class="text-danger"></span>
+                            <label for="ItemName" class="">Email*</label>
+                        </div>
+                    </div>
+                    <div class="col-12 row mt-3">
+                        <div class="form-floating my-auto col-12">
+                            <input type="text" class="form-control" name="" id="NameWaitingToken" required
+                                placeholder="ItemName">
+                            <span id="NameWaitingTokenError" class="text-danger"></span>
+                            <label for="ItemName" class="">Name*</label>
+                        </div>
+                    </div>
+                    <div class="col-12 row mt-3">
+                        <div class="form-floating my-auto col-12">
+                            <input type="text" class="form-control" name="" id="MobileNumberWaitingToken" required
+                                placeholder="ItemName">
+                            <span id="MobileNumberWaitingTokenError" class="text-danger"></span>
+                            <label for="ItemName" class="">Mobile Number*</label>
+                        </div>
+                    </div>
+                    <div class="col-12 row mt-3">
+                        <div class="form-floating my-auto col-12 col-md-6">
+                            <input type="text" class="form-control" name="" id="NumberOfPeopleWaitingList" required
+                                placeholder="ItemName">
+                            <span id="NumberOfPeopleWaitingListError" class="text-danger"></span>
+                            <label for="NumberOfPeopleWaitingList" class="">Number of People*</label>
+                        </div>
+                        <div class="col-12 col-md-6 p-2 form-floating">
+                            <select id="WaitingListSection" class="form-select" aria-label="CategoryId">
+                                @foreach (var Section in Model.Sections)
+                                {
+                                    <option value="@Section.SectionId">@Section.SectionName</option>
+                                }
+                            </select>
+                            <span id="WaitingListSectionError" class="text-danger"></span>
+                            <label for="WaitingListSection" class="mx-2 mt-2">Section*</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end ">
+                <button id="AddToWaitingList" type="button"
+                    class="btn btn-primary px-3">Save</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var selectedTables = [];
+
+    function selectTable(id, status) {
+        if (status == "Assigned" || status == "Running") {
+            toastr.error("You cannot select this table");
+            return;
+        }
+        var tableId = id.split("table")[1].split("section")[0];
+        var sectionId = id.split("section")[1];
+        var tableCard = document.getElementById(id);
+        tableCard.classList.toggle("selected-table-card");
+        if (tableCard.classList.contains("selected-table-card")) {
+            selectedTables.push({ tableId: tableId, sectionId: sectionId });
+        }
+        else {
+            selectedTables = selectedTables.filter(function (table) {
+                return table.tableId != tableId;
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $("#EmailWaitingToken").on("input", function () {
+            var email = $("#EmailWaitingToken").val();
+            if (email == "") {
+                $("#EmailWaitingTokenError").text("Email is required");
+            } else {
+                $("#EmailWaitingTokenError").text("");
+            }
+        });
+
+        $("#NameWaitingToken").on("input", function () {
+            var name = $("#NameWaitingToken").val();
+            if (name == "") {
+                $("#NameWaitingTokenError").text("Name is required");
+            } else {
+                $("#NameWaitingTokenError").text("");
+            }
+        });
+
+        $("#MobileNumberWaitingToken").on("input", function () {
+            var mobileNumber = $("#MobileNumberWaitingToken").val();
+            if (mobileNumber == "") {
+                $("#MobileNumberWaitingTokenError").text("Mobile Number is required");
+            } else if (!mobileNumber.match(/^[0-9]{10}$/)) {
+                $("#MobileNumberWaitingTokenError").text("Invalid Mobile Number");
+            } else {
+                $("#MobileNumberWaitingTokenError").text("");
+            }
+        });
+
+        $("#NumberOfPeopleWaitingList").on("input", function () {
+            var numberOfPeople = $("#NumberOfPeopleWaitingList").val();
+            if (numberOfPeople == "") {
+                $("#NumberOfPeopleWaitingListError").text("Number of People is required");
+            } else if (!numberOfPeople.match(/^[0-9]{1,}$/)) {
+                $("#NumberOfPeopleWaitingListError").text("Invalid Number of People");
+            } else {
+                $("#NumberOfPeopleWaitingListError").text("");
+            }
+        });
+
+        $("#WaitingListSection").on("change", function () {
+            var sectionId = $("#WaitingListSection").val();
+            if (sectionId == "") {
+                $("#WaitingListSectionError").text("Section is required");
+            } else {
+                $("#WaitingListSectionError").text("");
+            }
+        });
+    });
+
+    function assignTables(id) {
+        var sectionId = id.split("section")[1];
+        var selectedTablesSection = selectedTables.filter(function (table) {
+            return table.sectionId == sectionId;
+        });
+        if (selectedTablesSection.length == 0) {
+            toastr.error("Please select table(s) to assign");
+            return;
+        }
+        var selectedTableIds = selectedTablesSection.map(function (table) {
+            return parseInt(table.tableId);
+        });
+        console.log(selectedTableIds);
+    }
+
+    function openWaitingTokenModal (id) {
+        var sectionId = id.split("section")[1].split("name")[0];
+        $("#WaitingListSection").val(sectionId);
+        $("#waitingTokenModal").modal("show");
+    }
+
+    $("#AddToWaitingList").click(function () {
+            var email = $("#EmailWaitingToken").val();
+            var name = $("#NameWaitingToken").val();
+            var mobileNumber = $("#MobileNumberWaitingToken").val();
+            var numberOfPeople = $("#NumberOfPeopleWaitingList").val();
+            var sectionId = $("#WaitingListSection").val();
+            if (email == "") {
+                $("#EmailWaitingTokenError").text("Email is required");
+                return;
+            }
+            if (name == "") {
+                $("#NameWaitingTokenError").text("Name is required");
+                return;
+            }
+            if (mobileNumber == "") {
+                $("#MobileNumberWaitingTokenError").text("Mobile Number is required");
+                return;
+            }
+            if (!mobileNumber.match(/^[0-9]{10}$/)) {
+                $("#MobileNumberWaitingTokenError").text("Invalid Mobile Number");
+                return;
+            }
+            if (numberOfPeople == "") {
+                $("#NumberOfPeopleWaitingListError").text("Number of People is required");
+                return;
+            }
+            if (!numberOfPeople.match(/^[0-9]{1,}$/)) {
+                $("#NumberOfPeopleWaitingListError").text("Invalid Number of People");
+                return;
+            }
+            if (sectionId == "") {
+                $("#WaitingListSectionError").text("Section is required");
+                return;
+            }
+            $.ajax({
+                url: "/OrderApp/AddToWaitingList",
+                type: "POST",
+                data: {
+                    email: email,
+                    name: name,
+                    mobileNumber: mobileNumber,
+                    numberOfPeople: numberOfPeople,
+                    sectionId: sectionId
+                },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $("#waitingTokenModal").modal("hide");
+                    }
+                    else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+</script>

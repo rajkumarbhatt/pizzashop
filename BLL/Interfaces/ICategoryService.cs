@@ -32,5 +32,6 @@ namespace BLL.Interfaces
         public MenuViewModel GetModifierData(int modifierId, int modifierGroupId);
         public IActionResult DeleteSelectedModifiers(List<int> modifierIds, int modifierGroupId, int userId);
         public IActionResult DeleteSelectedItems(List<int> itemIds, int userId);
+        public MenuViewModel GetMenuViewModel(int pageIndex, int pageSize, string searchValue);
     }
 }

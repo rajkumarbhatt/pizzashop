@@ -28,3 +28,7 @@ $(document).ready(function () {
     console.log(srcMobile);
     $("#" + controllerName + "-svg-mobile").attr("src", srcMobile);
 });
+
+$("#redirectToOrderApp").click(function () {
+    window.location.href = "/OrderApp";
+});

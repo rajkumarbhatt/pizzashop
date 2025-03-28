@@ -22,4 +22,6 @@ public partial class Section
     public virtual ICollection<Table> Tables { get; set; } = new List<Table>();
 
     public virtual User UpdatedByNavigation { get; set; } = null!;
+
+    public virtual ICollection<WaitingList> WaitingLists { get; set; } = new List<WaitingList>();
 }

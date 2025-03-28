@@ -28,6 +28,4 @@ public partial class Table
     public virtual Section Section { get; set; } = null!;
 
     public virtual User UpdatedByNavigation { get; set; } = null!;
-
-    public virtual ICollection<WaitingList> WaitingLists { get; set; } = new List<WaitingList>();
 }

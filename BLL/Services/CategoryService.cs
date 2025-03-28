@@ -481,7 +481,7 @@ namespace BLL.Services
                     _context.ModifierModifiergroupMappings.Add(modifierModifierGroupMapping);
                     _context.SaveChanges();
                 }
-                return new JsonResult(new { success = true, message = "Modifier group added successfully" });
+                return new JsonResult(new { success = true, message = "Modifier group added successfully", id = modifierGroup.Id });
             } else {
                 if (userId == null)
                 {
@@ -737,6 +737,42 @@ namespace BLL.Services
                 }
             }
             return new JsonResult(new { success = true, message = "Items deleted successfully" });
+        }
+
+        public MenuViewModel GetMenuViewModel(int pageIndex, int pageSize, string searchValue)
+        {
+            var categories = GetCategories();
+            int categoryId = categories.FirstOrDefault()?.Id ?? 0;
+            var items = GetItemsBasedOnSearch(categoryId, searchValue ?? "");
+            var modifierGroups = GetModifierGroups();
+            var modifierId = modifierGroups.FirstOrDefault()?.Id ?? 0;
+            var modifiers = GetModifiersBasedOnSearch(modifierId, searchValue ?? "");
+            var pageIndexModifier = 1;
+            var pageSizeModifier = 5;
+            var totalModifiers = modifiers.Count;
+            var allModifiers = GetAllModifiers(searchValue ?? "");
+            var TotalPagesModifier = (int)Math.Ceiling(totalModifiers / (double)pageSizeModifier);
+            var menuViewModel = new MenuViewModel
+            {
+                Categories = categories,
+                Items = items.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = (int)Math.Ceiling(items.Count / (double)pageSize),
+                TotalItems = items.Count,
+                ModifierGroups = modifierGroups,
+                Modifiers = modifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageIndexModifier = pageIndexModifier,
+                PageSizeModifier = pageSizeModifier,
+                TotalPagesModifier = TotalPagesModifier,
+                TotalModifiers = totalModifiers,
+                PageIndexAllModifiers = 1,
+                PageSizeAllModifiers = 5,
+                TotalPagesAllModifiers = (int)Math.Ceiling(allModifiers.Count / (double)pageSize),
+                TotalAllModifiers = allModifiers.Count,
+                AllModifiers = allModifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList()
+            };
+            return menuViewModel;
         }
     }
 }

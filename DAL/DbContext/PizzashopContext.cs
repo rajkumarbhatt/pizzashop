@@ -974,6 +974,8 @@ public partial class PizzaShopContext : DbContext
 
             entity.ToTable("waiting_list");
 
+            entity.HasIndex(e => e.SectionId, "fki_section_id_constraint");
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -981,10 +983,11 @@ public partial class PizzaShopContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.TableId).HasColumnName("table_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.NoOfPersons).HasColumnName("no_of_persons");
+            entity.Property(e => e.SectionId).HasColumnName("section_id");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.WaitingListCreatedByNavigations)
@@ -996,10 +999,9 @@ public partial class PizzaShopContext : DbContext
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("waiting_list_customer_id_fkey");
 
-            entity.HasOne(d => d.Table).WithMany(p => p.WaitingLists)
-                .HasForeignKey(d => d.TableId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("waiting_list_table_id_fkey");
+            entity.HasOne(d => d.Section).WithMany(p => p.WaitingLists)
+                .HasForeignKey(d => d.SectionId)
+                .HasConstraintName("section_id_constraint");
 
             entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.WaitingListUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)

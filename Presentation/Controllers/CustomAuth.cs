@@ -35,7 +35,8 @@ namespace Presentaion.Controllers
                 { "TaxAndFee", "TaxAndFee" },
                 { "Order", "Order" },
                 { "Customer", "Customers" },
-                { "account", "Dashboard"}
+                { "account", "Dashboard"},
+                { "OrderApp", "OrderApp" }
             };
             PizzaShopContext db = new PizzaShopContext();
             if (user.Identity?.IsAuthenticated == false)
@@ -50,7 +51,6 @@ namespace Presentaion.Controllers
             {
                 return false;
             }
-
             if (requestedUrl.ToLower().Contains("edit") || requestedUrl.ToLower().Contains("update") || requestedUrl.ToLower().Contains("create") || requestedUrl.ToLower().Contains("add")) {
                 return permission.CanView == true && permission.CanEdit == true;
             } else if (requestedUrl.ToLower().Contains("delete")) {

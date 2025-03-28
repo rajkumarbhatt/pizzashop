@@ -664,7 +664,11 @@
                                 $("#AddModifierDescription").val("");
                                 $("#ModifierGroupId").val("-1");
                                 $("#modifierGroupId21").val(modifierGroupId);
-                                makeThisModifierGroupActive(modifierGroupId);
+                                if (modifierGroupId == -1) {
+                                    makeThisModifierGroupActive(1);
+                                } else {
+                                    makeThisModifierGroupActive(modifierGroupId);
+                                }
                             },
                             error: function (data) {
                                 console.log(data);

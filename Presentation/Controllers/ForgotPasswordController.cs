@@ -37,7 +37,6 @@ namespace Presentaion.Controllers
                 {
                     var userId = user.Id;
                     var expiryDate = DateTime.UtcNow.AddDays(1); 
-                    // encrypt expiry date and user id to make a token
                     var token = userId + "_" + expiryDate.ToString();
                     token = Convert.ToBase64String(Encoding.UTF8.GetBytes(token));
                     var resetLink = $"http://localhost:5125/resetpassword?token={token}";
