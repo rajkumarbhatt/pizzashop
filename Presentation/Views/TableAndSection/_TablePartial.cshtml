@@ -41,9 +41,9 @@
                     {
                         <span class="available-table">@table.Status</span>
                     }
-                    else
+                    else if (table.Status == "Assigned" || table.Status == "Running")  
                     {
-                        <span class="occupied-table">@table.Status</span>
+                        <span class="occupied-table">Occupied</span>
                     }
                 </td>
                 <td>

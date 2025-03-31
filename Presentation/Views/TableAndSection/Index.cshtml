@@ -415,7 +415,8 @@
                         <div class="col-12 col-md-6 p-2 form-floating">
                             <select id="TableStatus" class="form-select" aria-label="CategoryId" style="background-color: #E9ECEF">
                                 <option value="Available">Available</option>
-                                <option value="Occupied">Occupied</option>
+                                <option value="Running">Running</option>
+                                <option value="Assigned">Assigned</option>
                             </select>
                             <span id="TableStatusError" class="text-danger"></span>
                             <label for="CategoryId" class="mx-2 mt-2">Status*</label>
@@ -549,7 +550,7 @@
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("TablesFilter", "TableAndSection")',
-                        data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: "" },
+                        data: { pageIndex: 1, pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: $("#searchInput").val() },
                         success: function (data) {
                             $("#tablePartialView").html(data);
                         }
@@ -579,7 +580,7 @@
                         $.ajax({
                             type: "GET",
                             url: '@Url.Action("TablesFilter", "TableAndSection")',
-                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: "" },
+                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: $("#searchInput").val() },
                             success: function (data) {
                                 $("#tablePartialView").html(data);
                             }
@@ -661,7 +662,7 @@
                     $.ajax({
                         type: "GET",
                         url: '@Url.Action("TablesFilter", "TableAndSection")',
-                        data: { pageIndex: pageIndex, pageSize: @Model.PageSize, sectionId: tableSection, searchValue: "" },
+                        data: { pageIndex: pageIndex, pageSize: @Model.PageSize, sectionId: tableSection, searchValue: $("#searchInput").val() },
                         success: function (data) {
                             $("#tablePartialView").html(data);
                             makeThisSectionActive(tableSection);

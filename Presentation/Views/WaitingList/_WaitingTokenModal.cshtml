@@ -1,0 +1,204 @@
+@* waiting token modal *@
+@model DAL.ViewModels.WaitingListViewModel
+<div class="modal fade" id="waitingTokenModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered waiting-list-modal">
+        <form id="waitingTokenForm" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTableTitle">Waiting Token Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                        @if (Model.waitingListModal != null && Model.waitingListModal.Id > 0)
+                        {
+                            <input type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
+                                id="IdWaiting" value="@Model.waitingListModal.Id">
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
+                                id="IdWaiting" value="-1">
+                        }
+                        <div class="col-12 row">
+                            <div class="form-floating my-auto col-12">
+                                @if (Model.waitingListModal != null && Model.waitingListModal.Email != null)
+                                {
+                                    <input type="text" class="form-control" name="waitingListModal.Email"
+                                        id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off"
+                                        value="@Model.waitingListModal.Email">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" name="waitingListModal.Email"
+                                        id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off">
+                                }
+                                <ul id="emailSuggestions" class="dropdown-menu" style="display: none; position: absolute; z-index: 1000; width: 100%;"></ul>
+                                <label for="ItemName" class="">Email*</label>
+                                <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-12 row mt-3">
+                            <div class="form-floating my-auto col-12">
+                                @if (Model.waitingListModal != null && Model.waitingListModal.Name != null)
+                                {
+                                    <input type="text" class="form-control" name="waitingListModal.Name"
+                                        id="NameWaitingToken" asp-for="@Model.waitingListModal.Name"
+                                        value="@Model.waitingListModal.Name">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.Name"
+                                        name="waitingListModal.Name" id="NameWaitingToken">
+                                }
+                                <span asp-validation-for="@Model.waitingListModal.Name" class="text-danger"></span>
+                                <label for="ItemName" class="">Name*</label>
+                            </div>
+                        </div>
+                        <div class="col-12 row mt-3">
+                            <div class="form-floating my-auto col-12">
+                                @if (Model.waitingListModal != null && Model.waitingListModal.MobileNumber != null)
+                                {
+                                    <input type="text" class="form-control" name="waitingListModal.MobileNumber"
+                                        id="MobileNumberWaitingToken" asp-for="@Model.waitingListModal.MobileNumber"
+                                        value="@Model.waitingListModal.MobileNumber">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
+                                        name="waitingListModal.MobileNumber" id="MobileNumberWaitingToken">
+                                }
+                                <span asp-validation-for="@Model.waitingListModal.MobileNumber"
+                                    class="text-danger"></span>
+                                <label for="ItemName" class="">Mobile Number*</label>
+                            </div>
+                        </div>
+                        <div class="col-12 row mt-3">
+                            <div class="form-floating my-auto col-12 col-md-6">
+                                @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople <= 0)
+                                {
+                                    <input type="text" class="form-control" name="waitingListModal.NumberOfPeople"
+                                        id="NumberOfPeopleWaitingList" asp-for="@Model.waitingListModal.NumberOfPeople"
+                                        value="@Model.waitingListModal.NumberOfPeople">
+                                }
+                                else
+                                {
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
+                                        name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList">
+                                }
+                                <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
+                                    class="text-danger"></span>
+                                <label for="NumberOfPeopleWaitingList" class="">Number of People*</label>
+                            </div>
+                            <div class="col-12 col-md-6 p-2 form-floating">
+                                <select id="WaitingListSection" class="form-select" aria-label="CategoryId"
+                                    asp-for="@Model.waitingListModal.SectionId">
+                                    @foreach (var Section in Model.Sections)
+                                    {
+                                        <option value="@Section.Id">@Section.Name</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="@Model.waitingListModal.SectionId" class="text-danger"></span>
+                                <label for="WaitingListSection" class="mx-2 mt-2">Section*</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-end ">
+                    <button id="AddToWaitingList" type="submit" class="btn btn-primary px-3">Save</button>
+                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function AddToWaitingListFormSubmit() {
+        $("#waitingTokenForm").off("submit").submit(function (e) {
+            e.preventDefault();
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            $.ajax({
+                url: "/OrderApp/AddToWaitingList",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $("#waitingTokenModal").modal("hide");
+                        $.ajax({
+                            type: "GET",
+                            url: "/WaitingList/GetWaitingList",
+                            success: function (response) {
+                                $('#waitingListPartial').html(response);
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    }
+                    else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+    }
+    AddToWaitingListFormSubmit();
+
+    $(document).ready(function () {
+        $("#EmailWaitingToken").on("input", function () {
+            console.log("input event fired");
+            clearTimeout(this.delayTimer);
+            this.delayTimer = setTimeout(function () {
+                var email = $("#EmailWaitingToken").val();
+                if (email.length > 2) {
+                    $.ajax({
+                        url: "/WaitingList/GetCustomerSuggestions",
+                        type: "GET",
+                        data: { email: email },
+                        success: function (response) {
+                            console.log(response);
+                            var suggestions = response.customerSuggetions;
+                            var suggestionsList = $("#emailSuggestions");
+                            suggestionsList.empty();
+                            if (suggestions.length > 0) {
+                                suggestionsList.show();
+                                suggestions.forEach(function (item) {
+                                    suggestionsList.append(
+                                        `<li class="dropdown-item" onclick="fillForm('${item.email}', '${item.name}', '${item.mobileNumber}')">${item.email}</li>`
+                                    );
+                                });
+                            } else {
+                                suggestionsList.hide();
+                            }
+                        },
+                        error: function () {
+                            console.error("Error fetching suggestions.");
+                        }
+                    });
+                } else {
+                    $("#emailSuggestions").hide();
+                }
+            }, 500);
+        });
+
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#EmailWaitingToken, #emailSuggestions").length) {
+                $("#emailSuggestions").hide();
+            }
+        });
+    });
+
+    function fillForm(email, name, mobileNumber) {
+        $("#EmailWaitingToken").val(email);
+        $("#NameWaitingToken").val(name);
+        $("#MobileNumberWaitingToken").val(mobileNumber);
+        $("#emailSuggestions").hide();
+    }
+    
+</script>

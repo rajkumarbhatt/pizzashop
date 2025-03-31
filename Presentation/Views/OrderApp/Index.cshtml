@@ -32,3 +32,53 @@
         <partial name="_SectionDropdown" model="@Model" />
     </div>
 </div>
+
+
+@* sidebar offcanvas *@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    ...
+  </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
+    function openWaitingTokenModal (id) {
+        var sectionId = id.split("section")[1].split("name")[0];
+        $("#WaitingListSection").val(sectionId);
+        $("#waitingTokenModal").modal("show");
+        $.validator.unobtrusive.parse("#waitingTokenModal"); 
+        AddToWaitingListFormSubmit();
+    }
+
+    function AddToWaitingListFormSubmit () {
+        $("#waitingTokenForm").off("submit").submit(function (e) {
+            e.preventDefault();
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            $.ajax({
+                url: "/OrderApp/AddToWaitingList",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $("#waitingTokenModal").modal("hide");
+                    }
+                    else {
+                        toastr.error(response.message);
+                    }
+                }
+            });
+        });
+    }
+</script>

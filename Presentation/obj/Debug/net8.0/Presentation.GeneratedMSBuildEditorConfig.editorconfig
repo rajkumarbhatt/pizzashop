@@ -182,6 +182,18 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckxpc3RcX1VzZXJMaXN0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/pci88/Desktop/Internship-Tasks/PizzaShop/Presentation/Views/WaitingList/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV2FpdGluZ0xpc3RcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci88/Desktop/Internship-Tasks/PizzaShop/Presentation/Views/WaitingList/_WaitingListPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV2FpdGluZ0xpc3RcX1dhaXRpbmdMaXN0UGFydGlhbC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/pci88/Desktop/Internship-Tasks/PizzaShop/Presentation/Views/WaitingList/_WaitingTokenModal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcV2FpdGluZ0xpc3RcX1dhaXRpbmdUb2tlbk1vZGFsLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/pci88/Desktop/Internship-Tasks/PizzaShop/Presentation/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 

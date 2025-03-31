@@ -31,6 +31,7 @@ builder.Services.AddScoped<ITaxAndFeeService, TaxAndFeeService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICustomerService, CustomersService>();
 builder.Services.AddScoped<IOrderAppService, OrderAppService>();
+builder.Services.AddScoped<IWaitingListService, WaitingListService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;

@@ -37,6 +37,10 @@
       "PackagePath": "staticwebassets\\images\\dominos_background_mobile.jpg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\assign-waiting-list.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\assign-waiting-list.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\black-modifier.svg",
       "PackagePath": "staticwebassets\\images\\icons\\black-modifier.svg"
     },
@@ -77,12 +81,20 @@
       "PackagePath": "staticwebassets\\images\\icons\\delete-header.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\delete-waiting-list.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\delete-waiting-list.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\delete.svg",
       "PackagePath": "staticwebassets\\images\\icons\\delete.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\dinner-table.svg",
       "PackagePath": "staticwebassets\\images\\icons\\dinner-table.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\edit-waiting-list.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\edit-waiting-list.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\edit.svg",
@@ -367,6 +379,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\4dadb438-6399-4e75-92c4-412ddee88ad9.jfif",
       "PackagePath": "staticwebassets\\images\\item-images\\4dadb438-6399-4e75-92c4-412ddee88ad9.jfif"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\4f7157d8-6f5e-441f-966e-d49d7faa2fbd.jfif",
+      "PackagePath": "staticwebassets\\images\\item-images\\4f7157d8-6f5e-441f-966e-d49d7faa2fbd.jfif"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\50ff3398-dd74-46bd-a37a-b4d8d4e7f888.jfif",

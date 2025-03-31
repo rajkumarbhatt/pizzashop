@@ -43,8 +43,7 @@
     </select>
     <p class="px-1">
         Showing @((Model.pageIndex - 1) * Model.pageSize + 1) - 
-        @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalOrders)) of 
-        @Model.totalOrders
+        @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalOrders)) of @Model.totalOrders
     </p>
 
 

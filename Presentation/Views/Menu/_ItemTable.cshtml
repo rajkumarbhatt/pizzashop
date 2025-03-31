@@ -209,7 +209,7 @@
                     $.ajax({
                         type: "GET",
                         url: "/Menu/ItemsFilter",
-                        data: { categoryId: $("#categoryId").val(), pageIndex: $("#PageIndex").val(), pageSize: $("#PageSize").val() },
+                        data: { categoryId: $("#categoryId").val(), pageIndex:1, pageSize: $("#PageSize").val() },
                         success: function (data) {
                             $("#partialViewStartingInner").html(data);
                         },

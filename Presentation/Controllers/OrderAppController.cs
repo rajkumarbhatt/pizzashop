@@ -24,10 +24,14 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToWaitingList (string email, string name, string mobileNumber, string sectionId, string numberOfPeople)
+        public IActionResult AddToWaitingList ([FromForm] WaitingListModal waitingListModal)
         {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult (new { success = false, message = "Invalid Data" });
+            }
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _orderAppService.AddToWaitingList(email, name, mobileNumber, sectionId, numberOfPeople, userId);
+            return _orderAppService.AddToWaitingList(waitingListModal, userId);
         }
     }
 }
