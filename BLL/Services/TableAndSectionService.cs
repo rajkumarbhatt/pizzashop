@@ -87,6 +87,10 @@ namespace BLL.Services
         public IActionResult DeleteSection(int sectionId, int userId)
         {
             Section section = _context.Sections.FirstOrDefault(s => s.Id == sectionId) ?? new Section();
+            if (_context.Tables.Any(t => t.SectionId == sectionId && t.IsDeleted == false && (t.Status == "Occupied" || t.Status == "Running" || t.Status == "Assigned")))
+            {
+                return new JsonResult(new { success = false, message = "Section contains occupied table(s)" });
+            }
             section.IsDeleted = true;
             section.UpdatedBy = userId;
             _context.SaveChanges();
@@ -106,6 +110,14 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "No tables selected" });
             }
+            foreach (var tableId in tableIds)
+            {
+                Table table = _context.Tables.FirstOrDefault(t => t.Id == tableId);
+                if (table.Status == "Occupied" || table.Status == "Running" || table.Status == "Assigned")
+                {
+                    return new JsonResult(new { success = false, message = "Table is occupied" });
+                }
+            }
             List<Table> tables = _context.Tables.Where(t => tableIds.Contains(t.Id)).ToList();
             foreach (Table table in tables)
             {
@@ -119,6 +131,10 @@ namespace BLL.Services
         public IActionResult DeleteTable(int tableId, int userId)
         {
             Table table = _context.Tables.FirstOrDefault(t => t.Id == tableId) ?? new Table();
+            if (table.Status == "Occupied" || table.Status == "Running" || table.Status == "Assigned")
+            {
+                return new JsonResult(new { success = false, message = "Table is occupied" });
+            }
             table.IsDeleted = true;
             table.UpdatedBy = userId;
             _context.SaveChanges();

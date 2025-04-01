@@ -21,6 +21,8 @@ public partial class WaitingList
 
     public bool? IsDeleted { get; set; }
 
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Customer Customer { get; set; } = null!;

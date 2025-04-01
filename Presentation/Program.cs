@@ -88,7 +88,14 @@ app.UseSession();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"
+);
+
+app.MapControllerRoute(
+    name: "404",
+    pattern: "{*catchall}",
+    defaults: new { controller = "PageNotFound", action = "Index" } 
+);
 
 app.Run();
 

@@ -595,39 +595,51 @@ public partial class PizzaShopContext : DbContext
 
         modelBuilder.Entity<OrderTableMapping>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("tableordermapping_pkey");
+            entity.HasKey(e => e.Id).HasName("order_table_mapping_pkey");
 
             entity.ToTable("order_table_mapping");
 
+            entity.HasIndex(e => e.TableId, "fki_a");
+
+            entity.HasIndex(e => e.OrderId, "fki_order_id");
+
             entity.Property(e => e.Id)
-                .HasDefaultValueSql("nextval('tableordermapping_id_seq'::regclass)")
+                .UseIdentityAlwaysColumn()
                 .HasColumnName("id");
-            entity.Property(e => e.Createdat)
+            entity.Property(e => e.CreatedAt)
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("createdat");
-            entity.Property(e => e.Createdby)
-                .HasMaxLength(50)
-                .HasColumnName("createdby");
-            entity.Property(e => e.Isdeleted).HasColumnName("isdeleted");
-            entity.Property(e => e.Noofpersons).HasColumnName("noofpersons");
-            entity.Property(e => e.Orderid).HasColumnName("orderid");
-            entity.Property(e => e.Tableid).HasColumnName("tableid");
-            entity.Property(e => e.Updatedat)
+                .HasColumnName("created_at");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
+            entity.Property(e => e.NoOfPersons).HasColumnName("no_of_persons");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.TableId).HasColumnName("table_id");
+            entity.Property(e => e.UpdatedAt)
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("updatedat");
-            entity.Property(e => e.Updatedby)
-                .HasMaxLength(50)
-                .HasColumnName("updatedby");
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.OrderTableMappingCreatedByNavigations)
+                .HasForeignKey(d => d.CreatedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("created_by");
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderTableMappings)
-                .HasForeignKey(d => d.Orderid)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tableordermapping_orderid_fkey");
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("order_id");
 
             entity.HasOne(d => d.Table).WithMany(p => p.OrderTableMappings)
-                .HasForeignKey(d => d.Tableid)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("tableordermapping_tableid_fkey");
+                .HasForeignKey(d => d.TableId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("table_id");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.OrderTableMappingUpdatedByNavigations)
+                .HasForeignKey(d => d.UpdatedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("updated_by");
         });
 
         modelBuilder.Entity<OrderTaxis>(entity =>
@@ -988,6 +1000,9 @@ public partial class PizzaShopContext : DbContext
                 .HasColumnName("is_deleted");
             entity.Property(e => e.NoOfPersons).HasColumnName("no_of_persons");
             entity.Property(e => e.SectionId).HasColumnName("section_id");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.WaitingListCreatedByNavigations)

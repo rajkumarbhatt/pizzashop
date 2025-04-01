@@ -8,7 +8,7 @@
 
     <div class="d-flex justify-content-between align-items-center" style="width: 97%;">
         <h1 class="main-page-heading">Table View</h1>
-        <div class="d-flex gap-2">
+        <div class=" gap-2 d-none d-md-flex">
             <div class="d-flex gap-1 justify-content-center align-items-center">
                 <p class="available-kot"></p>
                 <p>Available</p>
@@ -36,29 +36,163 @@
 
 @* sidebar offcanvas *@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-  <div class="offcanvas-header">
-    <h5 id="offcanvasRightLabel">Offcanvas right</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-  <div class="offcanvas-body">
-    ...
-  </div>
+    <div class="offcanvas-header">
+        <h5 id="offcanvasRightLabel" class="text-blue-custom">Waiting List</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <form id="AssignTableToCustomerForm" method="post">
+        <div class="offcanvas-body">
+            <div class="table-responsive">
+                <table id="waitingListCanvasTable" class="table table-responsive" style="white-space: nowrap;">
+                    <thead class="color-head">
+                        <tr class="text-start">
+                            <th></th>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">No. of Persons</th>
+                        </tr>
+                    </thead>
+                    <tbody id="waitingTokenTableBody">
+
+                    </tbody>
+                </table>
+            </div>
+            <h5 class="text-blue-custom mt-3">Customer Details</h5>
+            <div>
+                <div class="col-12 row">
+                    <div class="form-floating my-auto col-12">
+                        @if (Model.waitingListModal != null && Model.waitingListModal.Email != null)
+                        {
+                            <input asp-for="@Model.waitingListModal.Email" type="text" class="form-control"
+                                name="waitingListModal.Email" id="EmailOffCanvasWaitingToken" autocomplete="off">
+                            <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <input asp-for="@Model.waitingListModal.Email" type="text" class="form-control"
+                                name="waitingListModal.Email" id="EmailOffCanvasWaitingToken" autocomplete="off">
+                            <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
+                        }
+                        <label for="EmailWaitingToken" class="">Email*</label>
+                    </div>
+                </div>
+                <div class="col-12 row mt-2">
+                    <div class="form-floating my-auto col-12">
+                        @if (Model.waitingListModal != null && Model.waitingListModal.Id > 0)
+                        {
+                            <input type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
+                                id="IdOffCanvasWaitingToken" value="@Model.waitingListModal.Id">
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
+                                id="IdOffCanvasWaitingToken" value="-1">
+                        }
+                        @if (Model.waitingListModal != null && Model.waitingListModal.Name != null)
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.waitingListModal.Name"
+                                name="waitingListModal.Name" id="NameOffCanvasWaitingToken" autocomplete="off">
+                            <span asp-validation-for="@Model.waitingListModal.Name" class="text-danger"></span>
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.waitingListModal.Name"
+                                name="waitingListModal.Name" id="NameOffCanvasWaitingToken" autocomplete="off">
+                            <span asp-validation-for="@Model.waitingListModal.Name" class="text-danger"></span>
+                        }
+                        <label for="NameWaitingToken" class="">Name*</label>
+                    </div>
+                    <div class="col-12 row mt-2">
+                        <div class="form-floating my-auto col-12">
+                            @if (Model.waitingListModal != null && Model.waitingListModal.MobileNumber != null)
+                            {
+                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
+                                    name="waitingListModal.MobileNumber" id="MobileNumberOffCanvasWaitingToken"
+                                    autocomplete="off">
+                                <span asp-validation-for="@Model.waitingListModal.MobileNumber" class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
+                                    name="waitingListModal.MobileNumber" id="MobileNumberOffCanvasWaitingToken"
+                                    autocomplete="off">
+                                <span asp-validation-for="@Model.waitingListModal.MobileNumber" class="text-danger"></span>
+                            }
+                            <label for="PhoneWaitingToken" class="">Mobile Number*</label>
+                        </div>
+                    </div>
+                    <div class="col-12 row mt-2">
+                        <div class="form-floating my-auto col-12 col-md-6">
+                            @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople != 0)
+                            {
+                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
+                                <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
+                                    class="text-danger"></span>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
+                                    name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
+                                <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
+                                    class="text-danger"></span>
+                            }
+                            <label for="NumberOfPeopleWaitingList" class="">Number of People*</label>
+                        </div>
+                        <div class="col-12 col-md-6 p-2 form-floating">
+                            @if (Model.waitingListModal != null)
+                            {
+                                <select asp-for="@Model.waitingListModal.SectionId" name="waitingListModal.SectionId"
+                                    id="SectionDropDownOffcanvas" class="form-select cursor-none" aria-label="CategoryId">
+                                    @if (Model.Sections != null)
+                                    {
+                                        foreach (var Section in Model.Sections)
+                                        {
+                                            <option value="@Section.SectionId" hidden>@Section.SectionName</option>
+                                        }
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <select asp-for="@Model.waitingListModal.SectionId" name="waitingListModal.SectionId"
+                                    id="SectionDropDownOffcanvas" class="form-select cursor-none" aria-label="CategoryId">
+                                    @if (Model.Sections != null)
+                                    {
+                                        foreach (var Section in Model.Sections)
+                                        {
+                                            <option value="@Section.SectionId" hidden>@Section.SectionName</option>
+                                        }
+                                    }
+                                </select>
+                            }
+                            <label for="WaitingListSection" class="mx-2 mt-2">Section*</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-primary px-3">Assign</button>
+                <a data-bs-dismiss="offcanvas"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+    </form>
 </div>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 <script>
-    function openWaitingTokenModal (id) {
+    function openWaitingTokenModal(id) {
         var sectionId = id.split("section")[1].split("name")[0];
         $("#WaitingListSection").val(sectionId);
         $("#waitingTokenModal").modal("show");
-        $.validator.unobtrusive.parse("#waitingTokenModal"); 
+        $.validator.unobtrusive.parse("#waitingTokenModal");
         AddToWaitingListFormSubmit();
     }
 
-    function AddToWaitingListFormSubmit () {
+    function AddToWaitingListFormSubmit() {
         $("#waitingTokenForm").off("submit").submit(function (e) {
             e.preventDefault();
             var form = $(this)[0];

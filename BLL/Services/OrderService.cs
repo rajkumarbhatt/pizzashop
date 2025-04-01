@@ -5,6 +5,7 @@ using DAL.ViewModels;
 using iText.Kernel.Pdf;
 using iText.Html2pdf;
 using ClosedXML.Excel;
+using System.Text;
 
 namespace BLL.Services;
 
@@ -230,7 +231,7 @@ public class OrderService : IOrderService
             }).ToList(),
             Total = 0,
         }).FirstOrDefault() ?? new OrderDetailsViewModel();
-
+        orderDetailsViewModel.InvoiceNumber = "INV" + orderDetailsViewModel.Id;
         foreach (InvoiceItem i in orderDetailsViewModel.InvoiceItems)
         {
             orderDetailsViewModel.SubTotal += i.TotalAmount;
@@ -239,11 +240,11 @@ public class OrderService : IOrderService
                 orderDetailsViewModel.SubTotal += im.TotalAmount;
             }
         }
-        List<OrderTableMapping>otmap = _context.OrderTableMappings.Where(otm => otm.Orderid == orderId).ToList();
+        List<OrderTableMapping>otmap = _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToList();
         int NumberOfPeople = 0;
         foreach (OrderTableMapping otm in otmap)
         {
-            NumberOfPeople += otm.Noofpersons;
+            NumberOfPeople += otm.NoOfPersons;
         }
         orderDetailsViewModel.NumberOfPeople = NumberOfPeople.ToString();
         orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
@@ -497,5 +498,19 @@ public class OrderService : IOrderService
                 return content;
             }
         }
+    }
+    public string EncryptOrderId(int orderId)
+    {
+        string encryptedOrderId = orderId.ToString();
+        byte[] data = Encoding.UTF8.GetBytes(encryptedOrderId);
+        encryptedOrderId = Convert.ToBase64String(data);
+        return encryptedOrderId;
+    }
+    public int DecryptOrderId(string orderIdEncrypted)
+    {
+        string decryptedOrderId = orderIdEncrypted;
+        byte[] data = Convert.FromBase64String(decryptedOrderId);
+        decryptedOrderId = Encoding.UTF8.GetString(data);
+        return Convert.ToInt32(decryptedOrderId);
     }
 }

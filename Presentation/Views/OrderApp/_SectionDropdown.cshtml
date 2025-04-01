@@ -10,7 +10,7 @@
                     data-bs-target="#@customAccordianId" aria-expanded="true" aria-controls="@customAccordianId">
                     <div class="d-flex justify-content-between align-items-center" style="width: 100%;">
                         <div class="section-name">@accordianSection.SectionName</div>
-                        <div class="d-flex gap-3">
+                        <div class="d-flex gap-3 d-none d-md-flex">
                             <div class="d-flex gap-2">
                                 <div class="d-flex gap-1 justify-content-center align-items-center">
                                     <p class="available-kot small-image-kot"></p>
@@ -250,14 +250,11 @@
                             <div class="form-floating my-auto col-12 col-md-6">
                                 @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople <= 0)
                                 {
-                                    <input type="text" class="form-control" name="waitingListModal.NumberOfPeople"
-                                        id="NumberOfPeopleWaitingList" asp-for="@Model.waitingListModal.NumberOfPeople"
-                                        value="@Model.waitingListModal.NumberOfPeople">
+                                    <input type="text" class="form-control" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList" asp-for="@Model.waitingListModal.NumberOfPeople" value="@Model.waitingListModal.NumberOfPeople">
                                 }
                                 else
                                 {
-                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
-                                        name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList">
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList">
                                 }
                                 <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
                                     class="text-danger"></span>
@@ -327,8 +324,74 @@
         var selectedTableIds = selectedTablesSection.map(function (table) {
             return parseInt(table.tableId);
         });
-        $("#offcanvasRight").offcanvas("show");
-        console.log(selectedTableIds);
+        $.ajax({
+            url: "/OrderApp/GetWaitingListForCurrentSection",
+            type: "GET",
+            data: { sectionId: sectionId },
+            success: function (response) {
+                console.log(response);
+                if (response.success) {
+                    var tableBody = $("#waitingTokenTableBody");
+                    tableBody.empty();
+                    response.customerDetails.forEach(function (item) {
+                        tableBody.append(
+                            `<tr>
+                                <td><input onclick="fillForm2('${item.email}', '${item.name}', '${item.phoneNumber}', '${item.tokenNumber}', '${item.numberOfPersons}')" type="radio" id="waitingList" name="waitingList" /></td>
+                                <td>${item.tokenNumber}</td>
+                                <td>${item.name}</td>
+                                <td>${item.numberOfPersons}</td>
+                            </tr>`
+                        );
+                    });
+                    $("#SectionDropDownOffcanvas").val(sectionId);
+                    $("#offcanvasRight").offcanvas("show");
+                
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+        AddOrder(sectionId);
+    }
+
+    function AddOrder (sectionId) {
+        $("#AssignTableToCustomerForm").off("submit").submit(function (e) {
+             var selectedTablesSection = selectedTables.filter(function (table) {
+                return table.sectionId == sectionId;
+            });
+            if (selectedTablesSection.length == 0) {
+                toastr.error("Please select table(s) to assign");
+                return;
+            }
+            var selectedTableIds = selectedTablesSection.map(function (table) {
+                return parseInt(table.tableId);
+            });
+            e.preventDefault();
+            var form = $(this)[0];
+            var formData = new FormData(form);
+            formData.append("tableIds", JSON.stringify(selectedTableIds));
+            $.ajax({
+                url: "/OrderApp/AssignTablesToCustomer",
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        selectedTables = [];
+                        $("#offcanvasRight").offcanvas("hide");
+                        setTimeout(function () {
+                            window.location.href = "/OrderApp/Menu";
+                        }, 1000);
+                    }
+                    else {
+                        toastr.error(response.message);
+                    }
+                },
+            });
+        });
     }
 
     $(document).ready(function () {
@@ -380,6 +443,14 @@
         $("#NameWaitingToken").val(name);
         $("#MobileNumberWaitingToken").val(mobileNumber);
         $("#emailSuggestions").hide();
+    }
+    
+    function fillForm2(email, name, mobileNumber, tokenNumber, noOfPersons) {
+        $("#EmailOffCanvasWaitingToken").val(email);
+        $("#NameOffCanvasWaitingToken").val(name);
+        $("#MobileNumberOffCanvasWaitingToken").val(mobileNumber);
+        $("#IdOffCanvasWaitingToken").val(tokenNumber);
+        $("#NumberOfPeopleWaitingListOffCanvas").val(noOfPersons);
     }
 
 </script>

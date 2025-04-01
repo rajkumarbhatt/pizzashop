@@ -44,5 +44,23 @@ namespace Presentation.Controllers
         {
             return _waitingListService.GetCustomerSuggestions(email);
         }
+
+        [HttpGet]
+        public IActionResult GetWaitingListBasedOnSection(int sectionId)
+        {
+            WaitingListViewModel waitingListViewModel = _waitingListService.GetWaitingListBasedOnSection(sectionId);
+            return PartialView("_WaitingListTablePartial", waitingListViewModel);
+        }
+        [HttpGet]
+        public IActionResult GetAvailableTables(int sectionId)
+        {
+            return _waitingListService.GetAvailableTables(sectionId);
+        }
+        [HttpPost]
+        public IActionResult AssignTable(int waitingListId, int tableId, int sectionId)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
+            return _waitingListService.AssignTable(waitingListId, tableId, userId, sectionId);
+        }
     }
 }

@@ -6,6 +6,8 @@ namespace BLL.Interfaces
     public interface IOrderAppService
     {
         public OrderAppViewModel GetOrderAppViewModel();
-        public IActionResult AddToWaitingList(string email, string name, string mobileNumber, string sectionId, string numberOfPeople, int userId);
+        public IActionResult AddToWaitingList(WaitingListModal waitingListModal, int userId);
+        public JsonResult GetWaitingListForCurrentSection(int sectionId);
+        public IActionResult AssignTablesToCustomer(WaitingListModal waitingListModal, int[] tableIds, int userId);
     }
 }

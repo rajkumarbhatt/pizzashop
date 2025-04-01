@@ -24,14 +24,37 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToWaitingList ([FromForm] WaitingListModal waitingListModal)
+        public IActionResult AddToWaitingList([FromForm] WaitingListModal waitingListModal)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult (new { success = false, message = "Invalid Data" });
+                return new JsonResult(new { success = false, message = "Invalid Data" });
             }
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _orderAppService.AddToWaitingList(waitingListModal, userId);
+        }
+        [HttpGet]
+        public JsonResult GetWaitingListForCurrentSection(int sectionId)
+        {
+            return _orderAppService.GetWaitingListForCurrentSection(sectionId);
+        }
+
+        [HttpPost]
+        public IActionResult AssignTablesToCustomer([FromForm] WaitingListModal waitingListModal, [FromForm] string tableIds)
+        {
+            //"[35,34]" => [35, 34]
+            string[] tableIdsArray = tableIds.Substring(1, tableIds.Length - 2).Split(",");
+            List<int> parsedTableIds = new List<int>(); 
+            foreach (string tableId in tableIdsArray)
+            {
+                parsedTableIds.Add(int.Parse(tableId));
+            }
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = "Invalid Data" });
+            }
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            return _orderAppService.AssignTablesToCustomer(waitingListModal, parsedTableIds, userId);
         }
     }
 }

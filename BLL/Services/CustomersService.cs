@@ -19,12 +19,10 @@ public class CustomersService : ICustomerService
         List<Customer> customerList = _context.Customers.ToList();
         foreach (Customer customer in customerList)
         {
-            string date = "01/01/1980";
             int totalOrders = 0;
             List<Order> orders = _context.Orders.Where(o => o.CustomerId == customer.Id && o.IsDeleted == false).OrderByDescending(o => o.CreatedAt).ToList();
             if (orders.Count != 0)
             {
-                date = orders.FirstOrDefault().CreatedAt.Value.ToString("dd/MM/yyyy");
                 totalOrders = orders.Count;
             }
             CustomerTable customerTable = new CustomerTable
@@ -33,7 +31,7 @@ public class CustomersService : ICustomerService
                 Name = customer.Name ?? "N/A",
                 PhoneNumber = customer.Phone ?? "N/A",
                 Email = customer.Email ?? "N/A",
-                Date = date ?? "N/A",
+                Date = customer.CreatedAt.HasValue ? customer.CreatedAt.Value.ToString("dd/MM/yyyy") : "N/A",
                 TotalOrders = totalOrders
             };
             customers.Add(customerTable);

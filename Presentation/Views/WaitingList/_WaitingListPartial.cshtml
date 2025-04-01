@@ -1,61 +1,109 @@
 @model DAL.ViewModels.WaitingListViewModel
 
-<div class="form-bg shadow mx-auto mb-3 table-responsive" style="height: 60px; width: 95%;">
-    <div class="d-flex justify-content-start align-items-center gap-3 h-100 mx-3" style="white-space: nowrap;">
+<div class="d-flex mx-auto py-2 flex-column gap-2  form-bg shadow  mb-3 table-responsive" style=" width: 95%;">
+    <div class="ps-3 d-flex justify-content-start align-items-center gap-3 h-100 " style="white-space: nowrap;">
         @foreach (var sectionWithCount in Model.SectionAndNumberOfWaitingLists)
         {
-            <div class="d-flex justify-content-center gap-1 align-items-center cursor-pointer">
-                <p class="text-gray">@sectionWithCount.SectionName</p>
-                <div class="gray-circle d-flex justify-content-center align-items-center text-white">
-                    @sectionWithCount.NumberOfWaitingList
+            var paraId = "para" + sectionWithCount.SectionId;
+            @if (sectionWithCount.SectionId == 0)
+            {
+                <div id="@sectionWithCount.SectionId"
+                    class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs active-waiting-list"
+                    onclick="changeSection(id)">
+                    <p id="@paraId" class="text-gray active-waiting-list">@sectionWithCount.SectionName</p>
+                    <div class="gray-circle d-flex justify-content-center align-items-center text-white">
+                        @sectionWithCount.NumberOfWaitingList
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div id="@sectionWithCount.SectionId"
+                    class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
+                    onclick="changeSection(id)">
+                    <p id="@paraId" class="text-gray">@sectionWithCount.SectionName</p>
+                    <div class="gray-circle d-flex justify-content-center align-items-center text-white">
+                        @sectionWithCount.NumberOfWaitingList
+                    </div>
+                </div>
+            }
         }
     </div>
-    <p class="border-line-blue"></p>
 </div>
 
 <div class="form-bg shadow mx-auto table-responsive" style="width: 95%;">
-    <table id="ordersTable" class="table table-responsive" style="white-space: nowrap;">
-        <thead class="color-head-order">
-            <tr class="text-start">
-                <th>#Token No.</th>
-                <th>Created At</th>
-                <th>Waiting Time</th>
-                <th>Name</th>
-                <th>No. of Persons</th>
-                <th>Phone Number</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var waitingList in Model.WaitingList)
-            {
-                <tr>
-                    <td>@waitingList.TokenNumber</td>
-                    <td>@waitingList.CreatedAt</td>
-                    <td>@waitingList.WaitingTime</td>
-                    <td>@waitingList.Name</td>
-                    <td>@waitingList.NumberOfPersons</td>
-                    <td>@waitingList.PhoneNumber</td>
-                    <td>@waitingList.Email</td>
-                    <td>
-                        <button class="delete-btn" onclick="editWaitingList(@waitingList.TokenNumber)"> <img src="~/images/icons/edit-waiting-list.svg" class="small-image"
-                                alt=""></button>
-                        <button class="delete-btn" onclick="deleteFromList(@waitingList.TokenNumber)"> <img
-                                src="~/images/icons/delete-waiting-list.svg" class="small-image" alt=""></button>
-                        <button class="delete-btn "> <img src="~/images/icons/assign-waiting-list.svg" class="small-image"
-                                alt=""></button>
-                    </td>
-                </tr>
-            }
-        </tbody>
+    <div id="waitingListTablePartial">
+        <partial name="_WaitingListTablePartial" model="@Model" />
+    </div>
+    </tbody>
     </table>
 </div>
 
 <div id="waitingListModalStarting">
-    <partial name="_WaitingTokenModal" model="@Model"/>
+    <partial name="_WaitingTokenModal" model="@Model" />
+</div>
+
+@* delete modal *@
+<div class="modal fade" id="deleteWaitingList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Delete
+                    Confirmation
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete this customer form Waiting List?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* assign table modal *@
+<div class="modal fade" id="AssignTableModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Assign Table</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <div class="col-12 row ">
+                    <div class="form-floating my-auto col-12 col-md-6">
+                        <select id="selectSection" class="form-select" aria-label="CategoryId" asp-for="@Model.waitingListModal.SectionId" onchange="getTables(this.value)">
+                            <option value="" selected hidden>Select Section</option>
+                            @foreach (var Section in Model.Sections)
+                            {
+                                <option value="@Section.Id">@Section.Name</option>
+                            }
+                        </select>
+                        <label for="NumberOfPeopleWaitingList" class="">Section*</label>
+                    </div>
+                    <div class="col-12 col-md-6 p-2 form-floating">
+                        <select id="selectTable" class="form-select" aria-label="CategoryId"
+                            asp-for="@Model.waitingListModal.SectionId">
+                            <option value="">Select Table</option>
+                        </select>
+                        <label for="WaitingListSection" class="mx-2 mt-2">Table*</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end gap-2">
+                <button id="assgnTableToCustomerButton" type="button" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -91,6 +139,20 @@
                             url: "/WaitingList/GetWaitingList",
                             success: function (response) {
                                 $('#waitingListPartial').html(response);
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/WaitingList/GetWaitingListBasedOnSection",
+                                    data: { sectionId: $("#currentSection").val() },
+                                    success: function (response) {
+                                        $('#waitingListTablePartial').html(response);
+                                        var paraId = "para" + $("#currentSection").val();
+                                        $('.text-gray').removeClass('active-waiting-list');
+                                        $('#' + paraId).addClass('active-waiting-list');
+                                    },
+                                    error: function (response) {
+                                        console.log(response);
+                                    }
+                                });
                             },
                             error: function (response) {
                                 console.log(response);
@@ -104,6 +166,92 @@
                     console.log(response);
                 }
             });
+        });
+    }
+
+    function changeSection(sectionId) {
+        var paraId = "para" + sectionId;
+        $('.text-gray').removeClass('active-waiting-list');
+        $('#' + paraId).addClass('active-waiting-list');
+        $.ajax({
+            type: "GET",
+            url: "/WaitingList/GetWaitingListBasedOnSection",
+            data: { sectionId: sectionId },
+            success: function (response) {
+                $('#waitingListTablePartial').html(response);
+                $("#currentSection").val(sectionId);
+            },
+            error: function (response) {
+                console.log(response);
+            }
+        });
+    }
+
+    function assignTableModalOpen(tokenNumber) {
+        console.log(tokenNumber);
+        $('#AssignTableModal').modal('show');
+        $("#assgnTableToCustomerButton").off("click").click(function(){
+            var tableId = $('#selectTable').val();
+            $.ajax({
+                type: "POST",
+                url: "/WaitingList/AssignTable",
+                data: { waitingListId: tokenNumber, tableId: tableId, sectionId: $('#selectSection').val() },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $('#AssignTableModal').modal('hide');
+                        $.ajax({
+                            type: "GET",
+                            url: "/WaitingList/GetWaitingList",
+                            success: function (response) {
+                                $('#waitingListPartial').html(response);
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/WaitingList/GetWaitingListBasedOnSection",
+                                    data: { sectionId: $("#currentSection").val() },
+                                    success: function (response) {
+                                        $('#waitingListTablePartial').html(response);
+                                        var paraId = "para" + $("#currentSection").val();
+                                        $('.text-gray').removeClass('active-waiting-list');
+                                        $('#' + paraId).addClass('active-waiting-list');
+                                    },
+                                    error: function (response) {
+                                        console.log(response);
+                                    }
+                                });
+                            },
+                            error: function (response) {
+                                console.log(response);
+                            }
+                        });
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (response) {
+                    console.log(response);
+                }
+            });
+        })
+
+    }
+
+    function getTables(sectionId) {
+        $('#selectTable').empty();
+        $('#selectTable').append('<option value="">Select Table</option>');
+        $.ajax({
+            type: "GET",
+            url: "/WaitingList/GetAvailableTables",
+            data: { sectionId: sectionId },
+            success: function (response) {
+                console.log(response);
+                $.each(response, function (key, value) {
+                    $('#selectTable').append('<option value="' + value.id + '">' + value.name + '</option>');
+                });
+            },
+            error: function (response) {
+                console.log(response);
+            }
         });
     }
 </script>

@@ -12,11 +12,13 @@ public class OrderController : Controller
 {
     private readonly IOrderService _orderService;
     private readonly PizzaShopContext _context;
+    private readonly IJwtService _jwtService;
 
-    public OrderController(IOrderService orderService, PizzaShopContext context)
+    public OrderController(IOrderService orderService, PizzaShopContext context, IJwtService jwtService)
     {
         _orderService = orderService;
         _context = context;
+        _jwtService = jwtService;
     }
 
     public IActionResult Index()
@@ -39,9 +41,10 @@ public class OrderController : Controller
     }
 
     [HttpGet]
-    [Route("Order/OrderDetails/{orderId}")]
-    public IActionResult OrderDetails(int orderId)
+    [Route("Order/OrderDetails/{orderIdEncrypted}")]
+    public IActionResult OrderDetails(string orderIdEncrypted)
     {
+        int orderId = _orderService.DecryptOrderId(orderIdEncrypted);
         OrderDetailsViewModel orderDetailsViewModel = _orderService.GetOrderDetails(orderId);
         return View(orderDetailsViewModel);
     }
@@ -51,5 +54,12 @@ public class OrderController : Controller
     {
         byte[] pdfBytes = _orderService.GenerateInvoice(orderId);
         return File(pdfBytes, "application/pdf", "Invoice.pdf");
+    }
+
+    [HttpGet]
+    public IActionResult EncryptOrder(int orderId)
+    {
+        string encryptedOrderId = _orderService.EncryptOrderId(orderId);
+        return Json(new { encryptedOrderId });
     }
 }

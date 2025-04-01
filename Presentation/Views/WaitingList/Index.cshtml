@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_LayoutOrderApp.cshtml";
 }
 @model DAL.ViewModels.WaitingListViewModel
-
+<input type="hidden" id="currentSection" value="0" /> 
 <div class="d-flex justify-content-between align-items-center mt-2 mx-auto" style="width: 95%;">
     <h1 class="main-page-heading" style="margin-left: 0;">Waiting List</h1>
     <p onclick="openWaitingTokenModal()" class="waiting-token-button-kot cursor-pointer"> + Waiting Token</p>
@@ -11,29 +11,7 @@
     <partial name="_WaitingListPartial" model="Model" />    
 </div>
 
-@* delete modal *@
-<div class="modal fade" id="deleteWaitingList" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Delete
-                    Confirmation
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
-                <p>Are you sure you want to delete this customer form Waiting List?</p>
-            </div>
-            <div class="modal-footer">
-                <button id="deleteButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Yes</button>
-                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
-            </div>
-        </div>
-    </div>
-</div>
+  
 
 <script>
     function openWaitingTokenModal() {

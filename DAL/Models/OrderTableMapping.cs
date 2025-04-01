@@ -7,23 +7,27 @@ public partial class OrderTableMapping
 {
     public int Id { get; set; }
 
-    public int? Orderid { get; set; }
+    public int OrderId { get; set; }
 
-    public int? Tableid { get; set; }
+    public int TableId { get; set; }
 
-    public short Noofpersons { get; set; }
+    public int NoOfPersons { get; set; }
 
-    public bool? Isdeleted { get; set; }
+    public bool IsDeleted { get; set; }
 
-    public DateTime? Createdat { get; set; }
+    public int CreatedBy { get; set; }
 
-    public string? Createdby { get; set; }
+    public int UpdatedBy { get; set; }
 
-    public DateTime? Updatedat { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public string? Updatedby { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
-    public virtual Order? Order { get; set; }
+    public virtual User CreatedByNavigation { get; set; } = null!;
 
-    public virtual Table? Table { get; set; }
+    public virtual Order Order { get; set; } = null!;
+
+    public virtual Table Table { get; set; } = null!;
+
+    public virtual User UpdatedByNavigation { get; set; } = null!;
 }

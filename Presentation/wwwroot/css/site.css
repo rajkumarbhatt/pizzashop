@@ -930,5 +930,13 @@ td{
   background-color: #A1A9B3;
 }
 .border-line-blue {
-  border-left: 2px solid #0066A7;
+  border: 1px solid #0066A7;
+}
+.active-waiting-list {
+  color: #0066A7;
+  font-weight: 650;
+}
+.text-blue-custom {
+  color: #0066A7;
+  font-weight: 500;
 }

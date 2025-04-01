@@ -97,9 +97,12 @@ $(document).ready(function () {
               if (response.success) {
                   if (rememberMe) {
                       document.cookie = `email=${email}; max-age=${60 * 60 * 24 * 7}`;
+                      document.cookie = `token=${response.token}; max-age=${60 * 60 * 24 * 7}`;
+                  }
+                  else {
+                    document.cookie = `token=${response.token};`;
                   }
                   toastr.success(response.message);
-                  document.cookie = `token=${response.token}; max-age=${60 * 60 * 24 * 7}; path=/; SameSite=Lax`;
 
                   setTimeout(function () {
                       window.location.href = '/Dashboard';

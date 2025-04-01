@@ -60,6 +60,7 @@
     function downloadPdfInvoice(orderId) {
         console.log(orderId);
         const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
+        $('.loader-container').removeClass('d-none');
         fetch(url, { method: "GET" })
             .then(response => response.blob())
             .then(blob => {
@@ -70,13 +71,23 @@
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
+                $('.loader-container').addClass('d-none');
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                
+            });
     }
 
     function viewOrderDetails(orderId) {
-        console.log(orderId);
-        window.location.href = "/Order/OrderDetails/" + orderId;
+        $.ajax({
+            url: '@Url.Action("EncryptOrder", "Order")',
+            type: "GET",
+            data: { orderId: orderId },
+            success: function (data) {
+                orderId = data.encryptedOrderId;
+                window.location.href = "/Order/OrderDetails/" + orderId;
+            }
+        });
     }
 
     function renderStars() {

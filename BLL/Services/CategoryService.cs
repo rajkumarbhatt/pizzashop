@@ -664,7 +664,7 @@ namespace BLL.Services
             {
                 Id = modifier.Id,
                 Name = modifier.Name,
-                Rate = (int)modifier.Price,
+                Rate = modifier.Price,
                 Quantity = (int)modifier.Quantity,
                 Unit = modifier.Unit,
                 Description = modifier.Description,

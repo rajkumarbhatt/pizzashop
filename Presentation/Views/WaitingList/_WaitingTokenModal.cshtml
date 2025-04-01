@@ -34,7 +34,8 @@
                                     <input type="text" class="form-control" name="waitingListModal.Email"
                                         id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off">
                                 }
-                                <ul id="emailSuggestions" class="dropdown-menu" style="display: none; position: absolute; z-index: 1000; width: 100%;"></ul>
+                                <ul id="emailSuggestions" class="dropdown-menu"
+                                    style="display: none; position: absolute; z-index: 1000; width: 100%;"></ul>
                                 <label for="ItemName" class="">Email*</label>
                                 <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
                             </div>
@@ -113,7 +114,6 @@
         </form>
     </div>
 </div>
-
 <script>
     function AddToWaitingListFormSubmit() {
         $("#waitingTokenForm").off("submit").submit(function (e) {
@@ -135,6 +135,20 @@
                             url: "/WaitingList/GetWaitingList",
                             success: function (response) {
                                 $('#waitingListPartial').html(response);
+                                $.ajax({
+                                    type: "GET",
+                                    url: "/WaitingList/GetWaitingListBasedOnSection",
+                                    data: { sectionId: $("#currentSection").val() },
+                                    success: function (response) {
+                                        $('#waitingListTablePartial').html(response);
+                                        var paraId = "para" + $("#currentSection").val();
+                                        $('.text-gray').removeClass('active-waiting-list');
+                                        $('#' + paraId).addClass('active-waiting-list');   
+                                    },
+                                    error: function (response) {
+                                        console.log(response);
+                                    }
+                                });
                             },
                             error: function (response) {
                                 console.log(response);
@@ -148,11 +162,11 @@
             });
         });
     }
+
     AddToWaitingListFormSubmit();
 
     $(document).ready(function () {
         $("#EmailWaitingToken").on("input", function () {
-            console.log("input event fired");
             clearTimeout(this.delayTimer);
             this.delayTimer = setTimeout(function () {
                 var email = $("#EmailWaitingToken").val();
@@ -162,7 +176,6 @@
                         type: "GET",
                         data: { email: email },
                         success: function (response) {
-                            console.log(response);
                             var suggestions = response.customerSuggetions;
                             var suggestionsList = $("#emailSuggestions");
                             suggestionsList.empty();
@@ -200,5 +213,5 @@
         $("#MobileNumberWaitingToken").val(mobileNumber);
         $("#emailSuggestions").hide();
     }
-    
+
 </script>

@@ -143,7 +143,7 @@
         const fromDate = encodeURIComponent($("#fromDate").val());
         const toDate = encodeURIComponent($("#toDate").val());
         const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
-
+        $('.loader-container').removeClass('d-none');
         fetch(url, { method: "GET" })
             .then(response => response.blob())
             .then(blob => {
@@ -153,8 +153,12 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                $('.loader-container').addClass('d-none');
             })
-            .catch(error => console.error("Error exporting data:", error));
+            .catch(error => {
+                console.error("Error exporting data:", error);
+                $('.loader-container').addClass('d-none');
+            });
     });
 
     document.getElementById("exportOrdersBtn2").addEventListener("click", function () {
@@ -163,7 +167,7 @@
         const fromDate = encodeURIComponent($("#fromDate").val());
         const toDate = encodeURIComponent($("#toDate").val());
         const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
-
+        $('.loader-container').removeClass('d-none');
         fetch(url, { method: "GET" })
             .then(response => response.blob())
             .then(blob => {
@@ -173,7 +177,11 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                $('.loader-container').addClass('d-none');
             })
-            .catch(error => console.error("Error exporting data:", error));
+            .catch(error => {
+                console.error("Error exporting data:", error);
+                $('.loader-container').addClass('d-none');
+            });
     });
 </script>
