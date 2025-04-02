@@ -105,7 +105,11 @@
             success: function (data) {
                 $("#TableName").val(data.name);
                 $("#TableCapacity").val(data.capacity);
-                $("#TableStatus").val(data.status);
+                if (data.status === "Available") {
+                    $("#TableStatus").val("Available");
+                } else {
+                    $("#TableStatus").val("Occupied");
+                }
                 $("#TableSection").val(data.sectionId);
                 $("#TableId").val(data.id);
                 console.log(data);
@@ -247,4 +251,5 @@
     if ($(".table-name-checkbox:checked").length === 0) {
         $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
     }
+
 </script>

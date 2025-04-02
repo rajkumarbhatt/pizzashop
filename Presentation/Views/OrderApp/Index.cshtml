@@ -65,14 +65,15 @@
                         {
                             <input asp-for="@Model.waitingListModal.Email" type="text" class="form-control"
                                 name="waitingListModal.Email" id="EmailOffCanvasWaitingToken" autocomplete="off">
-                            <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
                         }
                         else
                         {
                             <input asp-for="@Model.waitingListModal.Email" type="text" class="form-control"
                                 name="waitingListModal.Email" id="EmailOffCanvasWaitingToken" autocomplete="off">
-                            <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
                         }
+                        <ul id="emailSuggestionsOffcanvas" class="dropdown-menu"
+                            style="display: none; position: absolute; z-index: 1000; width: 100%;"></ul>
+                        <span asp-validation-for="@Model.waitingListModal.Email" class="text-danger"></span>
                         <label for="EmailWaitingToken" class="">Email*</label>
                     </div>
                 </div>
@@ -125,7 +126,8 @@
                         <div class="form-floating my-auto col-12 col-md-6">
                             @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople != 0)
                             {
-                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
+                                <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
+                                    name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
                                 <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
                                     class="text-danger"></span>
                             }
@@ -215,4 +217,56 @@
             });
         });
     }
+
+    $(document).ready(function () {
+        $("#EmailOffCanvasWaitingToken").on("input", function () {
+            console.log("input event fired");
+            clearTimeout(this.delayTimer);
+            this.delayTimer = setTimeout(function () {
+                var email = $("#EmailOffCanvasWaitingToken").val();
+                if (email.length > 2) {
+                    $.ajax({
+                        url: "/WaitingList/GetCustomerSuggestions",
+                        type: "GET",
+                        data: { email: email },
+                        success: function (response) {
+                            console.log(response);
+                            var suggestions = response.customerSuggetions;
+                            var suggestionsList = $("#emailSuggestionsOffcanvas");
+                            suggestionsList.empty();
+                            if (suggestions.length > 0) {
+                                suggestionsList.show();
+                                suggestions.forEach(function (item) {
+                                    suggestionsList.append(
+                                        `<li class="dropdown-item" onclick="fillFormOffCanvas('${item.email}', '${item.name}', '${item.mobileNumber}')">${item.email}</li>`
+                                    );
+                                });
+                            } else {
+                                suggestionsList.hide();
+                            }
+                        },
+                        error: function () {
+                            console.error("Error fetching suggestions.");
+                        }
+                    });
+                } else {
+                    $("#emailSuggestionsOffcanvas").hide();
+                }
+            }, 500);
+        });
+
+        $(document).click(function (e) {
+            if (!$(e.target).closest("#EmailOffCanvasWaitingToken, #emailSuggestionsOffcanvas").length) {
+                $("#emailSuggestionsOffcanvas").hide();
+            }
+        });
+    });
+
+    function fillFormOffCanvas(email, name, mobileNumber) {
+        $("#EmailOffCanvasWaitingToken").val(email);
+        $("#NameOffCanvasWaitingToken").val(name);
+        $("#MobileNumberOffCanvasWaitingToken").val(mobileNumber);
+        $("#emailSuggestionsOffcanvas").hide();
+    }
+
 </script>

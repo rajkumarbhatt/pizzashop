@@ -14,7 +14,7 @@ namespace DAL.ViewModels
         public string? CustomerName { get; set; }
         public string? CustomerEmail { get; set; }
         public string? CustomerPhone { get; set; }
-        public string? NumberOfPeople { get; set; }
+        public int? NumberOfPeople { get; set; }
         public List<Table>? Tables { get; set; }
         public string? Section { get; set; }
         public List<InvoiceItem>? InvoiceItems { get; set; }

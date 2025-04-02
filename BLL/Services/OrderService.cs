@@ -6,6 +6,8 @@ using iText.Kernel.Pdf;
 using iText.Html2pdf;
 using ClosedXML.Excel;
 using System.Text;
+using iText.Layout.Font;
+
 
 namespace BLL.Services;
 
@@ -55,7 +57,7 @@ public class OrderService : IOrderService
         };
         return orderViewModal;
     }
-    public OrderViewModal FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string fromDate, string toDate, string searchValue)
+    public OrderViewModal FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string? fromDate, string? toDate, string searchValue)
     {
         if (fromDate == "dd-mm-yyyy") fromDate = null;
         if (toDate == "dd-mm-yyyy") toDate = null;
@@ -148,7 +150,7 @@ public class OrderService : IOrderService
         List<OrderTable> orderTables = new List<OrderTable>();
         foreach (Order order in orders)
         {
-            Customer customer = customers.Find(c => c.Id == order.CustomerId);
+            Customer customer = customers.Find(c => c.Id == order.CustomerId) ?? new Customer();
             CustomerReview customerReview = customerReviews.Find(cr => cr.CustomerId == order.CustomerId && cr.OrderId == order.Id) ?? new CustomerReview();
 
             OrderTable orderTable = new OrderTable
@@ -205,7 +207,7 @@ public class OrderService : IOrderService
             CustomerName = o.Customer.Name ?? "N/A",
             CustomerEmail = o.Customer.Email ?? "N/A",
             CustomerPhone = o.Customer.Phone ?? "N/A",
-            NumberOfPeople = "0",
+            NumberOfPeople = 0,
             Tables = o.OrderTableMappings.Select(otm => otm.Table).ToList(),
             Section = o.OrderTableMappings.Select(otm => otm.Table.Section.Name).FirstOrDefault() ?? "N/A",
             InvoiceItems = o.OrderItems.Select(oi => new InvoiceItem
@@ -213,14 +215,14 @@ public class OrderService : IOrderService
                 SrNo = srNo,
                 Item = oi.Item.Name ?? "N/A",
                 Quantity = oi.Quantity,
-                Price = (double)oi.Price,
-                TotalAmount = (double)oi.Price * oi.Quantity,
+                Price = (double)(oi.Price ?? 0) ,
+                TotalAmount = (double)(oi.Price ?? 0) * oi.Quantity,
                 InvoiceModifiers = oi.OrderModifiers.Select(om => new InvoiceModifiers
                 {
                     Item = om.Modifier.Name ?? "N/A",
                     Quantity = 1,
-                    Price = (double)om.Price,
-                    TotalAmount = (double)om.Price
+                    Price = (double)(om.Price ?? 0),
+                    TotalAmount = (double)(om.Price ?? 0)
                 }).ToList()
             }).ToList(),
             SubTotal = 0,
@@ -232,10 +234,10 @@ public class OrderService : IOrderService
             Total = 0,
         }).FirstOrDefault() ?? new OrderDetailsViewModel();
         orderDetailsViewModel.InvoiceNumber = "INV" + orderDetailsViewModel.Id;
-        foreach (InvoiceItem i in orderDetailsViewModel.InvoiceItems)
+        foreach (InvoiceItem i in orderDetailsViewModel.InvoiceItems ?? new List<InvoiceItem>())
         {
             orderDetailsViewModel.SubTotal += i.TotalAmount;
-            foreach (InvoiceModifiers im in i.InvoiceModifiers)
+            foreach (InvoiceModifiers im in i.InvoiceModifiers ?? new List<InvoiceModifiers>())
             {
                 orderDetailsViewModel.SubTotal += im.TotalAmount;
             }
@@ -246,7 +248,7 @@ public class OrderService : IOrderService
         {
             NumberOfPeople += otm.NoOfPersons;
         }
-        orderDetailsViewModel.NumberOfPeople = NumberOfPeople.ToString();
+        orderDetailsViewModel.NumberOfPeople = NumberOfPeople;
         orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
         orderDetailsViewModel.OrderDuration = orderDetailsViewModel.OrderDuration.Substring(0, orderDetailsViewModel.OrderDuration.LastIndexOf("."));
         var days = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
@@ -258,36 +260,36 @@ public class OrderService : IOrderService
         }
         else if (hours > 0)
         {
-            orderDetailsViewModel.OrderDuration = hours + " hours " + minutes + " minutes ago";
+            orderDetailsViewModel.OrderDuration = hours + " hours " + minutes%60 + " minutes ago";
         }
         else if (minutes > 0)
         {
-            orderDetailsViewModel.OrderDuration = minutes + " minutes ago";
+            orderDetailsViewModel.OrderDuration = minutes%60 + " minutes ago";
         }
-        orderDetailsViewModel.SubTotal = (double?)Math.Round((decimal)orderDetailsViewModel.SubTotal, 2);
+        orderDetailsViewModel.SubTotal = (double?)Math.Round((decimal)(orderDetailsViewModel.SubTotal ?? 0), 2);
         orderDetailsViewModel.Total += orderDetailsViewModel.SubTotal;
         orderDetailsViewModel.InvoiceTaxes = GetInvoiceTaxes(orderId, orderDetailsViewModel);
         foreach (InvoiceTax i in orderDetailsViewModel.InvoiceTaxes)
         {
             orderDetailsViewModel.Total += i.TaxAmount;
         }
-        orderDetailsViewModel.Total = (double?)Math.Round((decimal)orderDetailsViewModel.Total, 2);
+        orderDetailsViewModel.Total = (double?)Math.Round((decimal)(orderDetailsViewModel.Total ?? 0), 2);
 
         return orderDetailsViewModel;
     }
     public List<InvoiceTax> GetInvoiceTaxes(int orderId, OrderDetailsViewModel orderDetailsViewModel)
     {
         List<InvoiceTax> invoiceTaxes = new List<InvoiceTax>();
-        Order order = _context.Orders.Find(orderId);
+        Order order = _context.Orders.Find(orderId) ?? new Order();
         List<OrderTaxis> orderTaxes = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
         foreach (OrderTaxis orderTax in orderTaxes)
         {
-            TaxesFee tax = _context.TaxesFees.Find(orderTax.TaxId);
+            TaxesFee tax = _context.TaxesFees.Find(orderTax.TaxId) ?? new TaxesFee();
             InvoiceTax invoiceTax = new InvoiceTax();
             if (tax.TaxType == "Percentage")
             {
                 invoiceTax.TaxName = tax.Name;
-                invoiceTax.TaxAmount = (double)(orderDetailsViewModel.SubTotal * (double)orderTax.TaxAmount / 100);
+                invoiceTax.TaxAmount = (double)((orderDetailsViewModel.SubTotal ?? 0) * (double)orderTax.TaxAmount / 100);
                 invoiceTax.TaxAmount = Math.Round(invoiceTax.TaxAmount, 2);
             }
             else
@@ -301,6 +303,10 @@ public class OrderService : IOrderService
     }
     public byte[] GenerateInvoice(int orderId)
     {
+        
+        string fontPath = "C:/Windows/Fonts/Arial.ttf"; 
+        FontProvider fontProvider = new FontProvider();
+        fontProvider.AddFont(fontPath);
 
         OrderDetailsViewModel orderDetailsViewModel = GetOrderDetails(orderId);
 
@@ -313,7 +319,7 @@ public class OrderService : IOrderService
             htmlContent = htmlContent.Replace("{{customerName}}", orderDetailsViewModel.CustomerName);
             htmlContent = htmlContent.Replace("{{customerPhone}}", orderDetailsViewModel.CustomerPhone);
             string tables = "";
-            foreach (DAL.Models.Table table in orderDetailsViewModel.Tables)
+            foreach (DAL.Models.Table table in orderDetailsViewModel.Tables ?? new List<DAL.Models.Table>())
             {
                 tables += table.Name + ",";
             }
@@ -321,10 +327,10 @@ public class OrderService : IOrderService
             htmlContent = htmlContent.Replace("{{table}}", tables);
             string invoiceItems = "";
             int srNo = 1;
-            foreach (InvoiceItem invoiceItem in orderDetailsViewModel.InvoiceItems)
+            foreach (InvoiceItem invoiceItem in orderDetailsViewModel.InvoiceItems ?? new List<InvoiceItem>())
             {
                 string invoiceModifiers = "";
-                foreach (InvoiceModifiers invoiceModifier in invoiceItem.InvoiceModifiers)
+                foreach (InvoiceModifiers invoiceModifier in invoiceItem.InvoiceModifiers ?? new List<InvoiceModifiers>())
                 {
                     invoiceModifiers += "<tr><td></td><td>" + invoiceModifier.Item + "</td><td>" + invoiceModifier.Quantity + "</td><td >" + invoiceModifier.Price + "</td><td style='text-align: right;'>" + invoiceModifier.TotalAmount + "</td></tr>";
                 }
@@ -332,7 +338,7 @@ public class OrderService : IOrderService
             }
             htmlContent = htmlContent.Replace("{{invoiceItems}}", invoiceItems);
             string invoiceTaxes = "<tr><td></td><td>SubTotal</td><td></td><td></td><td style='text-align: right;'>" + orderDetailsViewModel.SubTotal + "</td></tr>";
-            foreach (InvoiceTax invoiceTax in orderDetailsViewModel.InvoiceTaxes)
+            foreach (InvoiceTax invoiceTax in orderDetailsViewModel.InvoiceTaxes ?? new List<InvoiceTax>())
             {
                 invoiceTaxes += "<tr><td></td><td>" + invoiceTax.TaxName + "</td><td></td><td></td><td style='text-align: right;'>" + invoiceTax.TaxAmount + "</td></tr>";
             }
@@ -342,6 +348,7 @@ public class OrderService : IOrderService
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdf = new PdfDocument(writer);
             ConverterProperties converterProperties = new ConverterProperties();
+            converterProperties.SetFontProvider(fontProvider);
             HtmlConverter.ConvertToPdf(htmlContent, pdf, converterProperties);
             return ms.ToArray();
         }

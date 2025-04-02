@@ -108,6 +108,7 @@ namespace BLL.Services
         {
             List<Customer> customers = _context.Customers.Where(c => c.Email.Contains(email)).ToList();
             customers.RemoveAll(c => _context.WaitingLists.Any(w => w.CustomerId == c.Id && w.IsDeleted == false));
+            customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed"));
             List<CustomerDetailsSuggestions> customerSuggetions = new List<CustomerDetailsSuggestions>();
             foreach (Customer customer in customers)
             {
@@ -183,6 +184,11 @@ namespace BLL.Services
         public IActionResult AssignTable(int waitingListId, int tableId, int userId, int sectionId)
         {
             WaitingList waitingList = _context.WaitingLists.Find(waitingListId);
+            Customer customer = _context.Customers.Find(waitingList.CustomerId);
+            if (_context.Orders.Any(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            {
+                return new JsonResult(new { success = false, message = "Customer already has a ongoing order" });
+            }
             Table table = _context.Tables.Find(tableId);
             table.Status = "Assigned";
             waitingList.IsDeleted = true;

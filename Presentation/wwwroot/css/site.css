@@ -940,3 +940,84 @@ td{
   color: #0066A7;
   font-weight: 500;
 }
+/* kot menu styles */
+.active-kot-sidebar-item {
+  background-color: #0066A7;
+  color: white;
+}
+.right-border-custom {
+  color: white;
+  background-color: white;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+}
+.nonveg-kot {
+  background-color: #FF0000;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.veg-kot {
+  background-color: #008000;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.vegan-kot {
+  background-color: #FFA500;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+}
+.menu-item-kot-div {
+  background-color: white;
+  width: 275px;
+  height: 100px;
+  border: wheat;
+  border-radius: 20px;
+  position: relative; 
+}
+.kot-menu-item-image-div {
+  width: 100px;
+  height: 100px;
+  background: #FFFFFF;
+}
+.border-kot-menu-item-image {
+  border: 1px solid #D2CEC6;
+  border-radius: 50%;
+}
+.veg-menu-item-indicator {
+  background: #008000;
+  color: #008000;
+  border-bottom-left-radius: 50%;
+}
+.top-right-border-veg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0px 40px 40px 0; 
+  border-color: white green white white;
+}
+.top-right-border-nonveg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0px 40px 40px 0; 
+  border-color: white red white white;
+}
+.top-right-border-vegan {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0px 40px 40px 0; 
+  border-color: white orange white white;
+}

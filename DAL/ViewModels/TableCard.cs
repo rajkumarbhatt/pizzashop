@@ -4,7 +4,7 @@ namespace DAL.ViewModels
     {
         public int? TableId { get; set; }
         public string? TableName { get; set; }
-        public string? TableCapacity { get; set; }
+        public int? TableCapacity { get; set; }
         public string? CurentOrderTime { get; set; }
         public string? TableStatus { get; set; }
     }

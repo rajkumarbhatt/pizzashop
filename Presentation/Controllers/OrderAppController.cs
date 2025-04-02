@@ -40,21 +40,18 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult AssignTablesToCustomer([FromForm] WaitingListModal waitingListModal, [FromForm] string tableIds)
+        public IActionResult AssignTablesToCustomer([FromForm] WaitingListModal waitingListModal,[FromForm] string tableIds)
         {
-            //"[35,34]" => [35, 34]
-            string[] tableIdsArray = tableIds.Substring(1, tableIds.Length - 2).Split(",");
-            List<int> parsedTableIds = new List<int>(); 
-            foreach (string tableId in tableIdsArray)
-            {
-                parsedTableIds.Add(int.Parse(tableId));
-            }
+
+            string sanitizedTableIds = tableIds.Replace("[", "").Replace("]", "").Trim();
+            List<int> tableIdArray = sanitizedTableIds.Split(',').Select(id => int.Parse(id.Trim())).ToList();
+
             if (!ModelState.IsValid)
             {
                 return new JsonResult(new { success = false, message = "Invalid Data" });
             }
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _orderAppService.AssignTablesToCustomer(waitingListModal, parsedTableIds, userId);
+            return _orderAppService.AssignTablesToCustomer(waitingListModal, tableIdArray, userId);
         }
     }
 }

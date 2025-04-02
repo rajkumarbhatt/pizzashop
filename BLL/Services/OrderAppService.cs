@@ -36,8 +36,12 @@ public class OrderAppService : IOrderAppService
                     TableId = table.Id,
                     TableName = table.Name,
                     TableStatus = table.Status,
-                    TableCapacity = table.Capacity.ToString(),
-                    CurentOrderTime = "N/A"
+                    TableCapacity = table.Status == "Available" ? table.Capacity : (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.NoOfPersons ?? 0),
+                    CurentOrderTime = _context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id) != null
+                    ? ((DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours > 0
+                        ? $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours} hrs {(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins"
+                        : $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins")
+                    : "N/A"
                 }).ToList()
             };
             accordianItems.Add(accordianItem);
@@ -58,8 +62,15 @@ public class OrderAppService : IOrderAppService
             string mobileNumber = waitingListModal.MobileNumber;
             string numberOfPeople = waitingListModal.NumberOfPeople.ToString();
             string sectionId = waitingListModal.SectionId.ToString();
-
-            Customer customer = _context.Customers.FirstOrDefault(c => c.Email == email);
+            if (_context.WaitingLists.Any(w => w.Customer.Email == email && w.IsDeleted == false))
+            {
+                return new JsonResult(new { success = false, message = "Customer already in waiting list" });
+            }
+            Customer? customer = _context.Customers.FirstOrDefault(c => c.Email == email);
+            if (customer != null && _context.Orders.Any(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            {
+                return new JsonResult(new { success = false, message = "Customer already has a ongoing order" });
+            }
             if (customer == null)
             {
                 customer = new Customer
@@ -127,20 +138,38 @@ public class OrderAppService : IOrderAppService
         return new JsonResult(new { success = true, customerDetails = waitingListTables });
     }
 
-    public IActionResult AssignTablesToCustomer(WaitingListModal waitingListModal, int[] tableIds, int userId)
+    public IActionResult AssignTablesToCustomer(WaitingListModal waitingListModal, List<int> tableIds, int userId)
     {
+        if (tableIds.Count == 1)
+        {
+            Table table = _context.Tables.Find(tableIds[0]);
+            if (table.Capacity < waitingListModal.NumberOfPeople) {
+                return new JsonResult(new { success = false, message = "Customers can't be managed in selected table" });
+            }
+        }
         Customer customer = new Customer();
         foreach (int tableId in tableIds)
         {
             Table table = _context.Tables.Find(tableId);
-            if (table.Capacity > waitingListModal.NumberOfPeople && tableIds.Length > 1)
-            {
+            if (table.Capacity > waitingListModal.NumberOfPeople && tableIds.Count > 1)
                 return new JsonResult(new { success = false, message = "Customers can be managed in less than selected tables" });
-            }
         }
         if (waitingListModal.Id == -1)
         {
+            if (_context.WaitingLists.Any(w => w.Customer.Email == waitingListModal.Email && w.IsDeleted == false))
+            {
+                if (_context.WaitingLists.FirstOrDefault(w => w.Customer.Email == waitingListModal.Email && w.IsDeleted == false).SectionId == waitingListModal.SectionId)
+                {
+                    return new JsonResult(new { success = false, message = "Assign customer from waiting list" });
+                } else {
+                    return new JsonResult(new { success = false, message = "Customer already in waiting list of another section" });
+                }
+            }
             customer = _context.Customers.FirstOrDefault(c => c.Email == waitingListModal.Email);
+            if (_context.Orders.Any(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            {
+                return new JsonResult(new { success = false, message = "Customer already has a ongoing order" });
+            }
             if (customer == null)
             {
                 customer = new Customer
@@ -160,9 +189,18 @@ public class OrderAppService : IOrderAppService
         {
             WaitingList waitingList = _context.WaitingLists.Find(waitingListModal.Id);
             customer = _context.Customers.Find(waitingList.CustomerId);
+            customer.Name = waitingListModal.Name;
+            customer.Email = waitingListModal.Email;
+            customer.Phone = waitingListModal.MobileNumber;
+            customer.UpdatedBy = userId;
+            if (_context.Orders.Any(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            {
+                return new JsonResult(new { success = false, message = "Customer already has a ongoing order" });
+            }
             waitingList.IsDeleted = true;
             waitingList.UpdatedAt = DateTime.Now;
             waitingList.UpdatedBy = userId;
+            waitingList.NoOfPersons = (short)waitingListModal.NumberOfPeople;
             _context.SaveChanges();
         }
         DAL.Models.Order order = new DAL.Models.Order
@@ -188,7 +226,8 @@ public class OrderAppService : IOrderAppService
                 CreatedBy = userId,
                 UpdatedAt = DateTime.Now,
                 UpdatedBy = userId,
-                IsDeleted = false
+                IsDeleted = false,
+                NoOfPersons = (short)waitingListModal.NumberOfPeople
             };
             Table table = _context.Tables.Find(tableId);
             table.Status = "Assigned";

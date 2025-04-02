@@ -8,6 +8,6 @@ namespace BLL.Interfaces
         public OrderAppViewModel GetOrderAppViewModel();
         public IActionResult AddToWaitingList(WaitingListModal waitingListModal, int userId);
         public JsonResult GetWaitingListForCurrentSection(int sectionId);
-        public IActionResult AssignTablesToCustomer(WaitingListModal waitingListModal, int[] tableIds, int userId);
+        public IActionResult AssignTablesToCustomer(WaitingListModal waitingListModal, List<int> tableIds, int userId);
     }
 }

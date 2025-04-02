@@ -145,6 +145,10 @@ namespace BLL.Services
         {
             if (tableId == -1)
             {
+                if (_context.Tables.Any(t => t.Name == tableName && t.SectionId == sectionId && t.IsDeleted == false))
+                {
+                    return new JsonResult(new { success = false, message = "Table already exists" });
+                }
                 Table table = new Table
                 {
                     Name = tableName,
@@ -161,6 +165,10 @@ namespace BLL.Services
             else
             {
                 Table table = _context.Tables.FirstOrDefault(t => t.Id == tableId);
+                if (_context.Tables.Any(t => t.Name == tableName && t.SectionId == sectionId && t.IsDeleted == false && t.Id != tableId))
+                {
+                    return new JsonResult(new { success = false, message = "Table already exists" });
+                }
                 table.Name = tableName;
                 table.Status = tableStatus;
                 table.Capacity = tableCapacity;

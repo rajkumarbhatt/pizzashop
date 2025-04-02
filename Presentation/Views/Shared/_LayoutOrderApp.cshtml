@@ -113,27 +113,30 @@
             @RenderBody()
 
         </div>
-        <!-- logout confirmation modal -->
-        <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-body d-flex flex-column gap-3 align-items-center">
-                        <img src="~/images/icons/warning.svg" class="medium-image align-self-center" alt="">
-                        <p>Are you sure you want to logout?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
-                        <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
-                    </div>
+
+    </div>
+
+    <!-- logout confirmation modal -->
+    <div class="modal fade" id="logoutModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column gap-3 align-items-center">
+                    <img src="~/images/icons/warning.svg" class="medium-image align-self-center" alt="">
+                    <p>Are you sure you want to logout?</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
+                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
                 </div>
             </div>
         </div>
     </div>
+
+
     @section Scripts {
         @Html.Partial("_ValidationScriptsPartial")
     }
-    @* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await Component.InvokeAsync("Notyf")
@@ -152,13 +155,17 @@
         window.location.href = "/OrderApp";
     });
 
-
+    $("#kotMenu").click(function () {
+        window.location.href = "/OrderApp/Menu";
+    });
 
     $(document).ready(function () {
-        if (window.location.href.indexOf("OrderApp") > -1) {
-            makeThisTabActive("kotTables");
+        if (window.location.href.indexOf("Menu") > -1) {
+            makeThisTabActive("kotMenu");
         } else if (window.location.href.indexOf("WaitingList") > -1) {
             makeThisTabActive("kotWaitingList");
+        } else if (window.location.href.indexOf("OrderApp") > -1) {
+            makeThisTabActive("kotTables");
         }
     });
 
