@@ -1021,3 +1021,12 @@ td{
   border-width: 0px 40px 40px 0; 
   border-color: white orange white white;
 }
+.search-box-kot-menu {
+  width: 20%; 
+  height: min-content;
+}
+@media (max-width: 768px) {
+  .search-box-kot-menu {
+      width: 50%; 
+  }
+}

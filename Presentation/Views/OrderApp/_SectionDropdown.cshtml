@@ -47,7 +47,7 @@
                                 var tableCustomId = "table" + tableCard.TableId + "section" + accordianSection.SectionId;
                                 @if (tableCard.TableStatus == "Available")
                                 {
-                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5>@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -63,7 +63,7 @@
                                 }
                                 else if (tableCard.TableStatus == "Assigned")
                                 {
-                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5 style="color: #66A030;">@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -79,7 +79,7 @@
                                 }
                                 else if (tableCard.TableStatus == "Running")
                                 {
-                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5 style="color: #5080D4;">@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -113,7 +113,7 @@
                                 var tableCustomId = "table" + tableCard.TableId + "section" + accordianSection.SectionId;
                                 @if (tableCard.TableStatus == "Available")
                                 {
-                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="available-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5>@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -129,7 +129,7 @@
                                 }
                                 else if (tableCard.TableStatus == "Assigned")
                                 {
-                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="occupied-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5 style="color: #66A030;">@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -145,7 +145,7 @@
                                 }
                                 else if (tableCard.TableStatus == "Running")
                                 {
-                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus')">
+                                    <div class="running-table-card table-card" id="@tableCustomId" onclick="selectTable(id, '@tableCard.TableStatus', '@tableCard.OrderId')">
                                         <h5 style="color: #5080D4;">@tableCard.TableName</h5>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex flex-column justify-content-center">
@@ -293,9 +293,10 @@
 <script>
     var selectedTables = [];
 
-    function selectTable(id, status) {
+    function selectTable(id, status, orderId) {
+        console.log(id, status, orderId);
         if (status == "Assigned" || status == "Running") {
-            toastr.error("You cannot select this table");
+            window.location.href = "/OrderApp/Menu/" + orderId;
             return;
         }
         var tableId = id.split("table")[1].split("section")[0];
@@ -383,7 +384,7 @@
                         selectedTables = [];
                         $("#offcanvasRight").offcanvas("hide");
                         setTimeout(function () {
-                            window.location.href = "/OrderApp/Menu";
+                            window.location.href = "/OrderApp/Menu/" + response.orderId;    
                         }, 1000);
                     }
                     else {

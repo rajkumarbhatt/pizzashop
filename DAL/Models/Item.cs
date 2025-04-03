@@ -45,6 +45,8 @@ public partial class Item
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 
+    public virtual ICollection<CustomerFavourite> CustomerFavourites { get; set; } = new List<CustomerFavourite>();
+
     public virtual ICollection<ItemModifiergroup> ItemModifiergroups { get; set; } = new List<ItemModifiergroup>();
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();

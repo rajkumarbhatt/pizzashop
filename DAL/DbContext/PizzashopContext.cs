@@ -185,16 +185,21 @@ public partial class PizzaShopContext : DbContext
 
         modelBuilder.Entity<CustomerFavourite>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("customer_favourites");
+            entity.HasKey(e => e.Id).HasName("primary_key_id");
 
+            entity.ToTable("customer_favourites");
+
+            entity.HasIndex(e => e.ItemId, "fki_item_id_foreign_key");
+
+            entity.Property(e => e.Id).UseIdentityAlwaysColumn();
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.IsDeleted)
+                .HasDefaultValue(false)
+                .HasColumnName("is_deleted");
             entity.Property(e => e.ItemId).HasColumnName("item_id");
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -202,12 +207,17 @@ public partial class PizzaShopContext : DbContext
                 .HasColumnName("updated_at");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
-            entity.HasOne(d => d.CreatedByNavigation).WithMany()
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.CustomerFavouriteCreatedByNavigations)
                 .HasForeignKey(d => d.CreatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("customer_favourites_created_by_fkey");
 
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany()
+            entity.HasOne(d => d.Item).WithMany(p => p.CustomerFavourites)
+                .HasForeignKey(d => d.ItemId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("item_id_foreign_key");
+
+            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.CustomerFavouriteUpdatedByNavigations)
                 .HasForeignKey(d => d.UpdatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("customer_favourites_updated_by_fkey");

@@ -41,6 +41,9 @@ $("#cancel-button").click(function () {
 $(document).ready(function () {
     $("#change-password-form").submit(function (e) {
         e.preventDefault();
+        if (!$(this).valid()) {
+            return;
+        }
         var currentPassword = $("#current-password").val();
         var newPassword = $("#new-password").val();
         var confirmPassword = $("#confirm-password").val();

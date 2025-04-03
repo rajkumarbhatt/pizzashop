@@ -5,8 +5,6 @@ namespace DAL.Models;
 
 public partial class CustomerFavourite
 {
-    public int CustomerId { get; set; }
-
     public int ItemId { get; set; }
 
     public int CreatedBy { get; set; }
@@ -17,7 +15,13 @@ public partial class CustomerFavourite
 
     public DateTime? UpdatedAt { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
+    public int Id { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
+
+    public virtual Item Item { get; set; } = null!;
 
     public virtual User UpdatedByNavigation { get; set; } = null!;
 }

@@ -1,3 +1,5 @@
+using BLL.Interfaces;
+using BLL.Services;
 using DAL.DBContext;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -44,6 +46,11 @@ namespace Presentaion.Controllers
                 return false;
             }
             var roleId = int.Parse(user.Claims.ElementAt(4).Value);
+            INavBarService _navBarService = new NavBarService(db);
+            IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
+            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
+            var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
+            _httpContextAccessor.HttpContext?.Session.Set("permissions", permissionsBytes);
             var controller = requestedUrl.Split('/')[1];
             var permissionName = permissionNameObj[controller];
             var permission = db.RolePermissions.FirstOrDefault(rp => rp.RoleId == roleId && rp.Permission.Name == permissionName);

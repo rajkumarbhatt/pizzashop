@@ -2,6 +2,7 @@ namespace DAL.ViewModels
 {
     public class TableCard
     {
+        public int? OrderId { get; set; }
         public int? TableId { get; set; }
         public string? TableName { get; set; }
         public int? TableCapacity { get; set; }

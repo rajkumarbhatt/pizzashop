@@ -2,7 +2,6 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BLL.Services;
@@ -33,14 +32,31 @@ public class OrderAppService : IOrderAppService
                 NumberOfSelectedTables = 0,
                 TableCards = tables.Select(table => new TableCard
                 {
+                    OrderId = _context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id && otm.IsDeleted == false)?.OrderId ?? 0,
                     TableId = table.Id,
                     TableName = table.Name,
                     TableStatus = table.Status,
                     TableCapacity = table.Status == "Available" ? table.Capacity : (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.NoOfPersons ?? 0),
                     CurentOrderTime = _context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id) != null
+
+                    ?((DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Days > 0
+                        
+                        ? $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Days} days {(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours} hrs {(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins"
+
+                        : (DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours > 0
+
                     ? ((DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours > 0
+
                         ? $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Hours} hrs {(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins"
+
                         : $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins")
+
+                        : (DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes > 0
+
+                    ? $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Minutes} mins"
+
+                    : $"{(DateTime.Now - (_context.OrderTableMappings.FirstOrDefault(otm => otm.TableId == table.Id)?.CreatedAt ?? DateTime.Now)).Seconds} secs")
+                    
                     : "N/A"
                 }).ToList()
             };
@@ -235,6 +251,6 @@ public class OrderAppService : IOrderAppService
             _context.OrderTableMappings.Add(orderTableMapping);
             _context.SaveChanges();
         }
-        return new JsonResult(new { success = true, message = "Tables assigned successfully" });
+        return new JsonResult(new { success = true, message = "Tables assigned successfully", orderId = order.Id });
     }
 }

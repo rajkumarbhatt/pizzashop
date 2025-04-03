@@ -59,6 +59,10 @@ public partial class User
 
     public virtual ICollection<Customer> CustomerCreatedByNavigations { get; set; } = new List<Customer>();
 
+    public virtual ICollection<CustomerFavourite> CustomerFavouriteCreatedByNavigations { get; set; } = new List<CustomerFavourite>();
+
+    public virtual ICollection<CustomerFavourite> CustomerFavouriteUpdatedByNavigations { get; set; } = new List<CustomerFavourite>();
+
     public virtual ICollection<CustomerReview> CustomerReviewCreatedByNavigations { get; set; } = new List<CustomerReview>();
 
     public virtual ICollection<CustomerReview> CustomerReviewUpdatedByNavigations { get; set; } = new List<CustomerReview>();

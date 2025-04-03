@@ -48,7 +48,9 @@ $(document).ready(function () {
    // submit form
    $('#create-user-form').submit(function (e) {
        e.preventDefault();
-       
+        if (!$(this).valid()) {
+            return;
+       }
        var form = $(this)[0]; 
        var formData = new FormData(form);
        $('.loader-container').removeClass('d-none');

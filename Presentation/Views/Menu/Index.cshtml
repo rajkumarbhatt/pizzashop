@@ -160,6 +160,9 @@
     function initializeFormSubmit() {
         $("#AddItemForm").off("submit").submit(function (e) {
             e.preventDefault();
+            if (!$("#AddItemForm").valid()) {
+                return;
+            }
             if (!checkMinMaxData()) {
                 toastr.error("Please enter valid minimum and maximum values");
                 return;

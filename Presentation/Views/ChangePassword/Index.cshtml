@@ -10,7 +10,7 @@
             <p class="col-10 mx-auto mx-sm-5" style="padding: 8px;">Enter a new password to update your account
                 credentials</p>
             <form id="change-password-form" class="row flex-column">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
                 <!-- current password -->
                 <div class="col-10 col-sm-6 col-lg-3 mx-auto mx-sm-5 p-2 form-floating">
                     <input type="password" asp-for="@Model.CurrentPassword" autocomplete='off' class="form-control" id="current-password" placeholder="current-password">

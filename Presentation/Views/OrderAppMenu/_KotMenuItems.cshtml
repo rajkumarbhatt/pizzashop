@@ -1,100 +1,98 @@
 @model DAL.ViewModels.KotMenuViewModel
+@{
+    var orderId = ViewBag.OrderId;
+}
 
-<div class="d-flex flex-wrap gap-3">
-    @foreach (var item in @Model.MenuItemsKot)
-    {
-        @if (item.ItemType == "Vegetarian")
-        {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                    <div class="w-100 h-100 ">
-                        @{
-                            var imagePath = item.Image;
-                        }
-                        <img src="~/images/item-images/@imagePath"
-                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                    </div>
+<div class="d-flex">
+    <div id="thisDivIsImportant">
+        <div class="d-flex justify-content-between" style="height: min-content;">
+            <div class="input-group search-box m-3 search-box-kot-menu">
+                <input type="text" class="form-control bg-white search-input py-1 py-sm-2" id="searchKotMenuItems"
+                    placeholder="Search">
+                <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+            </div>
+            <div class="d-none d-md-flex gap-3 m-3">
+                <div class=" d-flex gap-1 align-items-center">
+                    <p class="veg-kot"></p>
+                    <p>Vegiterian</p>
                 </div>
-                <div class="d-flex flex-column justify-content-between w-100">
-                    <div class="d-flex flex-column ">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                        </div>
-                        <div class="top-right-border-veg"></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center pe-2">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                        </div>
-                        <div class="p-2">
-                            <img src="~/images/icons/favourite-empty.svg" class="small-image " alt="">
-                            <img src="~/images/icons/favourite-filled.svg" class="small-image d-none" alt="">
-                        </div>
-                    </div>
+                <div class=" d-flex gap-1 align-items-center">
+                    <p class="nonveg-kot"></p>
+                    <p>Non Vegiterian</p>
+                </div>
+                <div class=" d-flex gap-1 align-items-center">
+                    <p class="vegan-kot"></p>
+                    <p>Vegan</p>
                 </div>
             </div>
-        }
-        else if (item.ItemType == "Non-Vegetarian")
-        {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                    <div class="w-100 h-100 ">
-                        @{
-                            var imagePath = item.Image;
-                        }
-                        <img src="~/images/item-images/@imagePath"
-                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                    </div>
-                </div>
-                <div class="d-flex flex-column justify-content-between w-100">
-                    <div class="d-flex flex-column ">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                        </div>
-                        <div class="top-right-border-nonveg"></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center pe-2">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                        </div>
-                        <div class="p-2">
-                            <img src="~/images/icons/favourite-empty.svg" class="small-image " alt="">
-                            <img src="~/images/icons/favourite-filled.svg" class="small-image d-none" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-        else if (item.ItemType == "Vegan")
-        {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                    <div class="w-100 h-100 ">
-                        @{
-                            var imagePath = item.Image;
-                        }
-                        <img src="~/images/item-images/@imagePath"
-                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                    </div>
-                </div>
-                <div class="d-flex flex-column justify-content-between w-100">
-                    <div class="d-flex flex-column ">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                        </div>
-                        <div class="top-right-border-vegan"></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center pe-2">
-                        <div class="d-flex w-75">
-                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                        </div>
-                        <div class="p-2">
-                            <img src="~/images/icons/favourite-empty.svg" class="small-image " alt="">
-                            <img src="~/images/icons/favourite-filled.svg" class="small-image d-none" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    }
+        </div>
+        <div id="kotMenuItemsListPartialStart">
+        <partial name="_KotMenuItemsList" model="@Model" />
+
+        </div>
+    </div>
+    <div id="thisIsSecondImportant" class="bg-white d-none" style="height: 90vh;">
+
+    </div>
 </div>
+
+<script>
+
+    function addToFavourites(id) {
+        var itemId = parseInt(id.split("empty-heart-")[1]);
+        $("#" + id).addClass('d-none');
+        $("#filled-heart-" + itemId).removeClass('d-none');
+        $.ajax({
+            url: '/OrderAppMenu/AddToFavourites',
+            type: 'PUT',
+            data: { itemId: itemId },
+            success: function (response) {
+                if (response.success) {
+                    console.log(response.message)
+                } else {
+                    console.error(response.message)
+                }
+            },
+            error: function () {
+                console.error("error adding item to favourites")
+            }
+        })
+    }
+
+    function removeFromFavourites(id) {
+        var itemId = parseInt(id.split("filled-heart-")[1]);
+        $("#" + id).addClass('d-none');
+        $("#empty-heart-" + itemId).removeClass('d-none');
+        $.ajax({
+            url: '/OrderAppMenu/DeleteFromFavourites',
+            type: 'DELETE',
+            data: { itemId: itemId },
+            success: function (response) {
+                if (response.success) {
+                    if ($("#categoryIdKotMenu").val() == -2) {
+                        $("#category-kot-favourite-items").click();
+                    }
+                } else {
+                    console.error(response.message)
+                }
+            },
+            error: function () {
+                console.error("error adding item to favourites")
+            }
+        })
+    }
+
+    var url = window.location.href; 
+    var orderId = url.substring(url.lastIndexOf('/') + 1);
+    console.log(orderId == "Menu");   
+    if (orderId == "Menu") {
+        document.getElementById("thisDivIsImportant").style.width = "100%";
+        document.getElementById("thisIsSecondImportant").classList.add("d-none");
+    }
+    else {
+        document.getElementById("thisDivIsImportant").style.width = "66%";
+        document.getElementById("thisIsSecondImportant").classList.remove("d-none");
+        document.getElementById("thisIsSecondImportant").style.width = "34%";
+    }
+
+</script>

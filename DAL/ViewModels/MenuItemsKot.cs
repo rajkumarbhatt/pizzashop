@@ -8,4 +8,5 @@ public class MenuItemsKot
     public string? Image { get; set; }
     public int CategoryId { get; set; }
     public string? ItemType { get; set; }
+    public bool? IsFavourite { get; set; }
 }

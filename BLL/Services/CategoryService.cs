@@ -179,6 +179,14 @@ namespace BLL.Services
                     CreatedBy = userId,
                     UpdatedBy = userId
                 };
+                if (addItemViewModel.Quantity == 0)
+                {
+                    item.IsAvailable = false;
+                } 
+                else
+                {
+                    item.IsAvailable = true;
+                }
 
                 if (addItemViewModel.Image != null)
                 {
@@ -230,6 +238,14 @@ namespace BLL.Services
                         addItemViewModel.Image.CopyTo(fileStream);
                     }
                     item.ImageUrl = fileName;
+                }
+                if (addItemViewModel.Quantity == 0)
+                {
+                    item.IsAvailable = false;
+                } 
+                else
+                {
+                    item.IsAvailable = true;
                 }
                 _context.SaveChanges();
                 return item.Name;
