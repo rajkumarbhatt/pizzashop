@@ -9,5 +9,7 @@ public partial class Invoice
 
     public int OrderId { get; set; }
 
+    public string? InvoiceNo { get; set; }
+
     public virtual Order Order { get; set; } = null!;
 }

@@ -31,9 +31,14 @@
             <partial name="_KotMenuItems" model="@Model" />
         </div>
     </div>
+    
 </div>
 
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 <script>
     function changeCategoryKot(id) {
@@ -84,4 +89,6 @@
             }, 500));
         });
     });
+
+
 </script>

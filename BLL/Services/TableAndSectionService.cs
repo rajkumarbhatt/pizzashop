@@ -99,6 +99,7 @@ namespace BLL.Services
             {
                 table.IsDeleted = true;
                 table.UpdatedBy = userId;
+                table.UpdatedAt = DateTime.Now;
                 _context.SaveChanges();
             }
             return new JsonResult(new { success = true, message = "Section deleted successfully" });
@@ -156,6 +157,8 @@ namespace BLL.Services
                     Capacity = tableCapacity,
                     SectionId = sectionId,
                     CreatedBy = userId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
                     UpdatedBy = userId
                 };
                 _context.Tables.Add(table);

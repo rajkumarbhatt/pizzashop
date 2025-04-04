@@ -42,5 +42,21 @@ namespace Presentation.Controllers
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _kotMenuService.DeleteFromFavourites(itemId, userId);
         }
+        [HttpGet]
+        public IActionResult GetCustomerDetails(int orderId)
+        {
+            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetCustomerDetails(orderId);
+            return PartialView("_CustomerDetailsModal", kotMenuViewModel);
+        }
+        [HttpPost]
+        public IActionResult UpdateCustomerDetails ([FromForm]WaitingListModal waitingListModal)
+        {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = "Invalid Data" });
+            }
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            return _kotMenuService.UpdateCustomerDetails(waitingListModal, userId);
+        }
     }
 }

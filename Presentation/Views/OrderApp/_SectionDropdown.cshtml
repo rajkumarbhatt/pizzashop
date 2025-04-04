@@ -204,7 +204,7 @@
                                 else
                                 {
                                     <input type="text" class="form-control" name="waitingListModal.Email"
-                                        id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off">
+                                        id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off" placeholder=" ">
                                 }
                                 <ul id="emailSuggestions" class="dropdown-menu" style="display: none; position: absolute; z-index: 1000; width: 100%;"></ul>
                                 <label for="ItemName" class="">Email*</label>
@@ -222,7 +222,7 @@
                                 else
                                 {
                                     <input type="text" class="form-control" asp-for="@Model.waitingListModal.Name"
-                                        name="waitingListModal.Name" id="NameWaitingToken">
+                                        name="waitingListModal.Name" id="NameWaitingToken" placeholder=" ">
                                 }
                                 <span asp-validation-for="@Model.waitingListModal.Name" class="text-danger"></span>
                                 <label for="ItemName" class="">Name*</label>
@@ -238,8 +238,7 @@
                                 }
                                 else
                                 {
-                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
-                                        name="waitingListModal.MobileNumber" id="MobileNumberWaitingToken">
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber" name="waitingListModal.MobileNumber" id="MobileNumberWaitingToken" placeholder=" ">
                                 }
                                 <span asp-validation-for="@Model.waitingListModal.MobileNumber"
                                     class="text-danger"></span>
@@ -248,13 +247,13 @@
                         </div>
                         <div class="col-12 row mt-3">
                             <div class="form-floating my-auto col-12 col-md-6">
-                                @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople <= 0)
+                                @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople > 0)
                                 {
-                                    <input type="text" class="form-control" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList" asp-for="@Model.waitingListModal.NumberOfPeople" value="@Model.waitingListModal.NumberOfPeople">
+                                    <input type="text" class="form-control" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList" asp-for="@Model.waitingListModal.NumberOfPeople" value="@Model.waitingListModal.NumberOfPeople" >
                                 }
                                 else
                                 {
-                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList">
+                                    <input type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingList" placeholder=" ">
                                 }
                                 <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
                                     class="text-danger"></span>

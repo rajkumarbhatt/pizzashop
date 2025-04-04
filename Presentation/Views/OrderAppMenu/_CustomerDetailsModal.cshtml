@@ -1,0 +1,104 @@
+@model DAL.ViewModels.KotMenuViewModel
+
+
+@if (Model.WaitingListModal != null)
+{
+    <form id="CustomerDetailsForm">
+        <div class="modal fade" id="CustomerDetailsMenuModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered customer-details-modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addTableTitle">Customer Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row align-items-center">
+                            <div class="col-12 row">
+                                <div class="form-floating my-auto col-12">
+                                    @if (Model.WaitingListModal != null && Model.WaitingListModal.Name != null)
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.Name" class="form-control"
+                                            name="WaitingListModal.Name" id="TableName" required placeholder="ItemName"
+                                            value="@Model.WaitingListModal.Name">
+                                    }
+                                    else
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.Name" class="form-control"
+                                            name="WaitingListModal.Name" id="TableName" required placeholder="ItemName">
+                                    }
+                                    <span asp-validation-for="@Model.WaitingListModal.Name" class="text-danger"></span>
+                                    <label for="ItemName" class="">Name*</label>
+                                </div>
+                            </div>
+                            <div class="col-12 row">
+                                <div class="form-floating my-auto col-12 col-md-6">
+                                    @if (Model.WaitingListModal != null && Model.WaitingListModal.MobileNumber != null)
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.MobileNumber" class="form-control"
+                                            name="WaitingListModal.MobileNumber" required placeholder="ItemName"
+                                            value="@Model.WaitingListModal.MobileNumber">
+                                    }
+                                    else
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.MobileNumber" class="form-control"
+                                            name="WaitingListModal.MobileNumber" required placeholder="ItemName">
+                                    }
+                                    <span asp-validation-for="@Model.WaitingListModal.MobileNumber"
+                                        class="text-danger"></span>
+                                    <label for="ItemName" class="">Mobile Number*</label>
+                                </div>
+                                <div class="col-12 col-md-6 p-2 form-floating">
+                                    @if (Model.WaitingListModal != null && Model.WaitingListModal.NumberOfPeople != null)
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.NumberOfPeople" class="form-control"
+                                            name="WaitingListModal.NumberOfPeople" required placeholder="ItemName"
+                                            value="@Model.WaitingListModal.NumberOfPeople">
+                                    }
+                                    else
+                                    {
+                                        <input type="text" asp-for="@Model.WaitingListModal.NumberOfPeople" class="form-control"
+                                            name="WaitingListModal.NumberOfPeople" required placeholder="ItemName">
+                                    }
+                                    <span asp-validation-for="@Model.WaitingListModal.NumberOfPeople"
+                                        class="text-danger"></span>
+                                    <label for="ItemName" class="" style="top: 8px; left: 9px;">No of Persons*</label>
+                                </div>
+                                <div class="col-12 row">
+                                    <div class="form-floating my-auto col-12">
+                                        @if (Model.WaitingListModal != null && Model.WaitingListModal.Email != null)
+                                        {
+                                            <input type="text" asp-for="@Model.WaitingListModal.Email"
+                                            readonly style="background-color: #E9ECEF" name="WaitingListModal.Email" class="cursor-none form-control" required
+                                                placeholder="ItemName" value="@Model.WaitingListModal.Email">
+                                        }
+                                        else
+                                        {
+                                            <input type="text" asp-for="@Model.WaitingListModal.Email"
+                                            readonly style="background-color: #E9ECEF"   name="WaitingListModal.Email" class="cursor-none form-control" required
+                                                placeholder="ItemName">
+                                        }
+                                        <input asp-for="@Model.WaitingListModal.SectionId" name="WaitingListModal.SectionId"
+                                            type="hidden" value="-1" />
+                                        <span asp-validation-for="@Model.WaitingListModal.Email" class="text-danger"></span>
+                                        <label for="ItemName" class="">Email*</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-end ">
+                        <button id="UpdateCustomerDetails" type="submit" class="btn btn-primary px-3">Save</button>
+                        <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

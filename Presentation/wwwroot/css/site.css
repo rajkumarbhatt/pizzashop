@@ -488,6 +488,12 @@ td{
   .customer-modal {
       max-width: 80%;
   }
+  .qr-code-modal-width {
+      max-width: 15%;
+  }
+  .customer-details-modal-width {
+      max-width: 30%;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1029,4 +1035,25 @@ td{
   .search-box-kot-menu {
       width: 50%; 
   }
+}
+/* menu styles (order info card) */
+.bg-for-table-image {
+  background: #CBE4F3;
+}
+.font-weight-bold {
+  font-weight: 700;
+}
+.table-card-kot-menu-icon-border {
+  border: 1.5px solid #0056b3;
+  border-radius: 4px;
+}
+.border-kot-menu-item-card-order {
+  border: 1px solid #D2CEC6;
+  border-radius: 4px;
+}
+.font-size-item-name {
+  font-size: 16px;
+}
+.font-size-thead {
+  font-size: 14px;
 }

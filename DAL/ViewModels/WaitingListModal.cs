@@ -17,6 +17,6 @@ public class WaitingListModal
     [Required (ErrorMessage = "Number of People is required")]
     [RegularExpression(@"^[0-9]+$", ErrorMessage = "Number of People should contain only digits")]
     public required int NumberOfPeople { get; set; }
-    [Required(ErrorMessage = "Section is requires")]
-    public required int SectionId { get; set; }
+    [Required(ErrorMessage = "Section is required")]
+    public int? SectionId { get; set; }
 }

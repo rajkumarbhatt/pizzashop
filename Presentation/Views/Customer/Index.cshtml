@@ -14,8 +14,8 @@
             </a>
         </p>
         <div class="d-none d-md-block">
-            <select name="" onchange="FilerOrdersBasedOnTime(this.value)" id="CustomersTimeSelect"
-                class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;">
+            <select name="" onchange="FilerOrdersBasedOnTime(this.value);" onfocus="this.selectedIndex=-1;"
+                id="CustomersTimeSelect" class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;">
                 <option value="All Time">All Time</option>
                 <option value="Today">Today</option>
                 <option value="This Week">This Week</option>
@@ -69,7 +69,8 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button id="ApplyDateChangesButton" type="submit" class="btn btn-primary px-3">Submit</button>
-                <a><button data-bs-dismiss="modal" aria-label="Close" type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                <a><button data-bs-dismiss="modal" aria-label="Close" type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
     </div>
@@ -85,7 +86,7 @@
     var isNameAsc = true;
     var isDateAsc = true;
     var isTotalOrdersAsc = true;
-    
+
     var sortColumn = "name";
     var sortDirection = "asc";
 
@@ -95,11 +96,12 @@
             autoclose: true,
             todayHighlight: true
         }).on('show', function () {
-            $(this).attr('readonly', true); 
+            $(this).attr('readonly', true);
         });
     });
 
-    function FilerOrdersBasedOnTime (value) {
+    function FilerOrdersBasedOnTime(value) {
+        console.log("aefwef");
         if (value == "Custom Date") {
             $("#CustomDatepickerModal").modal("show");
             $("#ApplyDateChangesButton").off("click").click(function () {
@@ -110,16 +112,16 @@
                 var fromDate = $("#fromDate").val();
                 var toDate = $("#toDate").val();
                 $.ajax({
-                    url: '@Url.Action("FilterCustomers", "Customer")', 
+                    url: '@Url.Action("FilterCustomers", "Customer")',
                     type: "GET",
-                    data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue,  time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate},
+                    data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection, fromDate: fromDate, toDate: toDate },
                     success: function (data) {
                         $("#customersTablePartial").html(data);
                         $("#CustomDatepickerModal").modal("hide");
                     }
                 });
-                return;
             });
+            return;
         }
         var pageIndex = 1;
         var pageSize = $("#pageSizeSelectOrders").val();
@@ -128,9 +130,9 @@
         var fromDate = $("#fromDate").val();
         var toDate = $("#toDate").val();
         $.ajax({
-            url: '@Url.Action("FilterCustomers", "Customer")', 
+            url: '@Url.Action("FilterCustomers", "Customer")',
             type: "GET",
-            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue,  time: time, sort: sortColumn, order: sortDirection},
+            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, time: time, sort: sortColumn, order: sortDirection },
             success: function (data) {
                 $("#customersTablePartial").html(data);
             }

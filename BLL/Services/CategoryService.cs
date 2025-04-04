@@ -104,12 +104,14 @@ namespace BLL.Services
             }
             category.IsDeleted = true;
             category.UpdatedBy = userId;
+            category.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
             List<Item> items = _context.Items.Where(i => i.CategoryId == categoryId).ToList();
             foreach (Item item in items)
             {
                 item.IsDeleted = true;
                 item.UpdatedBy = userId;
+                item.UpdatedAt = DateTime.Now;
             }
             _context.SaveChanges();
             return new JsonResult(new { success = true, message = "Category deleted successfully" });
@@ -145,7 +147,7 @@ namespace BLL.Services
             }
             item.IsDeleted = true;
             item.UpdatedBy = userId;
-            List<ItemModifiergroup> itemModifierGroups = _context.ItemModifiergroups.Where(i => i.ItemId == itemId).ToList();   
+            List<ItemModifiergroup> itemModifierGroups = _context.ItemModifiergroups.Where(i => i.ItemId == itemId).ToList();
             foreach (ItemModifiergroup itemModifierGroup in itemModifierGroups)
             {
                 _context.ItemModifiergroups.Remove(itemModifierGroup);
@@ -159,96 +161,200 @@ namespace BLL.Services
         {
             if (addItemViewModel.Id == -1)
             {
-                if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName))
+                if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == false))
                 {
                     return null;
                 }
-                var item = new Item
+                else if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == true))
                 {
-                    CategoryId = addItemViewModel.CategoryId,
-                    Name = addItemViewModel.ItemName,
-                    ItemType = addItemViewModel.Type,
-                    Price = addItemViewModel.Rate,
-                    Quantity = addItemViewModel.Quantity,
-                    Unit = addItemViewModel.Unit,
-                    IsAvailable = addItemViewModel.IsAvailable,
-                    DefaultTax = addItemViewModel.IsDefaultTaxable,
-                    TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage,
-                    ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode,
-                    Description = addItemViewModel.Description,
-                    CreatedBy = userId,
-                    UpdatedBy = userId
-                };
-                if (addItemViewModel.Quantity == 0)
-                {
-                    item.IsAvailable = false;
-                } 
+                    Item item = _context.Items.FirstOrDefault(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == true);
+                    item.IsDeleted = false;
+                    item.CategoryId = addItemViewModel.CategoryId;
+                    item.Name = addItemViewModel.ItemName;
+                    item.ItemType = addItemViewModel.Type;
+                    item.Price = addItemViewModel.Rate;
+                    item.Quantity = addItemViewModel.Quantity;
+                    item.Unit = addItemViewModel.Unit;
+                    item.IsAvailable = addItemViewModel.IsAvailable;
+                    item.DefaultTax = addItemViewModel.IsDefaultTaxable;
+                    item.TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage;
+                    item.ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode;
+                    item.Description = addItemViewModel.Description;
+                    item.UpdatedBy = userId;
+                    item.UpdatedAt = DateTime.Now;
+                    if (addItemViewModel.Image != null)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                        if (!addItemViewModel.Image.ContentType.Contains("image"))
+                        {
+                            return "thisisnotacceptable";
+                        }
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            addItemViewModel.Image.CopyTo(fileStream);
+                        }
+                        item.ImageUrl = fileName;
+                    }
+                    if (addItemViewModel.Quantity == 0)
+                    {
+                        item.IsAvailable = false;
+                    }
+                    else
+                    {
+                        item.IsAvailable = true;
+                    }
+                    _context.SaveChanges();
+                    return item.Name;
+                }
                 else
                 {
-                    item.IsAvailable = true;
-                }
+                    var item = new Item
+                    {
+                        CategoryId = addItemViewModel.CategoryId,
+                        Name = addItemViewModel.ItemName,
+                        ItemType = addItemViewModel.Type,
+                        Price = addItemViewModel.Rate,
+                        Quantity = addItemViewModel.Quantity,
+                        Unit = addItemViewModel.Unit,
+                        IsAvailable = addItemViewModel.IsAvailable,
+                        DefaultTax = addItemViewModel.IsDefaultTaxable,
+                        TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage,
+                        ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode,
+                        Description = addItemViewModel.Description,
+                        CreatedBy = userId,
+                        CreatedAt = DateTime.Now,
+                        IsDeleted = false,
+                        UpdatedAt = DateTime.Now,
+                        UpdatedBy = userId
+                    };
+                    if (addItemViewModel.Quantity == 0)
+                    {
+                        item.IsAvailable = false;
+                    }
+                    else
+                    {
+                        item.IsAvailable = true;
+                    }
 
-                if (addItemViewModel.Image != null)
-                {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
-                    if (!addItemViewModel.Image.ContentType.Contains("image"))
+                    if (addItemViewModel.Image != null)
                     {
-                        return "thisisnotacceptable";
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                        if (!addItemViewModel.Image.ContentType.Contains("image"))
+                        {
+                            return "thisisnotacceptable";
+                        }
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            addItemViewModel.Image.CopyTo(fileStream);
+                        }
+                        item.ImageUrl = fileName;
                     }
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
-                    using (var fileStream = new FileStream(path, FileMode.Create))
-                    {
-                        addItemViewModel.Image.CopyTo(fileStream);
-                    }
-                    item.ImageUrl = fileName;
+                    _context.Items.Add(item);
+                    _context.SaveChanges();
+                    return item.Name;
                 }
-                _context.Items.Add(item);
-                _context.SaveChanges();
-                return item.Name;
             }
             else
             {
-                if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id))
+                if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == false))
                 {
                     return null;
                 }
-                var item = _context.Items.FirstOrDefault(i => i.Id == addItemViewModel.Id);
-                item.CategoryId = addItemViewModel.CategoryId;
-                item.Name = addItemViewModel.ItemName;
-                item.ItemType = addItemViewModel.Type;
-                item.Price = addItemViewModel.Rate;
-                item.Quantity = addItemViewModel.Quantity;
-                item.Unit = addItemViewModel.Unit;
-                item.IsAvailable = addItemViewModel.IsAvailable;
-                item.DefaultTax = addItemViewModel.IsDefaultTaxable;
-                item.TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage;
-                item.ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode;
-                item.Description = addItemViewModel.Description;
-                item.UpdatedBy = userId;
-                if (addItemViewModel.Image != null)
+                else if (_context.Items.Any(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == true))
                 {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
-                    if (!addItemViewModel.Image.ContentType.Contains("image"))
+                    Item itemToDelete = _context.Items.FirstOrDefault(i => i.Id == addItemViewModel.Id && i.IsDeleted == true);
+                    if (itemToDelete != null)
                     {
-                        return "thisisnotacceptable";
+                        itemToDelete.IsDeleted = true;
+                        itemToDelete.UpdatedBy = userId;
+                        itemToDelete.UpdatedAt = DateTime.Now;
+                        _context.SaveChanges();
                     }
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
-                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    Item item = _context.Items.FirstOrDefault(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == true);
+                    item.IsDeleted = false;
+                    item.CategoryId = addItemViewModel.CategoryId;
+                    item.Name = addItemViewModel.ItemName;
+                    item.ItemType = addItemViewModel.Type;
+                    item.Price = addItemViewModel.Rate;
+                    item.Quantity = addItemViewModel.Quantity;
+                    item.Unit = addItemViewModel.Unit;
+                    item.IsAvailable = addItemViewModel.IsAvailable;
+                    item.DefaultTax = addItemViewModel.IsDefaultTaxable;
+                    item.TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage;
+                    item.ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode;
+                    item.Description = addItemViewModel.Description;
+                    item.UpdatedBy = userId;
+                    item.IsDeleted = false;
+                    item.UpdatedAt = DateTime.Now;
+                    if (addItemViewModel.Image != null)
                     {
-                        addItemViewModel.Image.CopyTo(fileStream);
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                        if (!addItemViewModel.Image.ContentType.Contains("image"))
+                        {
+                            return "thisisnotacceptable";
+                        }
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            addItemViewModel.Image.CopyTo(fileStream);
+                        }
+                        item.ImageUrl = fileName;
                     }
-                    item.ImageUrl = fileName;
+                    if (addItemViewModel.Quantity == 0)
+                    {
+                        item.IsAvailable = false;
+                    }
+                    else
+                    {
+                        item.IsAvailable = true;
+                    }
+                    _context.SaveChanges();
+                    return item.Name;
                 }
-                if (addItemViewModel.Quantity == 0)
-                {
-                    item.IsAvailable = false;
-                } 
                 else
                 {
-                    item.IsAvailable = true;
+                    var item = _context.Items.FirstOrDefault(i => i.Id == addItemViewModel.Id);
+                    item.CategoryId = addItemViewModel.CategoryId;
+                    item.Name = addItemViewModel.ItemName;
+                    item.ItemType = addItemViewModel.Type;
+                    item.Price = addItemViewModel.Rate;
+                    item.Quantity = addItemViewModel.Quantity;
+                    item.Unit = addItemViewModel.Unit;
+                    item.IsAvailable = addItemViewModel.IsAvailable;
+                    item.DefaultTax = addItemViewModel.IsDefaultTaxable;
+                    item.TaxPercentage = addItemViewModel.TaxPercentage == null ? 0 : (decimal)addItemViewModel.TaxPercentage;
+                    item.ShortCode = addItemViewModel.ShortCode == null ? "" : addItemViewModel.ShortCode;
+                    item.Description = addItemViewModel.Description;
+                    item.UpdatedBy = userId;
+                    item.UpdatedAt = DateTime.Now;
+                    item.IsDeleted = false;
+                    if (addItemViewModel.Image != null)
+                    {
+                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
+                        if (!addItemViewModel.Image.ContentType.Contains("image"))
+                        {
+                            return "thisisnotacceptable";
+                        }
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
+                        using (var fileStream = new FileStream(path, FileMode.Create))
+                        {
+                            addItemViewModel.Image.CopyTo(fileStream);
+                        }
+                        item.ImageUrl = fileName;
+                    }
+                    if (addItemViewModel.Quantity == 0)
+                    {
+                        item.IsAvailable = false;
+                    }
+                    else
+                    {
+                        item.IsAvailable = true;
+                    }
+                    _context.SaveChanges();
+                    return item.Name;
                 }
-                _context.SaveChanges();
-                return item.Name;
             }
         }
 
@@ -417,7 +523,7 @@ namespace BLL.Services
         public int GetModifierGroupId(int modifierId)
         {
             return _context.ModifierModifiergroupMappings.FirstOrDefault(m => m.ModifierId == modifierId).ModifiergroupId;
-            
+
         }
 
         public IActionResult DeleteModifier(int modifierId, int userId, int modifierGroupId)
@@ -443,13 +549,13 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "Modifier group not found" });
             }
-            modifierGroup.IsDeleted = true;
             List<ModifierModifiergroupMapping> modifierModifierGroupMappings = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroupId).ToList();
             foreach (ModifierModifiergroupMapping modifierModifierGroupMapping in modifierModifierGroupMappings)
             {
                 _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
                 _context.SaveChanges();
             }
+            modifierGroup.IsDeleted = true;
             modifierGroup.UpdatedBy = userId;
             modifierGroup.UpdatedAt = DateTime.Now;
             _context.SaveChanges();
@@ -498,7 +604,9 @@ namespace BLL.Services
                     _context.SaveChanges();
                 }
                 return new JsonResult(new { success = true, message = "Modifier group added successfully", id = modifierGroup.Id });
-            } else {
+            }
+            else
+            {
                 if (userId == null)
                 {
                     return new JsonResult(new { success = false, message = "User not found" });
@@ -516,7 +624,7 @@ namespace BLL.Services
                 modifierGroup.Description = createModifierGroupViewModel.ModifierGroupDescription;
                 modifierGroup.UpdatedBy = userId;
                 modifierGroup.UpdatedAt = DateTime.Now;
-                _context.SaveChanges();     
+                _context.SaveChanges();
                 var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds;
                 var existingModifierGroupIds = _context.ModifierModifiergroupMappings.Where(m => m.ModifiergroupId == modifierGroup.Id).Select(m => m.ModifierId).ToList();
                 var newModifierGroupIds = modifierGroupIds.Except(existingModifierGroupIds).ToList();
@@ -616,7 +724,9 @@ namespace BLL.Services
                     _context.SaveChanges();
                 }
                 return new JsonResult(new { success = true, message = "Modifier added successfully" });
-            } else {
+            }
+            else
+            {
                 if (userId == null)
                 {
                     return new JsonResult(new { success = false, message = "User not found" });

@@ -107,7 +107,7 @@ $(document).ready(function () {
                   setTimeout(function () {
                       window.location.href = '/Dashboard';
                       $('.loader-container').addClass('d-none');
-                  }, 1000);
+                  }, 100);
                  
               } else {
                   toastr.error(response.message);

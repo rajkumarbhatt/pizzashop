@@ -27,72 +27,180 @@
             </div>
         </div>
         <div id="kotMenuItemsListPartialStart">
-        <partial name="_KotMenuItemsList" model="@Model" />
+            <partial name="_KotMenuItemsList" model="@Model" />
 
         </div>
     </div>
     <div id="thisIsSecondImportant" class="bg-white d-none" style="height: 90vh;">
+        <div class="p-3">
+            @* header *@
+            <div class="d-flex justify-content-between">
+                <div class="d-flex gap-1">
+                    <div class="bg-for-table-image">
+                        <img src="~/images/icons/kot-navbar-tables-black.svg" class="navbar-image p-2" alt="">
+                    </div>
+                    <div>
+                        <p>First Floor</p>
+                        <p><span class="font-weight-bold">Table:</span> <span>T2, T6</span></p>
+                    </div>
+                </div>
+                <div class="d-flex gap-3">
+                    <div class="table-card-kot-menu-icon-border cursor-pointer" data-bs-toggle="modal"
+                        data-bs-target="#QrCodeMenuModal">
+                        <img src="~/images/icons/kot-menu-qr-code.svg" class="navbar-image p-2" alt="">
+                    </div>
+                    <div class="table-card-kot-menu-icon-border cursor-pointer" onclick="getCustomerDetails()">
+                        <img src="~/images/icons/kot-menu-customer-details.svg" class="navbar-image p-2" alt="">
+                    </div>
+                    <div class="table-card-kot-menu-icon-border cursor-pointer">
+                        <img src="~/images/icons/kot-menu-comment.svg" class="navbar-image p-2" alt="">
+                    </div>
+                </div>
+            </div>
+            @* ordered items section *@
+            <div class="mt-3">
+                <div class="w-100 bg-white d-flex justify-content-start align-items-center px-3 py-2">
+                    <p class="font-weight-bold color-head-order font-size-thead text-start w-50">Item</p>
+                    <p class="font-weight-bold color-head-order font-size-thead" style="width: 15%;">Quantity</p>
+                    <p class="font-weight-bold color-head-order font-size-thead ps-4" style="width: 15%;">Amount</p>
+                </div>
 
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
 
-    function addToFavourites(id) {
-        var itemId = parseInt(id.split("empty-heart-")[1]);
-        $("#" + id).addClass('d-none');
-        $("#filled-heart-" + itemId).removeClass('d-none');
-        $.ajax({
-            url: '/OrderAppMenu/AddToFavourites',
-            type: 'PUT',
-            data: { itemId: itemId },
-            success: function (response) {
-                if (response.success) {
-                    console.log(response.message)
-                } else {
-                    console.error(response.message)
-                }
-            },
-            error: function () {
-                console.error("error adding item to favourites")
-            }
-        })
+@* qr code modal *@
+    <div class="modal fade" id="QrCodeMenuModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered qr-code-modal-width">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h5 class="modal-title" id="staticBackdropLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <img src="~/images/qr-code.png" style="width: 300px;" class="img-fluid p-4" alt="">
+                    <a data-bs-dismiss="modal"><button type="button"
+                            class="btn btn-contrast px-3 mt-4">Done</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="CustomerDetailsModalPartialStart1">
+        <partial name="_CustomerDetailsModal" model="@Model" />
+    </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+}
 
-    function removeFromFavourites(id) {
-        var itemId = parseInt(id.split("filled-heart-")[1]);
-        $("#" + id).addClass('d-none');
-        $("#empty-heart-" + itemId).removeClass('d-none');
-        $.ajax({
-            url: '/OrderAppMenu/DeleteFromFavourites',
-            type: 'DELETE',
-            data: { itemId: itemId },
-            success: function (response) {
-                if (response.success) {
-                    if ($("#categoryIdKotMenu").val() == -2) {
-                        $("#category-kot-favourite-items").click();
+    <script>
+
+        function addToFavourites(id) {
+            var itemId = parseInt(id.split("empty-heart-")[1]);
+            $("#" + id).addClass('d-none');
+            $("#filled-heart-" + itemId).removeClass('d-none');
+            $.ajax({
+                url: '/OrderAppMenu/AddToFavourites',
+                type: 'PUT',
+                data: { itemId: itemId },
+                success: function (response) {
+                    if (response.success) {
+                        console.log(response.message)
+                    } else {
+                        console.error(response.message)
                     }
-                } else {
-                    console.error(response.message)
+                },
+                error: function () {
+                    console.error("error adding item to favourites")
                 }
-            },
-            error: function () {
-                console.error("error adding item to favourites")
-            }
-        })
-    }
+            })
+        }
 
-    var url = window.location.href; 
-    var orderId = url.substring(url.lastIndexOf('/') + 1);
-    console.log(orderId == "Menu");   
-    if (orderId == "Menu") {
-        document.getElementById("thisDivIsImportant").style.width = "100%";
-        document.getElementById("thisIsSecondImportant").classList.add("d-none");
-    }
-    else {
-        document.getElementById("thisDivIsImportant").style.width = "66%";
-        document.getElementById("thisIsSecondImportant").classList.remove("d-none");
-        document.getElementById("thisIsSecondImportant").style.width = "34%";
-    }
+        function removeFromFavourites(id) {
+            var itemId = parseInt(id.split("filled-heart-")[1]);
+            $("#" + id).addClass('d-none');
+            $("#empty-heart-" + itemId).removeClass('d-none');
+            $.ajax({
+                url: '/OrderAppMenu/DeleteFromFavourites',
+                type: 'DELETE',
+                data: { itemId: itemId },
+                success: function (response) {
+                    if (response.success) {
+                        if ($("#categoryIdKotMenu").val() == -2) {
+                            $("#category-kot-favourite-items").click();
+                        }
+                    } else {
+                        console.error(response.message)
+                    }
+                },
+                error: function () {
+                    console.error("error adding item to favourites")
+                }
+            })
+        }
 
-</script>
+        var url = window.location.href;
+        var orderId = url.substring(url.lastIndexOf('/') + 1);
+        console.log(orderId == "Menu");
+        if (orderId == "Menu") {
+            document.getElementById("thisDivIsImportant").style.width = "100%";
+            document.getElementById("thisIsSecondImportant").classList.add("d-none");
+        }
+        else {
+            document.getElementById("thisDivIsImportant").style.width = "66%";
+            document.getElementById("thisIsSecondImportant").classList.remove("d-none");
+            document.getElementById("thisIsSecondImportant").style.width = "34%";
+        }
+
+        function getCustomerDetails() {
+            $.ajax({
+                url: '/OrderAppMenu/GetCustomerDetails',
+                type: 'GET',
+                data: { orderId: orderId },
+                success: function (response) {
+                    $("#CustomerDetailsModalPartialStart1").html(response);
+                    $("#CustomerDetailsMenuModal").modal('show');
+                    submitCustomerDetailsForm();
+                },
+                error: function () {
+                    console.error("error fetching customer details")
+                }
+            })
+        }
+
+        function submitCustomerDetailsForm() {
+
+            $('#CustomerDetailsForm').off('submit').on('submit', function (e) {
+                e.preventDefault();
+                if (!$("#CustomerDetailsForm").valid()) {
+                    return;
+                }
+                var form = $(this);
+                var formData = new FormData(this);
+                $.ajax({
+                    type: 'POST',
+                    url: "/OrderAppMenu/UpdateCustomerDetails",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            $("#CustomerDetailsMenuModal").modal('hide');
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function () {
+                        toastr.error("Error occurred while submitting the form.");
+                    }
+                });
+            });
+        }
+
+    </script>

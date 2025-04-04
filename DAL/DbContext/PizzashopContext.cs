@@ -170,6 +170,9 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Phone)
                 .HasMaxLength(20)
                 .HasColumnName("phone");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.CustomerCreatedByNavigations)
@@ -269,6 +272,9 @@ public partial class PizzaShopContext : DbContext
             entity.ToTable("invoice");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.InvoiceNo)
+                .HasMaxLength(200)
+                .HasColumnName("invoice_no");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
 
             entity.HasOne(d => d.Order).WithMany(p => p.Invoices)
@@ -831,6 +837,9 @@ public partial class PizzaShopContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Capacity).HasColumnName("capacity");
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.IsDeleted)
                 .HasDefaultValue(false)
@@ -842,6 +851,9 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.TableCreatedByNavigations)

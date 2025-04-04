@@ -19,6 +19,8 @@ public partial class Customer
 
     public int UpdatedBy { get; set; }
 
+    public DateTime? UpdatedAt { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual ICollection<CustomerReview> CustomerReviews { get; set; } = new List<CustomerReview>();

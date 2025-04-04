@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj": {}
+    "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj": {
+    "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+        "projectUniqueName": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+        "projectPath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
         "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\obj\\",
+        "outputPath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"

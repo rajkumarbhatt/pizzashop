@@ -11,5 +11,7 @@ namespace BLL.Interfaces
         public KotMenuViewModel SearchMenuItemsKot(string search, int categoryId);
         public JsonResult AddToFavourites (int itemId, int userId);
         public JsonResult DeleteFromFavourites (int itemId, int userId);
+        public KotMenuViewModel GetCustomerDetails(int orderId);
+        public JsonResult UpdateCustomerDetails (WaitingListModal waitingListModal, int userId);
     }
 }

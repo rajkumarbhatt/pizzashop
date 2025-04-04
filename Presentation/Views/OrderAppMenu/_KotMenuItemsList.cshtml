@@ -1,142 +1,148 @@
 @model DAL.ViewModels.KotMenuViewModel
 
 
-        <div class="d-flex flex-wrap gap-3 mx-auto mt-3 justify-content-center justify-content-md-start ">
-            @foreach (var item in @Model.MenuItemsKot)
-            {
-                var emptyHeartId = "empty-heart-" + item.Id;
-                var filledHeartId = "filled-heart-" + item.Id;
-                @if (item.ItemType == "Vegetarian")
-                {
-                    <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                        <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                            <div class="w-100 h-100 ">
-                                @{
-                                    var imagePath = item.Image;
-                                }
-                                <img src="~/images/item-images/@imagePath"
-                                    class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                            </div>
+<div class="d-flex flex-wrap gap-3 mx-auto mt-3 justify-content-center justify-content-md-start ">
+    @foreach (var item in @Model.MenuItemsKot)
+    {
+        var emptyHeartId = "empty-heart-" + item.Id;
+        var filledHeartId = "filled-heart-" + item.Id;
+        @if (item.ItemType == "Vegetarian")
+        {
+            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
+                    <div class="w-100 h-100 ">
+                        @{
+                            var imagePath = item.Image;
+                        }
+                        <img src="~/images/item-images/@imagePath"
+                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-between w-100">
+                    <div class="d-flex flex-column ">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
                         </div>
-                        <div class="d-flex flex-column justify-content-between w-100">
-                            <div class="d-flex flex-column ">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                                </div>
-                                <div class="top-right-border-veg"></div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center pe-2">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                                </div>
-                                <div class="p-2">
-                                    @if (item.IsFavourite == true)
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image d-none" alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image " alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
-                                    }
+                        <div class="top-right-border-veg"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pe-2">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
+                        </div>
+                        <div class="p-2">
+                            @if (item.IsFavourite == true)
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image d-none" alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image" alt="">
+                            }
+                            else
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image " alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
+                            }
 
-                                </div>
-                            </div>
                         </div>
                     </div>
-                }
-                else if (item.ItemType == "Non-Vegetarian")
-                {
-                    <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                        <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                            <div class="w-100 h-100 ">
-                                @{
-                                    var imagePath = item.Image;
-                                }
-                                <img src="~/images/item-images/@imagePath"
-                                    class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                            </div>
+                </div>
+            </div>
+        }
+        else if (item.ItemType == "Non-Vegetarian")
+        {
+            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
+                    <div class="w-100 h-100 ">
+                        @{
+                            var imagePath = item.Image;
+                        }
+                        <img src="~/images/item-images/@imagePath"
+                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-between w-100">
+                    <div class="d-flex flex-column ">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
                         </div>
-                        <div class="d-flex flex-column justify-content-between w-100">
-                            <div class="d-flex flex-column ">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                                </div>
-                                <div class="top-right-border-nonveg"></div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center pe-2">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                                </div>
-                                <div class="p-2">
-                                    @if (item.IsFavourite == true)
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image d-none" alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image " alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
-                                    }
+                        <div class="top-right-border-nonveg"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pe-2">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
+                        </div>
+                        <div class="p-2">
+                            @if (item.IsFavourite == true)
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image d-none" alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image" alt="">
+                            }
+                            else
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image " alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
+                            }
 
-                                </div>
-                            </div>
                         </div>
                     </div>
-                }
-                else if (item.ItemType == "Vegan")
-                {
-                    <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
-                        <div class="kot-menu-item-image-div shadow p-1 w-50 ">
-                            <div class="w-100 h-100 ">
-                                @{
-                                    var imagePath = item.Image;
-                                }
-                                <img src="~/images/item-images/@imagePath"
-                                    class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
-                            </div>
+                </div>
+            </div>
+        }
+        else if (item.ItemType == "Vegan")
+        {
+            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+                <div class="kot-menu-item-image-div shadow p-1 w-50 ">
+                    <div class="w-100 h-100 ">
+                        @{
+                            var imagePath = item.Image;
+                        }
+                        <img src="~/images/item-images/@imagePath"
+                            class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-between w-100">
+                    <div class="d-flex flex-column ">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
                         </div>
-                        <div class="d-flex flex-column justify-content-between w-100">
-                            <div class="d-flex flex-column ">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">@item.Name</p>
-                                </div>
-                                <div class="top-right-border-vegan"></div>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center pe-2">
-                                <div class="d-flex w-75">
-                                    <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
-                                </div>
-                                <div class="p-2">
-                                    @if (item.IsFavourite == true)
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image d-none" alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image" alt="">
-                                    }
-                                    else
-                                    {
-                                        <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg"
-                                            onclick="addToFavourites(id)" class="small-image " alt="">
-                                        <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
-                                            onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
-                                    }
+                        <div class="top-right-border-vegan"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center pe-2">
+                        <div class="d-flex w-75">
+                            <p class="w-100 p-2" style="font-weight: 500;">₹@item.Price</p>
+                        </div>
+                        <div class="p-2">
+                            @if (item.IsFavourite == true)
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image d-none" alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image" alt="">
+                            }
+                            else
+                            {
+                                <img id="@emptyHeartId" src="~/images/icons/favourite-empty.svg" onclick="addToFavourites(id)"
+                                    class="small-image " alt="">
+                                <img id="@filledHeartId" src="~/images/icons/favourite-filled.svg"
+                                    onclick="removeFromFavourites(id)" class="small-image d-none" alt="">
+                            }
 
-                                </div>
-                            </div>
                         </div>
                     </div>
-                }
-            }
-        </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
