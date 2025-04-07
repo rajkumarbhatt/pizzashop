@@ -13,31 +13,6 @@ public class CustomersService : ICustomerService
         _context = context;
     }
 
-    public async Task<List<CustomerTable>> GetCustomersAsync()
-    {
-        return await Task.Run(() => GetCustomers());
-    }
-    public async Task<CustomerViewModel> GetCustomerDetailsAsync()
-    {
-        return await Task.Run(() => GetCustomerDetails());
-    }
-    public async Task<CustomerViewModel> FilterCustomersAsync(int pageIndex, int pageSize, string searchValue, string time, string sort, string order, string fromDate, string toDate)
-    {
-        return await Task.Run(() => FilterCustomers(pageIndex, pageSize, searchValue, time, sort, order, fromDate, toDate));
-    }
-    public async Task<List<CustomerTable>> GetCustomersBassedOnFiltersAsync(string time, string searchValue, string fromDate, string toDate)
-    {
-        return await Task.Run(() => GetCustomersBassedOnFilters(time, searchValue, fromDate, toDate));
-    }
-    public async Task<CustomerHistory> GetCustomerDetailsAsync(int customerId)
-    {
-        return await Task.Run(() => GetCustomerDetails(customerId));
-    }
-    public async Task<byte[]> ExportCustomersAsync(string time, string searchValue, string fromDate, string toDate)
-    {
-        return await Task.Run(() => ExportCustomers(time, searchValue, fromDate, toDate));
-    }
-    
     public List<CustomerTable> GetCustomers()
     {
         List<CustomerTable> customers = new List<CustomerTable>();

@@ -106,6 +106,12 @@
     </div>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
 <script>
 
     function editWaitingList(tokenNumber) {
@@ -116,6 +122,7 @@
             success: function (response) {
                 $('#waitingListModalStarting').html(response);
                 $('#waitingTokenModal').modal('show');
+                $.validator.unobtrusive.parse('#waitingTokenModal');
             },
             error: function (response) {
                 console.log(response);

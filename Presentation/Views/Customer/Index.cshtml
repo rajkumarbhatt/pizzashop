@@ -45,7 +45,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button id="closeDatePickerModalButton" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex mx-auto gap-3">
                 <div class="input-group search-box cursor-pointer" style="width: 200px;">
@@ -69,7 +69,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-center">
                 <button id="ApplyDateChangesButton" type="submit" class="btn btn-primary px-3">Submit</button>
-                <a><button data-bs-dismiss="modal" aria-label="Close" type="button"
+                <a><button data-bs-dismiss="modal" aria-label="Close" type="button" id="cancelDatePickerButton"
                         class="btn btn-contrast px-3">Cancel</button></a>
             </div>
         </div>
@@ -98,6 +98,40 @@
         }).on('show', function () {
             $(this).attr('readonly', true);
         });
+
+        $('.datepicker').datepicker('setEndDate', new Date());
+
+        $('#fromDate').on('change', function () {
+            var fromDate = $(this).datepicker('getDate');
+            $('#toDate').datepicker('setStartDate', fromDate);
+        });
+
+        $("#cancelDatePickerButton").click(function () {
+            $("#fromDate").val("dd-mm-yyyy");
+            $("#toDate").val("dd-mm-yyyy");
+            $.ajax({
+                url: '@Url.Action("FilterCustomers", "Customer")',
+                type: "GET",
+                data: { pageIndex: 1, pageSize: $("#pageSizeSelectOrders").val(), searchValue: $("#searchInputCustomers").val().toLowerCase(), time: $("#CustomersTimeSelect").val(), sort: sortColumn, order: sortDirection, fromDate: "dd-mm-yyyy", toDate: "dd-mm-yyyy" },
+                success: function (data) {
+                    $("#customersTablePartial").html(data);
+                }
+            });
+        });
+
+        $("#closeDatePickerModalButton").click(function () {
+            $("#fromDate").val("dd-mm-yyyy");
+            $("#toDate").val("dd-mm-yyyy");
+            $.ajax({
+                url: '@Url.Action("FilterCustomers", "Customer")',
+                type: "GET",
+                data: { pageIndex: 1, pageSize: $("#pageSizeSelectOrders").val(), searchValue: $("#searchInputCustomers").val().toLowerCase(), time: $("#CustomersTimeSelect").val(), sort: sortColumn, order: sortDirection, fromDate: "dd-mm-yyyy", toDate: "dd-mm-yyyy" },
+                success: function (data) {
+                    $("#customersTablePartial").html(data);
+                }
+            });
+        });
+        
     });
 
     function FilerOrdersBasedOnTime(value) {

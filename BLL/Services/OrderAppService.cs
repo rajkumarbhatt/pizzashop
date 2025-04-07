@@ -170,6 +170,14 @@ public class OrderAppService : IOrderAppService
             if (table.Capacity > waitingListModal.NumberOfPeople && tableIds.Count > 1)
                 return new JsonResult(new { success = false, message = "Customers can be managed in less than selected tables" });
         }
+        int capacity = 0;
+        foreach (int tableId in tableIds)
+        {
+            Table table = _context.Tables.Find(tableId);
+            capacity += table.Capacity;
+        }
+        if (capacity < waitingListModal.NumberOfPeople)
+            return new JsonResult(new { success = false, message = "Customers can't be managed in selected tables" });
         if (waitingListModal.Id == -1)
         {
             if (_context.WaitingLists.Any(w => w.Customer.Email == waitingListModal.Email && w.IsDeleted == false))

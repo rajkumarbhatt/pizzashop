@@ -11,12 +11,15 @@
     <partial name="_WaitingListPartial" model="Model" />    
 </div>
 
-  
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 <script>
     function openWaitingTokenModal() {
         $("#waitingTokenModal").modal("show");
-        $.validator.unobtrusive.parse("#waitingTokenModal");
         AddToWaitingListFormSubmit();
     }
 </script>

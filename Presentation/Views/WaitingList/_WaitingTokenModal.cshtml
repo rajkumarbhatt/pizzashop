@@ -114,11 +114,21 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
 <script>
     function AddToWaitingListFormSubmit() {
         $("#waitingTokenForm").off("submit").submit(function (e) {
             e.preventDefault();
             var form = $(this)[0];
+            if(!$("#waitingTokenForm").valid()) {
+                return;
+            }
             var formData = new FormData(form);
             $.ajax({
                 url: "/OrderApp/AddToWaitingList",

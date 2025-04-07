@@ -17,27 +17,29 @@ namespace Presentation.Controllers
             _customerService = customerService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            CustomerViewModel customerViewModel = await _customerService.GetCustomerDetailsAsync();
+            CustomerViewModel customerViewModel = _customerService.GetCustomerDetails();
             return View(customerViewModel);
         }
+
         [HttpGet]
-        public async Task<IActionResult> FilterCustomers(int pageIndex, int pageSize, string searchValue, string time, string sort, string order, string fromDate, string toDate)
+        public IActionResult FilterCustomers(int pageIndex, int pageSize, string searchValue, string time, string sort, string order, string fromDate, string toDate)
         {
-            CustomerViewModel customerViewModel = await _customerService.FilterCustomersAsync(pageIndex, pageSize, searchValue, time, sort, order, fromDate, toDate);
+            CustomerViewModel customerViewModel = _customerService.FilterCustomers(pageIndex, pageSize, searchValue, time, sort, order, fromDate, toDate);
             return PartialView("_CustomersList", customerViewModel);
         }
+
         [HttpGet]
-        public async Task<IActionResult> ExportCustomers(string time, string searchValue, string fromDate, string toDate)
+        public IActionResult ExportCustomers(string time, string searchValue, string fromDate, string toDate)
         {
-            var fileContent = await _customerService.ExportCustomersAsync(time, searchValue, fromDate, toDate);
-            return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customers.xlsx");
+            return File(_customerService.ExportCustomers(time, searchValue, fromDate, toDate), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customers.xlsx");
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetCustomerDetails(int id)
+        public IActionResult GetCustomerDetails(int id)
         {
-            CustomerHistory customerHistory = await _customerService.GetCustomerDetailsAsync(id);
+            CustomerHistory customerHistory = _customerService.GetCustomerDetails(id);
             return PartialView("_CustomerDetails", customerHistory);
         }
     }

@@ -17,7 +17,7 @@ namespace Presentation.Controllers
         [Route("/OrderApp/Menu/{orderId}")]
         public ActionResult Index(int? orderId)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetKotMenu();
+            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetKotMenu(orderId);
             return View(kotMenuViewModel);
         }
         [HttpGet]
@@ -57,6 +57,18 @@ namespace Presentation.Controllers
             }
             int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
             return _kotMenuService.UpdateCustomerDetails(waitingListModal, userId);
+        }
+        [HttpGet]
+        public IActionResult GetSelectModifiersModalData(int itemId)
+        {
+            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetSelectModifiersModalData(itemId);
+            return PartialView("_SelectModifiersModal", kotMenuViewModel);
+        }
+        [HttpPost]
+        public IActionResult AddItemToOrder (int orderId, int itemId, List<int> modifierIds)
+        {
+            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
+            return _kotMenuService.AddItemToOrder(itemId, orderId, modifierIds, userId);
         }
     }
 }

@@ -2,10 +2,7 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
-using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.Json;
-using NuGet.Protocol;
 
 namespace BLL.Services
 {
@@ -16,8 +13,9 @@ namespace BLL.Services
         {
             _context = context;
         }
-        public KotMenuViewModel GetKotMenu()
+        public KotMenuViewModel GetKotMenu(int? orderId )
         {
+            OrderDetailsCard orderDetailsCard = new OrderDetailsCard();
             List<Category> categories = _context.Categories.Where(c => c.IsDeleted == false).ToList();
             List<MenuItemsKot> menuItemsKot = _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true).Select(m => new MenuItemsKot
             {
@@ -29,10 +27,45 @@ namespace BLL.Services
                 ItemType = m.ItemType,
                 IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
             }).ToList();
+            if (orderId != null)
+            {
+                List<int> tableIds = _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).Select(otb => otb.TableId).ToList();
+                int sectionId = _context.Tables.FirstOrDefault(t => t.Id == tableIds[0]).SectionId;
+                string sectionName = _context.Sections.FirstOrDefault(s => s.Id == sectionId).Name;
+                string tableNames = "";
+                foreach (int tableId in tableIds)
+                {
+                    string tableName = _context.Tables.FirstOrDefault(t => t.Id == tableId).Name;
+                    if (tableNames == "")
+                    {
+                        tableNames = tableName;
+                    }
+                    else
+                    {
+                        tableNames += ", " + tableName;
+                    }
+                    List<OrderItemDetials> orderItemDetails = _context.OrderItems.Where(oi => oi.OrderId == orderId).Select(oi => new OrderItemDetials
+                    {
+                        ItemName = oi.Item.Name,
+                        ItemQuantity = oi.Quantity,
+                        ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity),
+                        Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Select(om => new ModifierDetails
+                        {
+                            ModifierName = om.Modifier.Name,
+                            ModifierPrice = (decimal?)om.Price
+                        }).ToList(),
+                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Sum(om => om.Price),
+                    }).ToList();
+                    orderDetailsCard.SectionName = sectionName;
+                    orderDetailsCard.TableNames = tableNames;
+                    orderDetailsCard.OrderItemDetails = orderItemDetails;
+                }
+            }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
                 Categories = categories,
-                MenuItemsKot = menuItemsKot
+                MenuItemsKot = menuItemsKot,
+                OrderDetailsCard = orderDetailsCard
             };
             return kotMenuViewModel;
         }
@@ -42,7 +75,7 @@ namespace BLL.Services
             List<MenuItemsKot> menuItemsKot = new List<MenuItemsKot>();
             if (categoryId == -1)
             {
-                return GetKotMenu();
+                return GetKotMenu(null);
             }
             else if (categoryId == -2)
             {
@@ -232,6 +265,131 @@ namespace BLL.Services
                 _context.SaveChanges();
             }
             return new JsonResult(new { success = true, message = "Customer details updated successfully" });
+        }
+
+        public KotMenuViewModel GetSelectModifiersModalData(int itemId)
+        {
+            DAL.Models.Item item = _context.Items.FirstOrDefault(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
+            AddModifiersModal addModifiersModal = new AddModifiersModal();
+            addModifiersModal.ItemId = item.Id;
+            addModifiersModal.ItemName = item.Name;
+            List<ItemModifiergroup> itemModifierGroups = _context.ItemModifiergroups.Where(im => im.ItemId == item.Id).ToList();
+            List<ModifierGroupsAddItem> modifierGroups = new List<ModifierGroupsAddItem>();
+            foreach (ItemModifiergroup itemModifierGroup in itemModifierGroups)
+            {
+                ModifierGroupsAddItem modifierGroup = new ModifierGroupsAddItem();
+                modifierGroup.ModifierGroupId = itemModifierGroup.ModifiergroupId;
+                modifierGroup.ModifierGroupName = _context.ModifierGroups.FirstOrDefault(mg => mg.Id == itemModifierGroup.ModifiergroupId)?.Name;
+                modifierGroup.MinSelection = itemModifierGroup.MinValue ?? 0;
+                modifierGroup.MaxSelection = itemModifierGroup.MaxValue ?? 0;
+                List<ModifierGroupItemsAddItem> modifierGroupItems = _context.ModifierModifiergroupMappings.Where(mg => mg.ModifiergroupId == itemModifierGroup.ModifiergroupId).Select(mg => new ModifierGroupItemsAddItem
+                {
+                    ModifierId = mg.ModifierId,
+                    ModifierName = mg.Modifier.Name,
+                    Price = mg.Modifier.Price,
+                }).ToList();
+                modifierGroup.ModifierGroupItems = modifierGroupItems;
+                modifierGroups.Add(modifierGroup);
+            }
+            addModifiersModal.ModifierGroups = modifierGroups;
+            KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
+            {
+                AddModifiersModal = addModifiersModal
+            };
+            return kotMenuViewModel;
+        }
+
+        public IActionResult AddItemToOrder(int itemId, int orderId, List<int> modifierIds, int userId)
+        {
+            DAL.Models.Item item = _context.Items.FirstOrDefault(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
+            item.Quantity -= 1;
+            if (item.Quantity <= 0)
+            {
+                item.IsAvailable = false;
+            }
+            item.UpdatedAt = DateTime.Now;
+            item.UpdatedBy = userId;
+            _context.Items.Update(item);
+            _context.SaveChanges();
+            OrderItem orderItem = new OrderItem
+            {
+                OrderId = orderId,
+                ItemId = itemId,
+                Quantity = 1,
+                Price = (double?)item.Price,
+                CreatedBy = userId,
+                CreatedAt = DateTime.Now,
+                UpdatedBy = userId,
+                UpdatedAt = DateTime.Now,
+            };
+            _context.OrderItems.Add(orderItem);
+            _context.SaveChanges();
+            foreach (int modifierId in modifierIds)
+            {
+                Modifier modifier = _context.Modifiers.FirstOrDefault(m => m.Id == modifierId) ?? new Modifier();
+                modifier.Quantity -= 1;
+                modifier.UpdatedAt = DateTime.Now;
+                modifier.UpdatedBy = userId;
+                _context.Modifiers.Update(modifier);
+                _context.SaveChanges();
+                OrderModifier orderItemModifier = new OrderModifier
+                {
+                    OrderItemId = orderItem.Id,
+                    ModifierId = modifierId,
+                    Price = (double?)modifier.Price,
+                    CreatedBy = userId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = userId,
+                    UpdatedAt = DateTime.Now,
+                };
+                _context.OrderModifiers.Add(orderItemModifier);
+                _context.SaveChanges();
+            }
+            List<OrderTaxis> orderTaxes = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
+            double SubTotal = 0, totalTax = 0;
+            if (orderTaxes.Count == 0)
+            {
+                List<TaxesFee> taxesFees = _context.TaxesFees.Where(tf => tf.IsDeleted == false).ToList();
+                foreach (TaxesFee taxesFee in taxesFees)
+                {
+                    OrderTaxis orderTaxis = new OrderTaxis
+                    {
+                        OrderId = orderId,
+                        TaxId = taxesFee.Id,
+                        TaxAmount = taxesFee.Amount,
+                        CreatedBy = userId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedBy = userId,
+                        UpdatedAt = DateTime.Now,
+                    };
+                    _context.OrderTaxes.Add(orderTaxis);
+                    _context.SaveChanges();
+                }
+            }
+            SubTotal = _context.OrderItems.Where(oi => oi.OrderId == orderId).Sum(oi => oi.Price * oi.Quantity) ?? 0;
+            SubTotal += _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId).Sum(om => om.Price) ?? 0;
+            List<OrderTaxis> orderTaxis2 = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
+            foreach (OrderTaxis orderTaxis1 in orderTaxis2)
+            {
+                
+                string taxType = _context.TaxesFees.FirstOrDefault(tf => tf.Id == orderTaxis1.TaxId)?.TaxType ?? "";
+                if (taxType == "Percentage")
+                {
+                    totalTax += SubTotal * (double)orderTaxis1.TaxAmount / 100;
+                }
+                else if (taxType == "Fixed Amount")
+                {
+                    totalTax += (double)orderTaxis1.TaxAmount;
+                }
+            }
+            totalTax = Math.Round(totalTax, 2);
+            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId) ?? new Order();
+            order.TotalAmount = (decimal)(SubTotal + totalTax);
+            order.UpdatedAt = DateTime.Now;
+            order.UpdatedBy = userId;
+            _context.Orders.Update(order);
+            _context.SaveChanges();
+            return new JsonResult(new { success = true, message = "Item added to order successfully" });
         }
     }
 }

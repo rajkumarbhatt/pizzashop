@@ -11,6 +11,14 @@ public partial class OrderTaxis
 
     public decimal TaxAmount { get; set; }
 
+    public DateTime? CreatedAt { get; set; }
+
+    public int? CreatedBy { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public int? UpdatedBy { get; set; }
+
     public virtual Order Order { get; set; } = null!;
 
     public virtual TaxesFee Tax { get; set; } = null!;

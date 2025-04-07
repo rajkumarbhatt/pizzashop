@@ -8,7 +8,7 @@
         var filledHeartId = "filled-heart-" + item.Id;
         @if (item.ItemType == "Vegetarian")
         {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+            <div onclick="selectModifiers(@item.Id)" class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
                 <div class="kot-menu-item-image-div shadow p-1 w-50 ">
                     <div class="w-100 h-100 ">
                         @{
@@ -52,7 +52,7 @@
         }
         else if (item.ItemType == "Non-Vegetarian")
         {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+            <div onclick="selectModifiers(@item.Id)" class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
                 <div class="kot-menu-item-image-div shadow p-1 w-50 ">
                     <div class="w-100 h-100 ">
                         @{
@@ -96,7 +96,7 @@
         }
         else if (item.ItemType == "Vegan")
         {
-            <div class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+            <div onclick="selectModifiers(@item.Id)" class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
                 <div class="kot-menu-item-image-div shadow p-1 w-50 ">
                     <div class="w-100 h-100 ">
                         @{
@@ -146,3 +146,20 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+
+<script>
+    function selectModifiers (id) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetSelectModifiersModalData", "OrderAppMenu")',
+            data: { itemId: id },
+            success: function (data) {
+                $("#SelectModifiersPartialStaring").html(data);
+                $("#selectModifiersModal").modal("show");
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading partial view:", error);
+            }
+        })
+    }
+</script>

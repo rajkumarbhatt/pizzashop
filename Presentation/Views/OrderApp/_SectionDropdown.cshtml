@@ -369,6 +369,9 @@
             });
             e.preventDefault();
             var form = $(this)[0];
+            if(!$(this).valid()) {
+                return;
+            }
             var formData = new FormData(form);
             formData.append("tableIds", JSON.stringify(selectedTableIds));
             $.ajax({
