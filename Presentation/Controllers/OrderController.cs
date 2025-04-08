@@ -21,45 +21,46 @@ public class OrderController : Controller
         _jwtService = jwtService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        OrderViewModal orderViewModal = _orderService.GetOrders();
+        OrderViewModal orderViewModal = await _orderService.GetOrdersAsync();
         return View(orderViewModal);
     }
 
     [HttpGet]
-    public IActionResult FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string fromDate, string toDate, string searchValue = null)
+    public async Task<IActionResult> FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string fromDate, string toDate, string searchValue = null)
     {
-        OrderViewModal orderViewModal = _orderService.FilterOrders(pageSize, pageIndex, status, time, sort, order, fromDate, toDate, searchValue);
+        OrderViewModal orderViewModal = await _orderService.FilterOrdersAsync(pageSize, pageIndex, status, time, sort, order, fromDate, toDate, searchValue);
         return PartialView("_OrderList", orderViewModal);
     }
 
     [HttpGet]
-    public IActionResult ExportOrders(string status, string time, string searchValue)
+    public async Task<IActionResult> ExportOrders(string status, string time, string searchValue)
     {
-        return File(_orderService.ExportOrders(status, time, searchValue), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Orders.xlsx");
+        byte[] fileBytes = await _orderService.ExportOrdersAsync(status, time, searchValue);
+        return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Orders.xlsx");
     }
 
     [HttpGet]
     [Route("Order/OrderDetails/{orderIdEncrypted}")]
-    public IActionResult OrderDetails(string orderIdEncrypted)
+    public async Task<IActionResult> OrderDetails(string orderIdEncrypted)
     {
-        int orderId = _orderService.DecryptOrderId(orderIdEncrypted);
-        OrderDetailsViewModel orderDetailsViewModel = _orderService.GetOrderDetails(orderId);
+        int orderId = await _orderService.DecryptOrderIdAsync(orderIdEncrypted);
+        OrderDetailsViewModel orderDetailsViewModel = await _orderService.GetOrderDetailsAsync(orderId);
         return View(orderDetailsViewModel);
     }
 
     [HttpGet]
-    public IActionResult DownloadInvoice(int orderId)
+    public async Task<IActionResult> DownloadInvoice(int orderId)
     {
-        byte[] pdfBytes = _orderService.GenerateInvoice(orderId);
+        byte[] pdfBytes = await _orderService.GenerateInvoiceAsync(orderId);
         return File(pdfBytes, "application/pdf", "Invoice.pdf");
     }
 
     [HttpGet]
-    public IActionResult EncryptOrder(int orderId)
+    public async Task<IActionResult> EncryptOrder(int orderId)
     {
-        string encryptedOrderId = _orderService.EncryptOrderId(orderId);
+        string encryptedOrderId = await _orderService.EncryptOrderIdAsync(orderId);
         return Json(new { encryptedOrderId });
     }
 }

@@ -1081,11 +1081,17 @@ td{
 }
 .div-custom-accordian {
   background-color: #FFFFFF;
-  border: 1px solid gray;
-  border-radius: 10px;
-  padding: 10px;
+  border: 1px solid gray !important;
+  border-radius: 10px !important;
+  padding: 5px 10px;
+}
+.font-accordian {
+  font-size: 14px !important;
 }
 .quantity-card-order-items {
   border: 1px solid gray;
   border-radius: 5px;
+}
+.font-accordian-head {
+  font-size: 16px !important;
 }

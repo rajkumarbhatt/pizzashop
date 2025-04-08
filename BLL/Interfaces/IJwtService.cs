@@ -4,8 +4,8 @@ namespace BLL.Interfaces
 {
     public interface IJwtService
     {
-        public string GenerateJwtToken(User user, string role);
-
-        public int GetUserIdFromJwtToken(string token);
+        Task<string> GenerateJwtTokenAsync(User user, string role);
+        Task<int> GetUserIdFromJwtTokenAsync(string token);
+        Task SetSessionParametersAsync(int userId, string username, int roleId);
     }
 }

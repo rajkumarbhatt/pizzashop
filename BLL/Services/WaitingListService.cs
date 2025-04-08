@@ -3,6 +3,7 @@ using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -15,214 +16,235 @@ namespace BLL.Services
             _context = context;
             _jwtService = jwtService;
         }
-        public WaitingListViewModel GetWaitingListViewModel()
+        public async Task<WaitingListViewModel> GetWaitingListViewModelAsync()
         {
             List<SectionAndNumberOfWaitingList> sectionAndNumberOfWaitingLists = new List<SectionAndNumberOfWaitingList>();
-            int totalCountOfWaitingList = _context.WaitingLists.Where(w => w.IsDeleted == false).Count();
+            int totalCountOfWaitingList = await _context.WaitingLists.Where(w => w.IsDeleted == false).CountAsync();
             SectionAndNumberOfWaitingList sectionAndNumberOfWaitingList = new SectionAndNumberOfWaitingList
             {
-                SectionId = 0,
-                SectionName = "All",
-                NumberOfWaitingList = totalCountOfWaitingList
+            SectionId = 0,
+            SectionName = "All",
+            NumberOfWaitingList = totalCountOfWaitingList
             };
             sectionAndNumberOfWaitingLists.Add(sectionAndNumberOfWaitingList);
-            List<Section> sections = _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToList();
+            List<Section> sections = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
             foreach (var section in sections)
             {
-                int numberOfWaitingList = _context.WaitingLists.Where(w => w.SectionId == section.Id && w.IsDeleted == false).Count();  
-                sectionAndNumberOfWaitingList = new SectionAndNumberOfWaitingList
-                {
-                    SectionId = section.Id,
-                    SectionName = section.Name,
-                    NumberOfWaitingList = numberOfWaitingList
-                };
-                sectionAndNumberOfWaitingLists.Add(sectionAndNumberOfWaitingList);
+            int numberOfWaitingList = await _context.WaitingLists.Where(w => w.SectionId == section.Id && w.IsDeleted == false).CountAsync();
+            sectionAndNumberOfWaitingList = new SectionAndNumberOfWaitingList
+            {
+                SectionId = section.Id,
+                SectionName = section.Name,
+                NumberOfWaitingList = numberOfWaitingList
+            };
+            sectionAndNumberOfWaitingLists.Add(sectionAndNumberOfWaitingList);
             }
-            List<WaitingListTable> waitingList = _context.WaitingLists
-                .Where(w => w.IsDeleted == false)
-                .Select(w => new WaitingListTable
-                {
-                    TokenNumber = w.Id,
-                    CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                    PhoneNumber = w.Customer.Phone,
-                    WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                    Name = w.Customer.Name,
-                    NumberOfPersons = w.NoOfPersons,
-                    Email = w.Customer.Email
-                }).ToList();
+            List<WaitingListTable> waitingList = await _context.WaitingLists
+            .Where(w => w.IsDeleted == false)
+            .Select(w => new WaitingListTable
+            {
+                TokenNumber = w.Id,
+                CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
+                PhoneNumber = w.Customer.Phone,
+                WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
+                Name = w.Customer.Name,
+                NumberOfPersons = w.NoOfPersons,
+                Email = w.Customer.Email
+            }).ToListAsync();
             foreach (WaitingListTable waiting in waitingList)
             {
-                waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
+            waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
             }
-            List<Section> sections2 = _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToList();
+            List<Section> sections2 = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
             WaitingListViewModel waitingListViewModel = new WaitingListViewModel
             {
-                SectionAndNumberOfWaitingLists = sectionAndNumberOfWaitingLists,
-                WaitingList = waitingList,
-                Sections = sections2
+            SectionAndNumberOfWaitingLists = sectionAndNumberOfWaitingLists,
+            WaitingList = waitingList,
+            Sections = sections2
             };
             return waitingListViewModel;
         }
 
-        public IActionResult DeleteWaitingList(int id, int userId)
+        public async Task<IActionResult> DeleteWaitingListAsync(int id, int userId)
         {
-            WaitingList waitingList = _context.WaitingLists.Find(id);
+            WaitingList waitingList = await _context.WaitingLists.FindAsync(id);
             if (waitingList == null)
             {
-                return new JsonResult(new { success = false, message = "Waiting list not found"});
+            return new JsonResult(new { success = false, message = "Waiting list not found" });
             }
             waitingList.IsDeleted = true;
             waitingList.UpdatedBy = userId;
             waitingList.UpdatedAt = DateTime.Now;
-            _context.SaveChanges();
-            return new JsonResult(new { success = true, message = "Waiting list deleted successfully"});
+            await _context.SaveChangesAsync();
+            return new JsonResult(new { success = true, message = "Waiting list deleted successfully" });
         }
 
-        public WaitingListViewModel GetWaitingListDetails(int id)
+        public async Task<WaitingListViewModel> GetWaitingListDetailsAsync(int id)
         {
-            WaitingList waitingList = _context.WaitingLists.Find(id);
+            WaitingList waitingList = await _context.WaitingLists.FindAsync(id);
             if (waitingList == null)
             {
-                return new WaitingListViewModel();
+            return new WaitingListViewModel();
             }
-            Customer customer = _context.Customers.Find(waitingList.CustomerId);
+            Customer customer = await _context.Customers.FindAsync(waitingList.CustomerId);
             WaitingListModal waitingListModal = new WaitingListModal
             {
-                Id = waitingList.Id,
-                Name = customer.Name ,
-                Email = customer.Email,
-                MobileNumber = customer.Phone,
-                NumberOfPeople = waitingList.NoOfPersons,
-                SectionId = (int)waitingList.SectionId
+            Id = waitingList.Id,
+            Name = customer.Name,
+            Email = customer.Email,
+            MobileNumber = customer.Phone,
+            NumberOfPeople = waitingList.NoOfPersons,
+            SectionId = (int)waitingList.SectionId
             };
             WaitingListViewModel waitingListViewModel = new WaitingListViewModel
             {
-                waitingListModal = waitingListModal
+            waitingListModal = waitingListModal
             };
-            List<Section> sections = _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToList();
+            List<Section> sections = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
             waitingListViewModel.Sections = sections;
             return waitingListViewModel;
         }
 
-        public IActionResult GetCustomerSuggestions(string email)
+        public async Task<IActionResult> GetCustomerSuggestionsAsync(string email)
         {
-            List<Customer> customers = _context.Customers.Where(c => c.Email.Contains(email)).ToList();
+            List<Customer> customers = await _context.Customers.Where(c => c.Email.Contains(email)).ToListAsync();
             customers.RemoveAll(c => _context.WaitingLists.Any(w => w.CustomerId == c.Id && w.IsDeleted == false));
             customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed"));
             List<CustomerDetailsSuggestions> customerSuggetions = new List<CustomerDetailsSuggestions>();
             foreach (Customer customer in customers)
             {
-                CustomerDetailsSuggestions customerDetailsSuggestions = new CustomerDetailsSuggestions
-                {
-                    Name = customer.Name,
-                    Email = customer.Email,
-                    MobileNumber = customer.Phone
-                };
-                customerSuggetions.Add(customerDetailsSuggestions);
-
+            CustomerDetailsSuggestions customerDetailsSuggestions = new CustomerDetailsSuggestions
+            {
+                Name = customer.Name,
+                Email = customer.Email,
+                MobileNumber = customer.Phone
+            };
+            customerSuggetions.Add(customerDetailsSuggestions);
             }
             return new JsonResult(new { success = true, customerSuggetions });
         }
 
-        public WaitingListViewModel GetWaitingListBasedOnSection(int sectionId)
+        public async Task<WaitingListViewModel> GetWaitingListBasedOnSectionAsync(int sectionId)
         {
             List<WaitingListTable> waitingList = new List<WaitingListTable>();
             if (sectionId == 0)
             {
-                waitingList = _context.WaitingLists
-                    .Where(w => w.IsDeleted == false)
-                    .Select(w => new WaitingListTable
-                    {
-                        TokenNumber = w.Id,
-                        CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                        PhoneNumber = w.Customer.Phone,
-                        WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                        Name = w.Customer.Name,
-                        NumberOfPersons = w.NoOfPersons,
-                        Email = w.Customer.Email
-                    }).ToList();
+            waitingList = await _context.WaitingLists
+                .Where(w => w.IsDeleted == false)
+                .Select(w => new WaitingListTable
+                {
+                TokenNumber = w.Id,
+                CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
+                PhoneNumber = w.Customer.Phone,
+                WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
+                Name = w.Customer.Name,
+                NumberOfPersons = w.NoOfPersons,
+                Email = w.Customer.Email
+                }).ToListAsync();
             }
             else
             {
-                waitingList = _context.WaitingLists
-                    .Where(w => w.SectionId == sectionId && w.IsDeleted == false)
-                    .Select(w => new WaitingListTable
-                    {
-                        TokenNumber = w.Id,
-                        CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                        PhoneNumber = w.Customer.Phone,
-                        WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                        Name = w.Customer.Name,
-                        NumberOfPersons = w.NoOfPersons,
-                        Email = w.Customer.Email
-                    }).ToList();
+            waitingList = await _context.WaitingLists
+                .Where(w => w.SectionId == sectionId && w.IsDeleted == false)
+                .Select(w => new WaitingListTable
+                {
+                TokenNumber = w.Id,
+                CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
+                PhoneNumber = w.Customer.Phone,
+                WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
+                Name = w.Customer.Name,
+                NumberOfPersons = w.NoOfPersons,
+                Email = w.Customer.Email
+                }).ToListAsync();
             }
             foreach (WaitingListTable waiting in waitingList)
             {
-                waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
+            waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
             }
             WaitingListViewModel waitingListViewModel = new WaitingListViewModel
             {
-                WaitingList = waitingList
+            WaitingList = waitingList
             };
             return waitingListViewModel;
         }
 
-        public JsonResult GetAvailableTables(int sectionId)
+        public async Task<JsonResult> GetAvailableTablesAsync(int sectionId)
         {
-            List<Table> availableTables = _context.Tables
-                .Where(t => t.SectionId == sectionId && t.IsDeleted == false && t.Status == "Available")
-                .OrderBy(t => t.Id)
-                .Select(t => new Table
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                }).ToList();
+            List<Table> availableTables = await _context.Tables
+            .Where(t => t.SectionId == sectionId && t.IsDeleted == false && t.Status == "Available")
+            .OrderBy(t => t.Id)
+            .Select(t => new Table
+            {
+                Id = t.Id,
+                Name = t.Name
+            }).ToListAsync();
             return new JsonResult(availableTables);
         }
 
-        public IActionResult AssignTable(int waitingListId, int tableId, int userId, int sectionId)
+        public async Task<IActionResult> AssignTableAsync(int waitingListId, int tableId, int userId, int sectionId)
         {
-            WaitingList waitingList = _context.WaitingLists.Find(waitingListId);
-            Customer customer = _context.Customers.Find(waitingList.CustomerId);
-            if (_context.Orders.Any(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            WaitingList waitingList = await _context.WaitingLists.FindAsync(waitingListId);
+            if (waitingList == null)
             {
-                return new JsonResult(new { success = false, message = "Customer already has a ongoing order" });
+            return new JsonResult(new { success = false, message = "Waiting list not found" });
             }
-            Table table = _context.Tables.Find(tableId);
+
+            Customer customer = await _context.Customers.FindAsync(waitingList.CustomerId);
+            if (customer == null)
+            {
+            return new JsonResult(new { success = false, message = "Customer not found" });
+            }
+
+            if (await _context.Orders.AnyAsync(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            {
+            return new JsonResult(new { success = false, message = "Customer already has an ongoing order" });
+            }
+
+            Table table = await _context.Tables.FindAsync(tableId);
+            if (table == null)
+            {
+            return new JsonResult(new { success = false, message = "Table not found" });
+            }
+
             table.Status = "Assigned";
             waitingList.IsDeleted = true;
             waitingList.SectionId = sectionId;
             waitingList.UpdatedAt = DateTime.Now;
             waitingList.UpdatedBy = userId;
-            _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
+
             Order order = new Order
             {
-                TotalAmount = 0,
-                Status = "Pending",
-                PaymentMode = "Cash",
-                IsDeleted = false,
-                CustomerId = waitingList.CustomerId,
-                CreatedAt = DateTime.Now,
-                CreatedBy = userId,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = userId
+            TotalAmount = 0,
+            Status = "Pending",
+            PaymentMode = "Cash",
+            IsDeleted = false,
+            CustomerId = waitingList.CustomerId,
+            CreatedAt = DateTime.Now,
+            CreatedBy = userId,
+            UpdatedAt = DateTime.Now,
+            UpdatedBy = userId
             };
-            _context.Orders.Add(order);
-            _context.SaveChanges();
+
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+
             OrderTableMapping orderTableMapping = new OrderTableMapping
             {
-                OrderId = order.Id,
-                TableId = tableId,
-                CreatedAt = DateTime.Now,
-                CreatedBy = userId,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = userId,
-                IsDeleted = false
+            OrderId = order.Id,
+            TableId = tableId,
+            CreatedAt = DateTime.Now,
+            CreatedBy = userId,
+            UpdatedAt = DateTime.Now,
+            UpdatedBy = userId,
+            IsDeleted = false
             };
-            _context.OrderTableMappings.Add(orderTableMapping);
-            _context.SaveChanges();
-            return new JsonResult(new { success = true, message = "Table assigned successfully"});
+
+            await _context.OrderTableMappings.AddAsync(orderTableMapping);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { success = true, message = "Table assigned successfully" });
         }
     }
 }

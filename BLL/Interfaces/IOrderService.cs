@@ -4,13 +4,13 @@ namespace BLL.Interfaces;
 
 public interface IOrderService
 {
-    public OrderViewModal GetOrders();
-    public OrderViewModal FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string fromDate, string toDate, string searchValue);
-    public List<OrderTable> GetOrdersBasedOnFilters(string status, string time, string searchValue);
-    public OrderDetailsViewModel GetOrderDetails(int orderId);
-    public List<InvoiceTax> GetInvoiceTaxes(int orderId, OrderDetailsViewModel orderDetailsViewModel);
-    public byte[] GenerateInvoice(int orderId);
-    public byte[] ExportOrders(string status, string time, string searchValue);
-    public string EncryptOrderId(int orderId);
-    public int DecryptOrderId(string orderIdEncrypted);
+    public Task<OrderViewModal> GetOrdersAsync();
+    public Task<OrderViewModal> FilterOrdersAsync(int pageSize, int pageIndex, string status, string time, string sort, string order, string fromDate, string toDate, string searchValue);
+    public Task<List<OrderTable>> GetOrdersBasedOnFiltersAsync(string status, string time, string searchValue);
+    public Task<OrderDetailsViewModel> GetOrderDetailsAsync(int orderId);
+    public Task<List<InvoiceTax>> GetInvoiceTaxesAsync(int orderId, OrderDetailsViewModel orderDetailsViewModel);
+    public Task<byte[]> GenerateInvoiceAsync(int orderId);
+    public Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue);
+    public Task<string> EncryptOrderIdAsync(int orderId);
+    public Task<int> DecryptOrderIdAsync(string orderIdEncrypted);
 }

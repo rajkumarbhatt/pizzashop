@@ -13,54 +13,57 @@ namespace Presentation.Controllers
             _waitingListService = waitingListService;
             _jwtService = jwtService;
         }
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            WaitingListViewModel waitingListViewModel = _waitingListService.GetWaitingListViewModel();
+            WaitingListViewModel waitingListViewModel = await _waitingListService.GetWaitingListViewModelAsync();
             return View(waitingListViewModel);
         }
 
         [HttpDelete]
-        public IActionResult DeleteWaitingList(int id)
+        public async Task<IActionResult> DeleteWaitingList(int id)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _waitingListService.DeleteWaitingList(id, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _waitingListService.DeleteWaitingListAsync(id, userId);
         }
 
         [HttpGet]
-        public IActionResult GetWaitingList()
+        public async Task<IActionResult> GetWaitingList()
         {
-            WaitingListViewModel waitingListViewModel = _waitingListService.GetWaitingListViewModel();
+            WaitingListViewModel waitingListViewModel = await _waitingListService.GetWaitingListViewModelAsync();
             return PartialView("_WaitingListPartial", waitingListViewModel);
         }
 
         [HttpGet]
-        public IActionResult EditWaitingList(int id)
+        public async Task<IActionResult> EditWaitingList(int id)
         {
-            WaitingListViewModel waitingListViewModel = _waitingListService.GetWaitingListDetails(id);
+            WaitingListViewModel waitingListViewModel = await _waitingListService.GetWaitingListDetailsAsync(id);
             return PartialView("_WaitingTokenModal", waitingListViewModel);
-        }
-        [HttpGet]
-        public IActionResult GetCustomerSuggestions(string email)
-        {
-            return _waitingListService.GetCustomerSuggestions(email);
         }
 
         [HttpGet]
-        public IActionResult GetWaitingListBasedOnSection(int sectionId)
+        public async Task<IActionResult> GetCustomerSuggestions(string email)
         {
-            WaitingListViewModel waitingListViewModel = _waitingListService.GetWaitingListBasedOnSection(sectionId);
+            return await _waitingListService.GetCustomerSuggestionsAsync(email);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetWaitingListBasedOnSection(int sectionId)
+        {
+            WaitingListViewModel waitingListViewModel = await _waitingListService.GetWaitingListBasedOnSectionAsync(sectionId);
             return PartialView("_WaitingListTablePartial", waitingListViewModel);
         }
+
         [HttpGet]
-        public IActionResult GetAvailableTables(int sectionId)
+        public async Task<IActionResult> GetAvailableTables(int sectionId)
         {
-            return _waitingListService.GetAvailableTables(sectionId);
+            return await _waitingListService.GetAvailableTablesAsync(sectionId);
         }
+
         [HttpPost]
-        public IActionResult AssignTable(int waitingListId, int tableId, int sectionId)
+        public async Task<IActionResult> AssignTable(int waitingListId, int tableId, int sectionId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _waitingListService.AssignTable(waitingListId, tableId, userId, sectionId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _waitingListService.AssignTableAsync(waitingListId, tableId, userId, sectionId);
         }
     }
 }

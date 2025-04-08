@@ -25,7 +25,7 @@ public class HomeController : Controller
 
     [HttpPost]
     [Route("api/validate")]
-    public IActionResult Validate([FromBody] LoginViewModel loginModel)
+    public async Task<IActionResult> Validate([FromBody] LoginViewModel loginModel)
     {
         if (string.IsNullOrEmpty(loginModel.Email))
         {
@@ -37,6 +37,6 @@ public class HomeController : Controller
             return BadRequest("Password cannot be null or empty.");
         }
 
-        return _loginService.Validate(loginModel.Email, loginModel.Password);
+        return await _loginService.ValidateAsync(loginModel.Email, loginModel.Password);
     }
 }

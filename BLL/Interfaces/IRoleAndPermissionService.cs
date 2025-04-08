@@ -1,14 +1,18 @@
 using DAL.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAL.ViewModels
 {
     public interface IRoleAndPermissionService
     {
-        public List<Permission> GetPermissions();
-        public List<RolePermission> GetRolePermissions(int roleId);
-        public Role GetRole(int roleId);
-        public List<Role> GetRoles();
-        public IActionResult UpdateRolePermissions(List<PermissionChangeModel> changedPermissions);
+        Task<List<Permission>> GetPermissionsAsync();
+        Task<List<RolePermission>> GetRolePermissionsAsync(int roleId);
+        Task<Role> GetRoleAsync(int roleId);
+        Task<List<Role>> GetRolesAsync();
+        Task<IActionResult> UpdateRolePermissionsAsync(List<PermissionChangeModel> changedPermissions);
+        Task<RoleAndPermissionViewModel> GetRoleAndPermissionViewModelAsync();
+        Task<EditPermissionsViewModel> GetEditPermissionsViewModelAsync(int roleIdRequested);
     }
 }

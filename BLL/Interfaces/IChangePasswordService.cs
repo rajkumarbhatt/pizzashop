@@ -4,7 +4,7 @@ namespace BLL.Interfaces
 {
     public interface IChangePasswordService
     {
-        public IActionResult ChangePassword(int userId, string newPassword, string oldPassword);
+        public Task<IActionResult> ChangePasswordAsync(int userId, string newPassword, string oldPassword);
 
     }
 }

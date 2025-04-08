@@ -12,7 +12,7 @@
                 <div class="kot-menu-item-image-div shadow p-1 w-50 ">
                     <div class="w-100 h-100 ">
                         @{
-                            var imagePath = item.Image;
+                            var imagePath = item.Image == null ? "default-image.png" : item.Image;
                         }
                         <img src="~/images/item-images/@imagePath"
                             class="w-100 h-100 border-kot-menu-item-image object-fit-cover" alt="">

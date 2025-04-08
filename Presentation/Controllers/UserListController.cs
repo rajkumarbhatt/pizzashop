@@ -22,131 +22,63 @@ namespace Presentaion.Controllers
             _emailService = emailService;
         }
 
-        public IActionResult Index(int pageIndex = 1, int pageSize = 5)
+        public async Task<IActionResult> IndexAsync(int pageIndex = 1, int pageSize = 5)
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            var roleId = _navBarService.GetRoleIdFromUserId(userId);
-            var (users, totalUsers) = _userListService.GetUsers(pageIndex, pageSize);
-            var rolePermissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
-            int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
-
-            var userListViewModel = new UserListViewModel
-            {
-                Users = users,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                TotalPages = totalPages,
-                TotalUsers = totalUsers,
-                Permissions = rolePermissions
-            };
-
+            UserListViewModel userListViewModel = await _userListService.GetUsersListViewModelAsync(pageIndex, pageSize);
             return View(userListViewModel);
         }
 
-        public IActionResult SearchUser(int pageIndex = 1, int pageSize = 5, string? searchValue = null, string sortColumn = "FirstName", string sortColumnDirection = "asc")
+        public async Task<IActionResult> SearchUserAsync(int pageIndex = 1, int pageSize = 5, string? searchValue = null, string sortColumn = "FirstName", string sortColumnDirection = "asc")
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
-            var roleId = _navBarService.GetRoleIdFromUserId(userId);
-
-            var (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
-            int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
-
-            // Store original page index before adjustment
-            int originalPageIndex = pageIndex;
-
-            // Adjust pageIndex if out of bounds
-            pageIndex = totalPages > 0 ? Math.Clamp(pageIndex, 1, totalPages) : 1;
-
-            // Re-fetch if page index was adjusted
-            if (pageIndex != originalPageIndex)
-            {
-                (users, totalUsers) = _userListService.GetUsersWithSearch(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
-                totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
-            }
-
-            var userListViewModel = new UserListViewModel
-            {
-                Users = users,
-                Username = username,
-                ProfileImageURL = profileImageURL,
-                RoleId = roleId,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
-                TotalPages = totalPages,
-                TotalUsers = totalUsers
-            };
-
+            UserListViewModel userListViewModel = await _userListService.GetUsersListViewModelSearchAsync(pageIndex, pageSize, sortColumn, sortColumnDirection, searchValue ?? "");
             return PartialView("_UserList", userListViewModel);
         }
 
-
         [HttpDelete]
         [Route("UserList/DeleteUser/{userId}")]
-        public IActionResult DeleteUser(int userId)
+        public async Task<IActionResult> DeleteUserAsync(int userId)
         {
-            return _userListService.DeleteUser(userId); 
-
+            return await _userListService.DeleteUserAsync(userId);
         }
 
         [HttpGet]
         [Route("UserList/EditUser/{userId}")]
-        public IActionResult EditUser(int userId)
+        public async Task<IActionResult> EditUserAsync(int userId)
         {
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            EditUserViewModel userViewModel = _userListService.GetUserDataFromUserId(userId, userIdLoggedIn);
-
-            var countries = _profileService.GetCountries();
-            var states = _profileService.GetStates(userViewModel.CountryId ?? 0);
-            var cities = _profileService.GetCities(userViewModel.StateId ?? 0);
-            var roles = _userListService.GetRoles();
-
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            EditUserViewModel userViewModel = await _userListService.GetUserDataFromUserIdAsync(userId, userIdLoggedIn);
+            var countries = await _profileService.GetCountriesAsync();
+            var states = await _profileService.GetStatesAsync(userViewModel.CountryId ?? 0);
+            var cities = await _profileService.GetCitiesAsync(userViewModel.StateId ?? 0);
+            var roles = await _userListService.GetRolesAsync();
             ViewBag.Roles = roles;
             ViewBag.Countries = countries;
             ViewBag.States = states;
             ViewBag.Cities = cities;
-
             return View(userViewModel);
         }
 
         [HttpPut]
         [Route("UserList/EditUser/{userId}")]
-        public IActionResult EditUser(EditUserViewModel userViewModel)
+        public async Task<IActionResult> EditUserAsync(EditUserViewModel userViewModel)
         {
             if (!ModelState.IsValid)
-            {             
-                return new JsonResult(new { success = false, message = "Validation Error" });
+            {
+            return new JsonResult(new { success = false, message = "Validation Error" });
             }
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _userListService.UpdateUserDataFromUserId(userIdLoggedIn, userViewModel);
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _userListService.UpdateUserDataFromUserIdAsync(userIdLoggedIn, userViewModel);
         }
 
         [HttpGet]
         [Route("UserList/CreateUser")]
-        public IActionResult CreateUser()
+        public async Task<IActionResult> CreateUserAsync()
         {
-            var countries = _profileService.GetCountries();
-            var roles = _userListService.GetRoles();
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            var usernameLoggedIn = _navBarService.GetUsernameFromUserId(userIdLoggedIn);
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userIdLoggedIn);
-            var roleId = _navBarService.GetRoleIdFromUserId(userIdLoggedIn);
-
-            CreateUserViewModel createUserViewModel = new CreateUserViewModel
-            {
-                Username = usernameLoggedIn,
-                ProfileImageURL = profileImageURL,
-                RoleId = roleId,
-                FirstName = "", 
-                Email = "", 
-                Password = "", 
-                UsernameRequestedUser = ""
-            };
-
+            var countries = await _profileService.GetCountriesAsync();
+            var roles = await _userListService.GetRolesAsync();
             ViewBag.Roles = roles;
             ViewBag.Countries = countries;
-
+            CreateUserViewModel createUserViewModel = await _userListService.GetCreateUserViewModelAsync();
             return View(createUserViewModel);
         }
 
@@ -156,13 +88,11 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(new { success = false, message = "Validation Error" });
+            return new JsonResult(new { success = false, message = "Validation Error" });
             }
-            var userIdLoggedIn = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             await _emailService.SendCreateUserEmailAsync(createUserViewModel.Email, createUserViewModel.Password);
-
-            return _userListService.CreateUser(userIdLoggedIn, createUserViewModel);
+            return await _userListService.CreateUserAsync(userIdLoggedIn, createUserViewModel);
         }
     }
 

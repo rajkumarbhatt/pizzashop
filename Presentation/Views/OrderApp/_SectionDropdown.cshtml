@@ -179,7 +179,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addTableTitle">Waiting Token Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" onclick="clearWaitingTokenModal()" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row align-items-center">
@@ -275,7 +275,7 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-end ">
                     <button id="AddToWaitingList" type="submit" class="btn btn-primary px-3">Save</button>
-                    <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                    <a data-bs-dismiss="modal"><button type="button" onclick="clearWaitingTokenModal()" class="btn btn-contrast px-3">No</button></a>
                 </div>
             </div>
         </form>
@@ -345,7 +345,6 @@
                     });
                     $("#SectionDropDownOffcanvas").val(sectionId);
                     $("#offcanvasRight").offcanvas("show");
-                
                 }
                 else {
                     toastr.error(response.message);
@@ -454,6 +453,15 @@
         $("#MobileNumberOffCanvasWaitingToken").val(mobileNumber);
         $("#IdOffCanvasWaitingToken").val(tokenNumber);
         $("#NumberOfPeopleWaitingListOffCanvas").val(noOfPersons);
+    }
+
+    function clearWaitingTokenModal() {
+        $("#waitingTokenForm").trigger("reset");
+        $("#waitingTokenForm").find("input[type=hidden]").val("-1");
+        $("#emailSuggestions").hide();
+        $("#waitingTokenForm").find(".text-danger").each(function () {
+            $(this).text("");
+        });
     }
 
 </script>

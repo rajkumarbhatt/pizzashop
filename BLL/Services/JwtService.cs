@@ -4,14 +4,23 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services
 {
     public class JwtService : IJwtService
     {
-        public string GenerateJwtToken(User user, string role)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly INavBarService _navBarService;
+        public JwtService(IHttpContextAccessor httpContextAccessor, INavBarService navBarService)
         {
-
+            _navBarService = navBarService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+        public async Task<string> GenerateJwtTokenAsync(User user, string role)
+        {
+            return await Task.Run(() =>
+            {
             List<Claim> claims = new List<Claim>
             {
                 // Subject (sub) claim with the user's ID
@@ -19,7 +28,7 @@ namespace BLL.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim (ClaimTypes.Role, user.RoleId.ToString()),
+                new Claim(ClaimTypes.Role, user.RoleId.ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"));
@@ -33,10 +42,12 @@ namespace BLL.Services
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+            });
         }
-
-        public int GetUserIdFromJwtToken(string token)
+        public async Task<int> GetUserIdFromJwtTokenAsync(string token)
         {
+            return await Task.Run(() =>
+            {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
 
@@ -57,10 +68,12 @@ namespace BLL.Services
             }
 
             return userId;
+            });
         }
-
-        public string GetUsernameFromJwtToken(string token)
+        public async Task<string> GetUsernameFromJwtTokenAsync(string token)
         {
+            return await Task.Run(() =>
+            {
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadToken(token) as JwtSecurityToken;
 
@@ -76,6 +89,17 @@ namespace BLL.Services
             }
 
             return usernameClaim.Value;
+            });
+        }
+        public async Task SetSessionParametersAsync(int userId, string username, int roleId) {
+            var profileImageURL = await _navBarService.GetProfileImageUrlFromUserIdAsync(userId);
+            var permissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
+            var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
+            _httpContextAccessor.HttpContext?.Session.Set("permissions", permissionsBytes);
+            _httpContextAccessor.HttpContext?.Session.SetString("Username", username);
+            _httpContextAccessor.HttpContext?.Session.SetString("ProfileImageURL", profileImageURL);
+            _httpContextAccessor.HttpContext?.Session.SetInt32("RoleId", roleId);
+            _httpContextAccessor.HttpContext?.Session.SetInt32("UserId", userId); 
         }
     }
 }

@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using DAL.Models;
-using DAL.ViewModels;
 using BLL.Interfaces;
 
 namespace Presentaion.Controllers
@@ -17,13 +14,13 @@ namespace Presentaion.Controllers
             _navBarService = navBarService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var token = Request.Cookies["token"];
-            var userId = _jwtService.GetUserIdFromJwtToken(token??"");
-            var hasLoggedInBefore = _navBarService.IsFirstTimeLogin(userId);
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var roleId  = _navBarService.GetRoleIdFromUserId(userId);
+            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(token??"");
+            var hasLoggedInBefore = await _navBarService.IsFirstTimeLoginAsync(userId);
+            var username = await _navBarService.GetUsernameFromUserIdAsync(userId);
+            var roleId  = await _navBarService.GetRoleIdFromUserIdAsync(userId);
             if (roleId == 3)
             {
                 return RedirectToAction("Index", "OrderApp");
@@ -32,14 +29,7 @@ namespace Presentaion.Controllers
             {
                 return RedirectToAction("NewPassword","ResetPassword");
             }
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
-            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
-            var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
-            HttpContext.Session.Set("permissions", permissionsBytes);
-            HttpContext.Session.SetString("Username", username);
-            HttpContext.Session.SetString("ProfileImageURL", profileImageURL);
-            HttpContext.Session.SetInt32("RoleId", roleId);
-            HttpContext.Session.SetInt32("UserId", userId); 
+            await _jwtService.SetSessionParametersAsync(userId, username, roleId);
             return View();
         }
 

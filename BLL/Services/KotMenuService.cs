@@ -2,7 +2,9 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -13,11 +15,11 @@ namespace BLL.Services
         {
             _context = context;
         }
-        public KotMenuViewModel GetKotMenu(int? orderId )
+        public async Task<KotMenuViewModel> GetKotMenuAsync(int? orderId)
         {
             OrderDetailsCard orderDetailsCard = new OrderDetailsCard();
-            List<Category> categories = _context.Categories.Where(c => c.IsDeleted == false).ToList();
-            List<MenuItemsKot> menuItemsKot = _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true).Select(m => new MenuItemsKot
+            List<Category> categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
+            List<MenuItemsKot> menuItemsKot = await _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true).Select(m => new MenuItemsKot
             {
                 Id = m.Id,
                 Name = m.Name,
@@ -26,26 +28,23 @@ namespace BLL.Services
                 Image = m.ImageUrl,
                 ItemType = m.ItemType,
                 IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
-            }).ToList();
+            }).ToListAsync();
+
             if (orderId != null)
             {
-                List<int> tableIds = _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).Select(otb => otb.TableId).ToList();
-                int sectionId = _context.Tables.FirstOrDefault(t => t.Id == tableIds[0]).SectionId;
-                string sectionName = _context.Sections.FirstOrDefault(s => s.Id == sectionId).Name;
+                List<int> tableIds = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).Select(otb => otb.TableId).ToListAsync();
+                int sectionId = (await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableIds[0])).SectionId;
+                string sectionName = (await _context.Sections.FirstOrDefaultAsync(s => s.Id == sectionId)).Name;
                 string tableNames = "";
+
                 foreach (int tableId in tableIds)
                 {
-                    string tableName = _context.Tables.FirstOrDefault(t => t.Id == tableId).Name;
-                    if (tableNames == "")
+                    string tableName = (await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableId)).Name;
+                    tableNames = string.IsNullOrEmpty(tableNames) ? tableName : $"{tableNames}, {tableName}";
+
+                    List<OrderItemDetials> orderItemDetails = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Select(oi => new OrderItemDetials
                     {
-                        tableNames = tableName;
-                    }
-                    else
-                    {
-                        tableNames += ", " + tableName;
-                    }
-                    List<OrderItemDetials> orderItemDetails = _context.OrderItems.Where(oi => oi.OrderId == orderId).Select(oi => new OrderItemDetials
-                    {
+                        ItemId = oi.ItemId,
                         ItemName = oi.Item.Name,
                         ItemQuantity = oi.Quantity,
                         ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity),
@@ -55,53 +54,61 @@ namespace BLL.Services
                             ModifierPrice = (decimal?)om.Price
                         }).ToList(),
                         ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Sum(om => om.Price),
-                    }).ToList();
+                    }).ToListAsync();
+
                     orderDetailsCard.SectionName = sectionName;
                     orderDetailsCard.TableNames = tableNames;
                     orderDetailsCard.OrderItemDetails = orderItemDetails;
                 }
             }
+
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
                 Categories = categories,
                 MenuItemsKot = menuItemsKot,
                 OrderDetailsCard = orderDetailsCard
             };
+
             return kotMenuViewModel;
         }
 
-        public KotMenuViewModel GetKotMenuItemsBasedOnCategory(int categoryId)
+        public async Task<KotMenuViewModel> GetKotMenuItemsBasedOnCategoryAsync(int categoryId)
         {
             List<MenuItemsKot> menuItemsKot = new List<MenuItemsKot>();
             if (categoryId == -1)
             {
-                return GetKotMenu(null);
+                return await GetKotMenuAsync(null);
             }
             else if (categoryId == -2)
             {
-                menuItemsKot = _context.CustomerFavourites.Where(cf => cf.IsDeleted == false && cf.Item.IsAvailable == true).Select(cf => new MenuItemsKot
-                {
-                    Id = cf.ItemId,
-                    Name = cf.Item.Name,
-                    Price = cf.Item.Price,
-                    Image = cf.Item.ImageUrl,
-                    CategoryId = cf.Item.CategoryId,
-                    ItemType = cf.Item.ItemType,
-                    IsFavourite = !cf.IsDeleted
-                }).ToList();
+                menuItemsKot = await _context.CustomerFavourites
+                    .Where(cf => cf.IsDeleted == false && cf.Item.IsAvailable == true)
+                    .Select(cf => new MenuItemsKot
+                    {
+                        Id = cf.ItemId,
+                        Name = cf.Item.Name,
+                        Price = cf.Item.Price,
+                        Image = cf.Item.ImageUrl,
+                        CategoryId = cf.Item.CategoryId,
+                        ItemType = cf.Item.ItemType,
+                        IsFavourite = !cf.IsDeleted
+                    }).ToListAsync();
             }
             else
             {
-                menuItemsKot = _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true && m.CategoryId == categoryId).Select(m => new MenuItemsKot
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Price = m.Price,
-                    CategoryId = m.CategoryId,
-                    Image = m.ImageUrl,
-                    ItemType = m.ItemType,
-                    IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
-                }).ToList();
+                menuItemsKot = await _context.Items
+                    .Where(m => m.IsDeleted == false && m.IsAvailable == true && m.CategoryId == categoryId)
+                    .Select(m => new MenuItemsKot
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Price = m.Price,
+                        CategoryId = m.CategoryId,
+                        Image = m.ImageUrl,
+                        ItemType = m.ItemType,
+                        IsFavourite = _context.CustomerFavourites
+                        .FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
+                    }).ToListAsync();
             }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
@@ -110,51 +117,57 @@ namespace BLL.Services
             return kotMenuViewModel;
         }
 
-        public KotMenuViewModel SearchMenuItemsKot(string search, int categoryId)
+        public async Task<KotMenuViewModel> SearchMenuItemsKotAsync(string search, int categoryId)
         {
             if (string.IsNullOrEmpty(search))
             {
-                return GetKotMenuItemsBasedOnCategory(categoryId);
+                return await GetKotMenuItemsBasedOnCategoryAsync(categoryId);
             }
             List<MenuItemsKot> menuItemsKot = new List<MenuItemsKot>();
             if (categoryId == -1)
             {
-                menuItemsKot = _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true && m.Name.ToLower().Contains(search.ToLower())).Select(m => new MenuItemsKot
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Price = m.Price,
-                    CategoryId = m.CategoryId,
-                    Image = m.ImageUrl,
-                    IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null,
-                    ItemType = m.ItemType
-                }).ToList();
+                menuItemsKot = await _context.Items
+                    .Where(m => m.IsDeleted == false && m.IsAvailable == true && m.Name.ToLower().Contains(search.ToLower()))
+                    .Select(m => new MenuItemsKot
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Price = m.Price,
+                        CategoryId = m.CategoryId,
+                        Image = m.ImageUrl,
+                        IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null,
+                        ItemType = m.ItemType
+                    }).ToListAsync();
             }
             else if (categoryId == -2)
             {
-                menuItemsKot = _context.CustomerFavourites.Where(cf => cf.IsDeleted == false && cf.Item.IsAvailable == true && cf.Item.Name.ToLower().Contains(search.ToLower())).Select(cf => new MenuItemsKot
-                {
-                    Id = cf.ItemId,
-                    Name = cf.Item.Name,
-                    Price = cf.Item.Price,
-                    Image = cf.Item.ImageUrl,
-                    CategoryId = cf.Item.CategoryId,
-                    ItemType = cf.Item.ItemType,
-                    IsFavourite = !cf.IsDeleted
-                }).ToList();
+                menuItemsKot = await _context.CustomerFavourites
+                    .Where(cf => cf.IsDeleted == false && cf.Item.IsAvailable == true && cf.Item.Name.ToLower().Contains(search.ToLower()))
+                    .Select(cf => new MenuItemsKot
+                    {
+                        Id = cf.ItemId,
+                        Name = cf.Item.Name,
+                        Price = cf.Item.Price,
+                        Image = cf.Item.ImageUrl,
+                        CategoryId = cf.Item.CategoryId,
+                        ItemType = cf.Item.ItemType,
+                        IsFavourite = !cf.IsDeleted
+                    }).ToListAsync();
             }
             else
             {
-                menuItemsKot = _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true && m.CategoryId == categoryId && m.Name.ToLower().Contains(search.ToLower())).Select(m => new MenuItemsKot
-                {
-                    Id = m.Id,
-                    Name = m.Name,
-                    Price = m.Price,
-                    CategoryId = m.CategoryId,
-                    Image = m.ImageUrl,
-                    ItemType = m.ItemType,
-                    IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
-                }).ToList();
+                menuItemsKot = await _context.Items
+                    .Where(m => m.IsDeleted == false && m.IsAvailable == true && m.CategoryId == categoryId && m.Name.ToLower().Contains(search.ToLower()))
+                    .Select(m => new MenuItemsKot
+                    {
+                        Id = m.Id,
+                        Name = m.Name,
+                        Price = m.Price,
+                        CategoryId = m.CategoryId,
+                        Image = m.ImageUrl,
+                        ItemType = m.ItemType,
+                        IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
+                    }).ToListAsync();
             }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
@@ -163,9 +176,9 @@ namespace BLL.Services
             return kotMenuViewModel;
         }
 
-        public JsonResult AddToFavourites(int itemId, int userId)
+        public async Task<JsonResult> AddToFavouritesAsync(int itemId, int userId)
         {
-            CustomerFavourite customerFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite { ItemId = -2348 };
+            CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite { ItemId = -2348 };
             if (customerFavourite.ItemId == -2348)
             {
                 CustomerFavourite customerFavourite2 = new CustomerFavourite
@@ -177,33 +190,32 @@ namespace BLL.Services
                     UpdatedBy = userId,
                     IsDeleted = false
                 };
-                _context.CustomerFavourites.Add(customerFavourite2);
-                _context.SaveChanges();
+                await _context.CustomerFavourites.AddAsync(customerFavourite2);
+                await _context.SaveChangesAsync();
             }
             else
             {
                 customerFavourite.IsDeleted = false;
                 customerFavourite.UpdatedAt = DateTime.Now;
                 customerFavourite.UpdatedBy = userId;
-                _context.SaveChanges();
-
+                await _context.SaveChangesAsync();
             }
-            return new JsonResult(new { success = true, message = "Item added to favourites succeswsfully" });
+            return new JsonResult(new { success = true, message = "Item added to favourites successfully" });
         }
 
-        public JsonResult DeleteFromFavourites(int itemId, int userId)
+        public async Task<JsonResult> DeleteFromFavouritesAsync(int itemId, int userId)
         {
-            CustomerFavourite customerFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite();
+            CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite();
             customerFavourite.IsDeleted = true;
             customerFavourite.UpdatedAt = DateTime.Now;
             customerFavourite.UpdatedBy = userId;
-            _context.SaveChanges();
-            return new JsonResult(new { success = true, message = "Item removed from favourites succeswsfully" });
+            await _context.SaveChangesAsync();
+            return new JsonResult(new { success = true, message = "Item removed from favourites successfully" });
         }
 
-        public KotMenuViewModel GetCustomerDetails(int orderId)
+        public async Task<KotMenuViewModel> GetCustomerDetailsAsync(int orderId)
         {
-            Customer customerDetails = _context.Orders.Where(o => o.Id == orderId).OrderBy(o => o.Id).Select(o => o.Customer).LastOrDefault() ?? new Customer();
+            Customer customerDetails = await _context.Orders.Where(o => o.Id == orderId).OrderBy(o => o.Id).Select(o => o.Customer).LastOrDefaultAsync() ?? new Customer();
             WaitingListModal waitingListModalViewModel = new WaitingListModal
             {
                 Name = customerDetails.Name,
@@ -218,26 +230,26 @@ namespace BLL.Services
             return kotMenuViewModel;
         }
 
-        public JsonResult UpdateCustomerDetails(WaitingListModal waitingListModal, int userId)
+        public async Task<JsonResult> UpdateCustomerDetailsAsync(WaitingListModal waitingListModal, int userId)
         {
-            Customer customer1 = _context.Customers.FirstOrDefault(c => c.Email == waitingListModal.Email) ?? new Customer();
-            Order order = _context.Orders.OrderByDescending(o => o.Id).FirstOrDefault(o => o.CustomerId == customer1.Id) ?? new Order();
-            List<OrderTableMapping> orderTableMappings = _context.OrderTableMappings.Where(otm => otm.OrderId == order.Id).ToList();
+            Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
+            Order order = await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync(o => o.CustomerId == customer1.Id) ?? new Order();
+            List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == order.Id).ToListAsync();
             int tableCapacity = 0;
             if (orderTableMappings.Count > 1)
             {
                 foreach (OrderTableMapping orderTableMapping in orderTableMappings)
                 {
-                    Table table = _context.Tables.FirstOrDefault(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false);
+                    Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false);
                     if (table.Capacity > waitingListModal.NumberOfPeople)
                     {
-                        return new JsonResult(new { success = false, message = "Customers can be manages in less than selected tables" });
+                        return new JsonResult(new { success = false, message = "Customers can be managed in fewer tables than selected" });
                     }
                 }
             }
             foreach (OrderTableMapping orderTableMapping in orderTableMappings)
             {
-                Table table = _context.Tables.FirstOrDefault(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false);
+                Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false);
                 if (table != null)
                 {
                     tableCapacity += table.Capacity;
@@ -247,7 +259,7 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "Number of people exceeds table capacity" });
             }
-            Customer customer = _context.Customers.FirstOrDefault(c => c.Email == waitingListModal.Email) ?? new Customer();
+            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
             {
                 customer.Name = waitingListModal.Name;
                 customer.Phone = waitingListModal.MobileNumber;
@@ -255,39 +267,45 @@ namespace BLL.Services
                 customer.UpdatedAt = DateTime.Now;
                 customer.UpdatedBy = userId;
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             foreach (OrderTableMapping orderTableMapping in orderTableMappings)
             {
-                OrderTableMapping orderTableMapping1 = _context.OrderTableMappings.FirstOrDefault(otm => otm.Id == orderTableMapping.Id);
+                OrderTableMapping orderTableMapping1 = await _context.OrderTableMappings.FirstOrDefaultAsync(otm => otm.Id == orderTableMapping.Id);
                 orderTableMapping1.NoOfPersons = waitingListModal.NumberOfPeople;
                 orderTableMapping1.UpdatedAt = DateTime.Now;
                 orderTableMapping1.UpdatedBy = userId;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             return new JsonResult(new { success = true, message = "Customer details updated successfully" });
         }
 
-        public KotMenuViewModel GetSelectModifiersModalData(int itemId)
+        public async Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId)
         {
-            DAL.Models.Item item = _context.Items.FirstOrDefault(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
-            AddModifiersModal addModifiersModal = new AddModifiersModal();
-            addModifiersModal.ItemId = item.Id;
-            addModifiersModal.ItemName = item.Name;
-            List<ItemModifiergroup> itemModifierGroups = _context.ItemModifiergroups.Where(im => im.ItemId == item.Id).ToList();
+            DAL.Models.Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
+            AddModifiersModal addModifiersModal = new AddModifiersModal
+            {
+                ItemId = item.Id,
+                ItemName = item.Name
+            };
+            List<ItemModifiergroup> itemModifierGroups = await _context.ItemModifiergroups.Where(im => im.ItemId == item.Id).ToListAsync();
             List<ModifierGroupsAddItem> modifierGroups = new List<ModifierGroupsAddItem>();
             foreach (ItemModifiergroup itemModifierGroup in itemModifierGroups)
             {
-                ModifierGroupsAddItem modifierGroup = new ModifierGroupsAddItem();
-                modifierGroup.ModifierGroupId = itemModifierGroup.ModifiergroupId;
-                modifierGroup.ModifierGroupName = _context.ModifierGroups.FirstOrDefault(mg => mg.Id == itemModifierGroup.ModifiergroupId)?.Name;
-                modifierGroup.MinSelection = itemModifierGroup.MinValue ?? 0;
-                modifierGroup.MaxSelection = itemModifierGroup.MaxValue ?? 0;
-                List<ModifierGroupItemsAddItem> modifierGroupItems = _context.ModifierModifiergroupMappings.Where(mg => mg.ModifiergroupId == itemModifierGroup.ModifiergroupId).Select(mg => new ModifierGroupItemsAddItem
+                ModifierGroupsAddItem modifierGroup = new ModifierGroupsAddItem
                 {
-                    ModifierId = mg.ModifierId,
-                    ModifierName = mg.Modifier.Name,
-                    Price = mg.Modifier.Price,
-                }).ToList();
+                    ModifierGroupId = itemModifierGroup.ModifiergroupId,
+                    ModifierGroupName = (await _context.ModifierGroups.FirstOrDefaultAsync(mg => mg.Id == itemModifierGroup.ModifiergroupId))?.Name,
+                    MinSelection = itemModifierGroup.MinValue ?? 0,
+                    MaxSelection = itemModifierGroup.MaxValue ?? 0
+                };
+                List<ModifierGroupItemsAddItem> modifierGroupItems = await _context.ModifierModifiergroupMappings
+                    .Where(mg => mg.ModifiergroupId == itemModifierGroup.ModifiergroupId)
+                    .Select(mg => new ModifierGroupItemsAddItem
+                    {
+                        ModifierId = mg.ModifierId,
+                        ModifierName = mg.Modifier.Name,
+                        Price = mg.Modifier.Price,
+                    }).ToListAsync();
                 modifierGroup.ModifierGroupItems = modifierGroupItems;
                 modifierGroups.Add(modifierGroup);
             }
@@ -299,9 +317,9 @@ namespace BLL.Services
             return kotMenuViewModel;
         }
 
-        public IActionResult AddItemToOrder(int itemId, int orderId, List<int> modifierIds, int userId)
+        public async Task<IActionResult> AddItemToOrderAsync(int itemId, int orderId, List<int> modifierIds, int userId)
         {
-            DAL.Models.Item item = _context.Items.FirstOrDefault(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
+            DAL.Models.Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
             item.Quantity -= 1;
             if (item.Quantity <= 0)
             {
@@ -310,7 +328,8 @@ namespace BLL.Services
             item.UpdatedAt = DateTime.Now;
             item.UpdatedBy = userId;
             _context.Items.Update(item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
+
             OrderItem orderItem = new OrderItem
             {
                 OrderId = orderId,
@@ -321,17 +340,20 @@ namespace BLL.Services
                 CreatedAt = DateTime.Now,
                 UpdatedBy = userId,
                 UpdatedAt = DateTime.Now,
+                IsDeleted = false
             };
-            _context.OrderItems.Add(orderItem);
-            _context.SaveChanges();
+            await _context.OrderItems.AddAsync(orderItem);
+            await _context.SaveChangesAsync();
+
             foreach (int modifierId in modifierIds)
             {
-                Modifier modifier = _context.Modifiers.FirstOrDefault(m => m.Id == modifierId) ?? new Modifier();
+                Modifier modifier = await _context.Modifiers.FirstOrDefaultAsync(m => m.Id == modifierId) ?? new Modifier();
                 modifier.Quantity -= 1;
                 modifier.UpdatedAt = DateTime.Now;
                 modifier.UpdatedBy = userId;
                 _context.Modifiers.Update(modifier);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+
                 OrderModifier orderItemModifier = new OrderModifier
                 {
                     OrderItemId = orderItem.Id,
@@ -341,15 +363,18 @@ namespace BLL.Services
                     CreatedAt = DateTime.Now,
                     UpdatedBy = userId,
                     UpdatedAt = DateTime.Now,
+                    IsDeleted = false
                 };
-                _context.OrderModifiers.Add(orderItemModifier);
-                _context.SaveChanges();
+                await _context.OrderModifiers.AddAsync(orderItemModifier);
+                await _context.SaveChangesAsync();
             }
-            List<OrderTaxis> orderTaxes = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
+
+            List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
             double SubTotal = 0, totalTax = 0;
+
             if (orderTaxes.Count == 0)
             {
-                List<TaxesFee> taxesFees = _context.TaxesFees.Where(tf => tf.IsDeleted == false).ToList();
+                List<TaxesFee> taxesFees = await _context.TaxesFees.Where(tf => tf.IsDeleted == false).ToListAsync();
                 foreach (TaxesFee taxesFee in taxesFees)
                 {
                     OrderTaxis orderTaxis = new OrderTaxis
@@ -362,17 +387,67 @@ namespace BLL.Services
                         UpdatedBy = userId,
                         UpdatedAt = DateTime.Now,
                     };
-                    _context.OrderTaxes.Add(orderTaxis);
-                    _context.SaveChanges();
+                    await _context.OrderTaxes.AddAsync(orderTaxis);
+                    await _context.SaveChangesAsync();
                 }
             }
-            SubTotal = _context.OrderItems.Where(oi => oi.OrderId == orderId).Sum(oi => oi.Price * oi.Quantity) ?? 0;
-            SubTotal += _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId).Sum(om => om.Price) ?? 0;
-            List<OrderTaxis> orderTaxis2 = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
+
+            SubTotal = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).SumAsync(oi => oi.Price * oi.Quantity) ?? 0;
+            SubTotal += await _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).SumAsync(om => om.Price) ?? 0;
+
+            List<OrderTaxis> orderTaxis2 = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
             foreach (OrderTaxis orderTaxis1 in orderTaxis2)
             {
-                
-                string taxType = _context.TaxesFees.FirstOrDefault(tf => tf.Id == orderTaxis1.TaxId)?.TaxType ?? "";
+                string taxType = (await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTaxis1.TaxId))?.TaxType ?? "";
+                if (taxType == "Percentage")
+                {
+                    totalTax += SubTotal * (double)orderTaxis1.TaxAmount / 100;
+                }
+                else if (taxType == "Fixed Amount")
+                {
+                    totalTax += (double)orderTaxis1.TaxAmount;
+                }
+            }
+
+            totalTax = Math.Round(totalTax, 2);
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            order.TotalAmount = (decimal)(SubTotal + totalTax);
+            order.UpdatedAt = DateTime.Now;
+            order.UpdatedBy = userId;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { success = true, message = "Item added to order successfully" });
+        }
+        public async Task<IActionResult> DeleteItemFromOrderAsync(int orderId, int itemId, int userId)
+        {
+            Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId) ?? new Item();
+            OrderItem ordeItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            item.Quantity += ordeItem.Quantity;
+            item.UpdatedBy = userId;
+            item.UpdatedAt = DateTime.Now;
+            ordeItem.IsDeleted = true;
+            ordeItem.UpdatedAt = DateTime.Now;
+            ordeItem.UpdatedBy = userId;
+            _context.OrderItems.Update(ordeItem);
+            await _context.SaveChangesAsync();
+            List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == ordeItem.Id && om.IsDeleted == false).ToListAsync();
+            foreach (OrderModifier orderModifier in orderModifiers)
+            {
+                orderModifier.IsDeleted = true;
+                orderModifier.UpdatedAt = DateTime.Now;
+                orderModifier.UpdatedBy = userId;
+                _context.Update(orderModifier);
+                await _context.SaveChangesAsync();
+            }
+            double SubTotal = 0, totalTax = 0;
+            SubTotal = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).SumAsync(oi => oi.Price * oi.Quantity) ?? 0;
+            SubTotal += await _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).SumAsync(om => om.Price) ?? 0;
+
+            List<OrderTaxis> orderTaxis2 = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
+            foreach (OrderTaxis orderTaxis1 in orderTaxis2)
+            {
+                string taxType = (await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTaxis1.TaxId))?.TaxType ?? "";
                 if (taxType == "Percentage")
                 {
                     totalTax += SubTotal * (double)orderTaxis1.TaxAmount / 100;
@@ -383,13 +458,13 @@ namespace BLL.Services
                 }
             }
             totalTax = Math.Round(totalTax, 2);
-            Order order = _context.Orders.FirstOrDefault(o => o.Id == orderId) ?? new Order();
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             order.TotalAmount = (decimal)(SubTotal + totalTax);
             order.UpdatedAt = DateTime.Now;
             order.UpdatedBy = userId;
             _context.Orders.Update(order);
-            _context.SaveChanges();
-            return new JsonResult(new { success = true, message = "Item added to order successfully" });
+            await _context.SaveChangesAsync();
+            return new JsonResult (new {success=true, message="Item deleted from order successfully."});
         }
     }
 }

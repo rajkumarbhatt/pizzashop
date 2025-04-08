@@ -4,6 +4,7 @@ using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DAL.DBContext;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -22,45 +23,45 @@ namespace BLL.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public List<User> GetUsers()
+        public async Task<List<User>> GetUsersAsync()
         {
-            return _context.Users.Where(u => u.IsDeleted == false).ToList();
+            return await _context.Users.Where(u => u.IsDeleted == false).ToListAsync();
         }
 
-        public JsonResult DeleteUser(int userId)
+        public async Task<JsonResult> DeleteUserAsync(int userId)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
             {
                 return new JsonResult(new { success = false, message = "User not found" });
             }
             user.IsDeleted = true;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "User deleted successfully" });
         }
 
-        public User GetUserDataById(int userId)
+        public async Task<User> GetUserDataByIdAsync(int userId)
         {
-            return _context.Users.FirstOrDefault(u => u.Id == userId) ?? new User();
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? new User();
         }
 
-        public string GetRoleById(int roleId)
+        public async Task<string> GetRoleByIdAsync(int roleId)
         {
-            var role = _context.Roles.FirstOrDefault(r => r.Id == roleId);
+            var role = await _context.Roles.FirstOrDefaultAsync(r => r.Id == roleId);
             return role?.Name ?? "";
         }
 
-        public List<Role> GetRoles()
+        public async Task<List<Role>> GetRolesAsync()
         {
-            return _context.Roles.ToList();
+            return await _context.Roles.ToListAsync();
         }
 
-        public EditUserViewModel GetUserDataFromUserId(int userId, int userIdLoggedIn) 
+        public async Task<EditUserViewModel> GetUserDataFromUserIdAsync(int userId, int userIdLoggedIn)
         {
-            var usernameLoggedIn = _navBarService.GetUsernameFromUserId(userIdLoggedIn);
-            var profileImageURLLoggedIn = _navBarService.GetProfileImageUrlFromUserId(userIdLoggedIn);
-            var user = GetUserDataById(userId);
-            var roleIdLoggedIn = _navBarService.GetRoleIdFromUserId(userIdLoggedIn);
+            var usernameLoggedIn = await _navBarService.GetUsernameFromUserIdAsync(userIdLoggedIn);
+            var profileImageURLLoggedIn = await _navBarService.GetProfileImageUrlFromUserIdAsync(userIdLoggedIn);
+            var user = await GetUserDataByIdAsync(userId);
+            var roleIdLoggedIn = await _navBarService.GetRoleIdFromUserIdAsync(userIdLoggedIn);
             var userViewModel = new EditUserViewModel
             {
                 idLoggednin = userIdLoggedIn,
@@ -84,18 +85,18 @@ namespace BLL.Services
             return userViewModel;
         }
 
-        public JsonResult UpdateUserDataFromUserId(int userIdLoggedIn, EditUserViewModel userViewModel)
+        public async Task<JsonResult> UpdateUserDataFromUserIdAsync(int userIdLoggedIn, EditUserViewModel userViewModel)
         {
-            var user = GetUserDataById(userViewModel.Id);
+            var user = await GetUserDataByIdAsync(userViewModel.Id);
             if (user == null)
             {
                 return new JsonResult(new { success = false, message = "User not found" });
             }
-            if (_context.Users.Any(u => u.Username == userViewModel.UsernameRequestedUSer && u.Id != userViewModel.Id))
+            if (await _context.Users.AnyAsync(u => u.Username == userViewModel.UsernameRequestedUSer && u.Id != userViewModel.Id))
             {
                 return new JsonResult(new { success = false, message = "Username already exists" });
             }
-            if (_context.Users.Any(u => u.Email == userViewModel.Email && u.Id != userViewModel.Id))
+            if (await _context.Users.AnyAsync(u => u.Email == userViewModel.Email && u.Id != userViewModel.Id))
             {
                 return new JsonResult(new { success = false, message = "Email already exists" });
             }
@@ -124,7 +125,7 @@ namespace BLL.Services
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
-                    userViewModel.ProfileImage.CopyTo(fileStream);
+                    await userViewModel.ProfileImage.CopyToAsync(fileStream);
                 }
                 user.ProfileImage = fileName;
             }
@@ -134,17 +135,17 @@ namespace BLL.Services
                 _httpContextAccessor.HttpContext?.Session.SetString("ProfileImageURL", user.ProfileImage ?? "");
                 _httpContextAccessor.HttpContext?.Session.SetInt32("RoleId", user.RoleId);
             }
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "User updated successfully" });
         }
 
-        public JsonResult CreateUser(int userIdLoggedIn, CreateUserViewModel createUserViewModel)
+        public async Task<JsonResult> CreateUserAsync(int userIdLoggedIn, CreateUserViewModel createUserViewModel)
         {
-            if (_context.Users.Any(u => u.Username == createUserViewModel.UsernameRequestedUser))
+            if (await _context.Users.AnyAsync(u => u.Username == createUserViewModel.UsernameRequestedUser))
             {
                 return new JsonResult(new { success = false, message = "Username already exists" });
             }
-            if (_context.Users.Any(u => u.Email == createUserViewModel.Email))
+            if (await _context.Users.AnyAsync(u => u.Email == createUserViewModel.Email))
             {
                 return new JsonResult(new { success = false, message = "Email already exists" });
             }
@@ -179,29 +180,29 @@ namespace BLL.Services
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/profile-images", fileName);
                 using (var fileStream = new FileStream(path, FileMode.Create))
                 {
-                    createUserViewModel.ProfileImage.CopyTo(fileStream);
+                    await createUserViewModel.ProfileImage.CopyToAsync(fileStream);
                 }
                 user.ProfileImage = fileName;
             }
-            _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "User created successfully" });
         }
 
-        public int GetTotalUsers()
+        public async Task<int> GetTotalUsersAsync()
         {
-            return _context.Users.Count();
+            return await _context.Users.CountAsync();
         }
 
-        public (List<User>, int totalRecords) GetUsers(int pageIndex, int pageSize)
+        public async Task<(List<User>, int totalRecords)> GetUsersAsync(int pageIndex, int pageSize)
         {
             var query = _context.Users.Where(u => u.IsDeleted == false).OrderBy(u => u.FirstName);
-            int totalRecords = query.Count();
-            var users = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            int totalRecords = await query.CountAsync();
+            var users = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return (users, totalRecords);
         }
 
-        public (List<User>, int totalRecords) GetUsersWithSearch(int pageIndex, int pageSize, string searchValue, string sortColumn, string sortColumnDirection)
+        public async Task<(List<User>, int totalRecords)> GetUsersWithSearchAsync(int pageIndex, int pageSize, string searchValue, string sortColumn, string sortColumnDirection)
         {
             var query = _context.Users.Where(u => u.IsDeleted == false);
             if (!string.IsNullOrEmpty(searchValue))
@@ -235,10 +236,76 @@ namespace BLL.Services
                     }
                 }
             }
-            int totalRecords = query.Count();
-            var users = query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            int totalRecords = await query.CountAsync();
+            var users = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return (users, totalRecords);
         }
 
+        public async Task<UserListViewModel> GetUsersListViewModelAsync(int pageIndex, int pageSize)
+        {
+            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(_httpContextAccessor.HttpContext?.Request?.Cookies["token"] ?? "");
+            var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
+            var (users, totalUsers) = await GetUsersAsync(pageIndex, pageSize);
+            var rolePermissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
+            int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+            var userListViewModel = new UserListViewModel
+            {
+                Users = users,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                TotalUsers = totalUsers,
+                Permissions = rolePermissions
+            };
+            return userListViewModel;
+        }
+
+        public async Task<UserListViewModel> GetUsersListViewModelSearchAsync(int pageIndex, int pageSize, string sortColumn, string sortColumnDirection, string searchValue)
+        {
+            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(_httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? "");
+            var username = await _navBarService.GetUsernameFromUserIdAsync(userId);
+            var profileImageURL = await _navBarService.GetProfileImageUrlFromUserIdAsync(userId);
+            var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
+            var (users, totalUsers) = await GetUsersWithSearchAsync(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
+            int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+            int originalPageIndex = pageIndex;
+            pageIndex = totalPages > 0 ? Math.Clamp(pageIndex, 1, totalPages) : 1;
+            if (pageIndex != originalPageIndex)
+            {
+                (users, totalUsers) = await GetUsersWithSearchAsync(pageIndex, pageSize, searchValue ?? "", sortColumn, sortColumnDirection);
+                totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+            }
+            var userListViewModel = new UserListViewModel
+            {
+                Users = users,
+                Username = username,
+                ProfileImageURL = profileImageURL,
+                RoleId = roleId,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalPages = totalPages,
+                TotalUsers = totalUsers
+            };
+            return userListViewModel;
+        }
+
+        public async Task<CreateUserViewModel> GetCreateUserViewModelAsync()
+        {
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(_httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? "");
+            var usernameLoggedIn = await _navBarService.GetUsernameFromUserIdAsync(userIdLoggedIn);
+            var profileImageURL = await _navBarService.GetProfileImageUrlFromUserIdAsync(userIdLoggedIn);
+            var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userIdLoggedIn);
+            CreateUserViewModel createUserViewModel = new CreateUserViewModel
+            {
+                Username = usernameLoggedIn,
+                ProfileImageURL = profileImageURL,
+                RoleId = roleId,
+                FirstName = "",
+                Email = "",
+                Password = "",
+                UsernameRequestedUser = ""
+            };
+            return createUserViewModel;
+        }
     }
 }

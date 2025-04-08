@@ -4,6 +4,6 @@ namespace BLL.Interfaces
 {
     public interface ILoginService
     {
-        public IActionResult Validate(string email, string password);
+        Task<IActionResult> ValidateAsync(string email, string password);
     }
 }

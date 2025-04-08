@@ -284,7 +284,7 @@
             const currentPageIndex = 1;
             const pageSize = @Model.PageSize;
             $.ajax({
-                url: '@Url.Action("ItemsSearch", "Menu")',
+                url: '@Url.Action("ItemsFilter", "Menu")',
                 type: 'GET',
                 data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
                 success: function (data) {
@@ -302,7 +302,7 @@
             const currentPageIndex = 1;
             const pageSize = @Model.PageSize;
             $.ajax({
-                url: '@Url.Action("ItemsSearch", "Menu")',
+                url: '@Url.Action("ItemsFilter", "Menu")',
                 type: 'GET',
                 data: { pageIndex: currentPageIndex, pageSize: pageSize, categoryId: categoryId, searchValue: searchValue },
                 success: function (data) {
@@ -360,7 +360,7 @@
         console.log(currentCategoryId);
         console.log(currentPageIndex);
         console.log(currentPageSize);
-        $("#deleteItemButton").click(function () {
+        $("#deleteItemButton").off("click").click(function () {
             $.ajax({
                 url: '@Url.Action("DeleteItem", "Menu")',
                 type: 'DELETE',

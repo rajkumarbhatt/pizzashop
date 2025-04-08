@@ -23,6 +23,8 @@ public partial class OrderItem
 
     public DateTime? UpdatedAt { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual Item Item { get; set; } = null!;
 
     public virtual Order Order { get; set; } = null!;

@@ -15,75 +15,65 @@ namespace Presentaion.Controllers
             _tableAndSectionService = tableAndSectionService;
             _jwtService = jwtService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Section> sections = _tableAndSectionService.GetSections();
-            List<Table> tables = _tableAndSectionService.GetTablesBySectionId(sections[0].Id);
-            TableAndSectionViewModel tableAndSectionViewModel = new TableAndSectionViewModel
-            {
-                Sections = sections,
-                Tables = tables.Skip(0).Take(5).ToList(),
-                PageSize = 5,
-                PageIndex = 1,
-                TotalTables = tables.Count,
-                TotalPages = (int)Math.Ceiling((double)tables.Count / 5)
-            };
+            TableAndSectionViewModel tableAndSectionViewModel = await _tableAndSectionService.GetTableAndSectionViewModelAsync();
             return View(tableAndSectionViewModel);
         }
 
         [HttpGet]
-        public IActionResult TablesFilter(int pageIndex, int pageSize, int sectionId, string searchValue = null)
+        public async Task<IActionResult> TablesFilter(int pageIndex, int pageSize, int sectionId, string searchValue = null)
         {
-            TableAndSectionViewModel tableAndSectionViewModel = _tableAndSectionService.TablesFilter(sectionId, searchValue, pageIndex, pageSize);
+            TableAndSectionViewModel tableAndSectionViewModel = await _tableAndSectionService.TablesFilterAsync(sectionId, searchValue, pageIndex, pageSize);
             return PartialView("_TablePartial", tableAndSectionViewModel);
         }
 
         [HttpPost]
-        public IActionResult AddSection(string sectionName, string sectionDescription, int sectionId)
+        public async Task<IActionResult> AddSection(string sectionName, string sectionDescription, int sectionId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _tableAndSectionService.AddSection(sectionName, sectionDescription, sectionId, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _tableAndSectionService.AddSectionAsync(sectionName, sectionDescription, sectionId, userId);
         }
 
         [HttpGet]
-        public IActionResult EditSection(int sectionId)
+        public async Task<IActionResult> EditSection(int sectionId)
         {
-            Section section = _tableAndSectionService.GetSectionById(sectionId);
+            Section section = await _tableAndSectionService.GetSectionByIdAsync(sectionId);
             return new JsonResult(new { section.Name, section.Description });
         }
 
         [HttpDelete]
-        public IActionResult DeleteSection(int sectionId)
+        public async Task<IActionResult> DeleteSection(int sectionId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _tableAndSectionService.DeleteSection(sectionId, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _tableAndSectionService.DeleteSectionAsync(sectionId, userId);
         }
 
         [HttpDelete]
-        public IActionResult DeleteTables(List<int> tableIds)
+        public async Task<IActionResult> DeleteTables(List<int> tableIds)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _tableAndSectionService.DeleteTables(tableIds, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _tableAndSectionService.DeleteTablesAsync(tableIds, userId);
         }
 
         [HttpDelete]
-        public IActionResult DeleteTable(int tableId)
+        public async Task<IActionResult> DeleteTable(int tableId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _tableAndSectionService.DeleteTable(tableId, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _tableAndSectionService.DeleteTableAsync(tableId, userId);
         }
 
         [HttpPost]
-        public IActionResult AddTable(int tableId, string tableName, string tableStatus, int tableCapacity, int sectionId)
+        public async Task<IActionResult> AddTable(int tableId, string tableName, string tableStatus, int tableCapacity, int sectionId)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _tableAndSectionService.AddTable(tableId, tableName, tableStatus, tableCapacity, sectionId, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _tableAndSectionService.AddTableAsync(tableId, tableName, tableStatus, tableCapacity, sectionId, userId);
         }
 
         [HttpGet]
-        public IActionResult EditTable(int tableId)
+        public async Task<IActionResult> EditTable(int tableId)
         {
-            Table table = _tableAndSectionService.GetTableById(tableId);
+            Table table = await _tableAndSectionService.GetTableByIdAsync(tableId);
             return new JsonResult(new { table.Id, table.Name, table.Status, table.Capacity, table.SectionId });
         }
     }

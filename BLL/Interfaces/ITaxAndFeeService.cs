@@ -1,17 +1,20 @@
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BLL.Interfaces
 {
     public interface ITaxAndFeeService
     {
-        public List<TaxesFee> GetTaxes();
-        public IActionResult SaveChangesOfIsDefault(bool isDefault, int id, int userId);
-        public IActionResult SaveChangesOfIsEnabled(bool isEnabled, int id, int userId);
-        public IActionResult Delete(int id, int userId);
-        public TaxAndFeeViewModel Search(string searchValue);
-        public IActionResult AddTax(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount, int userId);
-        public IActionResult Edit(int taxId);
+        public Task<List<TaxesFee>> GetTaxesAsync();
+        public Task<IActionResult> SaveChangesOfIsDefaultAsync(bool isDefault, int id, int userId);
+        public Task<IActionResult> SaveChangesOfIsEnabledAsync(bool isEnabled, int id, int userId);
+        public Task<IActionResult> DeleteAsync(int id, int userId);
+        public Task<TaxAndFeeViewModel> SearchAsync(string searchValue);
+        public Task<IActionResult> AddTaxAsync(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount, int userId);
+        public Task<IActionResult> EditAsync(int taxId);
+        public Task<TaxAndFeeViewModel> GetTaxAndFeeViewModelAsync();
     }
 }

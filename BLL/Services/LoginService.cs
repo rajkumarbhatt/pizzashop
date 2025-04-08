@@ -2,6 +2,7 @@ using DAL.Models;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using DAL.DBContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services
 {
@@ -16,36 +17,36 @@ namespace BLL.Services
             _jwtService = jwtService;
         }
 
-        public IActionResult Validate(string email, string password)
+        public async Task<IActionResult> ValidateAsync(string email, string password)
         {
-            
-            User? user = _context.Users.FirstOrDefault(u => u.Email == email);
+            User? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (user == null)
             {
-                return new JsonResult(new { success = false, message = "User does not exist" });
+            return new JsonResult(new { success = false, message = "User does not exist" });
             }
-            if (!BCrypt.Net.BCrypt.Verify(password, user.Password)) {
-                return new JsonResult(new { success = false, message = "Invalid password" }); 
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+            return new JsonResult(new { success = false, message = "Invalid password" });
             }
             if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                if (user.IsDeleted ?? false)
-                {
-                    return new JsonResult(new { success = false, message = "User does not exist" });
-                }
-                if (!user.Status ?? false)
-                {
-                    return new JsonResult(new { success = false, message = "User is inactive" });
-                }
+            if (user.IsDeleted ?? false)
+            {
+                return new JsonResult(new { success = false, message = "User does not exist" });
+            }
+            if (!user.Status ?? false)
+            {
+                return new JsonResult(new { success = false, message = "User is inactive" });
+            }
 
-                var roleEntity = _context.Roles.FirstOrDefault(r => r.Id == user.RoleId);
-                if (roleEntity == null)
-                {
-                    return new JsonResult(new { success = false, message = "User role not found" });
-                }
-                string role = roleEntity.Name;
-                string token = _jwtService.GenerateJwtToken(user, role);
-                return new JsonResult(new { token = token, success = true, message = "Login successful" });
+            var roleEntity = await _context.Roles.FirstOrDefaultAsync(r => r.Id == user.RoleId);
+            if (roleEntity == null)
+            {
+                return new JsonResult(new { success = false, message = "User role not found" });
+            }
+            string role = roleEntity.Name;
+            string token = await _jwtService.GenerateJwtTokenAsync(user, role);
+            return new JsonResult(new { token = token, success = true, message = "Login successful" });
             }
             return new JsonResult(new { success = false, message = "Invalid credentials" });
         }

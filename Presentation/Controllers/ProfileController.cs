@@ -16,23 +16,24 @@ namespace Presentaion.Controllers
             _ProfileService = ProfileService;
             _jwtService = jwtService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            ProfileViewModel ProfileViewModel = _ProfileService.GetUserDataFromUserId(userId) ?? new ProfileViewModel();
-            var country = _ProfileService.GetCountryById(ProfileViewModel.CountryId ?? 0);
-            var state = _ProfileService.GetStateById(ProfileViewModel.StateId ?? 0);
-            var city = _ProfileService.GetCityById(ProfileViewModel.CityId ?? 0);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            ProfileViewModel ProfileViewModel = await _ProfileService.GetUserDataFromUserIdAsync(userId) ?? new ProfileViewModel();
+            var country = await _ProfileService.GetCountryByIdAsync(ProfileViewModel.CountryId ?? 0);
+            var state = await _ProfileService.GetStateByIdAsync(ProfileViewModel.StateId ?? 0);
+            var city = await _ProfileService.GetCityByIdAsync(ProfileViewModel.CityId ?? 0);
             ViewBag.Country = country;
             ViewBag.State = state;
             ViewBag.City = city;
             return View(ProfileViewModel); 
         }
-        public IActionResult Edit()
+
+        public async Task<IActionResult> Edit()
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            ProfileViewModel profileViewModel = _ProfileService.GetUserDataFromUserId(userId) ?? new ProfileViewModel();
-            var (countries, states, cities) = _ProfileService.SetCountriesStatesCitiesToViewBag(profileViewModel);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            ProfileViewModel profileViewModel = await _ProfileService.GetUserDataFromUserIdAsync(userId) ?? new ProfileViewModel();
+            var (countries, states, cities) = await _ProfileService.SetCountriesStatesCitiesToViewBagAsync(profileViewModel);
             ViewBag.Countries = countries;
             ViewBag.States = states;
             ViewBag.Cities = cities;
@@ -40,28 +41,26 @@ namespace Presentaion.Controllers
         }
         
         [HttpPost]
-        public IActionResult EditProfile(ProfileViewModel ProfileViewModel)
+        public async Task<IActionResult> EditProfile(ProfileViewModel ProfileViewModel)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(new { success = false, message = "Validation errors" });
+            return new JsonResult(new { success = false, message = "Validation errors" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _ProfileService.UpdateUserDataFromUserId(userId, ProfileViewModel);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _ProfileService.UpdateUserDataFromUserIdAsync(userId, ProfileViewModel);
         }
 
-        public JsonResult GetStates(int countryId)
+        public async Task<JsonResult> GetStates(int countryId)
         {
-            var states = _ProfileService.GetStates(countryId);
+            var states = await _ProfileService.GetStatesAsync(countryId);
             return Json(states);
         } 
 
-        public JsonResult GetCities(int stateId)
+        public async Task<JsonResult> GetCities(int stateId)
         {
-            var cities = _ProfileService.GetCities(stateId);
+            var cities = await _ProfileService.GetCitiesAsync(stateId);
             return Json(cities);
         }
-
-
     }
 };

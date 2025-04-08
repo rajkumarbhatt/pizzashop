@@ -38,7 +38,7 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel" class="text-blue-custom">Waiting List</h5>
-        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" onclick="clearOffCanvas()" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <form id="AssignTableToCustomerForm" method="post">
         <div class="offcanvas-body">
@@ -174,7 +174,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-end gap-2">
                 <button type="submit" class="btn btn-primary px-3">Assign</button>
-                <a data-bs-dismiss="offcanvas"><button type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                <a data-bs-dismiss="offcanvas"><button onclick="clearOffCanvas()" type="button" class="btn btn-contrast px-3">Cancel</button></a>
             </div>
     </form>
 </div>
@@ -271,6 +271,20 @@
         $("#NameOffCanvasWaitingToken").val(name);
         $("#MobileNumberOffCanvasWaitingToken").val(mobileNumber);
         $("#emailSuggestionsOffcanvas").hide();
+    }
+
+    function clearOffCanvas() {
+        $("#waitingTokenTableBody").empty();
+        $("#EmailOffCanvasWaitingToken").val("");
+        $("#NameOffCanvasWaitingToken").val("");
+        $("#MobileNumberOffCanvasWaitingToken").val("");
+        $("#NumberOfPeopleWaitingListOffCanvas").val("");
+        $("#SectionDropDownOffcanvas").val("");
+        $("#IdOffCanvasWaitingToken").val("-1");
+        $("#emailSuggestionsOffcanvas").hide();
+        $("#waitingTokenForm").find(".text-danger").each(function () {
+            $(this).text("");
+        });
     }
 
 </script>

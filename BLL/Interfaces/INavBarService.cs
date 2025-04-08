@@ -5,10 +5,10 @@ namespace BLL.Interfaces
 {
     public interface INavBarService
     {
-        public string GetUsernameFromUserId(int userId);
-        public string GetProfileImageUrlFromUserId(int userId);
-        public int GetRoleIdFromUserId(int userId);
-        public bool IsFirstTimeLogin(int userId);
-        public List<PermissionModel> GetRolePermissionsFromRoleId(int roleId);
+        public Task<string> GetUsernameFromUserIdAsync(int userId);
+        public Task<string> GetProfileImageUrlFromUserIdAsync(int userId);
+        public Task<int> GetRoleIdFromUserIdAsync(int userId);
+        public Task<bool> IsFirstTimeLoginAsync(int userId);
+        public Task<List<PermissionModel>> GetRolePermissionsFromRoleIdAsync(int roleId);
     }
 }

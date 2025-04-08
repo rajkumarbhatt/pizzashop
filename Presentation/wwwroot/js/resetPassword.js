@@ -133,6 +133,7 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
+                    debugger;
                     setTimeout(function () {
                         window.location.href = '/Dashboard';
                     }, 2000);

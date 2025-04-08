@@ -31,16 +31,15 @@ namespace Presentaion.Controllers
 
         [HttpPost]
         [Route("/account/changepassword")]
-        public IActionResult ChangePassword([FromBody] ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return new JsonResult(new { success = false, message = "Validation errors" });
             }
-
             var token = Request.Cookies["token"];
-            var userId = _jwtService.GetUserIdFromJwtToken(token ?? "");
-            return _changePasswordService.ChangePassword(userId, model.NewPassword ?? "", model.CurrentPassword ?? "");
+            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(token ?? "");
+            return await _changePasswordService.ChangePasswordAsync(userId, model.NewPassword ?? "", model.CurrentPassword ?? "");
         }
     }
 }

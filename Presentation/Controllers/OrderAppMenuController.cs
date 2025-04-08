@@ -15,60 +15,68 @@ namespace Presentation.Controllers
         }
         [Route("/OrderApp/Menu")]
         [Route("/OrderApp/Menu/{orderId}")]
-        public ActionResult Index(int? orderId)
+        public async Task<ActionResult> Index(int? orderId)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetKotMenu(orderId);
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetKotMenuAsync(orderId);
             return View(kotMenuViewModel);
         }
         [HttpGet]
-        public IActionResult GetKotMenuItemsBasedOnCategory(int categoryId, string search)
+        public async Task<IActionResult> GetKotMenuItemsBasedOnCategory(int categoryId, string search)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.SearchMenuItemsKot(search, categoryId);
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.SearchMenuItemsKotAsync(search, categoryId);
             return PartialView("_KotMenuItemsList", kotMenuViewModel);
         }
         [HttpGet]
-        public IActionResult SearchMenuItemsKot(string search, int categoryId)
+        public async Task<IActionResult> SearchMenuItemsKot(string search, int categoryId)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.SearchMenuItemsKot(search, categoryId);
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.SearchMenuItemsKotAsync(search, categoryId);
             return PartialView("_KotMenuItemsList", kotMenuViewModel);
         }
         [HttpPut]
-        public JsonResult AddToFavourites (int itemId) {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _kotMenuService.AddToFavourites(itemId, userId);
+        public async Task<JsonResult> AddToFavourites(int itemId)
+        {
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.AddToFavouritesAsync(itemId, userId);
         }
         [HttpDelete]
-        public JsonResult DeleteFromFavourites (int itemId) {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _kotMenuService.DeleteFromFavourites(itemId, userId);
+        public async Task<JsonResult> DeleteFromFavourites(int itemId)
+        {
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.DeleteFromFavouritesAsync(itemId, userId);
         }
         [HttpGet]
-        public IActionResult GetCustomerDetails(int orderId)
+        public async Task<IActionResult> GetCustomerDetails(int orderId)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetCustomerDetails(orderId);
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetCustomerDetailsAsync(orderId);
             return PartialView("_CustomerDetailsModal", kotMenuViewModel);
         }
         [HttpPost]
-        public IActionResult UpdateCustomerDetails ([FromForm]WaitingListModal waitingListModal)
+        public async Task<IActionResult> UpdateCustomerDetails([FromForm] WaitingListModal waitingListModal)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(new { success = false, message = "Invalid Data" });
+            return new JsonResult(new { success = false, message = "Invalid Data" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _kotMenuService.UpdateCustomerDetails(waitingListModal, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.UpdateCustomerDetailsAsync(waitingListModal, userId);
         }
         [HttpGet]
-        public IActionResult GetSelectModifiersModalData(int itemId)
+        public async Task<IActionResult> GetSelectModifiersModalData(int itemId)
         {
-            KotMenuViewModel kotMenuViewModel = _kotMenuService.GetSelectModifiersModalData(itemId);
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetSelectModifiersModalDataAsync(itemId);
             return PartialView("_SelectModifiersModal", kotMenuViewModel);
         }
         [HttpPost]
-        public IActionResult AddItemToOrder (int orderId, int itemId, List<int> modifierIds)
+        public async Task<IActionResult> AddItemToOrder(int orderId, int itemId, List<int> modifierIds)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _kotMenuService.AddItemToOrder(itemId, orderId, modifierIds, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.AddItemToOrderAsync(itemId, orderId, modifierIds, userId);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteItemFromOrder (int orderId, int itemId)
+        {
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.DeleteItemFromOrderAsync(orderId, itemId, userId);
         }
     }
 }

@@ -21,49 +21,25 @@ namespace Presentaion.Controllers
             _userListService = userListService;
             _roleAndPermissionService = roleAndPermissionService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            var username = _navBarService.GetUsernameFromUserId(userId);
-            var profileImageURL = _navBarService.GetProfileImageUrlFromUserId(userId);
-            var roleId = _navBarService.GetRoleIdFromUserId(userId);
-            var roles = _roleAndPermissionService.GetRoles();
-            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
-            RoleAndPermissionViewModel roleAndPermissionViewModel = new RoleAndPermissionViewModel
-            {
-                Username = username,
-                ProfileImageURL = profileImageURL,
-                RoleId = roleId,
-                Roles = roles,
-                Permissions = permissions
-            };
+            RoleAndPermissionViewModel roleAndPermissionViewModel = await _roleAndPermissionService.GetRoleAndPermissionViewModelAsync();
             return View(roleAndPermissionViewModel);
         }
 
-
         [HttpGet]
         [Route("/RoleAndPermission/ViewPermissions/{roleIdRequested}")]
-        public IActionResult ViewPermissions(int roleIdRequested)
+        public async Task<IActionResult> ViewPermissions(int roleIdRequested)
         {
-            var userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            var roleId = _navBarService.GetRoleIdFromUserId(userId);
-            var permission = _roleAndPermissionService.GetPermissions();
-            var roleRequested = _roleAndPermissionService.GetRole(roleIdRequested);
-            var rolePermissions = _roleAndPermissionService.GetRolePermissions(roleIdRequested);
-            var permissions = _navBarService.GetRolePermissionsFromRoleId(roleId);
-            EditPermissionsViewModel editPermissionsViewModel = new EditPermissionsViewModel
-            {
-                Permission = permission,
-                RolePermissions = rolePermissions,
-                RequestedRole = roleRequested,
-                Permissions = permissions
-            };
+            EditPermissionsViewModel editPermissionsViewModel = await _roleAndPermissionService.GetEditPermissionsViewModelAsync(roleIdRequested);
             return View(editPermissionsViewModel);
         }
 
         [HttpPost]
-        public IActionResult EditPermissions ([FromBody] List<PermissionChangeModel> changedPermissions) {
-            return _roleAndPermissionService.UpdateRolePermissions(changedPermissions);
+        public async Task<IActionResult> EditPermissions([FromBody] List<PermissionChangeModel> changedPermissions)
+        {
+            var result = await _roleAndPermissionService.UpdateRolePermissionsAsync(changedPermissions);
+            return result;
         }
     }
 }

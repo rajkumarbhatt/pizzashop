@@ -15,65 +15,57 @@ namespace Presentaion.Controllers
             _taxAndFeeService = taxAndFeeService;
             _jwtService = jwtService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<TaxesFee> taxes = _taxAndFeeService.GetTaxes();
-            TaxAndFeeViewModel taxAndFeeViewModel = new TaxAndFeeViewModel
-            {
-                Taxes = taxes
-            };
+            TaxAndFeeViewModel taxAndFeeViewModel = await _taxAndFeeService.GetTaxAndFeeViewModelAsync();
             return View(taxAndFeeViewModel);
         }
 
         [HttpPost]
-        public IActionResult SaveChangesOfDefault (bool isDefault, int id)
+        public async Task<IActionResult> SaveChangesOfDefault(bool isDefault, int id)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _taxAndFeeService.SaveChangesOfIsDefault(isDefault, id, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _taxAndFeeService.SaveChangesOfIsDefaultAsync(isDefault, id, userId);
         }
 
         [HttpPost]
-        public IActionResult SaveChangesOfEnabled (bool isEnabled, int id)
+        public async Task<IActionResult> SaveChangesOfEnabled(bool isEnabled, int id)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _taxAndFeeService.SaveChangesOfIsEnabled(isEnabled, id, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _taxAndFeeService.SaveChangesOfIsEnabledAsync(isEnabled, id, userId);
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _taxAndFeeService.Delete(id, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _taxAndFeeService.DeleteAsync(id, userId);
         }
 
         [HttpGet]
-        public IActionResult Search(string searchValue)
+        public async Task<IActionResult> Search(string searchValue)
         {
-            TaxAndFeeViewModel taxAndFeeViewModel = _taxAndFeeService.Search(searchValue);
+            TaxAndFeeViewModel taxAndFeeViewModel = await _taxAndFeeService.SearchAsync(searchValue);
             return PartialView("_TaxAndFeeTable", taxAndFeeViewModel);
         }
 
         [HttpPost]
-        public IActionResult AddTax(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount)
+        public async Task<IActionResult> AddTax(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount)
         {
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"]);
-            return _taxAndFeeService.AddTax(taxId, taxName, isEnabled, taxType, taxAmount, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
+            return await _taxAndFeeService.AddTaxAsync(taxId, taxName, isEnabled, taxType, taxAmount, userId);
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            return _taxAndFeeService.Edit(id);
+            return await _taxAndFeeService.EditAsync(id);
         }
 
         [HttpGet]
-        public IActionResult GetTaxes()
+        public async Task<IActionResult> GetTaxes()
         {
-            List<TaxesFee> taxes = _taxAndFeeService.GetTaxes();
-            TaxAndFeeViewModel taxAndFeeViewModel = new TaxAndFeeViewModel
-            {
-                Taxes = taxes
-            };
+            TaxAndFeeViewModel taxAndFeeViewModel = await _taxAndFeeService.GetTaxAndFeeViewModelAsync();
             return PartialView("_TaxAndFeeTable", taxAndFeeViewModel);
         }
     }

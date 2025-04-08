@@ -1,4 +1,5 @@
 using DAL.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace BLL.Interfaces
@@ -7,5 +8,6 @@ namespace BLL.Interfaces
     {
         public Task SendEmailAsync(string toEmail, User user, string resetLink);
         public Task SendCreateUserEmailAsync(string email, string password);
+        public Task<IActionResult> SendForgotPasswordEmailAsync(string email);
     }
 }

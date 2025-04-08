@@ -7,6 +7,7 @@ using iText.Html2pdf;
 using ClosedXML.Excel;
 using System.Text;
 using iText.Layout.Font;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace BLL.Services;
@@ -18,15 +19,17 @@ public class OrderService : IOrderService
     {
         _context = context;
     }
-    public OrderViewModal GetOrders()
+    public async Task<OrderViewModal> GetOrdersAsync()
     {
-        List<Order> orders = _context.Orders.ToList();
+        List<Order> orders = await _context.Orders.ToListAsync();
 
         List<OrderTable> orderTables = new List<OrderTable>();
         foreach (Order order in orders)
         {
-            Customer customer = _context.Customers.Find(order.CustomerId) ?? new Customer();
-            CustomerReview customerReview = _context.CustomerReviews.Where(cr => cr.CustomerId == order.CustomerId && cr.OrderId == order.Id).FirstOrDefault() ?? new CustomerReview();
+            Customer customer = await _context.Customers.FindAsync(order.CustomerId) ?? new Customer();
+            CustomerReview customerReview = await _context.CustomerReviews
+                .Where(cr => cr.CustomerId == order.CustomerId && cr.OrderId == order.Id)
+                .FirstOrDefaultAsync() ?? new CustomerReview();
 
             OrderTable orderTable = new OrderTable
             {
@@ -37,7 +40,6 @@ public class OrderService : IOrderService
                 PaymentMode = order.PaymentMode ?? "N/A",
                 AvgRating = (double)(customerReview.AverageRating ?? 0),
                 TotalAmount = order.TotalAmount
-
             };
 
             orderTables.Add(orderTable);
@@ -57,17 +59,19 @@ public class OrderService : IOrderService
         };
         return orderViewModal;
     }
-    public OrderViewModal FilterOrders(int pageSize, int pageIndex, string status, string time, string sort, string order, string? fromDate, string? toDate, string searchValue)
+    public async Task<OrderViewModal> FilterOrdersAsync(int pageSize, int pageIndex, string status, string time, string sort, string order, string? fromDate, string? toDate, string searchValue)
     {
         if (fromDate == "dd-mm-yyyy") fromDate = null;
         if (toDate == "dd-mm-yyyy") toDate = null;
-        List<Order> orders = _context.Orders.ToList();
+        List<Order> orders = await _context.Orders.ToListAsync();
 
         List<OrderTable> orderTables = new List<OrderTable>();
         foreach (Order order2 in orders)
         {
-            Customer customer = _context.Customers.Find(order2.CustomerId) ?? new Customer();
-            CustomerReview customerReview = _context.CustomerReviews.Where(cr => cr.CustomerId == order2.CustomerId && cr.OrderId == order2.Id).FirstOrDefault() ?? new CustomerReview();
+            Customer customer = await _context.Customers.FindAsync(order2.CustomerId) ?? new Customer();
+            CustomerReview customerReview = await _context.CustomerReviews
+                .Where(cr => cr.CustomerId == order2.CustomerId && cr.OrderId == order2.Id)
+                .FirstOrDefaultAsync() ?? new CustomerReview();
 
             OrderTable orderTable = new OrderTable
             {
@@ -78,7 +82,6 @@ public class OrderService : IOrderService
                 PaymentMode = order2.PaymentMode ?? "N/A",
                 AvgRating = (double)(customerReview.AverageRating ?? 0),
                 TotalAmount = order2.TotalAmount
-
             };
 
             orderTables.Add(orderTable);
@@ -141,11 +144,11 @@ public class OrderService : IOrderService
         };
         return orderViewModal;
     }
-    public List<OrderTable> GetOrdersBasedOnFilters(string status, string time, string searchValue)
+    public async Task<List<OrderTable>> GetOrdersBasedOnFiltersAsync(string status, string time, string searchValue)
     {
-        List<Order> orders = _context.Orders.ToList();
-        List<Customer> customers = _context.Customers.ToList();
-        List<CustomerReview> customerReviews = _context.CustomerReviews.ToList();
+        List<Order> orders = await _context.Orders.ToListAsync();
+        List<Customer> customers = await _context.Customers.ToListAsync();
+        List<CustomerReview> customerReviews = await _context.CustomerReviews.ToListAsync();
 
         List<OrderTable> orderTables = new List<OrderTable>();
         foreach (Order order in orders)
@@ -162,7 +165,6 @@ public class OrderService : IOrderService
                 PaymentMode = order.PaymentMode ?? "N/A",
                 AvgRating = (double)(customerReview.AverageRating ?? 0),
                 TotalAmount = order.TotalAmount
-
             };
 
             orderTables.Add(orderTable);
@@ -192,10 +194,10 @@ public class OrderService : IOrderService
         }
         return orderTables;
     }
-    public OrderDetailsViewModel GetOrderDetails(int orderId)
+    public async Task<OrderDetailsViewModel> GetOrderDetailsAsync(int orderId)
     {
         int srNo = 1;
-        OrderDetailsViewModel orderDetailsViewModel = _context.Orders.Where(o => o.Id == orderId).Select(o => new OrderDetailsViewModel
+        OrderDetailsViewModel orderDetailsViewModel = await _context.Orders.Where(o => o.Id == orderId).Select(o => new OrderDetailsViewModel
         {
             Id = o.Id,
             InvoiceNumber = "N/A",
@@ -210,14 +212,14 @@ public class OrderService : IOrderService
             NumberOfPeople = 0,
             Tables = o.OrderTableMappings.Select(otm => otm.Table).ToList(),
             Section = o.OrderTableMappings.Select(otm => otm.Table.Section.Name).FirstOrDefault() ?? "N/A",
-            InvoiceItems = o.OrderItems.Select(oi => new InvoiceItem
+            InvoiceItems = o.OrderItems.Where(oi => oi.IsDeleted == false).Select(oi => new InvoiceItem
             {
                 SrNo = srNo,
                 Item = oi.Item.Name ?? "N/A",
                 Quantity = oi.Quantity,
-                Price = (double)(oi.Price ?? 0) ,
+                Price = (double)(oi.Price ?? 0),
                 TotalAmount = (double)(oi.Price ?? 0) * oi.Quantity,
-                InvoiceModifiers = oi.OrderModifiers.Select(om => new InvoiceModifiers
+                InvoiceModifiers = oi.OrderModifiers.Where(om => om.IsDeleted == false).Select(om => new InvoiceModifiers
                 {
                     Item = om.Modifier.Name ?? "N/A",
                     Quantity = 1,
@@ -232,8 +234,10 @@ public class OrderService : IOrderService
                 TaxAmount = (double)ot.TaxAmount
             }).ToList(),
             Total = 0,
-        }).FirstOrDefault() ?? new OrderDetailsViewModel();
+        }).FirstOrDefaultAsync() ?? new OrderDetailsViewModel();
+
         orderDetailsViewModel.InvoiceNumber = "INV" + orderDetailsViewModel.Id;
+
         foreach (InvoiceItem i in orderDetailsViewModel.InvoiceItems ?? new List<InvoiceItem>())
         {
             orderDetailsViewModel.SubTotal += i.TotalAmount;
@@ -242,33 +246,38 @@ public class OrderService : IOrderService
                 orderDetailsViewModel.SubTotal += im.TotalAmount;
             }
         }
-        List<OrderTableMapping>otmap = _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToList();
+
+        List<OrderTableMapping> otmap = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
         int NumberOfPeople = 0;
         foreach (OrderTableMapping otm in otmap)
         {
             NumberOfPeople += otm.NoOfPersons;
         }
         orderDetailsViewModel.NumberOfPeople = NumberOfPeople;
+
         orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
         orderDetailsViewModel.OrderDuration = orderDetailsViewModel.OrderDuration.Substring(0, orderDetailsViewModel.OrderDuration.LastIndexOf("."));
         var days = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
         var hours = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalHours;
         var minutes = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalMinutes;
+
         if (days > 0)
         {
-            orderDetailsViewModel.OrderDuration = days + " days " + hours%24 + " hours " + minutes%60 + " minutes ago";
+            orderDetailsViewModel.OrderDuration = days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes ago";
         }
         else if (hours > 0)
         {
-            orderDetailsViewModel.OrderDuration = hours + " hours " + minutes%60 + " minutes ago";
+            orderDetailsViewModel.OrderDuration = hours + " hours " + minutes % 60 + " minutes ago";
         }
         else if (minutes > 0)
         {
-            orderDetailsViewModel.OrderDuration = minutes%60 + " minutes ago";
+            orderDetailsViewModel.OrderDuration = minutes % 60 + " minutes ago";
         }
+
         orderDetailsViewModel.SubTotal = (double?)Math.Round((decimal)(orderDetailsViewModel.SubTotal ?? 0), 2);
         orderDetailsViewModel.Total += orderDetailsViewModel.SubTotal;
-        orderDetailsViewModel.InvoiceTaxes = GetInvoiceTaxes(orderId, orderDetailsViewModel);
+
+        orderDetailsViewModel.InvoiceTaxes = await GetInvoiceTaxesAsync(orderId, orderDetailsViewModel);
         foreach (InvoiceTax i in orderDetailsViewModel.InvoiceTaxes)
         {
             orderDetailsViewModel.Total += i.TaxAmount;
@@ -277,14 +286,14 @@ public class OrderService : IOrderService
 
         return orderDetailsViewModel;
     }
-    public List<InvoiceTax> GetInvoiceTaxes(int orderId, OrderDetailsViewModel orderDetailsViewModel)
+    public async Task<List<InvoiceTax>> GetInvoiceTaxesAsync(int orderId, OrderDetailsViewModel orderDetailsViewModel)
     {
         List<InvoiceTax> invoiceTaxes = new List<InvoiceTax>();
-        Order order = _context.Orders.Find(orderId) ?? new Order();
-        List<OrderTaxis> orderTaxes = _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToList();
+        Order order = await _context.Orders.FindAsync(orderId) ?? new Order();
+        List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
         foreach (OrderTaxis orderTax in orderTaxes)
         {
-            TaxesFee tax = _context.TaxesFees.Find(orderTax.TaxId) ?? new TaxesFee();
+            TaxesFee tax = await _context.TaxesFees.FindAsync(orderTax.TaxId) ?? new TaxesFee();
             InvoiceTax invoiceTax = new InvoiceTax();
             if (tax.TaxType == "Percentage")
             {
@@ -301,18 +310,17 @@ public class OrderService : IOrderService
         }
         return invoiceTaxes;
     }
-    public byte[] GenerateInvoice(int orderId)
+    public async Task<byte[]> GenerateInvoiceAsync(int orderId)
     {
-        
-        string fontPath = "C:/Windows/Fonts/Arial.ttf"; 
+        string fontPath = "C:/Windows/Fonts/Arial.ttf";
         FontProvider fontProvider = new FontProvider();
         fontProvider.AddFont(fontPath);
 
-        OrderDetailsViewModel orderDetailsViewModel = GetOrderDetails(orderId);
+        OrderDetailsViewModel orderDetailsViewModel = await GetOrderDetailsAsync(orderId);
 
         using (MemoryStream ms = new MemoryStream())
         {
-            string htmlContent = System.IO.File.ReadAllText("Views/Order/Invoicetemplate.html");
+            string htmlContent = await System.IO.File.ReadAllTextAsync("Views/Order/Invoicetemplate.html");
             htmlContent = htmlContent.Replace("{{invoiceNumber}}", orderDetailsViewModel.InvoiceNumber);
             htmlContent = htmlContent.Replace("{{invoiceDate}}", orderDetailsViewModel.PlacedOn);
             htmlContent = htmlContent.Replace("{{section}}", orderDetailsViewModel.Section);
@@ -353,9 +361,9 @@ public class OrderService : IOrderService
             return ms.ToArray();
         }
     }
-    public byte[] ExportOrders(string status, string time, string searchValue)
+    public async Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue)
     {
-        var orders = GetOrdersBasedOnFilters(status, time, searchValue);
+        var orders = await GetOrdersBasedOnFiltersAsync(status, time, searchValue);
 
         using (var workbook = new XLWorkbook())
         {
@@ -389,8 +397,6 @@ public class OrderService : IOrderService
                 row2++;
                 count--;
             }
-
-
 
             worksheet.Cell("A2").Value = "Status:";
             worksheet.Cell("C2").Value = status;
@@ -437,7 +443,6 @@ public class OrderService : IOrderService
             worksheet.Range("C5:F6").Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
             worksheet.Range("C5:F6").Style.Alignment.Vertical = XLAlignmentVerticalValues.Center;
             worksheet.Range("C5:F6").Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
-
 
             worksheet.Range("H5:I6").Style.Fill.BackgroundColor = XLColor.FromHtml("#0066A7");
             worksheet.Range("H5:I6").Style.Font.FontColor = XLColor.White;
@@ -486,7 +491,6 @@ public class OrderService : IOrderService
 
                 worksheet.Range($"O9:P{row - 1}").Style.Border.RightBorder = XLBorderStyleValues.Thin;
 
-
                 row++;
             }
 
@@ -506,18 +510,24 @@ public class OrderService : IOrderService
             }
         }
     }
-    public string EncryptOrderId(int orderId)
+    public async Task<string> EncryptOrderIdAsync(int orderId)
     {
-        string encryptedOrderId = orderId.ToString();
-        byte[] data = Encoding.UTF8.GetBytes(encryptedOrderId);
-        encryptedOrderId = Convert.ToBase64String(data);
-        return encryptedOrderId;
+        return await Task.Run(() =>
+        {
+            string encryptedOrderId = orderId.ToString();
+            byte[] data = Encoding.UTF8.GetBytes(encryptedOrderId);
+            encryptedOrderId = Convert.ToBase64String(data);
+            return encryptedOrderId;
+        });
     }
-    public int DecryptOrderId(string orderIdEncrypted)
+    public async Task<int> DecryptOrderIdAsync(string orderIdEncrypted)
     {
-        string decryptedOrderId = orderIdEncrypted;
-        byte[] data = Convert.FromBase64String(decryptedOrderId);
-        decryptedOrderId = Encoding.UTF8.GetString(data);
-        return Convert.ToInt32(decryptedOrderId);
+        return await Task.Run(() =>
+        {
+            string decryptedOrderId = orderIdEncrypted;
+            byte[] data = Convert.FromBase64String(decryptedOrderId);
+            decryptedOrderId = Encoding.UTF8.GetString(data);
+            return Convert.ToInt32(decryptedOrderId);
+        });
     }
 }

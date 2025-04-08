@@ -17,7 +17,7 @@ builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor(); // Register IHttpContextAccessor here
 builder.Services.AddDbContext<PizzaShopContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<ILoginService, LoginService>();
-builder.Services.AddSingleton<IEmailService, EmailService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
@@ -92,11 +92,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
-app.MapControllerRoute(
-    name: "404",
-    pattern: "{*catchall}",
-    defaults: new { controller = "PageNotFound", action = "Index" } 
-);
+// app.MapControllerRoute(
+//     name: "404",
+//     pattern: "{*catchall}",
+//     defaults: new { controller = "PageNotFound", action = "Index" } 
+// );
 
 app.Run();
 

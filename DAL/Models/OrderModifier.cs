@@ -21,6 +21,8 @@ public partial class OrderModifier
 
     public DateTime? UpdatedAt { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Modifier Modifier { get; set; } = null!;

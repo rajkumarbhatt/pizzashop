@@ -1,19 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
 using DAL.ViewModels;
+using System.Threading.Tasks;
 
 namespace BLL.Interfaces
 {
     public interface IProfileService
     {
-        public ProfileViewModel? GetUserDataFromUserId(int userId);
-        public IActionResult UpdateUserDataFromUserId(int userId, ProfileViewModel ProfileViewModel);
-        public string GetCountryById(int countryId);
-        public string GetStateById(int stateId);
-        public string GetCityById(int cityId);
-        public List<Country> GetCountries();
-        public List<State> GetStates(int countryId);
-        public List<City> GetCities(int stateId);
-        public (List<Country> countries, List<State> states, List<City> cities) SetCountriesStatesCitiesToViewBag(ProfileViewModel ProfileViewModel);
+        public Task<ProfileViewModel?> GetUserDataFromUserIdAsync(int userId);
+        public Task<IActionResult> UpdateUserDataFromUserIdAsync(int userId, ProfileViewModel ProfileViewModel);
+        public Task<string> GetCountryByIdAsync(int countryId);
+        public Task<string> GetStateByIdAsync(int stateId);
+        public Task<string> GetCityByIdAsync(int cityId);
+        public Task<List<Country>> GetCountriesAsync();
+        public Task<List<State>> GetStatesAsync(int countryId);
+        public Task<List<City>> GetCitiesAsync(int stateId);
+        public Task<(List<Country> countries, List<State> states, List<City> cities)> SetCountriesStatesCitiesToViewBagAsync(ProfileViewModel ProfileViewModel);
     }
 }

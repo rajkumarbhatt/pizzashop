@@ -6,14 +6,15 @@ namespace BLL.Interfaces
 {
     public interface IKotMenuService
     {
-        public KotMenuViewModel GetKotMenu(int? orderId);
-        public KotMenuViewModel GetKotMenuItemsBasedOnCategory(int categoryId);
-        public KotMenuViewModel SearchMenuItemsKot(string search, int categoryId);
-        public JsonResult AddToFavourites (int itemId, int userId);
-        public JsonResult DeleteFromFavourites (int itemId, int userId);
-        public KotMenuViewModel GetCustomerDetails(int orderId);
-        public JsonResult UpdateCustomerDetails (WaitingListModal waitingListModal, int userId);
-        public KotMenuViewModel GetSelectModifiersModalData(int itemId);
-        public IActionResult AddItemToOrder (int itemId, int orderId, List<int> modifierIds, int userId);
+        public Task<KotMenuViewModel> GetKotMenuAsync(int? orderId);
+        public Task<KotMenuViewModel> GetKotMenuItemsBasedOnCategoryAsync(int categoryId);
+        public Task<KotMenuViewModel> SearchMenuItemsKotAsync(string search, int categoryId);
+        public Task<JsonResult> AddToFavouritesAsync(int itemId, int userId);
+        public Task<JsonResult> DeleteFromFavouritesAsync(int itemId, int userId);
+        public Task<KotMenuViewModel> GetCustomerDetailsAsync(int orderId);
+        public Task<JsonResult> UpdateCustomerDetailsAsync(WaitingListModal waitingListModal, int userId);
+        public Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId);
+        public Task<IActionResult> AddItemToOrderAsync(int itemId, int orderId, List<int> modifierIds, int userId);
+        public Task<IActionResult> DeleteItemFromOrderAsync (int orderId, int itemId, int userId);
     }
 }

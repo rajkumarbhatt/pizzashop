@@ -17,41 +17,41 @@ namespace Presentation.Controllers
             _jwtService = jwtService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            OrderAppViewModel orderAppViewModel = _orderAppService.GetOrderAppViewModel();
+            OrderAppViewModel orderAppViewModel = await _orderAppService.GetOrderAppViewModelAsync();
             return View(orderAppViewModel);
         }
 
         [HttpPost]
-        public IActionResult AddToWaitingList([FromForm] WaitingListModal waitingListModal)
+        public async Task<IActionResult> AddToWaitingList([FromForm] WaitingListModal waitingListModal)
         {
             if (!ModelState.IsValid)
             {
-                return new JsonResult(new { success = false, message = "Invalid Data" });
+            return new JsonResult(new { success = false, message = "Invalid Data" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _orderAppService.AddToWaitingList(waitingListModal, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _orderAppService.AddToWaitingListAsync(waitingListModal, userId);
         }
+
         [HttpGet]
-        public JsonResult GetWaitingListForCurrentSection(int sectionId)
+        public async Task<JsonResult> GetWaitingListForCurrentSection(int sectionId)
         {
-            return _orderAppService.GetWaitingListForCurrentSection(sectionId);
+            return await _orderAppService.GetWaitingListForCurrentSectionAsync(sectionId);
         }
 
         [HttpPost]
-        public IActionResult AssignTablesToCustomer([FromForm] WaitingListModal waitingListModal,[FromForm] string tableIds)
+        public async Task<IActionResult> AssignTablesToCustomer([FromForm] WaitingListModal waitingListModal, [FromForm] string tableIds)
         {
-
             string sanitizedTableIds = tableIds.Replace("[", "").Replace("]", "").Trim();
             List<int> tableIdArray = sanitizedTableIds.Split(',').Select(id => int.Parse(id.Trim())).ToList();
 
             if (!ModelState.IsValid)
             {
-                return new JsonResult(new { success = false, message = "Invalid Data" });
+            return new JsonResult(new { success = false, message = "Invalid Data" });
             }
-            int userId = _jwtService.GetUserIdFromJwtToken(Request.Cookies["token"] ?? "");
-            return _orderAppService.AssignTablesToCustomer(waitingListModal, tableIdArray, userId);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _orderAppService.AssignTablesToCustomerAsync(waitingListModal, tableIdArray, userId);
         }
     }
 }
