@@ -25,6 +25,8 @@ public partial class Order
 
     public bool? IsDeleted { get; set; }
 
+    public string? Comment { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Customer Customer { get; set; } = null!;

@@ -4,9 +4,10 @@
     @foreach (var accordianSection in @Model.Sections)
     {
         var customAccordianId = "accordion" + accordianSection.SectionId;
+        var customAccordianButtonId = "button" + accordianSection.SectionId;
         <div class="accordion-item mt-3">
             <h2 class="accordion-header" id="headingOne">
-                <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                <button id="@customAccordianButtonId" class="accordion-button " type="button" data-bs-toggle="collapse"
                     data-bs-target="#@customAccordianId" aria-expanded="true" aria-controls="@customAccordianId">
                     <div class="d-flex justify-content-between align-items-center" style="width: 100%;">
                         <div class="section-name">@accordianSection.SectionName</div>

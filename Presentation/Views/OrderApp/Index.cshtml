@@ -189,6 +189,7 @@
 
     function openWaitingTokenModal(id) {
         var sectionId = id.split("section")[1].split("name")[0];
+        var accordianButtonId = "button" + sectionId;
         $("#WaitingListSection").val(sectionId);
         $("#waitingTokenModal").modal("show");
         $.validator.unobtrusive.parse("#waitingTokenModal");

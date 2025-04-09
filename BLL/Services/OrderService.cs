@@ -222,9 +222,9 @@ public class OrderService : IOrderService
                 InvoiceModifiers = oi.OrderModifiers.Where(om => om.IsDeleted == false).Select(om => new InvoiceModifiers
                 {
                     Item = om.Modifier.Name ?? "N/A",
-                    Quantity = 1,
+                    Quantity = (int)om.Quantity,
                     Price = (double)(om.Price ?? 0),
-                    TotalAmount = (double)(om.Price ?? 0)
+                    TotalAmount = (double)(om.Price * om.Quantity ?? 0)
                 }).ToList()
             }).ToList(),
             SubTotal = 0,

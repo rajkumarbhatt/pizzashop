@@ -196,9 +196,30 @@ public class OrderAppService : IOrderAppService
         {
             Table table = await _context.Tables.FindAsync(tableId);
             if (table.Capacity > waitingListModal.NumberOfPeople && tableIds.Count > 1)
+            {
                 return new JsonResult(new { success = false, message = "Customers can be managed in less than selected tables" });
+            }
         }
 
+        if (tableIds.Count >= 1)
+        {
+            List<Table> tables = await _context.Tables.Where(t => t.IsDeleted == false && t.SectionId == waitingListModal.SectionId && t.Capacity >= waitingListModal.NumberOfPeople && t.Status == "Available" && tableIds.Contains(t.Id) == false).ToListAsync();
+            if (tables == null || tables.Count == 0)
+            {
+                goto assign;
+            }
+            Table optimumTable = tables.OrderBy(t => t.Capacity).FirstOrDefault() ?? new Table();
+            if (tableIds.Count == 1)
+            {
+                Table table = await _context.Tables.FindAsync(tableIds[0]) ?? new Table();
+                if (table.Capacity == optimumTable.Capacity)
+                {
+                    goto assign;
+                }
+            }
+            return new JsonResult(new { success = false, message = "You can assign " + optimumTable.Name + " for optimal arrangement" });
+        }
+    assign: 
         int capacity = 0;
         foreach (int tableId in tableIds)
         {

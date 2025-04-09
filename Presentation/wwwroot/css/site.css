@@ -494,6 +494,9 @@ td{
   .customer-details-modal-width {
       max-width: 30%;
   }
+  .order-comment-modal-width {
+      max-width: 30%;
+  }
 }
 
 @media (min-width: 768px) {
@@ -1094,4 +1097,11 @@ td{
 }
 .font-accordian-head {
   font-size: 16px !important;
+}
+.font-tax-head {
+  font-size: 16px !important;
+  font-weight: 400;
+}
+.order-item-details {
+  border-radius: 1px !important;
 }

@@ -943,7 +943,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.15": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2"
@@ -5851,10 +5851,10 @@
         "mailkit.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.14": {
-      "sha512": "e19jmWJAQucbPYk3/fihJMDCYfv6CO+Qwp34pOehUSCbaHROw6FZ551SN1D0s9Btl0U/QHfuwFq6Z8Oa2ktE6g==",
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.15": {
+      "sha512": "41DQAWCOIDS9ZzW6hWCShRiVrBLvz2QqR+i0VhMa4JHuQLNW2axfiWgEbB8jYt8try1ez2Q+z1PfF3vbl+B9gA==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.14",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.15",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5862,7 +5862,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
-        "microsoft.aspnetcore.authentication.jwtbearer.8.0.14.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.8.0.15.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
@@ -13487,11 +13487,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
       "projectName": "BLL",
-      "projectPath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
       "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\obj\\",
+      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -13506,8 +13506,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj": {
-              "projectPath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj"
+            "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj"
             }
           }
         }

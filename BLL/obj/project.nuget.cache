@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "4KyB/1nvqeQ=",
+  "dgSpecHash": "gB94RCCmHo0=",
   "success": true,
-  "projectFilePath": "c:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+  "projectFilePath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pci88\\.nuget\\packages\\aspnetcorehero.toastnotification\\1.1.0\\aspnetcorehero.toastnotification.1.1.0.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
@@ -72,7 +72,7 @@
     "C:\\Users\\pci88\\.nuget\\packages\\itext7.bouncy-castle-adapter\\9.1.0\\itext7.bouncy-castle-adapter.9.1.0.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\itext7.pdfhtml\\6.1.0\\itext7.pdfhtml.6.1.0.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\mailkit\\4.10.0\\mailkit.4.10.0.nupkg.sha512",
-    "C:\\Users\\pci88\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.14\\microsoft.aspnetcore.authentication.jwtbearer.8.0.14.nupkg.sha512",
+    "C:\\Users\\pci88\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.15\\microsoft.aspnetcore.authentication.jwtbearer.8.0.15.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.3.0\\microsoft.aspnetcore.http.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.3.0\\microsoft.aspnetcore.http.features.2.3.0.nupkg.sha512",
     "C:\\Users\\pci88\\.nuget\\packages\\microsoft.aspnetcore.razor.language\\6.0.24\\microsoft.aspnetcore.razor.language.6.0.24.nupkg.sha512",

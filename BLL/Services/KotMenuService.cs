@@ -2,7 +2,6 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,17 +47,32 @@ namespace BLL.Services
                         ItemName = oi.Item.Name,
                         ItemQuantity = oi.Quantity,
                         ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity),
-                        Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Select(om => new ModifierDetails
+                        Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Select(om => new ModifierDetails
                         {
                             ModifierName = om.Modifier.Name,
                             ModifierPrice = (decimal?)om.Price
                         }).ToList(),
-                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Sum(om => om.Price),
+                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Sum(om => om.Price * om.Quantity),
                     }).ToListAsync();
 
                     orderDetailsCard.SectionName = sectionName;
                     orderDetailsCard.TableNames = tableNames;
                     orderDetailsCard.OrderItemDetails = orderItemDetails;
+                    orderDetailsCard.SubTotal = (decimal?)_context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Sum(oi => oi.Price * oi.Quantity) ?? 0;
+                    orderDetailsCard.SubTotal += (decimal?)_context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).Sum(om => om.Price * om.Quantity) ?? 0;
+                    orderDetailsCard.SubTotal = Math.Round((decimal)orderDetailsCard.SubTotal, 2);
+                    orderDetailsCard.Taxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).Select(ot => new InvoiceTax
+                    {
+                        TaxName = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Name
+                            : null,
+                        TaxAmount = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType == "Percentage"
+                                ? (double)Math.Round((decimal)orderDetailsCard.SubTotal * (decimal)ot.TaxAmount / 100, 2)
+                                : (double)Math.Round((decimal)ot.TaxAmount, 2)
+                            : 0
+                    }).ToListAsync();
+                    orderDetailsCard.TotalPrice = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.TotalAmount).FirstOrDefault() ?? 0;
                 }
             }
 
@@ -363,7 +377,8 @@ namespace BLL.Services
                     CreatedAt = DateTime.Now,
                     UpdatedBy = userId,
                     UpdatedAt = DateTime.Now,
-                    IsDeleted = false
+                    IsDeleted = false,
+                    Quantity = 1
                 };
                 await _context.OrderModifiers.AddAsync(orderItemModifier);
                 await _context.SaveChangesAsync();
@@ -391,32 +406,7 @@ namespace BLL.Services
                     await _context.SaveChangesAsync();
                 }
             }
-
-            SubTotal = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).SumAsync(oi => oi.Price * oi.Quantity) ?? 0;
-            SubTotal += await _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).SumAsync(om => om.Price) ?? 0;
-
-            List<OrderTaxis> orderTaxis2 = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
-            foreach (OrderTaxis orderTaxis1 in orderTaxis2)
-            {
-                string taxType = (await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTaxis1.TaxId))?.TaxType ?? "";
-                if (taxType == "Percentage")
-                {
-                    totalTax += SubTotal * (double)orderTaxis1.TaxAmount / 100;
-                }
-                else if (taxType == "Fixed Amount")
-                {
-                    totalTax += (double)orderTaxis1.TaxAmount;
-                }
-            }
-
-            totalTax = Math.Round(totalTax, 2);
-            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
-            order.TotalAmount = (decimal)(SubTotal + totalTax);
-            order.UpdatedAt = DateTime.Now;
-            order.UpdatedBy = userId;
-            _context.Orders.Update(order);
-            await _context.SaveChangesAsync();
-
+            await UpdateOrderAmount(orderId, userId);
             return new JsonResult(new { success = true, message = "Item added to order successfully" });
         }
         public async Task<IActionResult> DeleteItemFromOrderAsync(int orderId, int itemId, int userId)
@@ -440,9 +430,138 @@ namespace BLL.Services
                 _context.Update(orderModifier);
                 await _context.SaveChangesAsync();
             }
+            await UpdateOrderAmount(orderId, userId);
+            return new JsonResult(new { success = true, message = "Item deleted from order successfully." });
+        }
+        public async Task<KotMenuViewModel> RefreshOrderItemDetails(int orderId)
+        {
+            OrderDetailsCard orderDetailsCard = new OrderDetailsCard();
+            List<int> tableIds = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).Select(otb => otb.TableId).ToListAsync();
+            int sectionId = (await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableIds[0])).SectionId;
+            string sectionName = (await _context.Sections.FirstOrDefaultAsync(s => s.Id == sectionId)).Name;
+            string tableNames = "";
+
+            foreach (int tableId in tableIds)
+            {
+                string tableName = (await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableId)).Name;
+                tableNames = string.IsNullOrEmpty(tableNames) ? tableName : $"{tableNames}, {tableName}";
+
+                List<OrderItemDetials> orderItemDetails = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Select(oi => new OrderItemDetials
+                {
+                    ItemId = oi.ItemId,
+                    ItemName = oi.Item.Name,
+                    ItemQuantity = oi.Quantity,
+                    ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity),
+                    Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Select(om => new ModifierDetails
+                    {
+                        ModifierName = om.Modifier.Name,
+                        ModifierPrice = (decimal?)om.Price
+                    }).ToList(),
+                    ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id).Sum(om => om.Price * om.Quantity),
+                }).ToListAsync();
+
+                orderDetailsCard.SectionName = sectionName;
+                orderDetailsCard.TableNames = tableNames;
+                orderDetailsCard.OrderItemDetails = orderItemDetails;
+                orderDetailsCard.SubTotal = (decimal?)_context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Sum(oi => oi.Price * oi.Quantity) ?? 0;
+                orderDetailsCard.SubTotal += (decimal?)_context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).Sum(om => om.Price * om.Quantity) ?? 0;
+                orderDetailsCard.SubTotal = Math.Round((decimal)orderDetailsCard.SubTotal, 2);
+                orderDetailsCard.Taxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).Select(ot => new InvoiceTax
+                {
+                    TaxName = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                        ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Name
+                        : null,
+                    TaxAmount = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                        ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType == "Percentage"
+                            ? (double)Math.Round((decimal)orderDetailsCard.SubTotal * (decimal)ot.TaxAmount / 100, 2)
+                            : (double)Math.Round((decimal)ot.TaxAmount, 2)
+                        : 0
+                }).ToListAsync();
+                orderDetailsCard.TotalPrice = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.TotalAmount).FirstOrDefault() ?? 0;
+            }
+            KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
+            {
+                OrderDetailsCard = orderDetailsCard
+            };
+            return kotMenuViewModel;
+        }
+        public async Task<JsonResult> IncreaseOrderItemQuantity(int orderId, int itemId, int userId)
+        {
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync() ?? new List<OrderModifier>();
+            Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId) ?? new Item();
+            if (item.Quantity <= 0)
+            {
+                return new JsonResult(new { success = false, message = "Item not available" });
+            }
+            item.Quantity -= 1;
+            item.UpdatedAt = DateTime.Now;
+            item.UpdatedBy = userId;
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+            orderItem.Quantity += 1;
+            orderItem.UpdatedAt = DateTime.Now;
+            orderItem.UpdatedBy = userId;
+            _context.OrderItems.Update(orderItem);
+            await _context.SaveChangesAsync();
+            foreach (OrderModifier orderModifier in orderModifiers)
+            {
+                orderModifier.Quantity += 1;
+                orderModifier.UpdatedAt = DateTime.Now;
+                orderModifier.UpdatedBy = userId;
+                _context.OrderModifiers.Update(orderModifier);
+                await _context.SaveChangesAsync();
+            }
+            await UpdateOrderAmount(orderId, userId);
+            return new JsonResult(new { success = true, message = "Item added successfully" });
+        }
+        public async Task<JsonResult> DecreaseOrderItemQuantity(int orderId, int itemId, int userId)
+        {
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync() ?? new List<OrderModifier>();
+            Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId) ?? new Item();
+            item.Quantity += 1;
+            item.UpdatedAt = DateTime.Now;
+            item.UpdatedBy = userId;
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+            orderItem.Quantity -= 1;
+            if (orderItem.Quantity == 0)
+            {
+                orderItem.IsDeleted = true;
+                orderItem.UpdatedAt = DateTime.Now;
+                orderItem.UpdatedBy = userId;
+                foreach (OrderModifier orderModifier in orderModifiers)
+                {
+                    orderModifier.Quantity -= 1;
+                    orderModifier.IsDeleted = true;
+                    orderModifier.UpdatedAt = DateTime.Now;
+                    orderModifier.UpdatedBy = userId;
+                    _context.OrderModifiers.Update(orderModifier);
+                    await _context.SaveChangesAsync();
+                }
+                await UpdateOrderAmount(orderId, userId);
+                return new JsonResult(new { success = true, message = "Item removed successfully" });
+            }
+            _context.OrderItems.Update(orderItem);
+            await _context.SaveChangesAsync();
+            foreach (OrderModifier orderModifier in orderModifiers)
+            {
+                orderModifier.Quantity -= 1;
+                orderModifier.UpdatedAt = DateTime.Now;
+                orderModifier.UpdatedBy = userId;
+                _context.OrderModifiers.Update(orderModifier);
+                await _context.SaveChangesAsync();
+            }
+            await UpdateOrderAmount(orderId, userId);
+            return new JsonResult(new { success = true, message = "Item removed successfully" });
+        }
+
+        public async Task<IActionResult> UpdateOrderAmount(int orderId, int userId)
+        {
             double SubTotal = 0, totalTax = 0;
             SubTotal = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).SumAsync(oi => oi.Price * oi.Quantity) ?? 0;
-            SubTotal += await _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).SumAsync(om => om.Price) ?? 0;
+            SubTotal += await _context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).SumAsync(om => om.Price * om.Quantity) ?? 0;
 
             List<OrderTaxis> orderTaxis2 = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
             foreach (OrderTaxis orderTaxis1 in orderTaxis2)
@@ -457,14 +576,43 @@ namespace BLL.Services
                     totalTax += (double)orderTaxis1.TaxAmount;
                 }
             }
-            totalTax = Math.Round(totalTax, 2);
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             order.TotalAmount = (decimal)(SubTotal + totalTax);
+            order.TotalAmount = Math.Round(order.TotalAmount, 2);
             order.UpdatedAt = DateTime.Now;
             order.UpdatedBy = userId;
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
-            return new JsonResult (new {success=true, message="Item deleted from order successfully."});
+            return new JsonResult(new { success = true, message = "Order total updated successfully" });
+        }
+        public async Task<JsonResult> GetOrderWiseCommentAsync (int orderId)
+        {
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            if (order != null)
+            {
+                return new JsonResult(new { success = true, message = order.Comment });
+            }
+            else 
+            {
+                return new JsonResult(new { success = false, message = "Order not found" });
+            }
+        }
+        public async Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId)
+        {
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            if (order != null)
+            {
+                order.Comment = comment;
+                order.UpdatedAt = DateTime.Now;
+                order.UpdatedBy = userId;
+                _context.Orders.Update(order);
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { success = true, message = "Comment added successfully" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Order not found" });
+            }
         }
     }
 }

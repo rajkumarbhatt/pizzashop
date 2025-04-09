@@ -113,7 +113,6 @@
             var modifierIds = modifiers.map(function (modifier) {
                 return modifier.ModifierId;
             });
-            console.log(orderId, itemId, modifierIds);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("AddItemToOrder", "OrderAppMenu")',
@@ -122,8 +121,15 @@
                     if (data.success) {
                         $("#selectModifiersModal").modal("hide");
                         clearModifiersList();
-                        window.location.reload();
-                        console.log(data.message);
+                        $.ajax({
+                            url: '/OrderAppMenu/RefreshOrderItemDetails',
+                            type: 'GET',
+                            data: { orderId: orderId },
+                            success: function (data) {
+                                $("#orderItemDetailsPartial").html(data)
+                            },
+                            error: () => console.error(error)
+                        })
                     } else {
                         console.error(data.message);
                     }

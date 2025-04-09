@@ -16,5 +16,11 @@ namespace BLL.Interfaces
         public Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId);
         public Task<IActionResult> AddItemToOrderAsync(int itemId, int orderId, List<int> modifierIds, int userId);
         public Task<IActionResult> DeleteItemFromOrderAsync (int orderId, int itemId, int userId);
+        public Task<KotMenuViewModel> RefreshOrderItemDetails (int orderId);
+        public Task<JsonResult> IncreaseOrderItemQuantity (int orderId, int itemId, int userId);
+        public Task<JsonResult> DecreaseOrderItemQuantity (int orderId, int itemId, int userId);
+        public Task<IActionResult> UpdateOrderAmount (int orderId, int userId);
+        public Task<JsonResult> GetOrderWiseCommentAsync (int orderId);
+        public Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId);
     }
 }

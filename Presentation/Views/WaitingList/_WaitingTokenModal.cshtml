@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="addTableTitle">Waiting Token Details</h5>
                     <button type="button" onclick="clearWaitingTokenModal()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+                </div> 
                 <div class="modal-body">
                     <div class="row align-items-center">
                         @if (Model.waitingListModal != null && Model.waitingListModal.Id > 0)
@@ -25,9 +25,9 @@
                             <div class="form-floating my-auto col-12">
                                 @if (Model.waitingListModal != null && Model.waitingListModal.Email != null)
                                 {
-                                    <input type="text" class="form-control" name="waitingListModal.Email"
+                                    <input type="text" class="form-control cursor-none" name="waitingListModal.Email"
                                         id="EmailWaitingToken" asp-for="@Model.waitingListModal.Email" autocomplete="off"
-                                        value="@Model.waitingListModal.Email">
+                                        value="@Model.waitingListModal.Email" readonly style="background-color: #E9ECEF;">
                                 }
                                 else
                                 {
