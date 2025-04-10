@@ -1,3 +1,5 @@
+using DAL.Models;
+
 namespace DAL.ViewModels;
 
 public class OrderDetailsCard 

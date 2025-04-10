@@ -22,5 +22,6 @@ namespace BLL.Interfaces
         public Task<IActionResult> UpdateOrderAmount (int orderId, int userId);
         public Task<JsonResult> GetOrderWiseCommentAsync (int orderId);
         public Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId);
+        public Task<IActionResult> SaveOrder (SaveOrderViewModel saveOrderViewModel, int userId);
     }
 }

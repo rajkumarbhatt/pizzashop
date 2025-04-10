@@ -80,7 +80,8 @@ namespace BLL.Services
             {
                 Categories = categories,
                 MenuItemsKot = menuItemsKot,
-                OrderDetailsCard = orderDetailsCard
+                OrderDetailsCard = orderDetailsCard,
+                TaxesFees = await _context.TaxesFees.Where(tf => tf.IsDeleted == false).ToListAsync()
             };
 
             return kotMenuViewModel;
@@ -299,7 +300,8 @@ namespace BLL.Services
             AddModifiersModal addModifiersModal = new AddModifiersModal
             {
                 ItemId = item.Id,
-                ItemName = item.Name
+                ItemName = item.Name,
+                ItemPrice = Math.Round((decimal)item.Price, 2),
             };
             List<ItemModifiergroup> itemModifierGroups = await _context.ItemModifiergroups.Where(im => im.ItemId == item.Id).ToListAsync();
             List<ModifierGroupsAddItem> modifierGroups = new List<ModifierGroupsAddItem>();
@@ -613,6 +615,44 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
+        }
+        public async Task<IActionResult> SaveOrder (SaveOrderViewModel saveOrderViewModel, int userId) {
+            foreach (var orderItem in saveOrderViewModel.OrderItems)
+            {
+                OrderItem orderItem1 = new OrderItem 
+                {
+                    OrderId = saveOrderViewModel.OrderId,
+                    ItemId = orderItem.ItemId,
+                    Quantity = orderItem.Quantity,
+                    Price = (double?)_context.Items.FirstOrDefault(i => i.Id == orderItem.ItemId)?.Price,
+                    CreatedBy = userId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedBy = userId,
+                    UpdatedAt = DateTime.Now,
+                    IsDeleted = false
+                };
+                await _context.OrderItems.AddAsync(orderItem1);
+                await _context.SaveChangesAsync();
+                foreach(var modifier in orderItem.ModifierIds)
+                {
+                    OrderModifier orderModifier = new OrderModifier
+                    {
+                        OrderItemId = orderItem1.Id,
+                        ModifierId = modifier,
+                        Price = (double?)_context.Modifiers.FirstOrDefault(m => m.Id == modifier)?.Price,
+                        CreatedBy = userId,
+                        CreatedAt = DateTime.Now,
+                        UpdatedBy = userId,
+                        UpdatedAt = DateTime.Now,
+                        IsDeleted = false,
+                        Quantity = 1
+                    };
+                    await _context.OrderModifiers.AddAsync(orderModifier);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            await UpdateOrderAmount(saveOrderViewModel.OrderId, userId);
+            return new JsonResult(new { success = true, message = "Order saved successfully" });
         }
     }
 }

@@ -41,8 +41,11 @@
 }
 
 <script>
-
     var selectedModifiers = [];
+    var totalOrderAmount = 0;
+    var subtotal = 0;
+    var itemList = [];
+    var taxListNameAndAmount = [];
 
     function changeCategoryKot(id) {
         var categoryId = id.split("-")[2];
@@ -92,6 +95,4 @@
             }, 500));
         });
     });
-
-
 </script>

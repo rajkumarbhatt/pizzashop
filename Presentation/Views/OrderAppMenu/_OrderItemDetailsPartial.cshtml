@@ -1,6 +1,6 @@
 @model DAL.ViewModels.KotMenuViewModel
 
-<div class="mt-3 d-flex flex-column justify-content-between w-100 h-100">
+<div class="mt-3 d-flex flex-column w-100 h-100">
     <div style="height: 500px; overflow-y: scroll;">
         <div class="w-100 bg-white d-flex justify-content-start align-items-center px-3 py-2">
             <p class="font-weight-bold color-head-order font-size-thead text-start w-50" style="margin-left: 6%;">Item
@@ -11,94 +11,103 @@
         </div>
         @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderItemDetails != null)
         {
-            @foreach (var orderItem in Model.OrderDetailsCard.OrderItemDetails)
-            {
-                var customAccordionId = "collapse" + orderItem.ItemId;
-                <div class="accordion-item mb-2 div-custom-accordian">
-                    <h2 class="accordion-header " id="headingOne">
-                        <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#@customAccordionId" aria-expanded="true" aria-controls="collapseOne">
-                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head">
-                                <p class="w-50 font-weight-bold-slight">@orderItem.ItemName</p>
-                                <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
-                                    style="width: 15%;">
-                                    <p> <span class="p-2"
-                                            onclick="decreaseQuantity(@orderItem.ItemId)">-</span>@orderItem.ItemQuantity<span
-                                            class="p-2" onclick="increaseQuantity(@orderItem.ItemId)">+</span></p>
-                                </div>
-                                <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
-                                    <p>₹@orderItem.ItemTotalPrice</p>
-                                    <p class="font-accordian">₹@orderItem.ModifiersTotalPrice</p>
-                                </div>
-                                <div onclick="deleteItemFromOrder(@orderItem.ItemId)">
-                                    <img src="~/images/icons/delete.svg" class="small-image">
-                                </div>
-                            </div>
-                        </button>
-                    </h2>
-
-                    <div id="@customAccordionId" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                        data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            <table class="" style=" width: 25%;">
-                                @foreach (var modifier in @orderItem.Modifiers)
-                                {
-                                    <div class="d-flex align-items-center w-100 font-accordian gap-2">
-                                        <tr class="">
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                        <tr class="font-accordian">
-                                            <td>•</td>
-                                            <td>@modifier.ModifierName</td>
-                                            <td>@modifier.ModifierPrice</td>
-                                        </tr>
+            <div id="accordianItemDetails">
+                @foreach (var orderItem in Model.OrderDetailsCard.OrderItemDetails)
+                {
+                    var customAccordionId = "collapse" + orderItem.ItemId;
+                    <div class="accordion-item mb-2 div-custom-accordian">
+                        <h2 class="accordion-header " id="headingOne">
+                            <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#@customAccordionId" aria-expanded="true" aria-controls="collapseOne">
+                                <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head">
+                                    <p class="w-50 font-weight-bold-slight">@orderItem.ItemName</p>
+                                    <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
+                                        style="width: 15%;">
+                                        <p> <span class="p-2"
+                                                onclick="decreaseQuantity(@orderItem.ItemId)">-</span>@orderItem.ItemQuantity<span
+                                                class="p-2" onclick="increaseQuantity(@orderItem.ItemId)">+</span></p>
                                     </div>
-                                }
-                            </table>
+                                    <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
+                                        <p>₹@orderItem.ItemTotalPrice</p>
+                                        <p class="font-accordian">₹@orderItem.ModifiersTotalPrice</p>
+                                    </div>
+                                    <div onclick="deleteItemFromOrder(@orderItem.ItemId)">
+                                        <img src="~/images/icons/delete.svg" class="small-image">
+                                    </div>
+                                </div>
+                            </button>
+                        </h2>
+
+                        <div id="@customAccordionId" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <table class="" style=" width: 25%;">
+                                    @foreach (var modifier in @orderItem.Modifiers)
+                                    {
+                                        <div class="d-flex align-items-center w-100 font-accordian gap-2">
+                                            <tr class="">
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                            <tr class="font-accordian">
+                                                <td>•</td>
+                                                <td>@modifier.ModifierName</td>
+                                                <td>@modifier.ModifierPrice</td>
+                                            </tr>
+                                        </div>
+                                    }
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
+                }
+            </div>
         }
     </div>
     <div>
         <hr>
         <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head font-tax-head">
             <p>Subtotal</p>
-            <p>@Model.OrderDetailsCard.SubTotal</p>
+            <p id="orderSubtotalValue">@Model.OrderDetailsCard.SubTotal</p>
         </div>
-        @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.Taxes != null)
+        @if (Model != null && Model.TaxesFees != null)
         {
-            @foreach (var tax in Model.OrderDetailsCard.Taxes)
-            {
-                <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
-                    <p>@tax.TaxName</p>
-                    <p>@tax.TaxAmount</p>
-                </div>
-            }
+            string taxList = "";
+            <div id="taxListContainer">
+                @foreach (var tax in Model.TaxesFees)
+                {
+                    var customTaxId = tax.TaxType + "-" + tax.Name + "-" + tax.Amount;
+                    taxList += customTaxId + ",";
+                    <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                        <p>@tax.Name</p>
+                        <p id="@customTaxId">0.00</p>
+                    </div>
+                }
+                <input type="hidden" id="taxAmountIds" value="@taxList" />
+            </div>
         }
         <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head font-tax-head">
             <p>Total</p>
-            <p>₹@Model.OrderDetailsCard.TotalPrice</p>
+            <p id="orderTotalValue">@Model.OrderDetailsCard.TotalPrice</p>
         </div>
         <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
             <p>Payment Mode</p>
             <div class="d-flex gap-2">
                 <input style="width: 16px; height: 16px" type="radio" id="cash" checked name="paymentMode" value="Cash"
-                    class="form-check-input">
+                    disabled class="form-check-input">
                 <label for="cash" class="form-check-label">Cash</label>
-                <input style="width: 16px; height: 16px" type="radio" id="card" name="paymentMode" value="Card"
+                <input style="width: 16px; height: 16px" type="radio" id="card" name="paymentMode" value="Card" disabled
                     class="form-check-input">
                 <label for="card" class="form-check-label">Card</label>
-                <input style="width: 16px; height: 16px" type="radio" id="upi" name="paymentMode" value="UPI"
+                <input style="width: 16px; height: 16px" type="radio" id="upi" name="paymentMode" value="UPI" disabled
                     class="form-check-input">
                 <label for="upi" class="form-check-label">UPI</label>
             </div>
         </div>
-        <div class="buttons d-flex flex-wrap gap-2 justify-content-end align-items-center w-100 mt-4 mb-5 ">
-            <button class="order-item-details button btn btn-primary" style="width: 30%;">Save</button>
+        <div class="buttons d-flex flex-wrap gap-2 justify-content-end align-items-center w-100 mt-4 ">
+            <button onclick="saveOrder()" class="order-item-details button btn btn-primary"
+                style="width: 30%;">Save</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Complete</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Generate Invoice</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Cancel</button>
@@ -107,50 +116,32 @@
 </div>
 
 <script>
-    function increaseQuantity(itemId) {
+    var urlTemp = window.location.href;
+    var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
+    function saveOrder() {
+        console.log(taxListNameAndAmount);
+        var saveOrderViewModel = {
+            OrderItems: itemList,
+            Subtotal: parseFloat($('#orderSubtotalValue').text()),
+            Total: parseFloat($('#orderTotalValue').text()),
+            OrderId: orderIdTemp,
+            OrderTaxes: taxListNameAndAmount,
+        };
+        console.log(saveOrderViewModel);
         $.ajax({
-            url: '/OrderAppMenu/IncreaseOrderItemQuantity',
-            type: 'POST',
-            data: { orderId: orderId, itemId: itemId },
+            type: "POST",
+            url: '@Url.Action("SaveOrder", "OrderAppMenu")',
+            data: { saveOrderViewModel: saveOrderViewModel },
             success: function (response) {
                 if (response.success) {
-                    $.ajax({
-                        url: '/OrderAppMenu/RefreshOrderItemDetails',
-                        type: 'GET',
-                        data: { orderId: orderId },
-                        success: function (data) {
-                            $("#orderItemDetailsPartial").html(data)
-                        },
-                        error: () => console.error(error)
-                    })
+                    toastr.success(response.message);
                 } else {
-                    toastr.error(response.message)
+                    toastr.error(response.message);
                 }
             },
-            error: () => console.error(error)
-        })
-    }
-    function decreaseQuantity(itemId) {
-        $.ajax({
-            url: '/OrderAppMenu/DecreaseOrderItemQuantity',
-            type: 'POST',
-            data: { orderId: orderId, itemId: itemId },
-            success: function (response) {
-                if (response.success) {
-                    $.ajax({
-                        url: '/OrderAppMenu/RefreshOrderItemDetails',
-                        type: 'GET',
-                        data: { orderId: orderId },
-                        success: function (data) {
-                            $("#orderItemDetailsPartial").html(data)
-                        },
-                        error: () => console.error(error)
-                    })
-                } else {
-                    toastr.error(response.message)
-                }
-            },
-            error: () => console.error(error)
+            error: function (xhr, status, error) {
+                console.error("Error:", error);
+            }
         })
     }
 </script>

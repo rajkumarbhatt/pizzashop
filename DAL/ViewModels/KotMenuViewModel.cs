@@ -1,6 +1,6 @@
 using DAL.Models;
 
-namespace DAL.ViewModels 
+namespace DAL.ViewModels
 {
     public class KotMenuViewModel
     {
@@ -9,5 +9,6 @@ namespace DAL.ViewModels
         public WaitingListModal? WaitingListModal { get; set; }
         public AddModifiersModal? AddModifiersModal { get; set; }
         public OrderDetailsCard? OrderDetailsCard { get; set; }
+        public List<TaxesFee>? TaxesFees { get; set; }
     }
 }
