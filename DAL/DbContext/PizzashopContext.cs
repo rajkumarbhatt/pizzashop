@@ -521,7 +521,6 @@ public partial class PizzaShopContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Comment)
-                .HasDefaultValueSql("200")
                 .HasColumnType("character varying")
                 .HasColumnName("comment");
             entity.Property(e => e.CreatedAt)
@@ -537,6 +536,9 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasColumnName("status");
+            entity.Property(e => e.SubTotal)
+                .HasPrecision(10, 2)
+                .HasColumnName("sub_total");
             entity.Property(e => e.TotalAmount)
                 .HasPrecision(10, 2)
                 .HasColumnName("total_amount");

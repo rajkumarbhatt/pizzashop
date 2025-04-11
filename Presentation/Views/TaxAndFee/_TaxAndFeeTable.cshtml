@@ -34,14 +34,14 @@
                         @if (tax.IsEnabled ?? false)
                         {
                             <div class="form-check form-switch">
-                                <input class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
+                                <input disabled style="opacity:1" class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
                                     type="checkbox" checked id="@idCustom">
                             </div>
                         }
                         else
                         {
                             <div class="form-check form-switch">
-                                <input class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
+                                <input disabled  style="opacity:1"class="form-check-input form-check-switch" onclick="saveChangesOfIsEnabled(@tax.Id)"
                                     type="checkbox" id="@idCustom">
                             </div>
                         }

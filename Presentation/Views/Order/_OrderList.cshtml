@@ -51,7 +51,7 @@
             </div>
     <button id="previousButtonOrders" class="p-1 px-2" @(Model.pageIndex == 1 ? "disabled" : "")>&lt;</button>
 
-    <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.pageIndex == Model.totalPages ? "disabled" : "")>&gt;</button>
+    <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.pageIndex == Model.totalPages) || Model.totalPages == 0) ? "disabled" : "")>&gt;</button>
     </div>
 </div>
 

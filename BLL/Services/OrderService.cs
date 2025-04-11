@@ -298,7 +298,7 @@ public class OrderService : IOrderService
             if (tax.TaxType == "Percentage")
             {
                 invoiceTax.TaxName = tax.Name;
-                invoiceTax.TaxAmount = (double)((orderDetailsViewModel.SubTotal ?? 0) * (double)orderTax.TaxAmount / 100);
+                invoiceTax.TaxAmount = (double)orderTax.TaxAmount;
                 invoiceTax.TaxAmount = Math.Round(invoiceTax.TaxAmount, 2);
             }
             else

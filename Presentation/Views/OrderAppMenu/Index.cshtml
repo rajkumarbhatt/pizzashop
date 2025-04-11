@@ -46,6 +46,7 @@
     var subtotal = 0;
     var itemList = [];
     var taxListNameAndAmount = [];
+    var isFirstLoad = true;
 
     function changeCategoryKot(id) {
         var categoryId = id.split("-")[2];
@@ -55,7 +56,6 @@
         } else if (categoryId == "favourite") {
             categoryId = -2;
         }
-        console.log(categoryId);
         var elements = document.getElementsByClassName("active-kot-sidebar-item");
         for (var i = 0; i < elements.length; i++) {
             elements[i].classList.remove("active-kot-sidebar-item");
@@ -95,4 +95,75 @@
             }, 500));
         });
     });
+
+    function syncItemsList() {
+        orderItems.forEach((item) => {
+            var accordianItemDetails = document.getElementById("accordianItemDetails");
+            var customAccordianId = "collapse" + item.itemId;
+            var orderItemTotalPriceValueCustomId = "orderItemTotalPriceValue" + item.itemId;
+            var orderModifiersTotalPriceValueCustomId = "orderModifiersTotalPriceValue" + item.itemId;
+            var increaseQuantityCustomId = "increaseQuantity" + item.itemId;
+            var decreaseQuantityCustomId = "decreaseQuantity" + item.itemId;
+            var itemQuantityCustomId = "itemQuantity" + item.itemId;
+            var accordianButtonCustomId = "accordianButton" + item.itemId;
+            var accordianItem = `
+                <div class="accordion-item mb-2 div-custom-accordian" id="${accordianButtonCustomId}">
+                    <h2 class="accordion-header " id="headingOne">
+                        <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#${customAccordianId}" aria-expanded="true" aria-controls="collapseOne">
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head">
+                                <p class="w-50 font-weight-bold-slight">${item.itemName}</p>
+                                <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
+                                    style="width: 15%;">
+                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id)">-</span><span id="${itemQuantityCustomId}">${item.itemQuantity}</span><span id="${decreaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id)">+</span></p>
+                                </div>
+                                <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
+                                    <p id="${orderItemTotalPriceValueCustomId}">${item.itemTotalPrice}</p>
+                                    <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian">${item.modifiersTotalPrice}</p>
+                                </div>
+                                <div onclick="deleteItemFromOrder(${item.itemId})">
+                                    <img src="@Url.Content("~/images/icons/delete.svg")" class="small-image">
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+
+                    <div id="${customAccordianId}" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table class="" style="width: 25%;">
+                                <tbody id="selectedModifiersTable-${customAccordianId}">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            var rows = "";
+            for (var i = 0; i < item.modifiers.length; i++) {
+                var modifier = item.modifiers[i];
+                var row = `
+                    <tr class="font-accordian">
+                        <td>•</td>
+                        <td>${modifier.modifierName}</td>
+                        <td>${modifier.modifierPrice}</td>
+                    </tr>
+                `;
+                rows += row;
+            }
+            accordianItemDetails.insertAdjacentHTML("beforeend", accordianItem);
+            var selectedModifiersTable = document.getElementById("selectedModifiersTable-" + customAccordianId);
+            selectedModifiersTable.insertAdjacentHTML("beforeend", rows);
+            itemList.push({
+                ItemId: parseInt(item.itemId),
+                Quantity: parseInt(1),
+            });
+            if ($("#taxListContainer").hasClass("d-none")) {
+                $("#taxListContainer").removeClass("d-none");
+            }
+            console.log(itemList);
+        })
+        
+    }
 </script>

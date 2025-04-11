@@ -84,8 +84,7 @@
     </div>
     <button id="previousButtonModifier" class="p-1 px-2" @(Model.PageIndexModifier == 1 ? "disabled" : "")>&lt;</button>
 
-    <button id="nextButtonModifier" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndexModifier ==
-        Model.TotalPagesModifier ? "disabled" : "")> &gt;</ button >
+    <button id="nextButtonModifier" class="p-1 px-2 ms-1 border-1 border-secondary"@(((Model.PageIndexModifier == Model.TotalPagesModifier) || Model.TotalPagesModifier == 0) ? "disabled" : "")> &gt;</ button >
 </div>
 
 @* delete modififer modal *@
@@ -277,6 +276,10 @@
                 $("#blue-dot" + modifierGroupId).removeClass("d-none");
             }
         });
+        deleteModifierList.forEach(function (item) {
+            $("#flexCheckChecked" + item).prop("checked", false);
+        });
+        deleteModifierList = [];
     }
 
     function makeThisModifierGroupActive(modifierGroupId) {

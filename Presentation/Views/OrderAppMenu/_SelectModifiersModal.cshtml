@@ -108,10 +108,8 @@
         document.getElementById("AddModifiersButton").classList.add("d-none");
     }
 
-    
-    function addModifiers (itemId, itemName, itemPrice) {
-        if (checkForMinMax())
-        {
+    function addModifiers(itemId, itemName, itemPrice) {
+        if (checkForMinMax()) {
             var accordianItemDetails = document.getElementById("accordianItemDetails");
             var customAccordianId = "collapse" + itemId;
             var orderItemTotalPriceValueCustomId = "orderItemTotalPriceValue" + itemId;
@@ -194,10 +192,10 @@
             if ($("#taxListContainer").hasClass("d-none")) {
                 $("#taxListContainer").removeClass("d-none");
             }
-            updateTaxes(Subtotal);    
+            updateTaxes(Subtotal);
         }
     }
-
+    
     function checkForMinMax () 
     {
         var getElementsByClassName = document.getElementsByClassName("min-greater-than-zero");
@@ -247,12 +245,13 @@
             var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
             var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
             var subTotalElement = document.getElementById("orderSubtotalValue");
-            var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
+            var Subtotal = parseFloat(subTotalElement.innerHTML);
             document.getElementById(itemQuantityCustomId).innerHTML = newValue;
             Subtotal -= itemPrice + orderModifiersTotalPriceValue;
             Subtotal = Subtotal.toFixed(2);
             subTotalElement.innerHTML = Subtotal;
             updateTaxes(Subtotal);
+            hideTaxesDiv(Subtotal);
             itemList.filter(function (item) {
                 if (item.ItemId == itemId) {
                     item.Quantity = parseInt(newValue);
@@ -260,6 +259,7 @@
             });
         }
         if (currentValue == 1) {
+            console.log(itemList);
             var orderItemTotalPriceValue = document.getElementById("orderItemTotalPriceValue" + itemId);
             var orderModifiersTotalPriceValue = document.getElementById("orderModifiersTotalPriceValue" + itemId);
             var subTotalElement = document.getElementById("orderSubtotalValue");
@@ -272,12 +272,14 @@
             accordianItem.remove();
             makeTaxesZeroIfNecessary(Subtotal);
             updateTaxes(Subtotal);
+            hideTaxesDiv(Subtotal);
             itemList.filter(function (item) {
                 if (item.ItemId == itemId) {
                     itemList.splice(itemList.indexOf(item), 1);
                 }
             });
         }
+        console.log(itemList);
     }
 
     function deleteItemFromOrder (itemId) {
@@ -294,6 +296,7 @@
         accordianItem.remove();
         makeTaxesZeroIfNecessary(Subtotal);
         updateTaxes(Subtotal);
+        hideTaxesDiv(Subtotal);
         itemList.filter(function (item) {
             if (item.ItemId == itemId) {
                 itemList.splice(itemList.indexOf(item), 1);
@@ -321,18 +324,45 @@
         taxList.pop();
         for (var i = 0; i < taxList.length; i++) {
             var taxId = taxList[i];
-            console.log("Tax ID: ", taxId);
             var taxType = taxId.split("-")[0];
             var taxAmount = taxId.split("-")[2];
             if (taxType == "Percentage") {
                 var taxValue = (parseFloat(taxAmount) / 100) * Subtotal;
                 totalTax += taxValue;
                 document.getElementById(taxId).innerHTML = taxValue.toFixed(2);
-                taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                if (taxListNameAndAmount.length == 0) {
+                    taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                } else {
+                    var found = false;
+                    for (var j = 0; j < taxListNameAndAmount.length; j++) {
+                        if (taxListNameAndAmount[j].TaxName == taxId.split("-")[1]) {
+                            found = true;
+                            taxListNameAndAmount[j].TaxAmount = taxValue.toFixed(2);
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                    }
+                }
             } else if (taxType == "Fixed Amount") {
                 var taxValue = parseFloat(taxAmount);
                 totalTax += taxValue;
-                taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                if (taxListNameAndAmount.length == 0) {
+                    taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                } else {
+                    var found = false;
+                    for (var j = 0; j < taxListNameAndAmount.length; j++) {
+                        if (taxListNameAndAmount[j].TaxName == taxId.split("-")[1]) {
+                            found = true;
+                            taxListNameAndAmount[j].TaxAmount = taxValue.toFixed(2);
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        taxListNameAndAmount.push({ TaxName: taxId.split("-")[1], TaxAmount: taxValue.toFixed(2) });
+                    }
+                }
                 document.getElementById(taxId).innerHTML = taxValue.toFixed(2);
             }
         }
@@ -342,4 +372,21 @@
         orderTotal = parseFloat(orderTotal).toFixed(2);
         orderTotalValue.innerHTML = orderTotal;
     }
+
+    function hideTaxesDiv (subTotal) {
+        var taxListContainer = document.getElementById("taxListContainer");
+        if (parseInt(subTotal) == 0) {
+            taxListContainer.classList.add("d-none");
+        } else {
+            taxListContainer.classList.remove("d-none");
+        }
+    }
+
+    $(document).ready(function () {
+        if (isFirstLoad)
+        {
+            syncItemsList();
+            isFirstLoad = false;
+        }
+    });
 </script>

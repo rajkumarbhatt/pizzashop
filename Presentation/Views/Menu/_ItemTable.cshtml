@@ -59,14 +59,14 @@
                     @if (item.IsAvailable ?? false)
                     {
                         <div class="form-check form-switch">
-                            <input class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
+                            <input disabled  style="opacity:1" class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
                                 type="checkbox" checked id="@idCustom">
                         </div>
                     }
                     else
                     {
                         <div class="form-check form-switch">
-                            <input class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
+                            <input disabled  style="opacity:1" class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
                                 type="checkbox" id="@idCustom">
                         </div>
                     }
@@ -120,7 +120,7 @@
     </div>
     <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
 
-    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(Model.PageIndex == Model.TotalPages ?
+    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.PageIndex == Model.TotalPages) || Model.TotalPages == 0) ?
         "disabled" : "")> &gt;</ button >
 </div>
 
@@ -342,6 +342,14 @@
                 $("#blueDot" + categoryId).removeClass("d-none");
             }
         });
+        deleteItemsList.forEach(item => {
+            $(".item-name-checkbox").each(function () {
+                if (parseInt($(this).val()) === item) {
+                    $(this).prop("checked", true);
+                }
+            });
+        });
+        deleteItemsList = [];
     }
 
     function makeThisCategoryActive(categoryId) {

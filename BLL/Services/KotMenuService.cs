@@ -16,6 +16,7 @@ namespace BLL.Services
         }
         public async Task<KotMenuViewModel> GetKotMenuAsync(int? orderId)
         {
+            bool areItemsAdded = false;
             OrderDetailsCard orderDetailsCard = new OrderDetailsCard();
             List<Category> categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
             List<MenuItemsKot> menuItemsKot = await _context.Items.Where(m => m.IsDeleted == false && m.IsAvailable == true).Select(m => new MenuItemsKot
@@ -52,7 +53,7 @@ namespace BLL.Services
                             ModifierName = om.Modifier.Name,
                             ModifierPrice = (decimal?)om.Price
                         }).ToList(),
-                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Sum(om => om.Price * om.Quantity),
+                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Sum(om => om.Price),
                     }).ToListAsync();
 
                     orderDetailsCard.SectionName = sectionName;
@@ -60,28 +61,40 @@ namespace BLL.Services
                     orderDetailsCard.OrderItemDetails = orderItemDetails;
                     orderDetailsCard.SubTotal = (decimal?)_context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Sum(oi => oi.Price * oi.Quantity) ?? 0;
                     orderDetailsCard.SubTotal += (decimal?)_context.OrderModifiers.Where(om => om.OrderItem.OrderId == orderId && om.IsDeleted == false).Sum(om => om.Price * om.Quantity) ?? 0;
-                    orderDetailsCard.SubTotal = Math.Round((decimal)orderDetailsCard.SubTotal, 2);
+                    orderDetailsCard.SubTotal = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.SubTotal).FirstOrDefault() ?? 0;
                     orderDetailsCard.Taxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).Select(ot => new InvoiceTax
                     {
                         TaxName = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
                             ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Name
                             : null,
-                        TaxAmount = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
-                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType == "Percentage"
-                                ? (double)Math.Round((decimal)orderDetailsCard.SubTotal * (decimal)ot.TaxAmount / 100, 2)
-                                : (double)Math.Round((decimal)ot.TaxAmount, 2)
-                            : 0
+                        TaxAmount = (double)ot.TaxAmount,
+                        TaxType = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType
+                            : null
                     }).ToListAsync();
                     orderDetailsCard.TotalPrice = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.TotalAmount).FirstOrDefault() ?? 0;
                 }
             }
-
+            if (orderDetailsCard.Taxes == null || orderDetailsCard.Taxes.Count == 0)
+            {
+                orderDetailsCard.Taxes = await _context.TaxesFees.Where(tf => tf.IsDeleted == false).Select(tf => new InvoiceTax
+                {
+                    TaxName = tf.Name,
+                    TaxAmount = (double)tf.Amount,
+                    TaxType = tf.TaxType
+                }).ToListAsync();
+            }
+            else 
+            {
+                areItemsAdded = true;
+            }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
                 Categories = categories,
                 MenuItemsKot = menuItemsKot,
                 OrderDetailsCard = orderDetailsCard,
-                TaxesFees = await _context.TaxesFees.Where(tf => tf.IsDeleted == false).ToListAsync()
+                TaxesFees = orderDetailsCard.Taxes,
+                AreItemsAdded = areItemsAdded
             };
 
             return kotMenuViewModel;
@@ -568,18 +581,11 @@ namespace BLL.Services
             List<OrderTaxis> orderTaxis2 = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
             foreach (OrderTaxis orderTaxis1 in orderTaxis2)
             {
-                string taxType = (await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTaxis1.TaxId))?.TaxType ?? "";
-                if (taxType == "Percentage")
-                {
-                    totalTax += SubTotal * (double)orderTaxis1.TaxAmount / 100;
-                }
-                else if (taxType == "Fixed Amount")
-                {
-                    totalTax += (double)orderTaxis1.TaxAmount;
-                }
+                totalTax += (double)orderTaxis1.TaxAmount;
             }
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             order.TotalAmount = (decimal)(SubTotal + totalTax);
+            order.SubTotal = (decimal)SubTotal;
             order.TotalAmount = Math.Round(order.TotalAmount, 2);
             order.UpdatedAt = DateTime.Now;
             order.UpdatedBy = userId;
@@ -587,19 +593,19 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Order total updated successfully" });
         }
-        public async Task<JsonResult> GetOrderWiseCommentAsync (int orderId)
+        public async Task<JsonResult> GetOrderWiseCommentAsync(int orderId)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             if (order != null)
             {
                 return new JsonResult(new { success = true, message = order.Comment });
             }
-            else 
+            else
             {
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId)
+        public async Task<IActionResult> AddOrderWiseComment(int orderId, string comment, int userId)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             if (order != null)
@@ -616,10 +622,11 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<IActionResult> SaveOrder (SaveOrderViewModel saveOrderViewModel, int userId) {
+        public async Task<IActionResult> SaveOrder(SaveOrderViewModel saveOrderViewModel, int userId)
+        {
             foreach (var orderItem in saveOrderViewModel.OrderItems)
             {
-                OrderItem orderItem1 = new OrderItem 
+                OrderItem orderItem1 = new OrderItem
                 {
                     OrderId = saveOrderViewModel.OrderId,
                     ItemId = orderItem.ItemId,
@@ -633,7 +640,7 @@ namespace BLL.Services
                 };
                 await _context.OrderItems.AddAsync(orderItem1);
                 await _context.SaveChangesAsync();
-                foreach(var modifier in orderItem.ModifierIds)
+                foreach (var modifier in orderItem.ModifierIds)
                 {
                     OrderModifier orderModifier = new OrderModifier
                     {
@@ -645,10 +652,46 @@ namespace BLL.Services
                         UpdatedBy = userId,
                         UpdatedAt = DateTime.Now,
                         IsDeleted = false,
-                        Quantity = 1
+                        Quantity = orderItem.Quantity
                     };
                     await _context.OrderModifiers.AddAsync(orderModifier);
                     await _context.SaveChangesAsync();
+                }
+            }
+            foreach (var orderTax in saveOrderViewModel.OrderTaxes)
+            {
+                List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
+                if (orderTaxes.Count == 0)
+                {
+                    foreach (var tax in saveOrderViewModel.OrderTaxes)
+                    {
+                        OrderTaxis orderTaxis = new OrderTaxis
+                        {
+                            OrderId = saveOrderViewModel.OrderId,
+                            TaxId = (_context.TaxesFees.FirstOrDefault(tf => tf.Name == tax.TaxName)?.Id) ?? 0,
+                            TaxAmount = (decimal)tax.TaxAmount,
+                            CreatedBy = userId,
+                            CreatedAt = DateTime.Now,
+                            UpdatedBy = userId,
+                            UpdatedAt = DateTime.Now
+                        };
+                        await _context.OrderTaxes.AddAsync(orderTaxis);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else
+                {
+                    foreach(OrderTaxis orderTaxis in orderTaxes)
+                    {
+                        if (orderTaxis.TaxId == _context.TaxesFees.FirstOrDefault(tf => tf.Name == orderTax.TaxName)?.Id)
+                        {
+                            orderTaxis.TaxAmount = (decimal)orderTax.TaxAmount;
+                            orderTaxis.UpdatedBy = userId;
+                            orderTaxis.UpdatedAt = DateTime.Now;
+                            _context.OrderTaxes.Update(orderTaxis);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                 }
             }
             await UpdateOrderAmount(saveOrderViewModel.OrderId, userId);

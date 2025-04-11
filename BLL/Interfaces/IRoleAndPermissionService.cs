@@ -1,9 +1,8 @@
 using DAL.Models;
+using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
-namespace DAL.ViewModels
+namespace BLL.Interfaces
 {
     public interface IRoleAndPermissionService
     {

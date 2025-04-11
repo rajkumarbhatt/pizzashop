@@ -9,6 +9,7 @@ namespace DAL.ViewModels
         public WaitingListModal? WaitingListModal { get; set; }
         public AddModifiersModal? AddModifiersModal { get; set; }
         public OrderDetailsCard? OrderDetailsCard { get; set; }
-        public List<TaxesFee>? TaxesFees { get; set; }
+        public List<InvoiceTax>? TaxesFees { get; set; }
+        public bool? AreItemsAdded { get; set; }
     }
 }

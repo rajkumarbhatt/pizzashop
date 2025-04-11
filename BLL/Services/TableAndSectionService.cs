@@ -45,7 +45,11 @@ namespace BLL.Services
                 t.Capacity.ToString().Contains(searchValue))
                 .ToList();
             }
-
+            int totalPages = (int)Math.Ceiling((double)tables.Count / pageSize);
+            if (pageIndex > totalPages)
+            {
+                pageIndex = totalPages;
+            }
             TableAndSectionViewModel tableAndSectionViewModel = new TableAndSectionViewModel
             {
             Sections = await _context.Sections.ToListAsync(),

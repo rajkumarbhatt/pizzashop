@@ -12,56 +12,9 @@
         @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderItemDetails != null)
         {
             <div id="accordianItemDetails">
-                @foreach (var orderItem in Model.OrderDetailsCard.OrderItemDetails)
-                {
-                    var customAccordionId = "collapse" + orderItem.ItemId;
-                    <div class="accordion-item mb-2 div-custom-accordian">
-                        <h2 class="accordion-header " id="headingOne">
-                            <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#@customAccordionId" aria-expanded="true" aria-controls="collapseOne">
-                                <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head">
-                                    <p class="w-50 font-weight-bold-slight">@orderItem.ItemName</p>
-                                    <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
-                                        style="width: 15%;">
-                                        <p> <span class="p-2"
-                                                onclick="decreaseQuantity(@orderItem.ItemId)">-</span>@orderItem.ItemQuantity<span
-                                                class="p-2" onclick="increaseQuantity(@orderItem.ItemId)">+</span></p>
-                                    </div>
-                                    <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
-                                        <p>₹@orderItem.ItemTotalPrice</p>
-                                        <p class="font-accordian">₹@orderItem.ModifiersTotalPrice</p>
-                                    </div>
-                                    <div onclick="deleteItemFromOrder(@orderItem.ItemId)">
-                                        <img src="~/images/icons/delete.svg" class="small-image">
-                                    </div>
-                                </div>
-                            </button>
-                        </h2>
-
-                        <div id="@customAccordionId" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <table class="" style=" width: 25%;">
-                                    @foreach (var modifier in @orderItem.Modifiers)
-                                    {
-                                        <div class="d-flex align-items-center w-100 font-accordian gap-2">
-                                            <tr class="">
-                                                <th></th>
-                                                <th></th>
-                                                <th></th>
-                                            </tr>
-                                            <tr class="font-accordian">
-                                                <td>•</td>
-                                                <td>@modifier.ModifierName</td>
-                                                <td>@modifier.ModifierPrice</td>
-                                            </tr>
-                                        </div>
-                                    }
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                }
+                <script>
+                    var orderItems = @Html.Raw(Json.Serialize(Model.OrderDetailsCard.OrderItemDetails));
+                </script>
             </div>
         }
     </div>
@@ -74,18 +27,37 @@
         @if (Model != null && Model.TaxesFees != null)
         {
             string taxList = "";
-            <div id="taxListContainer">
-                @foreach (var tax in Model.TaxesFees)
-                {
-                    var customTaxId = tax.TaxType + "-" + tax.Name + "-" + tax.Amount;
-                    taxList += customTaxId + ",";
-                    <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
-                        <p>@tax.Name</p>
-                        <p id="@customTaxId">0.00</p>
-                    </div>
-                }
-                <input type="hidden" id="taxAmountIds" value="@taxList" />
-            </div>
+            @if (Model.AreItemsAdded == false)
+            {
+                <div id="taxListContainer" class="d-none">
+                    @foreach (var tax in Model.TaxesFees)
+                    {
+                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount;
+                        taxList += customTaxId + ",";
+                        <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                            <p>@tax.TaxName</p>
+                            <p id="@customTaxId">@tax.TaxAmount</p>
+                        </div>
+                    }
+                    <input type="hidden" id="taxAmountIds" value="@taxList" />
+                </div>
+            }
+            else
+            {
+                <div id="taxListContainer">
+                    @foreach (var tax in Model.TaxesFees)
+                    {
+                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount;
+                        taxList += customTaxId + ",";
+                        <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                            <p>@tax.TaxName</p>
+                            <p id="@customTaxId">@tax.TaxAmount</p>
+                        </div>
+                    }
+                    <input type="hidden" id="taxAmountIds" value="@taxList" />
+                </div>
+            }
+
         }
         <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head font-tax-head">
             <p>Total</p>
@@ -109,13 +81,16 @@
             <button onclick="saveOrder()" class="order-item-details button btn btn-primary"
                 style="width: 30%;">Save</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Complete</button>
-            <button class="order-item-details button btn btn-contrast" style="width: 30%;">Generate Invoice</button>
+            <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
+                style="width: 30%;">Generate Invoice</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Cancel</button>
         </div>
     </div>
 </div>
 
+
 <script>
+    
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
     function saveOrder() {
@@ -144,4 +119,26 @@
             }
         })
     }
+
+    function downloadPdfInvoice() {
+        console.log(orderId);
+        const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
+        $('.loader-container').removeClass('d-none');
+        fetch(url, { method: "GET" })
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Order_${orderId}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                $('.loader-container').addClass('d-none');
+            })
+            .catch(error => {
+            });
+    }
+
+    
 </script>

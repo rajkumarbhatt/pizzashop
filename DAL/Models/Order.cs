@@ -27,6 +27,8 @@ public partial class Order
 
     public string? Comment { get; set; }
 
+    public decimal? SubTotal { get; set; }
+
     public virtual User CreatedByNavigation { get; set; } = null!;
 
     public virtual Customer Customer { get; set; } = null!;

@@ -717,6 +717,11 @@ namespace BLL.Services
         {
             var categories = await GetCategoriesAsync();
             var items = await GetItemsBasedOnSearchAsync(categoryId, searchValue ?? "");
+            int totalPages = (int)Math.Ceiling(items.Count / (double)pageSize);
+            if (pageIndex > totalPages)
+            {
+                pageIndex = totalPages;
+            }
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -752,6 +757,11 @@ namespace BLL.Services
         {
             var modifierGroups = await GetModifierGroupsAsync();
             var modifiers = await GetModifiersBasedOnSearchAsync(modifierGroupId, searchValue ?? "");
+            int totalPages = (int)Math.Ceiling(modifiers.Count / (double)pageSize);
+            if (pageIndex > totalPages)
+            {
+                pageIndex = totalPages;
+            }   
             var menuViewModel = new MenuViewModel
             {
                 ModifierGroups = modifierGroups,
