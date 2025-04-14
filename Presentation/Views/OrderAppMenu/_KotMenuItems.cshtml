@@ -235,33 +235,6 @@
                 });
             });
         }
-
-        function deleteItemFromOrder(itemId) {
-            console.log(itemId);
-            $.ajax({
-                url: '/OrderAppMenu/DeleteItemFromOrder',
-                type: 'DELETE',
-                data: { orderId: orderId, itemId: itemId },
-                success: function (response) {
-                    if (response.success) {
-                        $.ajax({
-                            url: '/OrderAppMenu/RefreshOrderItemDetails',
-                            type: 'GET',
-                            data: { orderId: orderId },
-                            success: function (data) {
-                                $("#orderItemDetailsPartial").html(data)
-                            },
-                            error: () => console.error(error)
-                        })
-                    } else {
-                        console.error(response.message)
-                    }
-                },
-                error: function () {
-                    console.error("error deleting item from order")
-                }
-            })
-        }
     
         function getOrderWiseComment() {
             $.ajax({

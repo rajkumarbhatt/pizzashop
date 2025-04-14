@@ -32,7 +32,7 @@
                 <div id="taxListContainer" class="d-none">
                     @foreach (var tax in Model.TaxesFees)
                     {
-                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount;
+                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
                         taxList += customTaxId + ",";
                         <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
                             <p>@tax.TaxName</p>
@@ -47,7 +47,7 @@
                 <div id="taxListContainer">
                     @foreach (var tax in Model.TaxesFees)
                     {
-                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount;
+                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
                         taxList += customTaxId + ",";
                         <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
                             <p>@tax.TaxName</p>

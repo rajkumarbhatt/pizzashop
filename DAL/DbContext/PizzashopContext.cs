@@ -569,6 +569,9 @@ public partial class PizzaShopContext : DbContext
             entity.ToTable("order_items");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Comment)
+                .HasMaxLength(200)
+                .HasColumnName("comment");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");

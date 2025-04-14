@@ -25,6 +25,8 @@ public partial class OrderItem
 
     public bool? IsDeleted { get; set; }
 
+    public string? Comment { get; set; }
+
     public virtual Item Item { get; set; } = null!;
 
     public virtual Order Order { get; set; } = null!;

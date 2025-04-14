@@ -66,36 +66,6 @@ namespace Presentation.Controllers
             KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetSelectModifiersModalDataAsync(itemId);
             return PartialView("_SelectModifiersModal", kotMenuViewModel);
         }
-        [HttpPost]
-        public async Task<IActionResult> AddItemToOrder(int orderId, int itemId, List<int> modifierIds)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.AddItemToOrderAsync(itemId, orderId, modifierIds, userId);
-        }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteItemFromOrder(int orderId, int itemId)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.DeleteItemFromOrderAsync(orderId, itemId, userId);
-        }
-        [HttpGet]
-        public async Task<IActionResult> RefreshOrderItemDetails(int orderId)
-        {
-            KotMenuViewModel kotMenuViewModel = await _kotMenuService.RefreshOrderItemDetails(orderId);
-            return PartialView("_OrderItemDetailsPartial", kotMenuViewModel);
-        }
-        [HttpPost]
-        public async Task<IActionResult> IncreaseOrderItemQuantity(int orderId, int itemId)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.IncreaseOrderItemQuantity(orderId, itemId, userId);
-        }
-        [HttpPost]
-        public async Task<IActionResult> DecreaseOrderItemQuantity(int orderId, int itemId)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.DecreaseOrderItemQuantity(orderId, itemId, userId);
-        }
         [HttpGet]
         public async Task<JsonResult> GetOrderWiseComment(int orderId)
         {

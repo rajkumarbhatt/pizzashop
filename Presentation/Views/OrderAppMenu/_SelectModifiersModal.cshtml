@@ -216,7 +216,7 @@
     }
 
     function increaseQuantity (id) {
-        var itemId = id.split("decreaseQuantity")[1];
+        var itemId = id.split("increaseQuantity")[1];
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
         var newValue = currentValue + 1;
@@ -240,13 +240,13 @@
         var itemId = id.split("decreaseQuantity")[1];
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
+        var newValue = currentValue - 1;
+        var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
+        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
+        var subTotalElement = document.getElementById("orderSubtotalValue");
+        var Subtotal = parseFloat(subTotalElement.innerHTML);
+        document.getElementById(itemQuantityCustomId).innerHTML = newValue;
         if (currentValue > 1) {
-            var newValue = currentValue - 1;
-            var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
-            var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
-            var subTotalElement = document.getElementById("orderSubtotalValue");
-            var Subtotal = parseFloat(subTotalElement.innerHTML);
-            document.getElementById(itemQuantityCustomId).innerHTML = newValue;
             Subtotal -= itemPrice + orderModifiersTotalPriceValue;
             Subtotal = Subtotal.toFixed(2);
             subTotalElement.innerHTML = Subtotal;
@@ -259,43 +259,38 @@
             });
         }
         if (currentValue == 1) {
-            console.log(itemList);
-            var orderItemTotalPriceValue = document.getElementById("orderItemTotalPriceValue" + itemId);
-            var orderModifiersTotalPriceValue = document.getElementById("orderModifiersTotalPriceValue" + itemId);
-            var subTotalElement = document.getElementById("orderSubtotalValue");
-            var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
-            Subtotal -= parseFloat(orderItemTotalPriceValue.innerHTML) + parseFloat(orderModifiersTotalPriceValue.innerHTML);
+            Subtotal -= (itemPrice + orderModifiersTotalPriceValue);
             Subtotal = Subtotal.toFixed(2);
             subTotalElement.innerHTML = Subtotal;
             var accordianButtonCustomId = "accordianButton" + itemId;
             var accordianItem = document.getElementById(accordianButtonCustomId);
             accordianItem.remove();
-            makeTaxesZeroIfNecessary(Subtotal);
-            updateTaxes(Subtotal);
-            hideTaxesDiv(Subtotal);
             itemList.filter(function (item) {
                 if (item.ItemId == itemId) {
                     itemList.splice(itemList.indexOf(item), 1);
                 }
             });
+            updateTaxes(Subtotal);
+            makeTaxesZeroIfNecessary(Subtotal);
+            hideTaxesDiv(Subtotal);
         }
         console.log(itemList);
     }
 
     function deleteItemFromOrder (itemId) {
-        var orderItemTotalPriceValue = document.getElementById("orderItemTotalPriceValue" + itemId);
-        var orderModifiersTotalPriceValue = document.getElementById("orderModifiersTotalPriceValue" + itemId);
+        var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
+        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
         var currentQuantity = parseInt(document.getElementById("itemQuantity" + itemId).innerHTML);
         var subTotalElement = document.getElementById("orderSubtotalValue");
         var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
-        Subtotal -= (parseFloat(orderItemTotalPriceValue.innerHTML) * currentQuantity) + (parseFloat(orderModifiersTotalPriceValue.innerHTML) * currentQuantity);
-        Subtotal = Subtotal.toFixed(2);
+        Subtotal -= (itemPrice + orderModifiersTotalPriceValue) * currentQuantity;
+        Subtotal = parseFloat(Subtotal).toFixed(2);
         subTotalElement.innerHTML = Subtotal;
         var accordianButtonCustomId = "accordianButton" + itemId;
         var accordianItem = document.getElementById(accordianButtonCustomId);
         accordianItem.remove();
-        makeTaxesZeroIfNecessary(Subtotal);
         updateTaxes(Subtotal);
+        makeTaxesZeroIfNecessary(Subtotal);
         hideTaxesDiv(Subtotal);
         itemList.filter(function (item) {
             if (item.ItemId == itemId) {
@@ -308,12 +303,13 @@
         if (parseInt(Subtotal) == 0) {
             var temp = document.getElementById("taxAmountIds").value;
             var taxList = document.getElementById("taxAmountIds").value.split(",");
+            taxList.pop();
             for (var i = 0; i < taxList.length; i++) {
                 var taxId = taxList[i];
                 document.getElementById(taxId).innerHTML = parseFloat(0).toFixed(2);
-                var orderTotalValue = document.getElementById("orderTotalValue");
-                orderTotalValue.innerHTML = parseFloat(0).toFixed(2);
             }
+            var orderTotalValue = document.getElementById("orderTotalValue");
+            orderTotalValue.innerHTML = parseFloat(0).toFixed(2);
         }
     }
 
@@ -325,7 +321,7 @@
         for (var i = 0; i < taxList.length; i++) {
             var taxId = taxList[i];
             var taxType = taxId.split("-")[0];
-            var taxAmount = taxId.split("-")[2];
+            var taxAmount = taxId.split("-")[3];
             if (taxType == "Percentage") {
                 var taxValue = (parseFloat(taxAmount) / 100) * Subtotal;
                 totalTax += taxValue;

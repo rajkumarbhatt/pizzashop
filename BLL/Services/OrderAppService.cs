@@ -212,7 +212,7 @@ public class OrderAppService : IOrderAppService
             if (tableIds.Count == 1)
             {
                 Table table = await _context.Tables.FindAsync(tableIds[0]) ?? new Table();
-                if (table.Capacity == optimumTable.Capacity)
+                if (table.Capacity == optimumTable.Capacity || table.Capacity == waitingListModal.NumberOfPeople)
                 {
                     goto assign;
                 }

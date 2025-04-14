@@ -1,0 +1,51 @@
+@{
+    Layout = "~/Views/Shared/_LayoutOrderApp.cshtml";
+}
+
+<div style="background-color: #F2F2F2;" style="width: 90%;">
+
+    <div class="d-flex justify-content-between align-items-center" style="width: 97%;">
+        <h1 class="main-page-heading">KOT</h1>
+    </div>
+
+    <div class="d-flex mx-auto py-3 flex-column gap-2  form-bg shadow  mb-3 table-responsive" style=" width: 95%;">
+        <div class="ps-3 d-flex justify-content-start align-items-center gap-3 h-100 " style="white-space: nowrap;">
+            @foreach (var category in Model.Categories)
+            {
+                var categoryId = "category" + category.Id;
+                var paraId = "para" + category.Id;
+                @if (category.Id == 0)
+                {
+                    <div id="@categoryId"
+                        class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
+                        onclick="changeCategoryKot(id)">
+                        <p id="@paraId" class="text-gray para-blue-color active-waiting-list">All</p>
+                    </div>
+                }
+                else
+                {
+                    <div id="@categoryId"
+                        class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
+                        onclick="changeCategoryKot(id)">
+                        <p id="@paraId" class="text-gray para-blue-color">@category.Name</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <div id="kotPartialViewStarting">
+        <partial name="_KotPartialView" model="@Model" />
+    </div>
+
+</div>
+
+<script>
+    function changeCategoryKot(id)
+    {
+        var id = id.replace("category", "");
+        var paraId = "para" + id;
+        $(".para-blue-color").removeClass("active-waiting-list");
+        document.getElementById(paraId).classList.add("active-waiting-list");
+    }
+</script>
