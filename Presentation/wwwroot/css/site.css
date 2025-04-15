@@ -1113,5 +1113,15 @@ td{
   font-size: 800 !important;
 }
 .box-kot-card-custom-border {
-  border: 1px dashed gray !important;
+  border: 1px dashed gray ;
+}
+.border-table-kot {
+  border: 1px solid #c5bfb3 ;
+}
+.border-light-table-kot {
+  border: 0.2px solid #dbdad8 ;
+}
+.quantity-div-border {
+  border: 1.5px solid #0066A7;
+  border-radius: 4px;
 }

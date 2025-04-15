@@ -1,0 +1,89 @@
+@model DAL.ViewModels.KotViewModel
+
+<div class="d-flex flex-wrap justify-content-start gap-3 p-4">
+    @if (Model.KotOrderCards != null)
+    {
+        @foreach (var order in Model.KotOrderCards)
+        {
+            <div onclick="openMarkedAsPreparedModal(@order.OrderId)" class=" ms-4 mb-4 box-kot-card-custom-border cursor-pointer" style="width: 350px; height: 320px;">
+                <div class=" w-100 text-dark bg-kot-card-top" style="height: 70px;">
+                    <div class="d-flex justify-content-between py-1 px-2 align-items-center">
+                        <h5 class=" kot-card-header-font">#@order.OrderId</h5>
+                        <div class="d-flex gap-2 align-items-center">
+                            <img src="~/images/icons/kot-navbar-clock-black.svg" class="small-image" alt="">
+                            <p>@order.OrderDuration</p>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start px-2 gap-2 align-items-center">
+                        <p>@order.Section</p>
+                        <p>•</p>
+                        <p>@order.Table</p>
+                    </div>
+                </div>
+                <div class="bg-white w-100 text-dark" style="height: 178px; overflow-y: scroll;">
+                    @if (order.OrderItems != null)
+                    {
+                        @foreach (var item in order.OrderItems)
+                        {
+                            <div class="">
+                                <div class="d-flex justify-content-between pt-1 px-2 align-items-center">
+                                    <p>@item.ItemName</p>
+                                    <p>@item.ItemQuantity</p>
+                                </div>
+                                <div class="d-flex justify-content-startd px-2 align-items-center">
+                                    @if (item.Modifiers != null)
+                                    {
+                                        <div class="d-flex flex-column">
+                                            @foreach (var modifier in item.Modifiers)
+                                            {
+                                                <div class="ms-3 d-flex justify-content-start gap-2 align-items-center">
+                                                    <p>•</p>
+                                                    <p>@modifier</p>
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                                @if (!String.IsNullOrEmpty(item.ItemInstruction))
+                                {
+                                    <div class="d-flex justify-content-start gap-2 pb-1 px-2 align-items-center">
+                                        <p class="text-primary">Instruction</p>
+                                        <p>@item.ItemInstruction</p>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="bg-kot-card-top w-100 text-dark" style="height: 70px;">
+                    @if (!String.IsNullOrEmpty(order.OrderInstruction))
+                    {
+                        <div class="d-flex justify-content-start gap-2 pb-1 px-2 align-items-center">
+                            <p class="text-primary">Instruction</p>
+                            <p>@order.OrderInstruction</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>
+
+<div id="markedAsPreparedModal">
+    <partial name="_MarkedAsPreparedModal" model="@Model" />
+</div>
+
+<script>
+    function openMarkedAsPreparedModal (orderId)
+    {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMarkedAsPreparedModal", "Kot")',
+            data: { orderId: orderId, categoryId: currentCategoryId },
+            success: function (data) {
+                $('#markedAsPreparedModal').html(data);
+                $("#MarkedAsPreparedModal").modal("show");
+            }
+        });
+    }
+</script>

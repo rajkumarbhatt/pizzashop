@@ -361,9 +361,17 @@ public class OrderService : IOrderService
             return ms.ToArray();
         }
     }
-    public async Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue)
+    public async Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue, string fromDate, string toDate)
     {
         var orders = await GetOrdersBasedOnFiltersAsync(status, time, searchValue);
+
+        if (fromDate == "dd-mm-yyyy") fromDate = null;
+        if (toDate == "dd-mm-yyyy") toDate = null;
+
+        if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
+        {
+            orders = orders.Where(o => DateTime.Parse(o.Date) >= DateTime.Parse(fromDate) && DateTime.Parse(o.Date) <= DateTime.Parse(toDate)).ToList();
+        }
 
         using (var workbook = new XLWorkbook())
         {

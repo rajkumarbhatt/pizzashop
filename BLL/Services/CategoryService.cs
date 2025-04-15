@@ -50,7 +50,7 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "User not found" });
             }
-            if (await _context.Categories.AnyAsync(c => c.Name == categoryName))
+            if (await _context.Categories.AnyAsync(c => c.Name == categoryName && c.IsDeleted == false))
             {
                 return new JsonResult(new { success = false, message = "Category already exists" });
             }
@@ -552,7 +552,7 @@ namespace BLL.Services
                 {
                     return new JsonResult(new { success = false, message = "User not found" });
                 }
-                if (await _context.ModifierGroups.AnyAsync(m => m.Name == createModifierGroupViewModel.ModifierGroupName))
+                if (await _context.ModifierGroups.AnyAsync(m => m.Name == createModifierGroupViewModel.ModifierGroupName && m.IsDeleted == false))
                 {
                     return new JsonResult(new { success = false, message = "Modifier group already exists" });
                 }
@@ -722,6 +722,10 @@ namespace BLL.Services
             {
                 pageIndex = totalPages;
             }
+            if (pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
             var menuViewModel = new MenuViewModel
             {
                 Categories = categories,
@@ -761,7 +765,11 @@ namespace BLL.Services
             if (pageIndex > totalPages)
             {
                 pageIndex = totalPages;
-            }   
+            }  
+            if (pageIndex < 1)
+            {
+                pageIndex = 1;
+            }
             var menuViewModel = new MenuViewModel
             {
                 ModifierGroups = modifierGroups,

@@ -20,7 +20,10 @@
             <th>Unit</th>
             <th>Rate</th>
             <th>Quantity</th>
-            <th>Action</th>
+            @if(permissionList != null && permissionList.Any(p => p.Name == "Menu" && (p.CanEdit == true || p.CanDelete == true)))
+            {
+                <th>Action</th>
+            }
     </thead>
     <tbody>
         @foreach (var modifier in Model.Modifiers)
@@ -40,23 +43,11 @@
                         <button onclick="editModifier(@modifier.Id)" type="button" class="edit-btn btn">
                             <a> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
                     }
-                    else
-                    {
-                        <button type="button" class="edit-btn btn cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none"
-                                    alt=""></a></button>
-                    }
                     @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
                     {
                         <button onclick="deleteModifierFunc(@modifier.Id)" type="button" class="delete-btn"
                             data-bs-toggle="modal" data-bs-target="#deleteModifier">
                             <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
-                    }
-                    else
-                    {
-                        <button type="button" class="delete-btn cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none"
-                                    alt=""></a></button>
                     }
                 </td>
                 <input type="hidden" id="modifierId" value=@modifier.Id />
@@ -67,7 +58,7 @@
 </table>
 <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
     <p>Items per page: </p>
-    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+    <select id="PageSizeModifiers" class="form-select pagination-dropdown text-black" aria-label="Items per page"
         onchange="changePageSizeModifier(this.value)">
         <option value="5" selected="@(Model.PageSizeModifier == 5 ? "selected" : null)">5</option>
         <option value="10" selected="@(Model.PageSizeModifier == 10 ? "selected" : null)">10</option>
@@ -158,6 +149,12 @@
         deleteModifierList = [...new Set(deleteModifierList.map(function (x) {
             return parseInt(x, 10);
         }))];
+
+        if (deleteModifierList.length === 0) {
+            toastr.error("Please select at least one modifier to delete.");
+            isDeletingModifiers = false;
+            return;
+        }
 
         console.log(deleteModifierList);
         var modifierGroupId = $("#modifierGroupId21").val();
@@ -264,7 +261,7 @@
         $.ajax({
             url: '@Url.Action("ModifiersFilter", "Menu")',
             type: 'GET',
-            data: { pageIndex: 1, pageSize: 5, modifierGroupId: modifierGroupId },
+            data: { pageIndex: 1, pageSize: $("#PageSizeModifiers").val(), modifierGroupId: modifierGroupId },
             success: function (data) {
                 $("#modifierGroupId21").val(modifierGroupId);
                 $("#ModifiersTablePartial").html(data);

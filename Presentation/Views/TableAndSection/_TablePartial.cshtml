@@ -24,8 +24,11 @@
             </th>
             <th>Capacity</th>
             <th>Status</th>
-            <th>Action</th>
-    </thead>
+            @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && (x.CanEdit == true || x.CanDelete == true)))
+            {
+                <th>Action</th>
+            }
+        </thead>
     <tbody>
         @foreach (var table in Model.Tables)
         {
@@ -52,20 +55,10 @@
                         <button type="button" onclick="editTableFunc(@table.Id)" class="edit-btn btn">
                             <a> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
                     }
-                    else 
-                    {
-                        <button type="button" class="edit-btn btn cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></button>
-                    }
                     @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanDelete == true))
                     {
                         <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#deleteTable" onclick="deleteTableId(@table.Id)">
                             <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
-                    }
-                    else
-                    {
-                        <button type="button" class="delete-btn cursor-none">
-                            <a class="cursor-none"> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""></a></button>
                     }
                 </td>
             </tr>

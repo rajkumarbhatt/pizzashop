@@ -10,7 +10,7 @@ public interface IOrderService
     public Task<OrderDetailsViewModel> GetOrderDetailsAsync(int orderId);
     public Task<List<InvoiceTax>> GetInvoiceTaxesAsync(int orderId, OrderDetailsViewModel orderDetailsViewModel);
     public Task<byte[]> GenerateInvoiceAsync(int orderId);
-    public Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue);
+    public Task<byte[]> ExportOrdersAsync(string status, string time, string searchValue, string fromDate, string toDate);
     public Task<string> EncryptOrderIdAsync(int orderId);
     public Task<int> DecryptOrderIdAsync(string orderIdEncrypted);
 }

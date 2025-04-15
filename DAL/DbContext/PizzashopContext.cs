@@ -84,8 +84,6 @@ public partial class PizzaShopContext : DbContext
 
             entity.ToTable("categories");
 
-            entity.HasIndex(e => e.Name, "categories_name_key").IsUnique();
-
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -581,6 +579,7 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("order_id");
             entity.Property(e => e.Price).HasColumnName("price");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.ReadyItemsCount).HasColumnName("ready_items_count");
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");

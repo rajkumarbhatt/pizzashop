@@ -41,11 +41,27 @@
 </div>
 
 <script>
+    var currentCategoryId = 0;
+    var readyItems = [];
     function changeCategoryKot(id)
     {
         var id = id.replace("category", "");
         var paraId = "para" + id;
         $(".para-blue-color").removeClass("active-waiting-list");
         document.getElementById(paraId).classList.add("active-waiting-list");
+        id = parseInt(id);
+        console.log(id);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetKotByCategory", "KOT")',
+            data: { categoryId: id },
+            success: function (data) {
+                $("#kotCardsPartialStart").html(data);
+                currentCategoryId = id;
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        })
     }
 </script>

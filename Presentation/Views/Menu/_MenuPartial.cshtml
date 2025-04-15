@@ -20,13 +20,6 @@
                     <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
                 </button>
             }
-            else
-            {
-                <button type="button" class="delete-btn cursor-none" data-bs-toggle="modal" data-bs-target="#categoryModal"
-                    disabled>
-                    <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image cursor-none" alt=""></a>
-                </button>
-            }
         </div>
         <div class="d-flex flex-column  category-list-styles ">
             @foreach (var category in Model.Categories)
@@ -58,27 +51,11 @@
                                             onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
                                 </button>
                             }
-                            else
-                            {
-                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                    data-bs-target="#editCategoryModal" disabled>
-                                    <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
-                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                                </button>
-                            }
                             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
                             {
                                 <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                     data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
                                     <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                            id="sandwich-delete-icon"></a>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                    data-bs-target="#categoryDeleteModal" disabled>
-                                    <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
                                             id="sandwich-delete-icon"></a>
                                 </button>
                             }
@@ -105,27 +82,11 @@
                                             onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
                                 </button>
                             }
-                            else
-                            {
-                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                    data-bs-target="#editCategoryModal" disabled>
-                                    <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
-                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                                </button>
-                            }
                             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
                             {
                                 <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                     data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
                                     <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                            id="sandwich-delete-icon"></a>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                    data-bs-target="#categoryDeleteModal" disabled>
-                                    <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
                                             id="sandwich-delete-icon"></a>
                                 </button>
                             }
@@ -155,14 +116,6 @@
                                     data-bs-target="#categoryModal">
                                     <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image"
                                             alt=""></a>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="delete-btn cursor-none" data-bs-toggle="modal"
-                                    data-bs-target="#categoryModal" disabled>
-                                    <a> <img src="~/images/icons/plus-with-border.svg"
-                                            class="menu-category-image cursor-none" alt=""></a>
                                 </button>
                             }
                             <div class="modal fade" id="categoryModalMobile" data-bs-backdrop="static"
@@ -222,28 +175,12 @@
                                                         onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
                                             </button>
                                         }
-                                        else
-                                        {
-                                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                                data-bs-target="#editCategoryModal" disabled>
-                                                <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""
-                                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
-                                            </button>
-                                        }
                                         @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" &&
                                                                             p.CanDelete == true))
                                         {
                                             <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                                 data-bs-target="#categoryDeleteModal" onclick="openModal('@category.Id')">
                                                 <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""
-                                                        id="sandwich-delete-icon"></a>
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="delete-btn bg-white cursor-none" data-bs-toggle="modal"
-                                                data-bs-target="#categoryDeleteModal" disabled>
-                                                <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""
                                                         id="sandwich-delete-icon"></a>
                                             </button>
                                         }
@@ -283,15 +220,6 @@
                         </a>
                     </p>
                 }
-                else
-                {
-                    <p class="delete-styles cursor-none" disabled>
-                        <a class="text-decoration-none text-black   add-user-link cursor-none">
-                            <img src="~/images/icons/delete-header.svg" class="p-2  menu-category-image-delete cursor-none"
-                                alt="">
-                        </a>
-                    </p>
-                }
                 @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
                 {
                     <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
@@ -301,32 +229,11 @@
                         </button>
                     </p>
                 }
-                else
-                {
-                    <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center cursor-none"
-                        style="width: 49px; height: 49px;">
-                        <button type="button" class="text-decoration-none text-black btn  add-user-link cursor-none">
-                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete cursor-none"
-                                alt="">
-                        </button>
-                    </p>
-                }
                 @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
                 {
                     <button type="button" id="AddItemModal" onclick="addItem()"
                         class="d-none d-md-block button-styles-header w-100 add-item-button">
                         <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
-                            <p>+</p>
-                            <p class="d-none d-sm-block">Add Item</p>
-                        </a>
-                    </button>
-                }
-                else
-                {
-                    <button type="button" id="AddItemModal"
-                        class="d-none d-md-block button-styles-header w-100 add-item-button" style="cursor: not-allowed;">
-                        <a
-                            class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center cursor-none">
                             <p>+</p>
                             <p class="d-none d-sm-block">Add Item</p>
                         </a>

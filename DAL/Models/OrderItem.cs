@@ -27,6 +27,8 @@ public partial class OrderItem
 
     public string? Comment { get; set; }
 
+    public int? ReadyItemsCount { get; set; }
+
     public virtual Item Item { get; set; } = null!;
 
     public virtual Order Order { get; set; } = null!;

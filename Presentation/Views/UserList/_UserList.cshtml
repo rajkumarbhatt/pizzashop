@@ -21,7 +21,10 @@
             <th>Phone</th>
             <th>Role <img src="~/images/icons/sorting-icon.svg" id="sortRoles" class="small-image"></th>
             <th>Status</th>
-            <th>Actions</th>
+            @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && (p.CanEdit == true || p.CanDelete == true)))
+            {
+                <th>Action</th>
+            }
         </tr>
     </thead>
     <tbody class="">
@@ -64,18 +67,11 @@
                         @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
                         {
                             <button onclick="editUser(@user.Id)" class="delete-btn "> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
-                        } else 
-                        {
-                            <button disabled onclick="editUser(@user.Id)" class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg" class="small-image  cursor-none" alt=""></button>
                         }
                         @if(permissionList != null && permissionList.Any(p => p.Name == "Users" && p.CanDelete == true))
                         {
                             <button type="button" class="delete-btn" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
                                 <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
-                        } else 
-                        {
-                            <button disabled type="button" class="delete-btn cursor-none" data-bs-toggle="modal"  data-bs-target="#deleteModel" onclick="openModel(@user.Id)">
-                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
                         }
                     }
                 </td>

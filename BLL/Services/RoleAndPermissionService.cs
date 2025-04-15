@@ -51,59 +51,59 @@ namespace BLL.Services
         {
             if (changedPermissions.Count == 0)
             {
-            return new JsonResult(new { success = false, message = "No permissions to update" });
+                return new JsonResult(new { success = false, message = "No permissions to update" });
             }
 
             foreach (var permissionChange in changedPermissions)
             {
-            var rolePermission = await _context.RolePermissions.FirstOrDefaultAsync(rp =>
-                rp.RoleId == permissionChange.RoleId && rp.PermissionId == permissionChange.PermissionId) ?? new RolePermission();
+                var rolePermission = await _context.RolePermissions.FirstOrDefaultAsync(rp =>
+                    rp.RoleId == permissionChange.RoleId && rp.PermissionId == permissionChange.PermissionId) ?? new RolePermission();
 
-            if (rolePermission != null)
-            {
-                if (permissionChange.PermissionName == "CanView")
+                if (rolePermission != null)
                 {
-                rolePermission.CanView = permissionChange.Checked;
-                await _context.SaveChangesAsync();
+                    if (permissionChange.PermissionName == "CanView")
+                    {
+                        rolePermission.CanView = permissionChange.Checked;
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (permissionChange.PermissionName == "CanEdit")
+                    {
+                        rolePermission.CanEdit = permissionChange.Checked;
+                        await _context.SaveChangesAsync();
+                    }
+                    else if (permissionChange.PermissionName == "CanDelete")
+                    {
+                        rolePermission.CanDelete = permissionChange.Checked;
+                        await _context.SaveChangesAsync();
+                    }
                 }
-                else if (permissionChange.PermissionName == "CanEdit")
-                {
-                rolePermission.CanEdit = permissionChange.Checked;
-                await _context.SaveChangesAsync();
-                }
-                else if (permissionChange.PermissionName == "CanDelete")
-                {
-                rolePermission.CanDelete = permissionChange.Checked;
-                await _context.SaveChangesAsync();
-                }
-            }
             }
 
             if (_httpContextAccessor.HttpContext?.Session.GetInt32("RoleId") == changedPermissions[0].RoleId)
             {
-            var permissions = new List<PermissionModel>();
-            var rolePermissions = await _context.RolePermissions.Where(rp => rp.RoleId == changedPermissions[0].RoleId).ToListAsync();
+                var permissions = new List<PermissionModel>();
+                var rolePermissions = await _context.RolePermissions.Where(rp => rp.RoleId == changedPermissions[0].RoleId).ToListAsync();
 
-            foreach (var rolePermission2 in rolePermissions)
-            {
-                var permission = await _context.Permissions.FirstOrDefaultAsync(p => p.Id == rolePermission2.PermissionId);
-                if (permission != null)
+                foreach (var rolePermission2 in rolePermissions)
                 {
-                var permissionModel = new PermissionModel
-                {
-                    PermissionId = permission.Id,
-                    Name = permission.Name,
-                    CanView = rolePermission2.CanView ?? false,
-                    CanEdit = rolePermission2.CanEdit ?? false,
-                    CanDelete = rolePermission2.CanDelete ?? false
-                };
-                permissions.Add(permissionModel);
+                    var permission = await _context.Permissions.FirstOrDefaultAsync(p => p.Id == rolePermission2.PermissionId);
+                    if (permission != null)
+                    {
+                        var permissionModel = new PermissionModel
+                        {
+                            PermissionId = permission.Id,
+                            Name = permission.Name,
+                            CanView = rolePermission2.CanView ?? false,
+                            CanEdit = rolePermission2.CanEdit ?? false,
+                            CanDelete = rolePermission2.CanDelete ?? false
+                        };
+                        permissions.Add(permissionModel);
+                    }
                 }
-            }
 
-            permissions = permissions.OrderBy(p => p.PermissionId).ToList();
-            byte[] permissionsBytes = JsonSerializer.SerializeToUtf8Bytes(permissions);
-            _httpContextAccessor.HttpContext.Session.Set("permissions", permissionsBytes);
+                permissions = permissions.OrderBy(p => p.PermissionId).ToList();
+                byte[] permissionsBytes = JsonSerializer.SerializeToUtf8Bytes(permissions);
+                _httpContextAccessor.HttpContext.Session.Set("permissions", permissionsBytes);
             }
 
             return new JsonResult(new { success = true, message = "Permissions updated successfully" });
@@ -120,11 +120,11 @@ namespace BLL.Services
 
             var roleAndPermissionViewModel = new RoleAndPermissionViewModel
             {
-            Username = username,
-            ProfileImageURL = profileImageURL,
-            RoleId = roleId,
-            Roles = roles,
-            Permissions = permissions
+                Username = username,
+                ProfileImageURL = profileImageURL,
+                RoleId = roleId,
+                Roles = roles,
+                Permissions = permissions
             };
 
             return roleAndPermissionViewModel;
@@ -138,13 +138,13 @@ namespace BLL.Services
             var roleRequested = await GetRoleAsync(roleIdRequested);
             var rolePermissions = await GetRolePermissionsAsync(roleIdRequested);
             var permissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
-
+            permission.RemoveAll(p => p.Name == "RoleAndPermission");
             var editPermissionsViewModel = new EditPermissionsViewModel
             {
-            Permission = permission,
-            RolePermissions = rolePermissions,
-            RequestedRole = roleRequested,
-            Permissions = permissions
+                Permission = permission,
+                RolePermissions = rolePermissions,
+                RequestedRole = roleRequested,
+                Permissions = permissions
             };
 
             return editPermissionsViewModel;

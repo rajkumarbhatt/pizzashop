@@ -21,7 +21,10 @@
             <th>Rate</th>
             <th>Quantity</th>
             <th>Available</th>
-            <th>Action</th>
+             @if(permissionList != null && permissionList.Any(p => p.Name == "Menu" && (p.CanEdit == true || p.CanDelete == true)))
+            {
+                <th>Action</th>
+            }
     </thead>
     <tbody>
         @foreach (var item in Model.Items)
@@ -77,21 +80,11 @@
                         <button onclick="editItem(@item.Id)" type="button" class="edit-btn btn">
                             <a> <img src="~/images/icons/edit.svg" class="small-image" alt=""></a></button>
                     }
-                    else
-                    {
-                        <button type="button" class="edit-btn btn cursor-none">
-                            <a> <img src="~/images/icons/edit.svg" class="small-image cursor-none" alt=""></a></button>
-                    }
                     @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
                     {
                         <button onclick="deleteItem(@item.Id)" type="button" class="delete-btn" data-bs-toggle="modal"
                             data-bs-target="#deleteItem">
                             <a> <img src="~/images/icons/delete.svg" class="small-image" alt=""></a></button>
-                    }
-                    else
-                    {
-                        <button type="button" class="delete-btn cursor-none" disabled>
-                            <a> <img src="~/images/icons/delete.svg" class="small-image cursor-none" alt=""></a></button>
                     }
                 </td>
                 <input asp-for="@Model.AddItemViewModel.Id" name="AddItemViewModel.Id" id="ItemId" type="hidden"
@@ -196,7 +189,11 @@
         isDeleting = true;
 
         deleteItemsList = deleteItemsList.map(item => parseInt(item));
-
+        if (deleteItemsList.length === 0) {
+            toastr.error("Please select at least one item to delete.");
+            isDeleting = false; 
+            return;
+        }
         $.ajax({
             url: '@Url.Action("DeleteSelectedItems", "Menu")',
             type: 'DELETE',
@@ -330,7 +327,7 @@
         $.ajax({
             url: '@Url.Action("ItemsFilter", "Menu")',
             type: 'GET',
-            data: { pageIndex: 1, pageSize: 5, categoryId: categoryId, searchValue: searchValue },
+            data: { pageIndex: 1, pageSize: $("#PageSize").val(), categoryId: categoryId, searchValue: searchValue },
             success: function (data) {
                 $("#categoryId").val(categoryId);
                 $("#partialViewStartingInner").html(data);

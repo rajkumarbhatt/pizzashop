@@ -18,7 +18,10 @@
                 <th>Type</th>
                 <th>IsEnabled</th>
                 <th>TaxValue</th>
-                <th>Actions</th>
+                @if (permissionList != null && permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true) || permissionList != null && permissionList.Any(p => p.Name == "TaxAndFee" && p.CanDelete == true))
+                {
+                    <th>Actions</th>
+                }
             </tr>
         </thead>
         <tbody class="">
@@ -65,21 +68,11 @@
                         {
                             <button class="delete-btn" onclick="editTax(@tax.Id)"> <img src="~/images/icons/edit.svg" class="small-image" alt=""></button>
                         }
-                        else
-                        {
-                            <button disabled class="cursor-none delete-btn"> <img src="~/images/icons/edit.svg"
-                                    class="small-image  cursor-none" alt=""></button>
-                        }
                         @if (permissionList != null && permissionList.Any(p => p.Name == "TaxAndFee" && p.CanDelete ==
                                             true))
                         {
                             <button type="button"  class="delete-btn" onclick="deleteTax(@tax.Id)">
                                 <a> <img src="~/images/icons/delete.svg" class="small-image " alt=""></a></button>
-                        }
-                        else
-                        {
-                            <button disabled type="button" class="delete-btn cursor-none">
-                                <a> <img src="~/images/icons/delete.svg" class="small-image  cursor-none" alt=""></a></button>
                         }
                     </td>
                 </tr>

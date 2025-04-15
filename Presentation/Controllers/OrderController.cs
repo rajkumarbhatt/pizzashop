@@ -35,9 +35,9 @@ public class OrderController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> ExportOrders(string status, string time, string searchValue)
+    public async Task<IActionResult> ExportOrders(string status, string time, string searchValue, string fromDate, string toDate)
     {
-        byte[] fileBytes = await _orderService.ExportOrdersAsync(status, time, searchValue);
+        byte[] fileBytes = await _orderService.ExportOrdersAsync(status, time, searchValue, fromDate, toDate);
         return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Orders.xlsx");
     }
 

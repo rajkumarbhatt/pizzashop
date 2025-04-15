@@ -126,7 +126,9 @@
         const status = encodeURIComponent($("#OrderStatusSelect").val());
         const time = encodeURIComponent($("#OrderTimeSelect").val());
         const searchValue = encodeURIComponent($("#searchInputOrders").val());
-        const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}`;
+        var fromDate = $("#fromDate").val();
+        var toDate = $("#toDate").val();
+        const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
         $('.loader-container').removeClass('d-none');
 
         fetch(url, { method: "GET" })
