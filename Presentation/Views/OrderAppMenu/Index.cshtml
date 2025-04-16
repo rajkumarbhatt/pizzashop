@@ -31,7 +31,97 @@
             <partial name="_KotMenuItems" model="@Model" />
         </div>
     </div>
-    
+
+</div>
+
+@* complete order modal *@
+<div class="modal fade" id="CompleteOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Complete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to complete this order?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="completeOrderButton" type="button" class="btn btn-primary px-3">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* customer rating modal *@
+<div class="modal fade" id="CustomerRatingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered customer-review-modal-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addTaxModalTitle">Customer Review
+                </h5>
+                <button onclick="" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="font-weight-bold-slight">Food</p>
+                        <div class="d-flex gap-1">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                var emptyId = "emptyStar-food-" + i;
+                                var filledId = "filledStar-food-" + i;
+                                <img id="@emptyId" src="~/images/icons/star.svg" class="small-image star-empty star food">
+                                <img id="@filledId" src="~/images/icons/star-filled.svg"
+                                    class="small-image d-none star-filled star food">
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="font-weight-bold-slight">Service</p>
+                        <div class="d-flex gap-1">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                var emptyId = "emptyStar-service-" + i;
+                                var filledId = "filledStar-service-" + i;
+                                <img id="@emptyId" src="~/images/icons/star.svg"
+                                    class="small-image star-empty star service">
+                                <img id="@filledId" src="~/images/icons/star-filled.svg"
+                                    class="small-image d-none star-filled star service">
+                            }
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <p class="font-weight-bold-slight">Ambience</p>
+                        <div class="d-flex gap-1">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                var emptyId = "emptyStar-ambience-" + i;
+                                var filledId = "filledStar-ambience-" + i;
+                                <img id="@emptyId" src="~/images/icons/star.svg"
+                                    class="small-image star-empty star ambience">
+                                <img id="@filledId" src="~/images/icons/star-filled.svg"
+                                    class="small-image d-none star-filled star ambience">
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 row mt-3">
+                    <div class="form-floating my-auto col-12">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="orderReviewByCustomer" style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">Comments</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-end ">
+                <button type="submit" id="AddTableButton" onclick="saveCustomerReview()" type="button" class="btn btn-primary px-3">Save</button>
+                <a onclick="" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -164,6 +254,68 @@
             }
             console.log(itemList);
         })
-        
+
+    }
+
+    $(document).ready(function () {
+
+        $(".star").click(function () {
+            var starId = $(this).attr("id");
+            var starType = starId.split("-")[1];
+            var starNumber = starId.split("-")[2];
+            var filledStarId = "filledStar-" + starType + "-" + starNumber;
+            var emptyStarId = "emptyStar-" + starType + "-" + starNumber;
+            $("#" + emptyStarId).addClass("d-none");
+            $("#" + filledStarId).removeClass("d-none");
+            for (var i = 1; i <= 5; i++) {
+                $("#filledStar-" + starType + "-" + i).addClass("d-none");
+                $("#emptyStar-" + starType + "-" + i).removeClass("d-none");
+            }
+            for (var i = 1; i <= starNumber; i++) {
+                $("#emptyStar-" + starType + "-" + i).addClass("d-none");
+                $("#filledStar-" + starType + "-" + i).removeClass("d-none");
+            }
+        });
+    });
+    
+    function saveCustomerReview() {
+        var foodRating = 0;
+        var serviceRating = 0;
+        var ambienceRating = 0;
+        for (var i = 1; i <= 5; i++) {
+            if ($("#emptyStar-food-" + i).hasClass("d-none")) {
+                foodRating++;
+            }
+            if ($("#emptyStar-service-" + i).hasClass("d-none")) {
+                serviceRating++;
+            }
+            if ($("#emptyStar-ambience-" + i).hasClass("d-none")) {
+                ambienceRating++;
+            }
+        }
+        var orderReviewByCustomer = $("#orderReviewByCustomer").val();
+        data = {
+            FoodRating: foodRating,
+            ServiceRating: serviceRating,
+            AmbienceRating: ambienceRating,
+            OrderReviewByCustomer: orderReviewByCustomer,
+            OrderId: parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1)),
+        }
+        $.ajax({
+            url: "/OrderAppMenu/SaveCustomerReview",
+            type: "POST",
+            data: {saveCustomerReviewViewModel: data},
+            success: function (response) {
+                $("#CustomerRatingModal").modal("hide");
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        window.location.href = "/OrderApp";
+                    }, 1000);
+                } else {
+                    toastr.error(response.message);
+                }
+            }
+        })
     }
 </script>

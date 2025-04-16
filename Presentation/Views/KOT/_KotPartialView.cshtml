@@ -7,17 +7,65 @@
                 <h2 class="font-blue ps-4 pt-3">All</h2>
             </div>
             <div class="pe-4 d-flex gap-2">
-                <button class="btn btn-primary">In Progress</button>
-                <button class="btn btn-contrast">Ready</button>
-                <button class="btn btn-contrast">
-                    < </button>
-                        <button class="btn btn-contrast"> > </button>
+                <button id="InProgressButton" class="btn btn-primary" onclick="showNotReadyItems()">In Progress</button>
+                <button id="ReadyButton" class="btn btn-contrast" onclick="showReadyItems()">Ready</button>
+                <button class="btn btn-contrast"> < </button>
+                <button class="btn btn-contrast"> > </button>
             </div>
         </div>
     </div>
 
-    <div id="kotCardsPartialStart" >
+    <div id="kotCardsPartialStart">
         <partial name="_CardsPartial" model="@Model" />
     </div>
 
 </div>
+
+<script>
+    function showReadyItems() {
+        $("#InProgressButton").removeClass("btn-primary").addClass("btn-contrast");
+        $("#ReadyButton").removeClass("btn-contrast").addClass("btn-primary");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetReadyItems", "Kot")',
+            data: { categoryId: currentCategoryId },
+            success: function (data) {
+                $('#kotCardsPartialStart').html(data);
+                inReady = true;
+            }
+        });
+    }
+
+    function showNotReadyItems() {
+        $("#InProgressButton").removeClass("btn-contrast").addClass("btn-primary");
+        $("#ReadyButton").removeClass("btn-primary").addClass("btn-contrast");
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetKotByCategory", "Kot")',
+            data: { categoryId: currentCategoryId },
+            success: function (data) {
+                $('#kotCardsPartialStart').html(data);
+                inReady = false;
+            }
+        });
+    }
+
+    function openMarkedAsPreparedModal (orderId)
+    {
+        console.log(orderId);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMarkedAsPreparedModal", "Kot")',
+            data: { orderId: orderId, categoryId: currentCategoryId, inReady: inReady },
+            success: function (data) {
+                $('#markedAsPreparedModalDiv').html(data);
+                if (inReady) 
+                    $("#ModalButtonText").text("Marked As In Progress");
+                else
+                    $("#ModalButtonText").text("Marked As Prepared");
+                $("#MarkedAsPreparedModal").modal("show");
+                console.log("modal shown");
+            }
+        });
+    }
+</script>

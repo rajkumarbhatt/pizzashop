@@ -127,7 +127,7 @@
                                 <p class="w-50 font-weight-bold-slight">${itemName}</p>
                                 <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
                                     style="width: 15%;">
-                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id)">-</span><span id="${itemQuantityCustomId}">1</span><span id="${decreaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id)">+</span></p>
+                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id)">-</span><span id="${itemQuantityCustomId}">1</span><span id="${increaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id)">+</span></p>
                                 </div>
                                 <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
                                     <p id="${orderItemTotalPriceValueCustomId}">${itemPrice}</p>
@@ -220,7 +220,8 @@
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
         var newValue = currentValue + 1;
-        var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
+        var itemPriceElement = document.getElementById("orderItemTotalPriceValue" + itemId);
+        var itemPrice = itemPriceElement ? parseFloat(itemPriceElement.innerHTML) : 0;
         var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
         var subTotalElement = document.getElementById("orderSubtotalValue");
         var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;

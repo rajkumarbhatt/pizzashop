@@ -1,7 +1,7 @@
 @model DAL.ViewModels.KotViewModel
 
 <div class="d-flex flex-wrap justify-content-start gap-3 p-4">
-    @if (Model.KotOrderCards != null)
+    @if (Model != null && Model.KotOrderCards != null && Model.KotOrderCards.Count > 0)
     {
         @foreach (var order in Model.KotOrderCards)
         {
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="bg-white w-100 text-dark" style="height: 178px; overflow-y: scroll;">
-                    @if (order.OrderItems != null)
+                    @if (order.OrderItems != null && order.OrderItems.Count > 0)
                     {
                         @foreach (var item in order.OrderItems)
                         {
@@ -31,7 +31,7 @@
                                     <p>@item.ItemQuantity</p>
                                 </div>
                                 <div class="d-flex justify-content-startd px-2 align-items-center">
-                                    @if (item.Modifiers != null)
+                                    @if (item.Modifiers != null && item.Modifiers.Count > 0)
                                     {
                                         <div class="d-flex flex-column">
                                             @foreach (var modifier in item.Modifiers)
@@ -66,24 +66,13 @@
                 </div>
             </div>
         }
+        <div id="markedAsPreparedModalDiv">
+            <partial name="_MarkedAsPreparedModal" model="@Model" />
+        </div>
+    } else {
+        <div class="d-flex justify-content-center align-items-center w-100 h-100">
+            <p class="text-gray">No Orders</p>
+        </div>
     }
 </div>
 
-<div id="markedAsPreparedModal">
-    <partial name="_MarkedAsPreparedModal" model="@Model" />
-</div>
-
-<script>
-    function openMarkedAsPreparedModal (orderId)
-    {
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("GetMarkedAsPreparedModal", "Kot")',
-            data: { orderId: orderId, categoryId: currentCategoryId },
-            success: function (data) {
-                $('#markedAsPreparedModal').html(data);
-                $("#MarkedAsPreparedModal").modal("show");
-            }
-        });
-    }
-</script>

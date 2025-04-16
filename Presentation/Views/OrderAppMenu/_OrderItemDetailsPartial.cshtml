@@ -80,7 +80,8 @@
         <div class="buttons d-flex flex-wrap gap-2 justify-content-end align-items-center w-100 mt-4 ">
             <button onclick="saveOrder()" class="order-item-details button btn btn-primary"
                 style="width: 30%;">Save</button>
-            <button class="order-item-details button btn btn-contrast" style="width: 30%;">Complete</button>
+            <button onclick="completeOrder()" class="order-item-details button btn btn-contrast"
+                style="width: 30%;">Complete</button>
             <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
                 style="width: 30%;">Generate Invoice</button>
             <button class="order-item-details button btn btn-contrast" style="width: 30%;">Cancel</button>
@@ -90,23 +91,23 @@
 
 
 <script>
-    
+
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
     function saveOrder() {
         console.log(taxListNameAndAmount);
-        var saveOrderViewModel = {
+        var data = {
             OrderItems: itemList,
             Subtotal: parseFloat($('#orderSubtotalValue').text()),
             Total: parseFloat($('#orderTotalValue').text()),
             OrderId: orderIdTemp,
             OrderTaxes: taxListNameAndAmount,
         };
-        console.log(saveOrderViewModel);
+        console.log(data);
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveOrder", "OrderAppMenu")',
-            data: { saveOrderViewModel: saveOrderViewModel },
+            data: { saveOrderViewModel: data },
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
@@ -140,5 +141,27 @@
             });
     }
 
-    
+    function completeOrder() {
+        $("#CompleteOrderModal").modal("show");
+        $("#completeOrderButton").off("click").on("click", function () {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CompleteOrder", "OrderAppMenu")',
+                data: { orderId: orderIdTemp },
+                success: function (response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $("#CompleteOrderModal").modal("hide");
+                        $("#CustomerRatingModal").modal("show");
+                    } else {
+                        toastr.error(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+    }
+
 </script>

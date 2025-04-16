@@ -10,25 +10,28 @@
 
     <div class="d-flex mx-auto py-3 flex-column gap-2  form-bg shadow  mb-3 table-responsive" style=" width: 95%;">
         <div class="ps-3 d-flex justify-content-start align-items-center gap-3 h-100 " style="white-space: nowrap;">
-            @foreach (var category in Model.Categories)
+            @if (Model.Categories != null && Model.Categories.Count > 0)
             {
-                var categoryId = "category" + category.Id;
-                var paraId = "para" + category.Id;
-                @if (category.Id == 0)
+                @foreach (var category in Model.Categories)
                 {
-                    <div id="@categoryId"
-                        class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
-                        onclick="changeCategoryKot(id)">
-                        <p id="@paraId" class="text-gray para-blue-color active-waiting-list">All</p>
-                    </div>
-                }
-                else
-                {
-                    <div id="@categoryId"
-                        class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
-                        onclick="changeCategoryKot(id)">
-                        <p id="@paraId" class="text-gray para-blue-color">@category.Name</p>
-                    </div>
+                    var categoryId = "category" + category.Id;
+                    var paraId = "para" + category.Id;
+                    @if (category.Id == 0)
+                    {
+                        <div id="@categoryId"
+                            class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
+                            onclick="changeCategoryKot(id)">
+                            <p id="@paraId" class="text-gray para-blue-color active-waiting-list">All</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div id="@categoryId"
+                            class="d-flex justify-content-center gap-1 align-items-center cursor-pointer section-tabs"
+                            onclick="changeCategoryKot(id)">
+                            <p id="@paraId" class="text-gray para-blue-color">@category.Name</p>
+                        </div>
+                    }
                 }
             }
         </div>
@@ -40,28 +43,46 @@
 
 </div>
 
+
+
 <script>
     var currentCategoryId = 0;
+    var inReady = false;
     var readyItems = [];
-    function changeCategoryKot(id)
-    {
+    function changeCategoryKot(id) {
         var id = id.replace("category", "");
         var paraId = "para" + id;
         $(".para-blue-color").removeClass("active-waiting-list");
         document.getElementById(paraId).classList.add("active-waiting-list");
         id = parseInt(id);
         console.log(id);
-        $.ajax({
-            type: "GET",
-            url: '@Url.Action("GetKotByCategory", "KOT")',
-            data: { categoryId: id },
-            success: function (data) {
-                $("#kotCardsPartialStart").html(data);
-                currentCategoryId = id;
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching data:", error);
-            }
-        })
+        if (inReady)
+        {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetReadyItems", "KOT")',
+                data: { categoryId: id },
+                success: function (data) {
+                    $("#kotCardsPartialStart").html(data);
+                    currentCategoryId = id;
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetKotByCategory", "KOT")',
+                data: { categoryId: id },
+                success: function (data) {
+                    $("#kotCardsPartialStart").html(data);
+                    currentCategoryId = id;
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
     }
 </script>

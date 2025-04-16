@@ -38,7 +38,8 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasRightLabel" class="text-blue-custom">Waiting List</h5>
-        <button type="button" onclick="clearOffCanvas()" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <button type="button" onclick="clearOffCanvas()" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+            aria-label="Close"></button>
     </div>
     <form id="AssignTableToCustomerForm" method="post">
         <div class="offcanvas-body">
@@ -81,13 +82,13 @@
                     <div class="form-floating my-auto col-12">
                         @if (Model.waitingListModal != null && Model.waitingListModal.Id > 0)
                         {
-                            <input placeholder=" " type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
-                                id="IdOffCanvasWaitingToken" value="@Model.waitingListModal.Id">
+                            <input placeholder=" " type="hidden" asp-for="@Model.waitingListModal.Id"
+                                name="waitingListModal.Id" id="IdOffCanvasWaitingToken" value="@Model.waitingListModal.Id">
                         }
                         else
                         {
-                            <input placeholder=" " type="hidden" asp-for="@Model.waitingListModal.Id" name="waitingListModal.Id"
-                                id="IdOffCanvasWaitingToken" value="-1">
+                            <input placeholder=" " type="hidden" asp-for="@Model.waitingListModal.Id"
+                                name="waitingListModal.Id" id="IdOffCanvasWaitingToken" value="-1">
                         }
                         @if (Model.waitingListModal != null && Model.waitingListModal.Name != null)
                         {
@@ -107,16 +108,16 @@
                         <div class="form-floating my-auto col-12">
                             @if (Model.waitingListModal != null && Model.waitingListModal.MobileNumber != null)
                             {
-                                <input placeholder=" " type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
-                                    name="waitingListModal.MobileNumber" id="MobileNumberOffCanvasWaitingToken"
-                                    autocomplete="off">
+                                <input placeholder=" " type="text" class="form-control"
+                                    asp-for="@Model.waitingListModal.MobileNumber" name="waitingListModal.MobileNumber"
+                                    id="MobileNumberOffCanvasWaitingToken" autocomplete="off">
                                 <span asp-validation-for="@Model.waitingListModal.MobileNumber" class="text-danger"></span>
                             }
                             else
                             {
-                                <input placeholder=" " type="text" class="form-control" asp-for="@Model.waitingListModal.MobileNumber"
-                                    name="waitingListModal.MobileNumber" id="MobileNumberOffCanvasWaitingToken"
-                                    autocomplete="off">
+                                <input placeholder=" " type="text" class="form-control"
+                                    asp-for="@Model.waitingListModal.MobileNumber" name="waitingListModal.MobileNumber"
+                                    id="MobileNumberOffCanvasWaitingToken" autocomplete="off">
                                 <span asp-validation-for="@Model.waitingListModal.MobileNumber" class="text-danger"></span>
                             }
                             <label for="PhoneWaitingToken" class="">Mobile Number*</label>
@@ -126,15 +127,17 @@
                         <div class="form-floating my-auto col-12 col-md-6">
                             @if (Model.waitingListModal != null && Model.waitingListModal.NumberOfPeople != 0)
                             {
-                                <input placeholder=" " type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
-                                    name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
+                                <input placeholder=" " type="text" class="form-control"
+                                    asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople"
+                                    id="NumberOfPeopleWaitingListOffCanvas">
                                 <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
                                     class="text-danger"></span>
                             }
                             else
                             {
-                                <input placeholder=" " type="text" class="form-control" asp-for="@Model.waitingListModal.NumberOfPeople"
-                                    name="waitingListModal.NumberOfPeople" id="NumberOfPeopleWaitingListOffCanvas">
+                                <input placeholder=" " type="text" class="form-control"
+                                    asp-for="@Model.waitingListModal.NumberOfPeople" name="waitingListModal.NumberOfPeople"
+                                    id="NumberOfPeopleWaitingListOffCanvas">
                                 <span asp-validation-for="@Model.waitingListModal.NumberOfPeople"
                                     class="text-danger"></span>
                             }
@@ -174,11 +177,14 @@
             </div>
             <div class="modal-footer d-flex justify-content-end gap-2">
                 <button type="submit" class="btn btn-primary px-3">Assign</button>
-                <a data-bs-dismiss="offcanvas"><button onclick="clearOffCanvas()" type="button" class="btn btn-contrast px-3">Cancel</button></a>
+                <a data-bs-dismiss="offcanvas"><button onclick="clearOffCanvas()" type="button"
+                        class="btn btn-contrast px-3">Cancel</button></a>
             </div>
     </form>
 </div>
-</div>
+@* </div> *@
+
+
 
 @section Scripts {
     @{

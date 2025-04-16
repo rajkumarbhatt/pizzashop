@@ -7,9 +7,11 @@ namespace Presentation.Controllers;
 public class KOTController : Controller
 {
     private readonly IKotService _kotService;
-    public KOTController(IKotService kotService)
+    private readonly IJwtService _jwtService;
+    public KOTController(IKotService kotService, IJwtService jwtService)
     {
         _kotService = kotService;
+        _jwtService = jwtService;
     }
     [Route("OrderApp/Kot")]
     public async Task<IActionResult> Index()
@@ -24,14 +26,30 @@ public class KOTController : Controller
         return PartialView("_CardsPartial", kotViewModel);
     }
     [HttpGet]
-    public async Task<IActionResult> GetMarkedAsPreparedModal (int orderId, int categoryId)
+    public async Task<IActionResult> GetMarkedAsPreparedModal (int orderId, int categoryId, bool inReady)
     {
-        KotViewModel kotViewModel = await _kotService.GetMarkedAsPreparedModalAsync(orderId, categoryId);
+        KotViewModel kotViewModel = await _kotService.GetMarkedAsPreparedModalAsync(orderId, categoryId, inReady);
         return PartialView("_MarkedAsPreparedModal", kotViewModel);
     }
-    [HttpGet]
-    public async Task<IActionResult> MarkItemsAsReady (List<MarkAsReadyModal> readyItems, int orderId)
+    [HttpPost]
+    public async Task<IActionResult> MarkItemsAsReady (List<MarkAsReadyModal> readyItems, int orderId, int categoryId, bool inReady)
     {
-        return Ok();
+        KotViewModel kotViewModel = new KotViewModel();
+        int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+        if (inReady)
+        {
+            kotViewModel = await _kotService.MarkItemsAsInPrepared(readyItems, orderId, categoryId, userId);
+        }
+        else
+        {
+            kotViewModel = await _kotService.MarkItemsAsReadyAsync(readyItems, orderId, categoryId, userId);
+        }
+        return PartialView("_CardsPartial", kotViewModel); 
+    }
+    [HttpGet]
+    public async Task<IActionResult> GetReadyItems (int categoryId)
+    {
+        KotViewModel kotViewModel = await _kotService.GetReadyItems(categoryId);
+        return PartialView("_CardsPartial", kotViewModel);
     }
 }

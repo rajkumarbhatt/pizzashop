@@ -233,6 +233,14 @@
       "PackagePath": "staticwebassets\\images\\icons\\sorting-icon.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\star-filled.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\star-filled.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\star.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\star.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\table-capacity-kot.svg",
       "PackagePath": "staticwebassets\\images\\icons\\table-capacity-kot.svg"
     },

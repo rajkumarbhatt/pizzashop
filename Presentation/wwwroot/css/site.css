@@ -494,6 +494,9 @@ td{
   .customer-details-modal-width {
       max-width: 30%;
   }
+  .customer-review-modal-width {
+      max-width: 25%;
+  }
   .order-comment-modal-width {
       max-width: 30%;
   }
