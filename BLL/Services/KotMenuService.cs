@@ -458,6 +458,7 @@ namespace BLL.Services
                         UpdatedBy = userId,
                         UpdatedAt = DateTime.Now,
                         IsDeleted = false,
+                        ReadyItemsCount = 0,
                     };
                     await _context.OrderItems.AddAsync(newOrderItem);
                     await _context.SaveChangesAsync();
@@ -549,6 +550,87 @@ namespace BLL.Services
             }
             await UpdateOrderAmount(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
             return new JsonResult(new { success = true, message = "Order saved successfully" });
+        }
+        public async Task<IActionResult> CompleteOrder(int orderId, int userId)
+        {
+            bool canComplete = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).AnyAsync(oi => oi.Quantity != oi.ReadyItemsCount);
+            if (!canComplete)
+            {
+                List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
+                List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
+                foreach (OrderTableMapping orderTableMapping in orderTableMappings)
+                {
+                    Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false) ?? new Table();
+                    if (table != null)
+                    {
+                        table.Status = "Available";
+                        table.UpdatedAt = DateTime.Now;
+                        table.UpdatedBy = userId;
+                        _context.Tables.Update(table);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                order.Status = "Completed";
+                order.PaymentMode = "Cash";
+                order.UpdatedAt = DateTime.Now;
+                order.UpdatedBy = userId;
+                _context.Orders.Update(order);
+                await _context.SaveChangesAsync();
+                List<OrderTableMapping> orderTableMappings1 = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
+                foreach (OrderTableMapping orderTableMapping in orderTableMappings1)
+                {
+                    orderTableMapping.IsDeleted = true;
+                    orderTableMapping.UpdatedAt = DateTime.Now;
+                    orderTableMapping.UpdatedBy = userId;
+                    _context.OrderTableMappings.Update(orderTableMapping);
+                    await _context.SaveChangesAsync();
+                }
+                return new JsonResult(new { success = true, message = "Order completed successfully" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "All items must be served before completing the order" });
+            }
+            
+        }
+        public async Task<IActionResult> SaveCustomerReview (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
+        {
+            CustomerReview customerReview = new CustomerReview 
+            {
+                OrderId = saveCustomerReviewViewModel.OrderId,
+                CustomerId = await _context.Orders.Where(o => o.Id == saveCustomerReviewViewModel.OrderId).Select(o => o.CustomerId).FirstOrDefaultAsync(),
+                Food = saveCustomerReviewViewModel.FoodRating,
+                Ambience = saveCustomerReviewViewModel.AmbienceRating,
+                Service = saveCustomerReviewViewModel.ServiceRating,
+                AverageRating = (decimal)Math.Round((double)(saveCustomerReviewViewModel.FoodRating + saveCustomerReviewViewModel.AmbienceRating + saveCustomerReviewViewModel.ServiceRating) / 3, 1),
+                Comment = saveCustomerReviewViewModel.OrderReviewByCustomer,
+                CreatedBy = userId,
+                UpdatedBy = userId,
+            };
+            await _context.CustomerReviews.AddAsync(customerReview);
+            await _context.SaveChangesAsync();
+            return new JsonResult(new { success = true, message = "Review saved successfully" });
+        }
+        public async Task<JsonResult> CanDeleteFromOrder (int orderId, int itemId)
+        {
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
+            if (orderItem.ReadyItemsCount > 0)
+            {
+                return new JsonResult ( new {canDelete = false} );
+            } 
+            return new JsonResult ( new {canDelete = true} );
+        }
+        public async Task<JsonResult> CanReduceFromOrder (int orderId, int itemId, int currentQuantity)
+        {
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
+            if (orderItem.ReadyItemsCount > currentQuantity - 1 && orderItem.ReadyItemsCount > 0)
+            {
+                return new JsonResult ( new {canDecrease = false} );
+            } 
+            return new JsonResult ( new {canDecrease = true} );
         }
     }
 }

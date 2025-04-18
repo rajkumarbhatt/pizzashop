@@ -2,6 +2,6 @@ namespace DAL.ViewModels;
 
 public class MarkAsReadyModal
 {
-    int Id { get; set; }
-    int Quantity { get; set; }
+    public int Id { get; set; }
+    public int Quantity { get; set; }
 }

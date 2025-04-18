@@ -8,6 +8,7 @@ namespace DAL.ViewModels
         public string? ItemName { get; set; }
         public string? ItemInstruction { get; set; }
         public int ItemQuantity { get; set; }
+        public int ItemReadyItemsCount { get; set; }
         public List<string>? Modifiers { get; set; }
     }
 }

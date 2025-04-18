@@ -5,9 +5,12 @@
 
 <div class="d-flex">
     <div id="thisDivIsImportant">
-        <div class="d-flex justify-content-between" style="height: min-content;">
+        <div class="d-flex justify-content-start" style="height: min-content;">
+            <img src="~/images/icons/hamburger-black.svg" class="navbar-image d-block d-md-none" alt=""
+                data-bs-toggle="offcanvas" data-bs-target="#categoriesKotMenuOffCanvas">
             <div class="input-group search-box m-3 search-box-kot-menu">
-                <input type="text" class="form-control bg-white search-input py-1 py-sm-2" id="searchKotMenuItems" placeholder="Search">
+                <input type="text" class="form-control bg-white search-input py-1 py-sm-2" id="searchKotMenuItems"
+                    placeholder="Search">
                 <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
             </div>
             <div class="d-none d-md-flex gap-3 m-3">
@@ -63,13 +66,36 @@
                 <div id="orderItemDetailsPartial" class="h-100">
                     <partial name="_OrderItemDetailsPartial" model="@Model" />
                 </div>
-                
+
             </div>
         </div>
     }
 </div>
 
-
+@* categories offcanvas *@
+<div class="offcanvas offcanvas-start width-custom-order-app-navbar-offcanvas" id="categoriesKotMenuOffCanvas">
+    <div class="offcanvas-header flex-column align-items-start">
+        <div class="d-flex flex-column gap-2">
+            <h3 class="pt-3 ps-3" style="font-weight: 650;">Category</h3>
+            <div id="categoryMobile-kot-favourite" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1 custom-border-kot-navbar"
+                style="font-size: large;">
+                Favourite Items
+            </div>
+            <div id="categoryMobile-kot-all" onclick="changeCategoryKot(id)"
+                class="ps-3 cursor-pointer py-1 active-kot-sidebar-item custom-border-kot-navbar" style="font-size: large;">
+                All
+            </div>
+            @foreach (var item in Model.Categories)
+            {
+                var customId = "categoryMobile-kot-" + item.Id;
+                <div id="@customId" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1 custom-border-kot-navbar"
+                    style="font-size: large;">
+                    @item.Name
+                </div>
+            }
+        </div>
+    </div>
+</div>
 @* qr code modal *@
 <div class="modal fade" id="QrCodeMenuModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -81,47 +107,49 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <img src="~/images/qr-code.png" style="width: 300px;" class="img-fluid p-4" alt="">
-                <a data-bs-dismiss="modal"><button type="button"
-                        class="btn btn-contrast px-3 mt-4">Done</button></a>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3 mt-4">Done</button></a>
             </div>
         </div>
     </div>
 </div>
 @* orderwise comment modal *@
-    <div class="modal fade" id="OrderCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="staticBackdropLabel">Order Wise Comment</h5>
-                    <button type="button" onclick="clearOrderCommentForm()" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="OrderCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Order Wise Comment</h5>
+                <button type="button" onclick="clearOrderCommentForm()" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <div class="d-flex justify-content-between align-items-center w-100">
                 </div>
-                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                    <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="col-12 row">
+                    <div class="form-floating my-auto col-12">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                            style="height: 100px"></textarea>
+                        <label for="floatingTextarea2">Comments</label>
                     </div>
-                    <div class="col-12 row">
-                        <div class="form-floating my-auto col-12">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                            <label for="floatingTextarea2">Comments</label>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end gap-3 align-items-center w-100">
-                        <a data-bs-dismiss="modal"><button onclick="addOrderWiseComment()" type="button" class="btn btn-primary px-3 mt-4">Save</button></a>
-                        <a data-bs-dismiss="modal"><button onclick="clearOrderCommentForm()" type="button" class="btn btn-contrast px-3 mt-4">Cancel</button></a>
-                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-3 align-items-center w-100">
+                    <a data-bs-dismiss="modal"><button onclick="addOrderWiseComment()" type="button"
+                            class="btn btn-primary px-3 mt-4">Save</button></a>
+                    <a data-bs-dismiss="modal"><button onclick="clearOrderCommentForm()" type="button"
+                            class="btn btn-contrast px-3 mt-4">Cancel</button></a>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @* customer details modal *@
-    <div id="CustomerDetailsModalPartialStart1">
-        <partial name="_CustomerDetailsModal" model="@Model" />
-    </div>
-
+<div id="CustomerDetailsModalPartialStart1">
+    <partial name="_CustomerDetailsModal" model="@Model" />
+</div>
 @* select modifiers modal *@
-    <div id="SelectModifiersPartialStaring">
-        <partial name="_SelectModifiersModal" model="@Model" />
-    </div>
+<div id="SelectModifiersPartialStaring">
+    <partial name="_SelectModifiersModal" model="@Model" />
+</div>
 
 @section Scripts {
     @{
@@ -129,140 +157,102 @@
     }
 }
 
-    <script>
+<script>
 
-        function addToFavourites(id, event) {
-            var itemId = parseInt(id.split("empty-heart-")[1]);
-            $("#" + id).addClass('d-none');
-            $("#filled-heart-" + itemId).removeClass('d-none');
-            $.ajax({
-                url: '/OrderAppMenu/AddToFavourites',
-                type: 'PUT',
-                data: { itemId: itemId },
-                success: function (response) {
-                    if (response.success) {
-                        console.log(response.message)
-                    } else {
-                        console.error(response.message)
+    function addToFavourites(id, event) {
+        var itemId = parseInt(id.split("empty-heart-")[1]);
+        $("#" + id).addClass('d-none');
+        $("#filled-heart-" + itemId).removeClass('d-none');
+        $.ajax({
+            url: '/OrderAppMenu/AddToFavourites',
+            type: 'PUT',
+            data: { itemId: itemId },
+            success: function (response) {
+                if (response.success) {
+                    console.log(response.message)
+                } else {
+                    console.error(response.message)
+                }
+            },
+            error: function () {
+                console.error("error adding item to favourites")
+            }
+        })
+        event.stopPropagation();
+    }
+
+    function removeFromFavourites(id, event) {
+        var itemId = parseInt(id.split("filled-heart-")[1]);
+        $("#" + id).addClass('d-none');
+        $("#empty-heart-" + itemId).removeClass('d-none');
+        $.ajax({
+            url: '/OrderAppMenu/DeleteFromFavourites',
+            type: 'DELETE',
+            data: { itemId: itemId },
+            success: function (response) {
+                if (response.success) {
+                    if (currentCategory == -2) {
+                        $("#category-kot-favourite").click();
                     }
-                },
-                error: function () {
-                    console.error("error adding item to favourites")
+                } else {
+                    console.error(response.message)
                 }
-            })
-            event.stopPropagation();
-        }
+            },
+            error: function () {
+                console.error("error adding item to favourites")
+            }
+        })
+        event.stopPropagation();
+    }
 
-        function removeFromFavourites(id, event) {
-            var itemId = parseInt(id.split("filled-heart-")[1]);
-            $("#" + id).addClass('d-none');
-            $("#empty-heart-" + itemId).removeClass('d-none');
+    var url = window.location.href;
+    var orderId = url.substring(url.lastIndexOf('/') + 1);
+    if (orderId == "Menu") {
+        document.getElementById("thisDivIsImportant").style.width = "100%";
+        document.getElementById("thisIsSecondImportant").classList.add("d-none");
+    }
+    else {
+        document.getElementById("thisDivIsImportant").style.width = "66%";
+        document.getElementById("thisIsSecondImportant").classList.remove("d-none");
+        document.getElementById("thisIsSecondImportant").style.width = "34%";
+    }
+
+    function getCustomerDetails() {
+        $.ajax({
+            url: '/OrderAppMenu/GetCustomerDetails',
+            type: 'GET',
+            data: { orderId: orderId },
+            success: function (response) {
+                $("#CustomerDetailsModalPartialStart1").html(response);
+                $("#CustomerDetailsMenuModal").modal('show');
+                $.validator.unobtrusive.parse("#CustomerDetailsForm");
+                submitCustomerDetailsForm();
+            },
+            error: function () {
+                console.error("error fetching customer details")
+            }
+        })
+    }
+
+    function submitCustomerDetailsForm() {
+
+        $('#CustomerDetailsForm').off('submit').on('submit', function (e) {
+            e.preventDefault();
+            var form = $(this);
+            if (!$("#CustomerDetailsForm").valid()) {
+                return;
+            }
+            var formData = new FormData(this);
             $.ajax({
-                url: '/OrderAppMenu/DeleteFromFavourites',
-                type: 'DELETE',
-                data: { itemId: itemId },
-                success: function (response) {
-                    if (response.success) {
-                        if ($("#categoryIdKotMenu").val() == -2) {
-                            $("#category-kot-favourite-items").click();
-                        }
-                    } else {
-                        console.error(response.message)
-                    }
-                },
-                error: function () {
-                    console.error("error adding item to favourites")
-                }
-            })
-            event.stopPropagation();
-        }
-
-        var url = window.location.href;
-        var orderId = url.substring(url.lastIndexOf('/') + 1);
-        if (orderId == "Menu") {
-            document.getElementById("thisDivIsImportant").style.width = "100%";
-            document.getElementById("thisIsSecondImportant").classList.add("d-none");
-        }
-        else {
-            document.getElementById("thisDivIsImportant").style.width = "66%";
-            document.getElementById("thisIsSecondImportant").classList.remove("d-none");
-            document.getElementById("thisIsSecondImportant").style.width = "34%";
-        }
-
-        function getCustomerDetails() {
-            $.ajax({
-                url: '/OrderAppMenu/GetCustomerDetails',
-                type: 'GET',
-                data: { orderId: orderId },
-                success: function (response) {
-                    $("#CustomerDetailsModalPartialStart1").html(response);
-                    $("#CustomerDetailsMenuModal").modal('show');
-                    $.validator.unobtrusive.parse("#CustomerDetailsForm");
-                    submitCustomerDetailsForm();
-                },
-                error: function () {
-                    console.error("error fetching customer details")
-                }
-            })
-        }
-
-        function submitCustomerDetailsForm() {
-
-            $('#CustomerDetailsForm').off('submit').on('submit', function (e) {
-                e.preventDefault();
-                var form = $(this);
-                if (!$("#CustomerDetailsForm").valid()) {
-                    return;
-                }
-                var formData = new FormData(this);
-                $.ajax({
-                    type: 'POST',
-                    url: "/OrderAppMenu/UpdateCustomerDetails",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        if (response.success) {
-                            toastr.success(response.message);
-                            $("#CustomerDetailsMenuModal").modal('hide');
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function () {
-                        toastr.error("Error occurred while submitting the form.");
-                    }
-                });
-            });
-        }
-    
-        function getOrderWiseComment() {
-            $.ajax({
-                url: '/OrderAppMenu/GetOrderWiseComment',
-                type: 'GET',
-                data: { orderId: orderId },
-                success: function (response) {
-                    console.log(response);
-                    $("#floatingTextarea2").val(response.message);
-                    $("#OrderCommentModal").modal('show');
-                    $.validator.unobtrusive.parse("#OrderCommentModal");
-                },
-                error: function () {
-                    console.error("error fetching order wise comment")
-                }
-            })
-        }
-
-        function addOrderWiseComment() {
-            var comment = $("#floatingTextarea2").val();
-            $.ajax({
-                url: '/OrderAppMenu/AddOrderWiseComment',
                 type: 'POST',
-                data: { orderId: orderId, comment: comment },
+                url: "/OrderAppMenu/UpdateCustomerDetails",
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
-                        $("#OrderCommentModal").modal('hide');
+                        $("#CustomerDetailsMenuModal").modal('hide');
                     } else {
                         toastr.error(response.message);
                     }
@@ -271,9 +261,47 @@
                     toastr.error("Error occurred while submitting the form.");
                 }
             });
-        }
+        });
+    }
 
-        function clearOrderCommentForm() {
-            $("#floatingTextarea2").val("");
-        }
-    </script>
+    function getOrderWiseComment() {
+        $.ajax({
+            url: '/OrderAppMenu/GetOrderWiseComment',
+            type: 'GET',
+            data: { orderId: orderId },
+            success: function (response) {
+                console.log(response);
+                $("#floatingTextarea2").val(response.message);
+                $("#OrderCommentModal").modal('show');
+                $.validator.unobtrusive.parse("#OrderCommentModal");
+            },
+            error: function () {
+                console.error("error fetching order wise comment")
+            }
+        })
+    }
+
+    function addOrderWiseComment() {
+        var comment = $("#floatingTextarea2").val();
+        $.ajax({
+            url: '/OrderAppMenu/AddOrderWiseComment',
+            type: 'POST',
+            data: { orderId: orderId, comment: comment },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    $("#OrderCommentModal").modal('hide');
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function () {
+                toastr.error("Error occurred while submitting the form.");
+            }
+        });
+    }
+
+    function clearOrderCommentForm() {
+        $("#floatingTextarea2").val("");
+    }
+</script>

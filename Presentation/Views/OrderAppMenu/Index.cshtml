@@ -1,13 +1,14 @@
 @{
     Layout = "~/Views/Shared/_LayoutOrderApp.cshtml";
 }
+
 @model DAL.ViewModels.KotMenuViewModel
-<input type="hidden" id="categoryIdKotMenu" value="-1" />
+
 <div class="d-flex">
     <div class=" bg-white d-none d-md-block col-3 col-lg-2" style="height: 90vh;">
         <div class="d-flex flex-column gap-2">
             <h3 class="pt-3 ps-3" style="font-weight: 650;">Category</h3>
-            <div id="category-kot-favourite-items" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1"
+            <div id="category-kot-favourite" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1"
                 style="font-size: large;">
                 Favourite Items
             </div>
@@ -137,6 +138,7 @@
     var itemList = [];
     var taxListNameAndAmount = [];
     var isFirstLoad = true;
+    var currentCategory = -1;
 
     function changeCategoryKot(id) {
         var categoryId = id.split("-")[2];
@@ -147,18 +149,30 @@
             categoryId = -2;
         }
         var elements = document.getElementsByClassName("active-kot-sidebar-item");
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].classList.remove("active-kot-sidebar-item");
+        while (elements.length > 0) {
+            elements[0].classList.remove("active-kot-sidebar-item");
         }
         var element = document.getElementById(id);
+        var otherElement = ""
+        if (id.includes("Mobile"))
+        {
+            var otherId = id.replace("Mobile", "");
+            otherElement = document.getElementById(otherId);
+        } else {
+            var otherId = id.replace("category", "categoryMobile");
+            console.log(otherId);
+            otherElement = document.getElementById(otherId);
+        }
         element.classList.add("active-kot-sidebar-item");
+        otherElement.classList.add("active-kot-sidebar-item");
+        
         $.ajax({
             url: "/OrderAppMenu/GetKotMenuItemsBasedOnCategory",
             type: "GET",
             data: { categoryId: categoryId, search: search },
             success: function (response) {
                 $("#kotMenuItemsListPartialStart").html(response);
-                $("#categoryIdKotMenu").val(categoryId);
+                currentCategory = categoryId;
             }
         })
     }

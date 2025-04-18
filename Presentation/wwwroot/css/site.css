@@ -1128,3 +1128,37 @@ td{
   border: 1.5px solid #0066A7;
   border-radius: 4px;
 }
+.width-custom-order-app-navbar-offcanvas {
+  width: 40% !important;
+}
+.width-custom-order-app-categories-offcanvas {
+  width: 30% !important;
+}
+@media (max-width: 576px) {
+  .width-custom-order-app-categories-offcanvas {
+      width: 50% !important;
+  }
+}
+@media (max-width: 768px) {
+  .width-custom-order-app-navbar-offcanvas {
+      width: 60% !important;
+  }
+}
+.active-mobile-navbar-order-app {
+  background-color: #73a4c2;
+  color: white;
+}
+.custom-border-kot-navbar-mobile {
+  border: 1px solid #0066A7;
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+@media (max-width: 1600px) {
+  #thisIsSecondImportant {
+    display: none !important;
+  }
+  #thisDivIsImportant {
+    width: 100% !important;
+  }
+}

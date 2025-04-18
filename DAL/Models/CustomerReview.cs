@@ -17,13 +17,13 @@ public partial class CustomerReview
 
     public int? Ambience { get; set; }
 
-    public int? AverageRating { get; set; }
-
     public string? Comment { get; set; }
 
     public int CreatedBy { get; set; }
 
     public int UpdatedBy { get; set; }
+
+    public decimal? AverageRating { get; set; }
 
     public virtual User CreatedByNavigation { get; set; } = null!;
 

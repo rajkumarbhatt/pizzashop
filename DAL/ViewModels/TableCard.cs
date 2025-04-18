@@ -8,5 +8,6 @@ namespace DAL.ViewModels
         public int? TableCapacity { get; set; }
         public string? CurentOrderTime { get; set; }
         public string? TableStatus { get; set; }
+        public decimal? OrderTotal { get; set; }
     }
 }

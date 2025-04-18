@@ -44,7 +44,7 @@ public class CustomersService : ICustomerService
         return customers;
     }
 
-    public async Task<CustomerViewModel> GetCustomerDetailsAsync()
+    public async Task<CustomerViewModel> GetCustomerDetailsTableAsync()
     {
         List<CustomerTable> customers = await GetCustomersAsync();
         CustomerViewModel customerViewModel = new CustomerViewModel

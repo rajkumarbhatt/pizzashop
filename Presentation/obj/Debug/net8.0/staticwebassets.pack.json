@@ -129,6 +129,10 @@
       "PackagePath": "staticwebassets\\images\\icons\\gray-six-dots.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\hamburger-black.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\hamburger-black.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\hamburger.svg",
       "PackagePath": "staticwebassets\\images\\icons\\hamburger.svg"
     },
@@ -157,8 +161,16 @@
       "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-clock.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-kot-black.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-kot-black.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-kot.svg",
       "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-kot.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-menu-black.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\kot-navbar-menu-black.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\kot-navbar-menu.svg",

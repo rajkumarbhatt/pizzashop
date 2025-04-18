@@ -96,5 +96,15 @@ namespace Presentation.Controllers
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _kotMenuService.SaveCustomerReview(saveCustomerReviewViewModel, userId);
         }
+        [HttpGet]
+        public async Task<JsonResult> CanDeleteFromOrder(int orderId, int itemId)
+        {
+            return await _kotMenuService.CanDeleteFromOrder(orderId, itemId);
+        }
+        [HttpGet]
+        public async Task<JsonResult> CanReduceFromOrder(int orderId, int itemId, int currentQuantity)
+        {
+            return await _kotMenuService.CanReduceFromOrder(orderId, itemId, currentQuantity);
+        }
     }
 }

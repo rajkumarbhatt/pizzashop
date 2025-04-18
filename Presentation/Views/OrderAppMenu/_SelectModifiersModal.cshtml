@@ -241,63 +241,86 @@
         var itemId = id.split("decreaseQuantity")[1];
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
-        var newValue = currentValue - 1;
-        var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
-        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
-        var subTotalElement = document.getElementById("orderSubtotalValue");
-        var Subtotal = parseFloat(subTotalElement.innerHTML);
-        document.getElementById(itemQuantityCustomId).innerHTML = newValue;
-        if (currentValue > 1) {
-            Subtotal -= itemPrice + orderModifiersTotalPriceValue;
-            Subtotal = Subtotal.toFixed(2);
-            subTotalElement.innerHTML = Subtotal;
-            updateTaxes(Subtotal);
-            hideTaxesDiv(Subtotal);
-            itemList.filter(function (item) {
-                if (item.ItemId == itemId) {
-                    item.Quantity = parseInt(newValue);
+        $.ajax({
+            url: '@Url.Action("CanReduceFromOrder", "OrderAppMenu")',
+            type: 'GET',
+            data: { orderId: orderId, itemId: itemId, currentQuantity: currentValue },
+            success(response) {
+                console.log(response)
+                if (response.canDecrease) {
+                    var newValue = currentValue - 1;
+                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
+                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
+                    var subTotalElement = document.getElementById("orderSubtotalValue");
+                    var Subtotal = parseFloat(subTotalElement.innerHTML);
+                    document.getElementById(itemQuantityCustomId).innerHTML = newValue;
+                    if (currentValue > 1) {
+                        Subtotal -= itemPrice + orderModifiersTotalPriceValue;
+                        Subtotal = Subtotal.toFixed(2);
+                        subTotalElement.innerHTML = Subtotal;
+                        updateTaxes(Subtotal);
+                        hideTaxesDiv(Subtotal);
+                        itemList.filter(function (item) {
+                            if (item.ItemId == itemId) {
+                                item.Quantity = parseInt(newValue);
+                            }
+                        });
+                    }
+                    if (currentValue == 1) {
+                        Subtotal -= (itemPrice + orderModifiersTotalPriceValue);
+                        Subtotal = Subtotal.toFixed(2);
+                        subTotalElement.innerHTML = Subtotal;
+                        var accordianButtonCustomId = "accordianButton" + itemId;
+                        var accordianItem = document.getElementById(accordianButtonCustomId);
+                        accordianItem.remove();
+                        itemList.filter(function (item) {
+                            if (item.ItemId == itemId) {
+                                itemList.splice(itemList.indexOf(item), 1);
+                            }
+                        });
+                        updateTaxes(Subtotal);
+                        makeTaxesZeroIfNecessary(Subtotal);
+                        hideTaxesDiv(Subtotal);
+                    }
+                } else {
+                    toastr.error("You cannot reduce this item as the item is ready");
                 }
-            });
-        }
-        if (currentValue == 1) {
-            Subtotal -= (itemPrice + orderModifiersTotalPriceValue);
-            Subtotal = Subtotal.toFixed(2);
-            subTotalElement.innerHTML = Subtotal;
-            var accordianButtonCustomId = "accordianButton" + itemId;
-            var accordianItem = document.getElementById(accordianButtonCustomId);
-            accordianItem.remove();
-            itemList.filter(function (item) {
-                if (item.ItemId == itemId) {
-                    itemList.splice(itemList.indexOf(item), 1);
-                }
-            });
-            updateTaxes(Subtotal);
-            makeTaxesZeroIfNecessary(Subtotal);
-            hideTaxesDiv(Subtotal);
-        }
-        console.log(itemList);
+            }
+        });
     }
 
     function deleteItemFromOrder (itemId) {
-        var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
-        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
-        var currentQuantity = parseInt(document.getElementById("itemQuantity" + itemId).innerHTML);
-        var subTotalElement = document.getElementById("orderSubtotalValue");
-        var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
-        Subtotal -= (itemPrice + orderModifiersTotalPriceValue) * currentQuantity;
-        Subtotal = parseFloat(Subtotal).toFixed(2);
-        subTotalElement.innerHTML = Subtotal;
-        var accordianButtonCustomId = "accordianButton" + itemId;
-        var accordianItem = document.getElementById(accordianButtonCustomId);
-        accordianItem.remove();
-        updateTaxes(Subtotal);
-        makeTaxesZeroIfNecessary(Subtotal);
-        hideTaxesDiv(Subtotal);
-        itemList.filter(function (item) {
-            if (item.ItemId == itemId) {
-                itemList.splice(itemList.indexOf(item), 1);
-            }
-        });
+        $.ajax({
+            url: '@Url.Action("CanDeleteFromOrder", "OrderAppMenu")',
+            type: 'GET',
+            data: { orderId: orderId, itemId: itemId },
+            success(response) {
+                console.log(response)
+                if (response.canDelete) {
+                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
+                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
+                    var currentQuantity = parseInt(document.getElementById("itemQuantity" + itemId).innerHTML);
+                    var subTotalElement = document.getElementById("orderSubtotalValue");
+                    var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
+                    Subtotal -= (itemPrice + orderModifiersTotalPriceValue) * currentQuantity;
+                    Subtotal = parseFloat(Subtotal).toFixed(2);
+                    subTotalElement.innerHTML = Subtotal;
+                    var accordianButtonCustomId = "accordianButton" + itemId;
+                    var accordianItem = document.getElementById(accordianButtonCustomId);
+                    accordianItem.remove();
+                    updateTaxes(Subtotal);
+                    makeTaxesZeroIfNecessary(Subtotal);
+                    hideTaxesDiv(Subtotal);
+                    itemList.filter(function (item) {
+                        if (item.ItemId == itemId) {
+                            itemList.splice(itemList.indexOf(item), 1);
+                        }
+                    });
+                } else {
+                    toastr.error("You cannot delete this item as the item is ready");
+                }
+            },
+        })
     }
 
     function makeTaxesZeroIfNecessary (Subtotal) {

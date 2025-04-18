@@ -51,6 +51,9 @@ public class OrderAppService : IOrderAppService
                 {
                     OrderId = orderTableMapping?.OrderId ?? 0,
                     TableId = table.Id,
+                    OrderTotal = orderTableMapping != null
+                        ? (await _context.Orders.FindAsync(orderTableMapping.OrderId))?.TotalAmount
+                        : 0,
                     TableName = table.Name,
                     TableStatus = table.Status,
                     TableCapacity = table.Status == "Available"
@@ -195,6 +198,10 @@ public class OrderAppService : IOrderAppService
         foreach (int tableId in tableIds)
         {
             Table table = await _context.Tables.FindAsync(tableId);
+            if (table.Status == "Assigned" || table.Status == "Running")
+            {
+                return new JsonResult(new { success = false, message = "The table is already assigned." });
+            }
             if (table.Capacity > waitingListModal.NumberOfPeople && tableIds.Count > 1)
             {
                 return new JsonResult(new { success = false, message = "Customers can be managed in less than selected tables" });
@@ -219,7 +226,7 @@ public class OrderAppService : IOrderAppService
             }
             return new JsonResult(new { success = false, message = "You can assign " + optimumTable.Name + " for optimal arrangement" });
         }
-    assign: 
+    assign:
         int capacity = 0;
         foreach (int tableId in tableIds)
         {
@@ -245,12 +252,14 @@ public class OrderAppService : IOrderAppService
             }
 
             customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email);
-            if (await _context.Orders.AnyAsync(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+            if (customer != null)
             {
-                return new JsonResult(new { success = false, message = "Customer already has an ongoing order" });
-            }
-
-            if (customer == null)
+                if (await _context.Orders.AnyAsync(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
+                {
+                    return new JsonResult(new { success = false, message = "Customer already has an ongoing order" });
+                }
+            } 
+            else 
             {
                 customer = new Customer
                 {
@@ -291,7 +300,7 @@ public class OrderAppService : IOrderAppService
             CustomerId = customer.Id,
             TotalAmount = 0,
             Status = "Pending",
-            PaymentMode = "Cash",
+            PaymentMode = "Pending",
             CreatedAt = DateTime.Now,
             CreatedBy = userId,
             UpdatedBy = userId,

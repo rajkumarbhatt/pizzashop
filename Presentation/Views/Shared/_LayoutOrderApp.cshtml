@@ -134,32 +134,33 @@
     </div>
 
     @* offcanvas *@
-    <div class="offcanvas offcanvas-end" id="navbarOrderApp">
-        <div class="offcanvas-header">
-            <h5 id="offcanvasRightLabel" class="text-blue-custom">PIZZASHOP</h5>
-            <button type="button" onclick="clearOffCanvas()" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas body">
-            <div class="d-flex flex-column gap-2">
-                <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar"
-                    id="kotKot">
-                    <img src="~/images/icons/kot-navbar-kot.svg" class="small-image" alt="">
-                    <p class="text-blue-custom">KOT</p>
+    <div class="offcanvas offcanvas-end width-custom-order-app-navbar-offcanvas" id="navbarOrderApp">
+        <div class="offcanvas-header flex-column">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <h5 id="offcanvasRightLabel" class="text-blue-custom">PIZZASHOP</h5>
+                <button type="button" class="btn-close text-reset"
+                    data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="d-flex flex-column gap-1 align-items-center  w-100"> 
+                <div class="active-mobile-navbar-order-app d-flex justify-content-start gap-1 align-items-center custom-border-kot-navbar w-100"
+                    id="kotKotMobile">
+                    <img src="~/images/icons/kot-navbar-kot-black.svg" class="small-image" alt="">
+                    <p class="text-blue-custom text-black">KOT</p>
                 </div>
-                <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar"
-                    id="kotWaitingList">
-                    <img src="~/images/icons/kot-navbar-clock.svg" class="small-image" alt="">
-                    <p class="text-blue-custom">Waiting List</p>
+                <div class="d-flex justify-content-start gap-1 align-items-center custom-border-kot-navbar w-100"
+                    id="kotWaitingListMobile">
+                    <img src="~/images/icons/kot-navbar-clock-black.svg" class="small-image" alt="">
+                    <p class="text-blue-custom text-black">Waiting List</p>
                 </div>
-                <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar"
-                    id="kotTables">
-                    <img src="~/images/icons/kot-navbar-tables.svg" class="small-image" alt="">
-                    <p class="text-blue-custom">Tables</p>
+                <div class="d-flex justify-content-start gap-1 align-items-center custom-border-kot-navbar w-100"
+                    id="kotTablesMobile">
+                    <img src="~/images/icons/kot-navbar-tables-black.svg" class="small-image" alt="">
+                    <p class="text-blue-custom text-black">Tables</p>
                 </div>
-                <div class="d-flex justify-content-center gap-1 align-items-center custom-border-kot-navbar"
-                    id="kotMenu">
-                    <img src="~/images/icons/kot-navbar-menu.svg" class="small-image" alt="">
-                    <p class="text-blue-custom">Menu</p>
+                <div class="d-flex justify-content-start gap-1 align-items-center custom-border-kot-navbar w-100"
+                    id="kotMenuMobile">
+                    <img src="~/images/icons/kot-navbar-menu-black.svg" class="small-image" alt="">
+                    <p class="text-blue-custom text-black">Menu</p>
                 </div>
             </div>
         </div>
@@ -182,6 +183,21 @@
         window.location.href = "/WaitingList";
     });
 
+    $("#kotWaitingListMobile").click(function () {
+        window.location.href = "/WaitingList";
+    });
+
+    $("#kotKotMobile").click(function () {
+        window.location.href = "/OrderApp/Kot";
+    });
+
+    $("#kotTablesMobile").click(function () {
+        window.location.href = "/OrderApp";
+    });
+
+    $("#kotMenuMobile").click(function () {
+        window.location.href = "/OrderApp/Menu";
+    });
     $("#kotTables").click(function () {
         window.location.href = "/OrderApp";
     });
@@ -196,18 +212,27 @@
     $(document).ready(function () {
         if (window.location.href.indexOf("Menu") > -1) {
             makeThisTabActive("kotMenu");
+            makeThisTabActiveMobile("kotMenuMobile");
         } else if (window.location.href.indexOf("WaitingList") > -1) {
             makeThisTabActive("kotWaitingList");
+            makeThisTabActiveMobile("kotWaitingListMobile");
         } else if (window.location.href.indexOf("/OrderApp/Kot") > -1) {
             makeThisTabActive("kotKot");
+            makeThisTabActiveMobile("kotKotMobile");
         } else if (window.location.href.indexOf("OrderApp") > -1) {
             makeThisTabActive("kotTables");
-        } 
+            makeThisTabActiveMobile("kotTablesMobile");
+        }
     });
 
     function makeThisTabActive(tabId) {
         $(".custom-border-kot-navbar").removeClass("active-kot-navbar");
         $("#" + tabId).addClass("active-kot-navbar");
+    }
+
+    function makeThisTabActiveMobile(tabId) {
+        $(".custom-border-kot-navbar").removeClass("active-mobile-navbar-order-app");
+        $("#" + tabId).addClass("active-mobile-navbar-order-app");
     }
 
 </script>

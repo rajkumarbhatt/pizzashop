@@ -18,7 +18,7 @@ namespace Presentation.Controllers
 
         public async Task<IActionResult> Index()
         {
-            CustomerViewModel customerViewModel = await _customerService.GetCustomerDetailsAsync();
+            CustomerViewModel customerViewModel = await _customerService.GetCustomerDetailsTableAsync();
             return View(customerViewModel);
         }
 

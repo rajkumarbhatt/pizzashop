@@ -227,25 +227,16 @@ public class OrderService : IOrderService
                     TotalAmount = (double)(om.Price * om.Quantity ?? 0)
                 }).ToList()
             }).ToList(),
-            SubTotal = 0,
+            SubTotal = (double?)o.SubTotal,
             InvoiceTaxes = o.OrderTaxes.Select(ot => new InvoiceTax
             {
                 TaxName = ot.Tax.Name ?? "N/A",
                 TaxAmount = (double)ot.TaxAmount
             }).ToList(),
-            Total = 0,
+            Total = (double?)o.TotalAmount,
         }).FirstOrDefaultAsync() ?? new OrderDetailsViewModel();
 
         orderDetailsViewModel.InvoiceNumber = "INV" + orderDetailsViewModel.Id;
-
-        foreach (InvoiceItem i in orderDetailsViewModel.InvoiceItems ?? new List<InvoiceItem>())
-        {
-            orderDetailsViewModel.SubTotal += i.TotalAmount;
-            foreach (InvoiceModifiers im in i.InvoiceModifiers ?? new List<InvoiceModifiers>())
-            {
-                orderDetailsViewModel.SubTotal += im.TotalAmount;
-            }
-        }
 
         List<OrderTableMapping> otmap = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
         int NumberOfPeople = 0;
@@ -254,13 +245,19 @@ public class OrderService : IOrderService
             NumberOfPeople += otm.NoOfPersons;
         }
         orderDetailsViewModel.NumberOfPeople = NumberOfPeople;
-
-        orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
-        orderDetailsViewModel.OrderDuration = orderDetailsViewModel.OrderDuration.Substring(0, orderDetailsViewModel.OrderDuration.LastIndexOf("."));
-        var days = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
-        var hours = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalHours;
-        var minutes = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalMinutes;
-
+        int days = 0, hours = 0, minutes = 0;
+        if (orderDetailsViewModel.OrderStatus == "Completed")
+        {
+            orderDetailsViewModel.OrderDuration = (Convert.ToDateTime(orderDetailsViewModel.ModifiedOn) - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
+            days = (int)(Convert.ToDateTime(orderDetailsViewModel.ModifiedOn) - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
+            hours = (int)(Convert.ToDateTime(orderDetailsViewModel.ModifiedOn) - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalHours;
+            minutes = (int)(Convert.ToDateTime(orderDetailsViewModel.ModifiedOn) - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalMinutes;
+        } else {
+            orderDetailsViewModel.OrderDuration = (DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).ToString();
+            days = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalDays;
+            hours = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalHours;
+            minutes = (int)(DateTime.Now - Convert.ToDateTime(orderDetailsViewModel.PlacedOn)).TotalMinutes;
+        }
         if (days > 0)
         {
             orderDetailsViewModel.OrderDuration = days + " days " + hours % 24 + " hours " + minutes % 60 + " minutes ago";
@@ -274,42 +271,9 @@ public class OrderService : IOrderService
             orderDetailsViewModel.OrderDuration = minutes % 60 + " minutes ago";
         }
 
-        orderDetailsViewModel.SubTotal = (double?)Math.Round((decimal)(orderDetailsViewModel.SubTotal ?? 0), 2);
-        orderDetailsViewModel.Total += orderDetailsViewModel.SubTotal;
-
-        orderDetailsViewModel.InvoiceTaxes = await GetInvoiceTaxesAsync(orderId, orderDetailsViewModel);
-        foreach (InvoiceTax i in orderDetailsViewModel.InvoiceTaxes)
-        {
-            orderDetailsViewModel.Total += i.TaxAmount;
-        }
-        orderDetailsViewModel.Total = (double?)Math.Round((decimal)(orderDetailsViewModel.Total ?? 0), 2);
-
         return orderDetailsViewModel;
     }
-    public async Task<List<InvoiceTax>> GetInvoiceTaxesAsync(int orderId, OrderDetailsViewModel orderDetailsViewModel)
-    {
-        List<InvoiceTax> invoiceTaxes = new List<InvoiceTax>();
-        Order order = await _context.Orders.FindAsync(orderId) ?? new Order();
-        List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).ToListAsync();
-        foreach (OrderTaxis orderTax in orderTaxes)
-        {
-            TaxesFee tax = await _context.TaxesFees.FindAsync(orderTax.TaxId) ?? new TaxesFee();
-            InvoiceTax invoiceTax = new InvoiceTax();
-            if (tax.TaxType == "Percentage")
-            {
-                invoiceTax.TaxName = tax.Name;
-                invoiceTax.TaxAmount = (double)orderTax.TaxAmount;
-                invoiceTax.TaxAmount = Math.Round(invoiceTax.TaxAmount, 2);
-            }
-            else
-            {
-                invoiceTax.TaxName = tax.Name;
-                invoiceTax.TaxAmount = (double)orderTax.TaxAmount;
-            }
-            invoiceTaxes.Add(invoiceTax);
-        }
-        return invoiceTaxes;
-    }
+
     public async Task<byte[]> GenerateInvoiceAsync(int orderId)
     {
         string fontPath = "C:/Windows/Fonts/Arial.ttf";
