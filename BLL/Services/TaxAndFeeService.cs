@@ -84,7 +84,7 @@ namespace BLL.Services
         {
             if (taxId == -1)
             {
-            if (await _context.TaxesFees.AnyAsync(t => t.Name == taxName && t.IsDeleted == false))
+            if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.IsDeleted == false))
             {
                 return new JsonResult(new { success = false, message = "Tax already exists" });
             }
@@ -103,7 +103,7 @@ namespace BLL.Services
             }
             else
             {
-            if (await _context.TaxesFees.AnyAsync(t => t.Name == taxName && t.Id != taxId && t.IsDeleted == false))
+            if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.Id != taxId && t.IsDeleted == false))
             {
                 return new JsonResult(new { success = false, message = "Tax already exists" });
             }

@@ -5,38 +5,45 @@
 
 <div class="d-flex">
     <div id="thisDivIsImportant">
-        <div class="d-flex justify-content-start" style="height: min-content;">
-            <img src="~/images/icons/hamburger-black.svg" class="navbar-image d-block d-md-none" alt=""
-                data-bs-toggle="offcanvas" data-bs-target="#categoriesKotMenuOffCanvas">
-            <div class="input-group search-box m-3 search-box-kot-menu">
-                <input type="text" class="form-control bg-white search-input py-1 py-sm-2" id="searchKotMenuItems"
-                    placeholder="Search">
-                <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
-            </div>
-            <div class="d-none d-md-flex gap-3 m-3">
-                <div class=" d-flex gap-1 align-items-center">
-                    <p class="veg-kot"></p>
-                    <p>Vegiterian</p>
+        <div class="d-flex justify-content-between" style="height: min-content;">
+            <div class="w-100 d-flex justify-content-between align-items-center">
+                <img src="~/images/icons/hamburger-black.svg" class="navbar-image d-block d-md-none" alt=""
+                    data-bs-toggle="offcanvas" data-bs-target="#categoriesKotMenuOffCanvas">
+                <div class="input-group search-box m-3 search-box-kot-menu">
+                    <input type="text" class="form-control bg-white search-input py-1 py-sm-2" id="searchKotMenuItems"
+                        placeholder="Search">
+                    <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
                 </div>
-                <div class=" d-flex gap-1 align-items-center">
-                    <p class="nonveg-kot"></p>
-                    <p>Non Vegiterian</p>
+                <div class="d-none d-md-flex gap-3 m-3">
+                    <div class=" d-flex gap-1 align-items-center">
+                        <p class="veg-kot"></p>
+                        <p>Vegiterian</p>
+                    </div>
+                    <div class=" d-flex gap-1 align-items-center">
+                        <p class="nonveg-kot"></p>
+                        <p>Non Vegiterian</p>
+                    </div>
+                    <div class=" d-flex gap-1 align-items-center">
+                        <p class="vegan-kot"></p>
+                        <p>Vegan</p>
+                    </div>
                 </div>
-                <div class=" d-flex gap-1 align-items-center">
-                    <p class="vegan-kot"></p>
-                    <p>Vegan</p>
-                </div>
+                @if (Model.OrderDetailsCard.TableNames != null)
+                {
+                    <div class="custom-eye-border d-none" id="showOrderDetailsTabButton" onclick="showOrderDetailsTab()">
+                        <img src="~/images/icons/show-order-details.svg" class="navbar-image d-block p-2" alt="">
+                    </div>
+                }
             </div>
         </div>
         <div id="kotMenuItemsListPartialStart">
             <partial name="_KotMenuItemsList" model="@Model" />
-
         </div>
     </div>
-    @if (Model.OrderDetailsCard != null)
+    @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.TableNames != null)
     {
         <div id="thisIsSecondImportant" class="bg-white d-none" style="height: 84vh;">
-            <div class="p-3 h-100">
+            <div class="p-3 ">
                 @* header *@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex gap-1">
@@ -60,95 +67,100 @@
                         <div class="table-card-kot-menu-icon-border cursor-pointer" onclick="getOrderWiseComment()">
                             <img src="~/images/icons/kot-menu-comment.svg" class="navbar-image p-2" alt="">
                         </div>
+                        <div id="hideOrderDetailsTabButton" class="cursor-pointer hide-order-details-icon d-none"
+                            onclick="hideOrderDetailsTab()">
+                            <img src="~/images/icons/cross.svg" class="navbar-image d-block " alt="">
+                        </div>
                     </div>
                 </div>
-                @* ordered items section *@
-                <div id="orderItemDetailsPartial" class="h-100">
-                    <partial name="_OrderItemDetailsPartial" model="@Model" />
-                </div>
-
+            </div>
+            @* ordered items section *@
+            <div id="orderItemDetailsPartial" class="h-100">
+                <partial name="_OrderItemDetailsPartial" model="@Model" />
             </div>
         </div>
     }
-</div>
 
-@* categories offcanvas *@
-<div class="offcanvas offcanvas-start width-custom-order-app-navbar-offcanvas" id="categoriesKotMenuOffCanvas">
-    <div class="offcanvas-header flex-column align-items-start">
-        <div class="d-flex flex-column gap-2">
-            <h3 class="pt-3 ps-3" style="font-weight: 650;">Category</h3>
-            <div id="categoryMobile-kot-favourite" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1 custom-border-kot-navbar"
-                style="font-size: large;">
-                Favourite Items
-            </div>
-            <div id="categoryMobile-kot-all" onclick="changeCategoryKot(id)"
-                class="ps-3 cursor-pointer py-1 active-kot-sidebar-item custom-border-kot-navbar" style="font-size: large;">
-                All
-            </div>
-            @foreach (var item in Model.Categories)
-            {
-                var customId = "categoryMobile-kot-" + item.Id;
-                <div id="@customId" onclick="changeCategoryKot(id)" class="ps-3 cursor-pointer py-1 custom-border-kot-navbar"
+    @* categories offcanvas *@
+    <div class="offcanvas offcanvas-start width-custom-order-app-navbar-offcanvas" id="categoriesKotMenuOffCanvas">
+        <div class="offcanvas-header flex-column align-items-start">
+            <div class="d-flex flex-column gap-2">
+                <h3 class="pt-3 ps-3" style="font-weight: 650;">Category</h3>
+                <div id="categoryMobile-kot-favourite" onclick="changeCategoryKot(id)"
+                    class="ps-3 cursor-pointer py-1 custom-border-kot-navbar" style="font-size: large;">
+                    Favourite Items
+                </div>
+                <div id="categoryMobile-kot-all" onclick="changeCategoryKot(id)"
+                    class="ps-3 cursor-pointer py-1 active-kot-sidebar-item custom-border-kot-navbar"
                     style="font-size: large;">
-                    @item.Name
+                    All
                 </div>
-            }
-        </div>
-    </div>
-</div>
-@* qr code modal *@
-<div class="modal fade" id="QrCodeMenuModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered qr-code-modal-width">
-        <div class="modal-content">
-            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                <div class="d-flex justify-content-between align-items-center w-100">
-                    <h5 class="modal-title" id="staticBackdropLabel">Menu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <img src="~/images/qr-code.png" style="width: 300px;" class="img-fluid p-4" alt="">
-                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3 mt-4">Done</button></a>
+                @foreach (var item in Model.Categories)
+                {
+                    var customId = "categoryMobile-kot-" + item.Id;
+                    <div id="@customId" onclick="changeCategoryKot(id)"
+                        class="ps-3 cursor-pointer py-1 custom-border-kot-navbar" style="font-size: large;">
+                        @item.Name
+                    </div>
+                }
             </div>
         </div>
     </div>
-</div>
-@* orderwise comment modal *@
-<div class="modal fade" id="OrderCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Order Wise Comment</h5>
-                <button type="button" onclick="clearOrderCommentForm()" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                <div class="d-flex justify-content-between align-items-center w-100">
+    @* qr code modal *@
+    <div class="modal fade" id="QrCodeMenuModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered qr-code-modal-width">
+            <div class="modal-content">
+                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h5 class="modal-title" id="staticBackdropLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <img src="~/images/qr-code.png" style="width: 300px;" class="img-fluid p-4" alt="">
+                    <a data-bs-dismiss="modal"><button type="button"
+                            class="btn btn-contrast px-3 mt-4">Done</button></a>
                 </div>
-                <div class="col-12 row">
-                    <div class="form-floating my-auto col-12">
-                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
-                            style="height: 100px"></textarea>
-                        <label for="floatingTextarea2">Comments</label>
+            </div>
+        </div>
+    </div>
+    @* orderwise comment modal *@
+    <div class="modal fade" id="OrderCommentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Order Wise Comment</h5>
+                    <button type="button" onclick="clearOrderCommentForm()" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                    </div>
+                    <div class="col-12 row">
+                        <div class="form-floating my-auto col-12">
+                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                                style="height: 100px"></textarea>
+                            <label for="floatingTextarea2">Comments</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-3 align-items-center w-100">
+                        <a data-bs-dismiss="modal"><button onclick="addOrderWiseComment()" type="button"
+                                class="btn btn-primary px-3 mt-4">Save</button></a>
+                        <a data-bs-dismiss="modal"><button onclick="clearOrderCommentForm()" type="button"
+                                class="btn btn-contrast px-3 mt-4">Cancel</button></a>
                     </div>
                 </div>
-                <div class="d-flex justify-content-end gap-3 align-items-center w-100">
-                    <a data-bs-dismiss="modal"><button onclick="addOrderWiseComment()" type="button"
-                            class="btn btn-primary px-3 mt-4">Save</button></a>
-                    <a data-bs-dismiss="modal"><button onclick="clearOrderCommentForm()" type="button"
-                            class="btn btn-contrast px-3 mt-4">Cancel</button></a>
-                </div>
             </div>
         </div>
     </div>
-</div>
-@* customer details modal *@
-<div id="CustomerDetailsModalPartialStart1">
-    <partial name="_CustomerDetailsModal" model="@Model" />
-</div>
-@* select modifiers modal *@
-<div id="SelectModifiersPartialStaring">
-    <partial name="_SelectModifiersModal" model="@Model" />
+    @* customer details modal *@
+    <div id="CustomerDetailsModalPartialStart1">
+        <partial name="_CustomerDetailsModal" model="@Model" />
+    </div>
+    @* select modifiers modal *@
+    <div id="SelectModifiersPartialStaring">
+        <partial name="_SelectModifiersModal" model="@Model" />
+    </div>
 </div>
 
 @section Scripts {
@@ -304,4 +316,41 @@
     function clearOrderCommentForm() {
         $("#floatingTextarea2").val("");
     }
+
+    function showOrderDetailsTab() {
+        if (orderId != "Menu") {
+            $("#thisDivIsImportant").addClass("d-none");
+            document.getElementById("thisIsSecondImportant").style.display = "block";
+            document.getElementById("thisIsSecondImportant").style.width = "100%";
+            $("#hideOrderDetailsTabButton").removeClass("d-none");
+        }
+    }
+
+    function hideOrderDetailsTab() {
+        if (orderId != "Menu") {
+            $("#thisDivIsImportant").removeClass("d-none");
+            document.getElementById("thisIsSecondImportant").style.display = "none";
+            document.getElementById("thisDivIsImportant").style.width = "100%";
+        }
+        $("#hideOrderDetailsTabButton").addClass("d-none");
+    }
+
+    $(window).on('resize', function () {
+        console.log("Window resized");
+        if ($(window).width() > 1600) {
+            document.getElementById("thisDivIsImportant").style.width = "64%";
+            document.getElementById("thisDivIsImportant").style.display = "block !important";
+        }
+    });
+
+    @* resize js *@
+        document.addEventListener("resize", function () {
+            console.log("Window resized");
+            if (window.innerWidth > 1600) {
+                console.log("window is greater than 1600", innerWidth);
+                document.getElementById("thisDivIsImportant").classList.remove("d-none");
+                document.getElementById("thisDivIsImportant").style.width = "64% !important";
+            }
+        });
+
 </script>

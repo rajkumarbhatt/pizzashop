@@ -998,6 +998,7 @@ td{
   width: 100px;
   height: 100px;
   background: #FFFFFF;
+  border-radius: 20px;
 }
 .border-kot-menu-item-image {
   border: 1px solid #D2CEC6;
@@ -1017,6 +1018,7 @@ td{
   border-style: solid;
   border-width: 0px 40px 40px 0; 
   border-color: white green white white;
+  border-radius: 0px 20px 0px 20px;
 }
 .top-right-border-nonveg {
   position: absolute;
@@ -1027,6 +1029,7 @@ td{
   border-style: solid;
   border-width: 0px 40px 40px 0; 
   border-color: white red white white;
+  border-radius: 0px 20px 0px 20px;
 }
 .top-right-border-vegan {
   position: absolute;
@@ -1037,6 +1040,7 @@ td{
   border-style: solid;
   border-width: 0px 40px 40px 0; 
   border-color: white orange white white;
+  border-radius: 0px 20px 0px 20px;
 }
 .search-box-kot-menu {
   width: 20%; 
@@ -1156,9 +1160,31 @@ td{
 }
 @media (max-width: 1600px) {
   #thisIsSecondImportant {
-    display: none !important;
+    display: none;
   }
   #thisDivIsImportant {
     width: 100% !important;
   }
+  .custom-eye-border {
+    display: block !important;
+    border: 1px solid black;
+    height: max-content;
+    border-radius: 50%;
+  }
+}
+@media (min-width: 1600px) {
+  .hide-order-details-icon {
+    display: none !important;
+  }
+  
+  #thisIsSecondImportant {
+    width: 34% !important;
+    display: block !important;
+  }
+}
+.selected-table-waiting-list {
+  background-color: #0066A7;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 12px;  
 }

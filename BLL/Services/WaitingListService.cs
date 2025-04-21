@@ -2,6 +2,7 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,12 @@ namespace BLL.Services
     {
         private readonly PizzaShopContext _context;
         private readonly IJwtService _jwtService;
-        public WaitingListService(PizzaShopContext context, IJwtService jwtService)
+        private readonly IOrderAppService _orderAppService;
+        public WaitingListService(PizzaShopContext context, IJwtService jwtService, IOrderAppService orderAppService)
         {
             _context = context;
             _jwtService = jwtService;
+            _orderAppService = orderAppService;
         }
         public async Task<WaitingListViewModel> GetWaitingListViewModelAsync()
         {
@@ -109,7 +112,7 @@ namespace BLL.Services
         {
             List<Customer> customers = await _context.Customers.Where(c => c.Email.Contains(email)).ToListAsync();
             customers.RemoveAll(c => _context.WaitingLists.Any(w => w.CustomerId == c.Id && w.IsDeleted == false));
-            customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed"));
+            customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed" && o.Status != "Cancelled"));
             List<CustomerDetailsSuggestions> customerSuggetions = new List<CustomerDetailsSuggestions>();
             foreach (Customer customer in customers)
             {
@@ -181,78 +184,20 @@ namespace BLL.Services
             return new JsonResult(availableTables);
         }
 
-        public async Task<IActionResult> AssignTableAsync(int waitingListId, int tableId, int userId, int sectionId)
+        public async Task<IActionResult> AssignTableAsync(int waitingListId, List<int> tableIds, int userId, int sectionId)
         {
-            WaitingList waitingList = await _context.WaitingLists.FindAsync(waitingListId);
-            if (waitingList == null)
+            WaitingList waitingList = await _context.WaitingLists.FindAsync(waitingListId) ?? new WaitingList();
+            Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == waitingList.CustomerId) ?? new Customer();
+            WaitingListModal waitingListModal = new WaitingListModal
             {
-                return new JsonResult(new { success = false, message = "Waiting list not found" });
-            }
-
-            Customer customer = await _context.Customers.FindAsync(waitingList.CustomerId);
-            if (customer == null)
-            {
-                return new JsonResult(new { success = false, message = "Customer not found" });
-            }
-
-            if (await _context.Orders.AnyAsync(o => o.CustomerId == customer.Id && (o.Status == "Pending" || o.Status == "In Progress" || o.Status == "Served")))
-            {
-                return new JsonResult(new { success = false, message = "Customer already has an ongoing order" });
-            }
-
-            Table table = await _context.Tables.FindAsync(tableId);
-            if (table == null)
-            {
-                return new JsonResult(new { success = false, message = "Table not found" });
-            }
-            else if (table.Capacity < waitingList.NoOfPersons)
-            {
-                return new JsonResult(new { success = false, message = "Customers can't be managed in selected table" });
-            }
-            else if (table.Status != "Available")
-            {
-                return new JsonResult(new { success = false, message = "Table is not available" });
-            }
-
-            table.Status = "Assigned";
-            waitingList.IsDeleted = true;
-            waitingList.SectionId = sectionId;
-            waitingList.UpdatedAt = DateTime.Now;
-            waitingList.UpdatedBy = userId;
-
-            await _context.SaveChangesAsync();
-
-            Order order = new Order
-            {
-                TotalAmount = 0,
-                Status = "Pending",
-                PaymentMode = "Cash",
-                IsDeleted = false,
-                CustomerId = waitingList.CustomerId,
-                CreatedAt = DateTime.Now,
-                CreatedBy = userId,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = userId
+                Id = waitingList.Id,
+                Name = customer.Name,
+                Email = customer.Email ?? "",
+                MobileNumber = customer.Phone ?? "",
+                NumberOfPeople = waitingList.NoOfPersons,
+                SectionId = sectionId
             };
-
-            await _context.Orders.AddAsync(order);
-            await _context.SaveChangesAsync();
-
-            OrderTableMapping orderTableMapping = new OrderTableMapping
-            {
-                OrderId = order.Id,
-                TableId = tableId,
-                CreatedAt = DateTime.Now,
-                CreatedBy = userId,
-                UpdatedAt = DateTime.Now,
-                UpdatedBy = userId,
-                IsDeleted = false
-            };
-
-            await _context.OrderTableMappings.AddAsync(orderTableMapping);
-            await _context.SaveChangesAsync();
-
-            return new JsonResult(new { success = true, message = "Table assigned successfully" });
+            return await _orderAppService.AssignTablesToCustomerAsync(waitingListModal, tableIds, userId);
         }
     }
 }

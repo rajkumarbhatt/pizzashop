@@ -16,13 +16,13 @@ public class KOTController : Controller
     [Route("OrderApp/Kot")]
     public async Task<IActionResult> Index()
     {
-        KotViewModel kotViewModel = await _kotService.GetKotViewModelAsync();
+        KotViewModel kotViewModel = await _kotService.GetKotViewModelAsync(1, 4);
         return View(kotViewModel);
     }    
     [HttpGet]
-    public async Task<IActionResult> GetKotByCategory (int categoryId)
+    public async Task<IActionResult> GetKotByCategory (int categoryId, int pageIndex = 1, int pageSize = 4)
     {
-        KotViewModel kotViewModel = await _kotService.GetKotByCategoryAsync(categoryId);
+        KotViewModel kotViewModel = await _kotService.GetKotByCategoryAsync(categoryId, pageIndex, pageSize);
         return PartialView("_CardsPartial", kotViewModel);
     }
     [HttpGet]
@@ -47,9 +47,9 @@ public class KOTController : Controller
         return PartialView("_CardsPartial", kotViewModel); 
     }
     [HttpGet]
-    public async Task<IActionResult> GetReadyItems (int categoryId)
+    public async Task<IActionResult> GetReadyItems (int categoryId, int pageIndex = 1)
     {
-        KotViewModel kotViewModel = await _kotService.GetReadyItems(categoryId);
+        KotViewModel kotViewModel = await _kotService.GetReadyItems(categoryId, pageIndex);
         return PartialView("_CardsPartial", kotViewModel);
     }
 }

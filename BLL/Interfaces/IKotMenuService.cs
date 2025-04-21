@@ -19,6 +19,7 @@ namespace BLL.Interfaces
         public Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId);
         public Task<IActionResult> SaveOrder (SaveOrderViewModel saveOrderViewModel, int userId);
         public Task<IActionResult> CompleteOrder (int orderId, int userId);
+        public Task<IActionResult> CancelOrder (int orderId, int userId);
         public Task<IActionResult> SaveCustomerReview (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
         public Task<JsonResult> CanDeleteFromOrder (int orderId, int itemId);
         public Task<JsonResult> CanReduceFromOrder (int orderId, int itemId, int currentQuantity);

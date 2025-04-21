@@ -379,6 +379,7 @@
                             data: { categoryId: currentCategoryId, pageIndex: currentPageIndex, pageSize: currentPageSize },
                             success: function (data) {
                                 $("#partialViewStartingInner").html(data);
+                                $("#searchInput").val("");
                             },
                             error: function (data) {
                                 console.log(data);

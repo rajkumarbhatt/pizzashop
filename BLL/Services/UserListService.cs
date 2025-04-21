@@ -92,11 +92,11 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "User not found" });
             }
-            if (await _context.Users.AnyAsync(u => u.Username == userViewModel.UsernameRequestedUSer && u.Id != userViewModel.Id))
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == userViewModel.UsernameRequestedUSer.ToLower() && u.Id != userViewModel.Id))
             {
                 return new JsonResult(new { success = false, message = "Username already exists" });
             }
-            if (await _context.Users.AnyAsync(u => u.Email == userViewModel.Email && u.Id != userViewModel.Id))
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == userViewModel.Email.ToLower() && u.Id != userViewModel.Id))
             {
                 return new JsonResult(new { success = false, message = "Email already exists" });
             }
@@ -141,11 +141,11 @@ namespace BLL.Services
 
         public async Task<JsonResult> CreateUserAsync(int userIdLoggedIn, CreateUserViewModel createUserViewModel)
         {
-            if (await _context.Users.AnyAsync(u => u.Username == createUserViewModel.UsernameRequestedUser))
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == createUserViewModel.UsernameRequestedUser.ToLower()))
             {
                 return new JsonResult(new { success = false, message = "Username already exists" });
             }
-            if (await _context.Users.AnyAsync(u => u.Email == createUserViewModel.Email))
+            if (await _context.Users.AnyAsync(u => u.Email.ToLower() == createUserViewModel.Email.ToLower()))
             {
                 return new JsonResult(new { success = false, message = "Email already exists" });
             }

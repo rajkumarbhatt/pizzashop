@@ -70,7 +70,7 @@ namespace BLL.Services
         public async Task<IActionResult> AddSectionAsync(string sectionName, string sectionDescription, int sectionId, int userId)
         {
 
-            if (await _context.Sections.AnyAsync(s => s.Name == sectionName && s.IsDeleted == false))
+            if (await _context.Sections.AnyAsync(s => s.Name.ToLower() == sectionName.ToLower() && s.IsDeleted == false && s.Id != sectionId))
             {
                 return new JsonResult(new { success = false, message = "Section already exists" });
             }
@@ -166,7 +166,7 @@ namespace BLL.Services
         {
             if (tableId == -1)
             {
-                if (await _context.Tables.AnyAsync(t => t.Name == tableName && t.SectionId == sectionId && t.IsDeleted == false))
+                if (await _context.Tables.AnyAsync(t => t.Name.ToLower() == tableName.ToLower() && t.SectionId == sectionId && t.IsDeleted == false))
                 {
                     return new JsonResult(new { success = false, message = "Table already exists" });
                 }
@@ -188,7 +188,7 @@ namespace BLL.Services
             else
             {
                 Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == tableId);
-                if (await _context.Tables.AnyAsync(t => t.Name == tableName && t.SectionId == sectionId && t.IsDeleted == false && t.Id != tableId))
+                if (await _context.Tables.AnyAsync(t => t.Name.ToLower() == tableName.ToLower() && t.SectionId == sectionId && t.IsDeleted == false && t.Id != tableId))
                 {
                     return new JsonResult(new { success = false, message = "Table already exists" });
                 }

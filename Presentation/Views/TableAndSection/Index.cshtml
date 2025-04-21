@@ -506,9 +506,10 @@
                         $.ajax({
                             type: "GET",
                             url: '@Url.Action("TablesFilter", "TableAndSection")',
-                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val(), searchValue: $("#searchInput").val() },
+                            data: { pageIndex: $("#PageIndex").val(), pageSize: @Model.PageSize, sectionId: $("#SectionId").val()},
                             success: function (data) {
                                 $("#tablePartialView").html(data);
+                                $("#searchInput").val("");
                             }
                         });
                     } else {

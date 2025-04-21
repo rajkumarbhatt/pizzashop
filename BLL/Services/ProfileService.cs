@@ -61,7 +61,7 @@ namespace BLL.Services
             {
             return new JsonResult(new { success = false, message = "Unauthorized access" });
             }
-            if (await _context.Users.AnyAsync(u => u.Username == ProfileViewModel.Username && u.Id != userId))
+            if (await _context.Users.AnyAsync(u => u.Username.ToLower() == ProfileViewModel.Username.ToLower() && u.Id != userId))
             {
             return new JsonResult(new { success = false, message = "Username already exists" });
             }

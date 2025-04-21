@@ -73,6 +73,10 @@
       "PackagePath": "staticwebassets\\images\\icons\\cloud.svg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\cross.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\cross.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\customer-details.svg",
       "PackagePath": "staticwebassets\\images\\icons\\customer-details.svg"
     },
@@ -231,6 +235,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\search-icon.svg",
       "PackagePath": "staticwebassets\\images\\icons\\search-icon.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\show-order-details.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\show-order-details.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\show-password.svg",

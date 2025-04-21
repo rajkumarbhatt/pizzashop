@@ -60,10 +60,10 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AssignTable(int waitingListId, int tableId, int sectionId)
+        public async Task<IActionResult> AssignTable(int waitingListId, List<int> tableIds, int sectionId)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
-            return await _waitingListService.AssignTableAsync(waitingListId, tableId, userId, sectionId);
+            return await _waitingListService.AssignTableAsync(waitingListId, tableIds, userId, sectionId);
         }
     }
 }

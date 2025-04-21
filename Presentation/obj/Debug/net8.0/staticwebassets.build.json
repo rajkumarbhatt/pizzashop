@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vldlqYf2gsPx3meWsfQ7xOEVnn4TOslabFcyAIXLpSg=",
+  "Hash": "mbGnCLx9cecmKqkw36PGFLjqFgt25AjkUYm9qua8Dg0=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -414,6 +414,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\icons\\cloud.svg"
+    },
+    {
+      "Identity": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\cross.svg",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "images/icons/cross.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\icons\\cross.svg"
     },
     {
       "Identity": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\customer-details.svg",
@@ -1174,6 +1193,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\icons\\search-icon.svg"
+    },
+    {
+      "Identity": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\show-order-details.svg",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "images/icons/show-order-details.svg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\icons\\show-order-details.svg"
     },
     {
       "Identity": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\show-password.svg",

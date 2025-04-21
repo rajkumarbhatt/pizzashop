@@ -56,6 +56,27 @@
     </div>
 </div>
 
+@* complete order modal *@
+<div class="modal fade" id="CancelOrderModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Cancel Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to cancel this order?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelOrderButton" type="button" class="btn btn-primary px-3">Yes</button>
+                <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @* customer rating modal *@
 <div class="modal fade" id="CustomerRatingModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -201,6 +222,7 @@
     });
 
     function syncItemsList() {
+        console.log("assfsa", orderItems);
         orderItems.forEach((item) => {
             var accordianItemDetails = document.getElementById("accordianItemDetails");
             var customAccordianId = "collapse" + item.itemId;

@@ -21,15 +21,15 @@ namespace Presentaion.Controllers
             var hasLoggedInBefore = await _navBarService.IsFirstTimeLoginAsync(userId);
             var username = await _navBarService.GetUsernameFromUserIdAsync(userId);
             var roleId  = await _navBarService.GetRoleIdFromUserIdAsync(userId);
+            await _jwtService.SetSessionParametersAsync(userId, username, roleId);
             if (roleId == 3)
             {
-                return RedirectToAction("Index", "OrderApp");
+                return RedirectToAction("Index", "KOT");
             }
             if (hasLoggedInBefore == false)
             {
                 return RedirectToAction("NewPassword","ResetPassword");
             }
-            await _jwtService.SetSessionParametersAsync(userId, username, roleId);
             return View();
         }
 

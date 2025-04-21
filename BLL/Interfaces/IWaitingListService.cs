@@ -12,6 +12,6 @@ namespace BLL.Interfaces
         Task<IActionResult> GetCustomerSuggestionsAsync(string email);
         Task<WaitingListViewModel> GetWaitingListBasedOnSectionAsync(int sectionId);
         Task<JsonResult> GetAvailableTablesAsync(int sectionId);
-        Task<IActionResult> AssignTableAsync(int waitingListId, int tableId, int userId, int sectionId);
+        Task<IActionResult> AssignTableAsync(int waitingListId, List<int> tableIds, int userId, int sectionId);
     }
 }

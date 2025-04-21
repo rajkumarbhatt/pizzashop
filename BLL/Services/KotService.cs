@@ -14,7 +14,7 @@ namespace BLL.Services
         {
             _context = context;
         }
-        public async Task<KotViewModel> GetKotViewModelAsync(int? orderId)
+        public async Task<KotViewModel> GetKotViewModelAsync(int pageIndex = 1, int pageSize = 4, int? orderId = null)
         {
             List<Category>? categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
             List<KotOrderCard> kotOrderCards = new List<KotOrderCard>();
@@ -90,18 +90,30 @@ namespace BLL.Services
                     kotOrderCards.Add(kotOrderCard);
                 }
             }
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            int TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / pageSize);
+            if (pageIndex > TotalPages && TotalPages != 0)
+            {
+                pageIndex = TotalPages;
+            }
             KotViewModel kotViewModel = new()
             {
                 Categories = categories.OrderBy(c => c.Id).ToList(),
-                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).ToList(),
+                PageSize = pageSize,
+                PageIndex = pageIndex,
+                TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4),
+                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
             };
             return kotViewModel;
         }
-        public async Task<KotViewModel> GetKotByCategoryAsync(int categoryId, int? orderId = null)
+        public async Task<KotViewModel> GetKotByCategoryAsync(int categoryId, int pageIndex, int pageSize, int? orderId = null)
         {
             if (categoryId == 0)
             {
-                return await GetKotViewModelAsync(orderId);
+                return await GetKotViewModelAsync(pageIndex, pageSize, orderId);
             }
             List<Category>? categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
             List<KotOrderCard> kotOrderCards = new List<KotOrderCard>();
@@ -176,10 +188,22 @@ namespace BLL.Services
                     kotOrderCards.Add(kotOrderCard);
                 }
             }
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            int TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / pageSize);
+            if (pageIndex > TotalPages && TotalPages != 0)
+            {
+                pageIndex = TotalPages;
+            }
             KotViewModel kotViewModel = new()
             {
                 Categories = categories.OrderBy(c => c.Id).ToList(),
-                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).ToList(),
+                TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / pageSize),
+                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageSize = pageSize,
+                PageIndex = pageIndex,
             };
             return kotViewModel;
         }
@@ -189,8 +213,10 @@ namespace BLL.Services
             if (inReady)
             {
                 kotViewModel = await GetReadyItems(categoryId, orderId);
-            } else {
-                kotViewModel = await GetKotByCategoryAsync(categoryId, orderId);
+            }
+            else
+            {
+                kotViewModel = await GetKotByCategoryAsync(categoryId, 1, 4, orderId);
             }
             return kotViewModel;
         }
@@ -205,7 +231,7 @@ namespace BLL.Services
                 _context.Orders.Update(order);
                 await _context.SaveChangesAsync();
             }
-            Table table = await _context.OrderTableMappings.Where (otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).FirstOrDefaultAsync() ?? new Table();
+            Table table = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).FirstOrDefaultAsync() ?? new Table();
             if (table.Status == "Assigned")
             {
                 table.Status = "Running";
@@ -226,7 +252,7 @@ namespace BLL.Services
                     await _context.SaveChangesAsync();
                 }
             }
-            KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId);
+            KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId, 1, 4);
             return kotViewModel;
         }
 
@@ -247,7 +273,7 @@ namespace BLL.Services
             KotViewModel kotViewModel = await GetReadyItems(categoryId);
             return kotViewModel;
         }
-        public async Task<KotViewModel> GetReadyItems(int categoryId, int? orderId = null)
+        public async Task<KotViewModel> GetReadyItems(int categoryId, int pageIndex = 1, int? orderId = null)
         {
             List<Category>? categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
             List<KotOrderCard> kotOrderCards = new List<KotOrderCard>();
@@ -334,10 +360,22 @@ namespace BLL.Services
             {
                 kotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).ToList();
             }
+            if (pageIndex == 0)
+            {
+                pageIndex = 1;
+            }
+            int TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4);
+            if (pageIndex > TotalPages && TotalPages != 0)
+            {
+                pageIndex = TotalPages;
+            }
             KotViewModel kotViewModel = new()
             {
                 Categories = categories.OrderBy(c => c.Id).ToList(),
-                KotOrderCards = kotOrderCards,
+                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * 4).Take(4).ToList(),
+                PageSize = 4,
+                PageIndex = pageIndex,
+                TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4),
             };
             return kotViewModel;
         }

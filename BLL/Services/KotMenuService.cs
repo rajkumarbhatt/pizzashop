@@ -101,7 +101,6 @@ namespace BLL.Services
 
             return kotMenuViewModel;
         }
-
         public async Task<KotMenuViewModel> GetKotMenuItemsBasedOnCategoryAsync(int categoryId)
         {
             List<MenuItemsKot> menuItemsKot = new List<MenuItemsKot>();
@@ -146,7 +145,6 @@ namespace BLL.Services
             };
             return kotMenuViewModel;
         }
-
         public async Task<KotMenuViewModel> SearchMenuItemsKotAsync(string search, int categoryId)
         {
             if (string.IsNullOrEmpty(search))
@@ -205,7 +203,6 @@ namespace BLL.Services
             };
             return kotMenuViewModel;
         }
-
         public async Task<JsonResult> AddToFavouritesAsync(int itemId, int userId)
         {
             CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite { ItemId = -2348 };
@@ -232,7 +229,6 @@ namespace BLL.Services
             }
             return new JsonResult(new { success = true, message = "Item added to favourites successfully" });
         }
-
         public async Task<JsonResult> DeleteFromFavouritesAsync(int itemId, int userId)
         {
             CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite();
@@ -242,7 +238,6 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Item removed from favourites successfully" });
         }
-
         public async Task<KotMenuViewModel> GetCustomerDetailsAsync(int orderId)
         {
             Customer customerDetails = await _context.Orders.Where(o => o.Id == orderId).OrderBy(o => o.Id).Select(o => o.Customer).LastOrDefaultAsync() ?? new Customer();
@@ -259,7 +254,6 @@ namespace BLL.Services
             };
             return kotMenuViewModel;
         }
-
         public async Task<JsonResult> UpdateCustomerDetailsAsync(WaitingListModal waitingListModal, int userId)
         {
             Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
@@ -308,7 +302,6 @@ namespace BLL.Services
             }
             return new JsonResult(new { success = true, message = "Customer details updated successfully" });
         }
-
         public async Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId)
         {
             DAL.Models.Item item = await _context.Items.FirstOrDefaultAsync(i => i.Id == itemId && i.IsDeleted == false) ?? new DAL.Models.Item();
@@ -347,7 +340,6 @@ namespace BLL.Services
             };
             return kotMenuViewModel;
         }
-
         public async Task<IActionResult> UpdateOrderAmount(int orderId, int userId, float subTotal, float total)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
@@ -631,6 +623,42 @@ namespace BLL.Services
                 return new JsonResult ( new {canDecrease = false} );
             } 
             return new JsonResult ( new {canDecrease = true} );
+        }
+        public async Task<IActionResult> CancelOrder(int orderId, int userId)
+        {
+            List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
+            if (orderItems.Count > 0)
+            {
+                return new JsonResult(new { success = false, message = "Order cannot be cancelled as items are already added" });
+            }
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            order.Status = "Cancelled";
+            order.UpdatedAt = DateTime.Now;
+            order.UpdatedBy = userId;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+            List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
+            foreach (OrderTableMapping orderTableMapping in orderTableMappings)
+            {
+                Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false) ?? new Table();
+                if (table != null)
+                {
+                    table.Status = "Available";
+                    table.UpdatedAt = DateTime.Now;
+                    table.UpdatedBy = userId;
+                    _context.Tables.Update(table);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            foreach (OrderTableMapping orderTableMapping in orderTableMappings)
+            {
+                orderTableMapping.IsDeleted = true;
+                orderTableMapping.UpdatedAt = DateTime.Now;
+                orderTableMapping.UpdatedBy = userId;
+                _context.OrderTableMappings.Update(orderTableMapping);
+                await _context.SaveChangesAsync();
+            }
+            return new JsonResult(new { success = true, message = "Order cancelled successfully" });
         }
     }
 }

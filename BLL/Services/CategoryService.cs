@@ -50,7 +50,7 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "User not found" });
             }
-            if (await _context.Categories.AnyAsync(c => c.Name == categoryName && c.IsDeleted == false))
+            if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryName.ToLower() && c.IsDeleted == false))
             {
                 return new JsonResult(new { success = false, message = "Category already exists" });
             }
@@ -76,7 +76,7 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "Category not found" });
             }
-            if (await _context.Categories.AnyAsync(c => c.Name == categoryName && c.Id != categoryId))
+            if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryName.ToLower() && c.Id != categoryId && c.IsDeleted == false))
             {
                 return new JsonResult(new { success = false, message = "Category already exists" });
             }
@@ -151,11 +151,11 @@ namespace BLL.Services
         {
             if (addItemViewModel.Id == -1)
             {
-                if (await _context.Items.AnyAsync(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == false))
+                if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.IsDeleted == false))
                 {
                     return null;
                 }
-                else if (await _context.Items.AnyAsync(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == true))
+                else if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.IsDeleted == true))
                 {
                     var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == true);
                     item.IsDeleted = false;
@@ -237,11 +237,11 @@ namespace BLL.Services
             }
             else
             {
-                if (await _context.Items.AnyAsync(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == false))
+                if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.Id != addItemViewModel.Id && i.IsDeleted == false))
                 {
                     return null;
                 }
-                else if (await _context.Items.AnyAsync(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == true))
+                else if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.Id != addItemViewModel.Id && i.IsDeleted == true))
                 {
                     var itemToDelete = await _context.Items.FirstOrDefaultAsync(i => i.Id == addItemViewModel.Id && i.IsDeleted == true);
                     if (itemToDelete != null)
@@ -552,7 +552,7 @@ namespace BLL.Services
                 {
                     return new JsonResult(new { success = false, message = "User not found" });
                 }
-                if (await _context.ModifierGroups.AnyAsync(m => m.Name == createModifierGroupViewModel.ModifierGroupName && m.IsDeleted == false))
+                if (await _context.ModifierGroups.AnyAsync(m => m.Name.ToLower() == createModifierGroupViewModel.ModifierGroupName.ToLower() && m.IsDeleted == false))
                 {
                     return new JsonResult(new { success = false, message = "Modifier group already exists" });
                 }
@@ -589,7 +589,7 @@ namespace BLL.Services
                 {
                     return new JsonResult(new { success = false, message = "Modifier group not found" });
                 }
-                if (await _context.ModifierGroups.AnyAsync(m => m.Name == createModifierGroupViewModel.ModifierGroupName && m.Id != createModifierGroupViewModel.ModifierGroupId))
+                if (await _context.ModifierGroups.AnyAsync(m => m.Name.ToLower() == createModifierGroupViewModel.ModifierGroupName.ToLower() && m.Id != createModifierGroupViewModel.ModifierGroupId))
                 {
                     return new JsonResult(new { success = false, message = "Modifier group already exists" });
                 }
@@ -765,7 +765,7 @@ namespace BLL.Services
             if (pageIndex > totalPages)
             {
                 pageIndex = totalPages;
-            }  
+            }
             if (pageIndex < 1)
             {
                 pageIndex = 1;
@@ -883,7 +883,7 @@ namespace BLL.Services
             var modifierGroup = await _context.ModifierGroups.FirstOrDefaultAsync(m => m.Id == modifierGroupId);
             if (modifierGroup == null)
             {
-            return new MenuViewModel();
+                return new MenuViewModel();
             }
 
             var selectedModifiers = await _context.ModifierModifiergroupMappings
@@ -902,27 +902,27 @@ namespace BLL.Services
 
             var createModifierGroupViewModel = new CreateModifierGroupViewModel
             {
-            ModifierGroupId = modifierGroup.Id,
-            ModifierGroupName = modifierGroup.Name,
-            ModifierGroupDescription = modifierGroup.Description,
-            Modifiers = selectedModifiers,
-            SelectedModifierIds = modifierIds
+                ModifierGroupId = modifierGroup.Id,
+                ModifierGroupName = modifierGroup.Name,
+                ModifierGroupDescription = modifierGroup.Description,
+                Modifiers = selectedModifiers,
+                SelectedModifierIds = modifierIds
             };
 
             var menuViewModel = new MenuViewModel
             {
-            CreateModifierGroupViewModel = createModifierGroupViewModel,
-            AllModifiers = modifiers.Skip(0).Take(5).ToList(),
-            ModifierGroups = modifierGroups,
-            Modifiers = modifiers1.Skip(0).Take(5).ToList(),
-            PageIndexAllModifiers = 1,
-            TotalAllModifiers = modifiers.Count,
-            PageSizeAllModifiers = 5,
-            TotalPagesAllModifiers = (int)Math.Ceiling(modifiers.Count / (double)5),
-            PageIndexModifier = 1,
-            TotalModifiers = modifiers1.Count,
-            PageSizeModifier = 5,
-            TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
+                CreateModifierGroupViewModel = createModifierGroupViewModel,
+                AllModifiers = modifiers.Skip(0).Take(5).ToList(),
+                ModifierGroups = modifierGroups,
+                Modifiers = modifiers1.Skip(0).Take(5).ToList(),
+                PageIndexAllModifiers = 1,
+                TotalAllModifiers = modifiers.Count,
+                PageSizeAllModifiers = 5,
+                TotalPagesAllModifiers = (int)Math.Ceiling(modifiers.Count / (double)5),
+                PageIndexModifier = 1,
+                TotalModifiers = modifiers1.Count,
+                PageSizeModifier = 5,
+                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
             };
 
             return menuViewModel;
@@ -932,7 +932,7 @@ namespace BLL.Services
             var modifier = await _context.Modifiers.FirstOrDefaultAsync(m => m.Id == modifierId);
             if (modifier == null)
             {
-            return new MenuViewModel();
+                return new MenuViewModel();
             }
 
             var modifiers1 = await _context.ModifierModifiergroupMappings
@@ -953,31 +953,31 @@ namespace BLL.Services
 
             var addModifierViewModel = new AddModifierViewModel
             {
-            Id = modifier.Id,
-            Name = modifier.Name,
-            Rate = modifier.Price,
-            Quantity = (int)modifier.Quantity,
-            Unit = modifier.Unit,
-            Description = modifier.Description,
-            ModifierGroupIds = modifierGroupIds
+                Id = modifier.Id,
+                Name = modifier.Name,
+                Rate = modifier.Price,
+                Quantity = (int)modifier.Quantity,
+                Unit = modifier.Unit,
+                Description = modifier.Description,
+                ModifierGroupIds = modifierGroupIds
             };
 
             var menuViewModel = new MenuViewModel
             {
-            ModifierGroups = modifierGroups,
-            AddModifierViewModel = addModifierViewModel,
-            Categories = categories,
-            AllModifiers = allModifiers,
-            Modifiers = modifiers1.Skip(0).Take(5).ToList(),
-            PageIndexModifier = 1,
-            TotalModifiers = modifiers1.Count,
-            PageSizeModifier = 5,
-            TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5),
+                ModifierGroups = modifierGroups,
+                AddModifierViewModel = addModifierViewModel,
+                Categories = categories,
+                AllModifiers = allModifiers,
+                Modifiers = modifiers1.Skip(0).Take(5).ToList(),
+                PageIndexModifier = 1,
+                TotalModifiers = modifiers1.Count,
+                PageSizeModifier = 5,
+                TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5),
             };
 
             return menuViewModel;
         }
-        public async Task<MenuViewModel> ResetAddItemFormAsync() 
+        public async Task<MenuViewModel> ResetAddItemFormAsync()
         {
             List<Category> categories = await GetCategoriesAsync();
             List<ModifierGroup> modifierGroups = await GetModifierGroupsAsync();
@@ -993,87 +993,88 @@ namespace BLL.Services
         {
             if (addModifierViewModel.Id == -1)
             {
-            if (userId == null)
-            {
-                return new JsonResult(new { success = false, message = "User not found" });
-            }
-            if (await _context.Modifiers.AnyAsync(m => m.Name == addModifierViewModel.Name))
-            {
-                return new JsonResult(new { success = false, message = "Modifier already exists" });
-            }
-            var modifier = new Modifier
-            {
-                Name = addModifierViewModel.Name,
-                Description = addModifierViewModel.Description,
-                Price = addModifierViewModel.Rate,
-                Quantity = addModifierViewModel.Quantity,
-                Unit = addModifierViewModel.Unit,
-                CreatedBy = userId,
-                UpdatedBy = userId
-            };
-            await _context.Modifiers.AddAsync(modifier);
-            await _context.SaveChangesAsync();
-            var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
-            foreach (var modifierGroupId in modifierGroupIds)
-            {
-                var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                if (userId == null)
                 {
-                ModifierId = modifier.Id,
-                ModifiergroupId = modifierGroupId
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                if (await _context.Modifiers.AnyAsync(m => m.Name.ToLower() == addModifierViewModel.Name.ToLower()))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier already exists" });
+                }
+                var modifier = new Modifier
+                {
+                    Name = addModifierViewModel.Name,
+                    Description = addModifierViewModel.Description,
+                    Price = addModifierViewModel.Rate,
+                    Quantity = addModifierViewModel.Quantity,
+                    Unit = addModifierViewModel.Unit,
+                    CreatedBy = userId,
+                    UpdatedBy = userId
                 };
-                await _context.ModifierModifiergroupMappings.AddAsync(modifierModifierGroupMapping);
+                await _context.Modifiers.AddAsync(modifier);
                 await _context.SaveChangesAsync();
-            }
-            return new JsonResult(new { success = true, message = "Modifier added successfully" });
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                foreach (var modifierGroupId in modifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifier.Id,
+                        ModifiergroupId = modifierGroupId
+                    };
+                    await _context.ModifierModifiergroupMappings.AddAsync(modifierModifierGroupMapping);
+                    await _context.SaveChangesAsync();
+                }
+                return new JsonResult(new { success = true, message = "Modifier added successfully" });
             }
             else
             {
-            if (userId == null)
-            {
-                return new JsonResult(new { success = false, message = "User not found" });
-            }
-            var modifier = await _context.Modifiers.FirstOrDefaultAsync(m => m.Id == addModifierViewModel.Id);
-            if (modifier == null)
-            {
-                return new JsonResult(new { success = false, message = "Modifier not found" });
-            }
-            if (await _context.Modifiers.AnyAsync(m => m.Name == addModifierViewModel.Name && m.Id != addModifierViewModel.Id))
-            {
-                return new JsonResult(new { success = false, message = "Modifier already exists" });
-            }
-            modifier.Name = addModifierViewModel.Name;
-            modifier.Description = addModifierViewModel.Description;
-            modifier.Price = addModifierViewModel.Rate;
-            modifier.Unit = addModifierViewModel.Unit;
-            modifier.Quantity = addModifierViewModel.Quantity;
-            modifier.UpdatedBy = userId;
-            modifier.UpdatedAt = DateTime.Now;
-            await _context.SaveChangesAsync();
-            var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
-            var existingModifierGroupIds = await _context.ModifierModifiergroupMappings
-                .Where(m => m.ModifierId == modifier.Id)
-                .Select(m => m.ModifiergroupId)
-                .ToListAsync();
-            var newModifierGroupIds = modifierGroupIds.Except(existingModifierGroupIds).ToList();
-            var deleteModifierGroupIds = existingModifierGroupIds.Except(modifierGroupIds).ToList();
-            foreach (var modifierGroupId in newModifierGroupIds)
-            {
-                var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                if (userId == null)
                 {
-                ModifierId = modifier.Id,
-                ModifiergroupId = modifierGroupId
-                };
-                await _context.ModifierModifiergroupMappings.AddAsync(modifierModifierGroupMapping);
+                    return new JsonResult(new { success = false, message = "User not found" });
+                }
+                var modifier = await _context.Modifiers.FirstOrDefaultAsync(m => m.Id == addModifierViewModel.Id);
+                if (modifier == null)
+                {
+                    return new JsonResult(new { success = false, message = "Modifier not found" });
+                }
+                if (await _context.Modifiers.AnyAsync(m => m.Name.ToLower() == addModifierViewModel.Name.ToLower() && m.Id != addModifierViewModel.Id))
+                {
+                    return new JsonResult(new { success = false, message = "Modifier already exists" });
+                }
+                modifier.Name = addModifierViewModel.Name;
+                modifier.Description = addModifierViewModel.Description;
+                modifier.Price = addModifierViewModel.Rate;
+                modifier.Unit = addModifierViewModel.Unit;
+                modifier.Quantity = addModifierViewModel.Quantity;
+                modifier.UpdatedBy = userId;
+                modifier.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                var existingModifierGroupIds = await _context.ModifierModifiergroupMappings
+                    .Where(m => m.ModifierId == modifier.Id)
+                    .Select(m => m.ModifiergroupId)
+                    .ToListAsync();
+                var newModifierGroupIds = modifierGroupIds.Except(existingModifierGroupIds).ToList();
+                var deleteModifierGroupIds = existingModifierGroupIds.Except(modifierGroupIds).ToList();
+                foreach (var modifierGroupId in newModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = new ModifierModifiergroupMapping
+                    {
+                        ModifierId = modifier.Id,
+                        ModifiergroupId = modifierGroupId
+                    };
+                    await _context.ModifierModifiergroupMappings.AddAsync(modifierModifierGroupMapping);
+                    await _context.SaveChangesAsync();
+                }
+                foreach (var modifierGroupId in deleteModifierGroupIds)
+                {
+                    var modifierModifierGroupMapping = await _context.ModifierModifiergroupMappings
+                    .FirstOrDefaultAsync(m => m.ModifierId == modifier.Id && m.ModifiergroupId == modifierGroupId);
+                    _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
+                    await _context.SaveChangesAsync();
+                }
+                return new JsonResult(new { success = true, message = "Modifier updated successfully" });
             }
-            foreach (var modifierGroupId in deleteModifierGroupIds)
-            {
-                var modifierModifierGroupMapping = await _context.ModifierModifiergroupMappings
-                .FirstOrDefaultAsync(m => m.ModifierId == modifier.Id && m.ModifiergroupId == modifierGroupId);
-                _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
-                await _context.SaveChangesAsync();
-            }
-            return new JsonResult(new { success = true, message = "Modifier updated successfully" });
-            }
-        }}
+        }
+    }
 }

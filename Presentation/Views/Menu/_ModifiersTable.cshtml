@@ -303,6 +303,7 @@
                             data: { pageIndex: 1, pageSize: 5, modifierGroupId: $("#modifierGroupId21").val() },
                             success: function (data) {
                                 $("#ModifiersTablePartial").html(data);
+                                $("#searchInputModifier").val("");
                             }
                         });
                     } else {

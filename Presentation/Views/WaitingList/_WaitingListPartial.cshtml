@@ -79,7 +79,8 @@
             <div class="modal-body d-flex flex-column align-items-center justify-content-center">
                 <div class="col-12 row ">
                     <div class="form-floating my-auto col-12 col-md-6">
-                        <select id="selectSection" class="form-select" aria-label="CategoryId" asp-for="@Model.waitingListModal.SectionId" onchange="getTables(this.value)">
+                        <select id="selectSection" class="form-select" aria-label="CategoryId"
+                            asp-for="@Model.waitingListModal.SectionId" onchange="getTables(this.value)">
                             <option value="" selected hidden>Select Section</option>
                             @foreach (var Section in Model.Sections)
                             {
@@ -88,18 +89,23 @@
                         </select>
                         <label for="NumberOfPeopleWaitingList" class="">Section*</label>
                     </div>
-                    <div class="col-12 col-md-6 p-2 form-floating">
-                        <select id="selectTable" class="form-select" aria-label="CategoryId"
-                            asp-for="@Model.waitingListModal.SectionId">
-                            <option value="">Select Table</option>
-                        </select>
-                        <label for="WaitingListSection" class="mx-2 mt-2">Table*</label>
-                    </div>
+                    <button
+                        class="btn btn-outline-primary dropdown-toggle col-12 col-md-6 d-flex justify-content-between align-items-center"
+                        type="button" id="custom-multiselect" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span>Select Table(s)</span>
+                        <span class="ms-auto dropdown-arrow"></span>
+                    </button>
+                    <ul class="dropdown-menu p-2" id="selectTableUl" aria-labelledby="custom-multiselect" style="width: 46%;">
+                        <li>
+                            <input type="checkbox" style="height:1em;" class="form-check-input multi-checkbox"
+                                value="-1">
+                            <label class="form-check-label">Select Table</label>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-end gap-2">
-                <button id="assgnTableToCustomerButton" type="button" class="btn btn-primary px-3"
-                    data-bs-dismiss="modal">Yes</button>
+                <button id="assgnTableToCustomerButton" type="button" class="btn btn-primary px-3">Yes</button>
                 <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
@@ -196,12 +202,12 @@
 
     function assignTableModalOpen(tokenNumber) {
         $('#AssignTableModal').modal('show');
-        $("#assgnTableToCustomerButton").off("click").click(function(){
+        $("#assgnTableToCustomerButton").off("click").click(function () {
             var tableId = $('#selectTable').val();
             $.ajax({
                 type: "POST",
                 url: "/WaitingList/AssignTable",
-                data: { waitingListId: tokenNumber, tableId: tableId, sectionId: $('#selectSection').val() },
+                data: { waitingListId: tokenNumber, tableIds: selectedTables, sectionId: $('#selectSection').val() },
                 success: function (response) {
                     if (response.success) {
                         toastr.success(response.message);
@@ -250,9 +256,19 @@
             url: "/WaitingList/GetAvailableTables",
             data: { sectionId: sectionId },
             success: function (response) {
+                $('#selectTableUl').empty();
                 console.log(response);
                 $.each(response, function (key, value) {
-                    $('#selectTable').append('<option value="' + value.id + '">' + value.name + '</option>');
+                    $('#selectTableUl').append('<li><input type="checkbox" style="height:1em;" class="form-check-input multi-checkbox" value="' + value.id + '"><label class="form-check-label">' + value.name + '</label></li>');
+                });
+                
+                $('.multi-checkbox').change(function () {
+                    if (selectedTables.indexOf(parseInt($(this).val())) !== -1) {
+                        selectedTables.splice(selectedTables.indexOf(parseInt($(this).val())), 1);
+                    } else {
+                        selectedTables.push(parseInt($(this).val()));
+                    }
+                    console.log(selectedTables);
                 });
             },
             error: function (response) {
@@ -260,4 +276,6 @@
             }
         });
     }
+
+
 </script>

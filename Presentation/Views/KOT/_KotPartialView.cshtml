@@ -9,8 +9,8 @@
             <div class="pe-4 d-flex gap-2">
                 <button id="InProgressButton" class="btn btn-primary" onclick="showNotReadyItems()">In Progress</button>
                 <button id="ReadyButton" class="btn btn-contrast" onclick="showReadyItems()">Ready</button>
-                <button class="btn btn-contrast"> < </button>
-                <button class="btn btn-contrast"> > </button>
+                <button id="prevKotCards" class="btn btn-contrast"> &lt; </button>
+                <button id="nextKotCards" class="btn btn-contrast"> &gt; </button>
             </div>
         </div>
     </div>
@@ -50,8 +50,7 @@
         });
     }
 
-    function openMarkedAsPreparedModal (orderId)
-    {
+    function openMarkedAsPreparedModal(orderId) {
         console.log(orderId);
         $.ajax({
             type: "GET",
@@ -59,7 +58,7 @@
             data: { orderId: orderId, categoryId: currentCategoryId, inReady: inReady },
             success: function (data) {
                 $('#markedAsPreparedModalDiv').html(data);
-                if (inReady) 
+                if (inReady)
                     $("#ModalButtonText").text("Marked As In Progress");
                 else
                     $("#ModalButtonText").text("Marked As Prepared");
@@ -68,4 +67,61 @@
             }
         });
     }
+
+    $("#nextKotCards").click(function () {
+        console.log(currentCategoryId, @Model.PageIndex + 1);
+        if (inReady) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetReadyItems", "Kot")',
+                data: { categoryId: currentCategoryId, pageIndex: @Model.PageIndex + 1 },
+                success: function (data) {
+                    $('#kotCardsPartialStart').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading next KOT cards:", error);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetKotByCategory", "Kot")',
+                data: { categoryId: currentCategoryId, pageIndex: @Model.PageIndex + 1 },
+                success: function (data) {
+                    $('#kotCardsPartialStart').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading next KOT cards:", error);
+                }
+            });
+        }
+    });
+
+    $("#prevKotCards").click(function () {
+        if (inReady) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetReadyItems", "Kot")',
+                data: { categoryId: currentCategoryId, pageIndex: @Model.PageIndex - 1 },
+                success: function (data) {
+                    $('#kotCardsPartialStart').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading previous KOT cards:", error);
+                }
+            });
+        } else {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetKotByCategory", "Kot")',
+                data: { categoryId: currentCategoryId, pageIndex: @Model.PageIndex - 1 },
+                success: function (data) {
+                    $('#kotCardsPartialStart').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading previous KOT cards:", error);
+                }
+            });
+        }
+    });
 </script>
