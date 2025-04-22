@@ -71,11 +71,22 @@ namespace Presentation.Controllers
         {
             return await _kotMenuService.GetOrderWiseCommentAsync(orderId);
         }
+        [HttpGet]
+        public async Task<JsonResult> GetItemWiseComment(int orderId, int itemId)
+        {
+            return await _kotMenuService.GetItemWiseCommentAsync(orderId, itemId);
+        }
         [HttpPost]
         public async Task<IActionResult> AddOrderWiseComment(int orderId, string comment)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _kotMenuService.AddOrderWiseComment(orderId, comment, userId);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddItemWiseComment(int orderId, int itemId, string comment)
+        {
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _kotMenuService.AddItemWiseComment(orderId, itemId, comment, userId);
         }
         [HttpPost]
         public async Task<IActionResult> SaveOrder(SaveOrderViewModel saveOrderViewModel)

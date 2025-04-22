@@ -51,7 +51,6 @@
     }
 
     function openMarkedAsPreparedModal(orderId) {
-        console.log(orderId);
         $.ajax({
             type: "GET",
             url: '@Url.Action("GetMarkedAsPreparedModal", "Kot")',
@@ -59,11 +58,10 @@
             success: function (data) {
                 $('#markedAsPreparedModalDiv').html(data);
                 if (inReady)
-                    $("#ModalButtonText").text("Marked As In Progress");
+                    $("#ModalButtonText").text("Mark As In Progress");
                 else
-                    $("#ModalButtonText").text("Marked As Prepared");
+                    $("#ModalButtonText").text("Mark As Prepared");
                 $("#MarkedAsPreparedModal").modal("show");
-                console.log("modal shown");
             }
         });
     }

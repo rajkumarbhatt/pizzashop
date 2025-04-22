@@ -119,7 +119,7 @@
             var itemQuantityCustomId = "itemQuantity" + itemId;
             var accordianButtonCustomId = "accordianButton" + itemId;
             var accordianItem = `
-                <div class="accordion-item mb-2 div-custom-accordian" id="${accordianButtonCustomId}">
+                <div class="accordion-item mb-2 div-custom-accordian" onclick="openItemInstructionsModal(${itemId})" id="${accordianButtonCustomId}">
                     <h2 class="accordion-header " id="headingOne">
                         <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
                             data-bs-target="#${customAccordianId}" aria-expanded="true" aria-controls="collapseOne">
@@ -409,4 +409,23 @@
             isFirstLoad = false;
         }
     });
+
+    function openItemInstructionsModal(itemId)
+    {
+        $.ajax({
+            url: '/OrderAppMenu/GetItemWiseComment',
+            type: 'GET',
+            data: { orderId: orderId, itemId: itemId },
+            success: function (response) {
+                console.log(response);
+                $("#ItemNameInstruction").val(response.message);
+                $("#ItemwiseComment").modal('show');
+                itemIdCurrent = itemId;
+            },
+            error: function () {
+                console.error("error fetching order wise comment")
+            }
+        })
+        $("#ItemwiseComment").modal("show");
+    }
 </script>

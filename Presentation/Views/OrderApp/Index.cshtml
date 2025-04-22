@@ -53,7 +53,7 @@
                         </tr>
                     </thead>
                     <tbody id="waitingTokenTableBody">
-
+                        
                     </tbody>
                 </table>
             </div>
@@ -291,6 +291,9 @@
         $("#waitingTokenForm").find(".text-danger").each(function () {
             $(this).text("");
         });
+        $("#EmailOffCanvasWaitingToken").attr("readonly", false);
+        document.getElementById('EmailOffCanvasWaitingToken').style.backgroundColor = "white";
+        document.getElementById('EmailOffCanvasWaitingToken').classList.remove("cursor-none");
     }
 
 </script>

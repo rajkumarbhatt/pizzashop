@@ -153,6 +153,35 @@
             </div>
         </div>
     </div>
+    @* itemwise comment modal *@
+    <div class="modal fade" id="ItemwiseComment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Special Instruction</h5>
+                    <button type="button" onclick="clearItemCommentForm()" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column align-items-center justify-content-center">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                    </div>
+                    <div class="col-12 row">
+                        <div class="form-floating my-auto col-12">
+                            <input type="text" name="ItemName" id="ItemNameInstruction" class="form-control" required placeholder="ItemName">
+                            <label for="ItemName">Instruction</label>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-3 align-items-center w-100">
+                        <a data-bs-dismiss="modal"><button onclick="addItemWiseComment()" type="button"
+                                class="btn btn-primary px-3 mt-4">Save</button></a>
+                        <a data-bs-dismiss="modal"><button onclick="clearItemCommentForm()" type="button"
+                                class="btn btn-contrast px-3 mt-4">Cancel</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @* customer details modal *@
     <div id="CustomerDetailsModalPartialStart1">
         <partial name="_CustomerDetailsModal" model="@Model" />
@@ -312,9 +341,33 @@
             }
         });
     }
+    
+    function addItemWiseComment() {
+        var comment = $("#ItemNameInstruction").val();
+        $.ajax({
+            url: '/OrderAppMenu/AddItemWiseComment',
+            type: 'POST',
+            data: { orderId: orderId, itemId: itemIdCurrent, comment: comment },
+            success: function (response) {
+                if (response.success) {
+                    toastr.success(response.message);
+                    $("#ItemwiseComment").modal('hide');
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function () {
+                toastr.error("Error occurred while submitting the form.");
+            }
+        });
+    }
 
     function clearOrderCommentForm() {
         $("#floatingTextarea2").val("");
+    }
+   
+    function clearItemCommentForm() {
+        $("#ItemNameInstruction").val("");
     }
 
     function showOrderDetailsTab() {

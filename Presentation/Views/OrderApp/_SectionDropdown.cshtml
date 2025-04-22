@@ -345,16 +345,25 @@
                 if (response.success) {
                     var tableBody = $("#waitingTokenTableBody");
                     tableBody.empty();
-                    response.customerDetails.forEach(function (item) {
+                    if (response.customerDetails.length == 0) 
+                    {
                         tableBody.append(
                             `<tr>
-                                <td><input onclick="fillForm2('${item.email}', '${item.name}', '${item.phoneNumber}', '${item.tokenNumber}', '${item.numberOfPersons}')" type="radio" id="waitingList" name="waitingList" /></td>
-                                <td>${item.tokenNumber}</td>
-                                <td>${item.name}</td>
-                                <td>${item.numberOfPersons}</td>
+                                <td colspan="4" class="text-center font-weight-bold-slight ">No waiting token available</td>
                             </tr>`
                         );
-                    });
+                    } else {
+                        response.customerDetails.forEach(function (item) {
+                            tableBody.append(
+                                `<tr>
+                                    <td><input onclick="fillForm2('${item.email}', '${item.name}', '${item.phoneNumber}', '${item.tokenNumber}', '${item.numberOfPersons}')" type="radio" id="waitingList" name="waitingList" /></td>
+                                    <td>${item.tokenNumber}</td>
+                                    <td>${item.name}</td>
+                                    <td>${item.numberOfPersons}</td>
+                                </tr>`
+                            );
+                        });
+                    }
                     $("#SectionDropDownOffcanvas").val(sectionId);
                     $("#offcanvasRight").offcanvas("show");
                 }
@@ -461,6 +470,9 @@
     
     function fillForm2(email, name, mobileNumber, tokenNumber, noOfPersons) {
         $("#EmailOffCanvasWaitingToken").val(email);
+        $("#EmailOffCanvasWaitingToken").attr("readonly", true);
+        document.getElementById('EmailOffCanvasWaitingToken').style.backgroundColor = "#E9ECEF";
+        document.getElementById('EmailOffCanvasWaitingToken').classList.add("cursor-none");
         $("#NameOffCanvasWaitingToken").val(name);
         $("#MobileNumberOffCanvasWaitingToken").val(mobileNumber);
         $("#IdOffCanvasWaitingToken").val(tokenNumber);

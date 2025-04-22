@@ -31,6 +31,7 @@ builder.Services.AddScoped<IOrderAppService, OrderAppService>();
 builder.Services.AddScoped<IWaitingListService, WaitingListService>();
 builder.Services.AddScoped<IKotMenuService, KotMenuService>();
 builder.Services.AddScoped<IKotService, KotService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddNotyf(config =>
 {
     config.DurationInSeconds = 3;

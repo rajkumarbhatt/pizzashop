@@ -1,189 +1,36 @@
+@model DAL.ViewModels.DashboardViewModel
 
-
-        <!-- user heading and dropdown -->
-        <div class="row d-flex justify-content-between align-items-center">
-            <h1 class=" col-6 col-sm-8 col-lg-9 main-page-heading">Dashboard</h1>
-            <!-- dropdown -->
-            <div class="col pe-2">
-                <select name="select-duration" id="select-duration" class="form-select" aria-label="Select Duration">
-                    <option value="current-month" selected>Current Month</option>
-                    <option value="last-7-days">Last 7 Days</option>
-                    <option value="last-30-days">Last 30 Days</option>
-                    <option value="today">Today</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- 4 - tiles -->
-        <div class="row d-flex  justify-content-md-center align-items-center justify-content-around">
-            <!-- tile -->
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border tile-green d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border tile-blue d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-orders.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">1</h2>
-                    <p class="tile-paragraph">Total Orders</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border tile-sky-blue d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/order-value.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Avg. Order Value</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border tile-orange d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/waiting-time.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">6.96 mins</h2>
-                    <p class="tile-paragraph">Average Waiting Time</p>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- 2 - tiles -->
-        <div class="row d-flex  justify-content-md-center align-items-center justify-content-around">
-            <!-- tile -->
-            <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-            <!-- tile -->
-            <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                        <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-        </div>
-        <!-- 4 - tiles -->
-        <div class="row d-flex  justify-content-md-center align-items-center justify-content-around">
-            <!-- tile -->
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4-bottom">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                            <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4-bottom">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                            <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4-bottom">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                            <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-            <div class="col-10 col-sm-5 m-2 col-lg-3   form-bg   shadow tile-group-4-bottom">
-                <!-- tile-image -->
-                <div class="d-flex justify-content-end align-items-center m-2">
-                    <div class="tiles-image-outer-border d-flex  justify-content-center align-items-center">
-                        <div class="tiles-image-border d-flex justify-content-center align-items-center">
-                            <img src="~/images/icons/total-sales.svg" class="tiles-image " alt="">
-                        </div>
-                    </div>
-                </div>
-                <!-- tile-content -->
-                <div class="pb-1 ps-2 tile-content>
-                            <h2 class=" tile-heading">$1630</h2>
-                    <p class="tile-paragraph">Total Sales</p>
-                </div>
-            </div>
-
-        </div>
+<!-- user heading and dropdown -->
+<div class="row d-flex justify-content-between align-items-center">
+    <h1 class=" col-6 col-sm-8 col-lg-9 main-page-heading">Dashboard</h1>
+    <!-- dropdown -->
+    <div class="col pe-2">
+        <select name="select-duration" id="select-duration" class="form-select" aria-label="Select Duration">
+            <option value="Current Month" selected>Current Month</option>
+            <option value="This Week">Last 7 Days</option>
+            <option value="This Year">Last Year</option>
+            <option value="Today">Today</option>
+        </select>
     </div>
+</div>
 
-  
+<div id="dashboardPartialStarting">
+    <partial name="_DashboardPartial" model="Model" />
+</div>
 
-
-@* <script src="~/lib/jquery/dist/jquery.min.js"></script> *@
-<script src="~js/bootstrap.bundle.min.js"></script>
+<script>
+    $("#select-duration").change(function () {
+        var selectedValue = $(this).val();
+        $.ajax({
+            url: '@Url.Action("GetUpdatedData", "Dashboard")',
+            type: 'GET',
+            data: { TimePeriod: selectedValue },
+            success: function (data) {
+                $("#dashboardPartialStarting").html(data);
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching data:", error);
+            }
+        });
+    });
+</script>

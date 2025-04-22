@@ -41,6 +41,10 @@
       "PackagePath": "staticwebassets\\images\\dominos_background_mobile.jpg"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\account-dashboard.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\account-dashboard.svg"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\assign-waiting-list.svg",
       "PackagePath": "staticwebassets\\images\\icons\\assign-waiting-list.svg"
     },
@@ -227,6 +231,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\plus-with-border.svg",
       "PackagePath": "staticwebassets\\images\\icons\\plus-with-border.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\sand-timer.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\sand-timer.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\search-header.svg",

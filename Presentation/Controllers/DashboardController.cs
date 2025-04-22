@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BLL.Interfaces;
+using DAL.ViewModels;
 
 namespace Presentaion.Controllers
 {
@@ -8,10 +9,12 @@ namespace Presentaion.Controllers
     {
         private readonly IJwtService _jwtService;
         private readonly INavBarService _navBarService;
-        public DashboardController(IJwtService jwtService, INavBarService navBarService)
+        private readonly IDashboardService _dashboardService;
+        public DashboardController(IJwtService jwtService, INavBarService navBarService, IDashboardService dashboardService)
         {
             _jwtService = jwtService;
             _navBarService = navBarService;
+            _dashboardService = dashboardService;
         }
 
         public async Task<IActionResult> Index()
@@ -30,7 +33,8 @@ namespace Presentaion.Controllers
             {
                 return RedirectToAction("NewPassword","ResetPassword");
             }
-            return View();
+            DashboardViewModel dashboardViewModel = await _dashboardService.GetDashboardDataAsync("Current Month");
+            return View(dashboardViewModel);
         }
 
         public IActionResult Logout()
@@ -38,6 +42,12 @@ namespace Presentaion.Controllers
             Response.Cookies.Delete("token");
             Response.Cookies.Delete("email");
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUpdatedData(string TimePeriod)
+        {
+            DashboardViewModel dashboardViewModel = await _dashboardService.GetDashboardDataAsync(TimePeriod);
+            return PartialView("_DashboardPartial", dashboardViewModel);
         }
     }
 }
