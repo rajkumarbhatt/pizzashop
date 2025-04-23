@@ -99,8 +99,8 @@
         var quantityElement = document.getElementById(quantityId);
         var currentQuantity = parseInt(quantityElement.innerText);
         if (inReady) {
-            if (currentQuantity <= 0) {
-                quantityElement.innerText = 0;
+            if (currentQuantity <= 1) {
+                quantityElement.innerText = 1;
             } else {
                 quantityElement.innerText = currentQuantity - 1;
             }
@@ -159,7 +159,7 @@
         $.ajax({
             type: "POST",
             url: '@Url.Action("MarkItemsAsReady", "KOT")',
-            data: { readyItems: listToSend, orderId: @Model.KotOrderCards[0].OrderId, categoryId: currentCategoryId, inReady: inReady },
+            data: { pageIndex: @Model.PageIndex , readyItems: listToSend, orderId: @Model.KotOrderCards[0].OrderId, categoryId: currentCategoryId, inReady: inReady },
             success: function (data) {
                 $("#kotCardsPartialStart").html(data);
                 $("#MarkedAsPreparedModal").modal('hide');

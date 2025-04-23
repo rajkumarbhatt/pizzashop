@@ -76,3 +76,20 @@
     }
 </div>
 
+<script>
+    function openMarkedAsPreparedModal(orderId) {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMarkedAsPreparedModal", "Kot")',
+            data: { pageIndex: @Model?.PageIndex, orderId: orderId, categoryId: currentCategoryId, inReady: inReady },
+            success: function (data) {
+                $('#markedAsPreparedModalDiv').html(data);
+                if (inReady)
+                    $("#ModalButtonText").text("Mark As In Progress");
+                else
+                    $("#ModalButtonText").text("Mark As Prepared");
+                $("#MarkedAsPreparedModal").modal("show");
+            }
+        });
+    }
+</script>

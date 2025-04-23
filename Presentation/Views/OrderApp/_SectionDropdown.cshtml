@@ -174,7 +174,7 @@
 
                             }
                         </div>
-                        <div class="d-flex justify-content-end  px-4 pb-3" id="@assignButtonId" onclick="assignTables(id)"><button type="button"
+                        <div class="d-flex justify-content-end  px-4 pb-3"><button  id="@assignButtonId" onclick="assignTables(id)" type="button"
                                 class="button-styles py-2 px-4 rounded" style="width: 90px;">Assign</button></div>
                     </div>
                 </div>
@@ -272,12 +272,7 @@
                                 <label for="NumberOfPeopleWaitingList" class="">Number of People*</label>
                             </div>
                             <div class="col-12 col-md-6 p-2 form-floating">
-                                <select id="WaitingListSection" class="form-select" aria-label="CategoryId"
-                                    asp-for="@Model.waitingListModal.SectionId">
-                                    @foreach (var Section in Model.Sections)
-                                    {
-                                        <option value="@Section.SectionId">@Section.SectionName</option>
-                                    }
+                                <select id="WaitingListSection" class="form-select cursor-none" aria-label="CategoryId" style="background-color: rgb(233, 236, 239);" asp-for="@Model.waitingListModal.SectionId">
                                 </select>
                                 <span asp-validation-for="@Model.waitingListModal.SectionId" class="text-danger"></span>
                                 <label for="WaitingListSection" class="mx-2 mt-2">Section*</label>
@@ -305,7 +300,6 @@
     var selectedTables = [];
 
     function selectTable(id, status, orderId) {
-        console.log(id, status, orderId);
         if (status == "Assigned" || status == "Running") {
             window.location.href = "/OrderApp/Menu/" + orderId;
             return;
@@ -341,7 +335,6 @@
             type: "GET",
             data: { sectionId: sectionId },
             success: function (response) {
-                console.log(response);
                 if (response.success) {
                     var tableBody = $("#waitingTokenTableBody");
                     tableBody.empty();
@@ -419,7 +412,6 @@
 
     $(document).ready(function () {
         $("#EmailWaitingToken").on("input", function () {
-            console.log("input event fired");
             clearTimeout(this.delayTimer);
             this.delayTimer = setTimeout(function () {
                 var email = $("#EmailWaitingToken").val();
@@ -429,7 +421,6 @@
                         type: "GET",
                         data: { email: email },
                         success: function (response) {
-                            console.log(response);
                             var suggestions = response.customerSuggetions;
                             var suggestionsList = $("#emailSuggestions");
                             suggestionsList.empty();

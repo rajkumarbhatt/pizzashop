@@ -25,10 +25,8 @@ $('#email').on('input', function () {
 var isEmailValid = true;
 
 $(document).ready(function () {
-  console.log('ready');
 
   $('#forgot-password-form').submit(function (e) {
-    console.log('submit');
 
     e.preventDefault();
     validateEmail();
@@ -55,7 +53,6 @@ $(document).ready(function () {
         }
       },
       error: function (xhr) {
-        console.log(xhr);
         if (xhr.responseJSON && xhr.responseJSON.message) {
           toastr.error(xhr.responseJSON.message); 
         } else {

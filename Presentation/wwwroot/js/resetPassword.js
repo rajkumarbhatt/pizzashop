@@ -69,10 +69,8 @@ $('#confirm-password').on('input', function () {
     validateConfirmPassword();
 });
 $(document).ready(function () {
-    console.log('ready');
 
     $('#reset-password-form').submit(function (e) {
-        console.log('submit');
 
         e.preventDefault();
         var password = $('#password').val();
@@ -103,7 +101,6 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.log(xhr);
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     toastr.error(xhr.responseJSON.message);
                 } else {
@@ -123,7 +120,6 @@ $(document).ready(function () {
         e.preventDefault();
         var password = $('#password').val();
         var confirmPassword = $('#confirm-password').val();
-        console.log('submit');
 
         $.ajax({
             url: '/ResetPassword/NewPassword',
@@ -142,7 +138,6 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.log(xhr);
                 if (xhr.responseJSON && xhr.responseJSON.message) {
                     toastr.error(xhr.responseJSON.message);
                 } else {

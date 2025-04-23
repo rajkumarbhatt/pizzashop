@@ -25,6 +25,12 @@
             </tr>
         </thead>
         <tbody class="">
+            @if (Model.Taxes.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5" class="text-center font-weight-bold-slight">No Taxes Found</td>
+                </tr>
+            }
             @foreach (var tax in Model.Taxes)
             {
                 <tr class="text-start">

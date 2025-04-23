@@ -367,7 +367,6 @@
     function showDiv(divId) {
         divId.classList.remove('d-none');
         var divId2 = divId.id + "2";
-        console.log(divId2);
         $("#" + divId2).addClass('active-category-div'); 
     }
 
@@ -412,7 +411,6 @@
             url: '@Url.Action("EditSection", "TableAndSection")',
             data: { sectionId: sectionId },
             success: function (response) {
-                console.log(response);
                 document.getElementById("SectionName").value = response.name;
                 document.getElementById("SectionDescription").value = response.description;
                 document.getElementById("SectionIdModal").value = sectionId;

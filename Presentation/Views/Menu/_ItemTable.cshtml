@@ -27,6 +27,12 @@
             }
     </thead>
     <tbody>
+        @if (Model?.Items.Count() == 0)
+        {
+            <tr>
+                <td colspan="5" class="text-center font-weight-bold-slight">No items found</td>
+            </tr>
+        }
         @foreach (var item in Model.Items)
         {
 
@@ -103,7 +109,7 @@
     </select>
     <p class="px-1">
         <input type="hidden" id="PageIndex" value="@Model.PageIndex" />
-        Showing @((Model.PageIndex - 1) * Model.PageSize + 1) -
+        Showing @(Model.TotalPages == 0 ? 0 : (Model.PageIndex - 1) * Model.PageSize + 1) -
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalItems)) of
         @Model.TotalItems
     </p>
@@ -160,7 +166,6 @@
                 deleteItemsList = deleteItemsList.filter(item => item !== itemIdTemp);
             });
         }
-        console.log(deleteItemsList);
     });
 
     $(".item-name-checkbox").click(function () {
@@ -169,7 +174,6 @@
         } else {
             $("#DeleteItemsIntermediateCheckbox").prop("checked", false);
         }
-        console.log(deleteItemsList);
     });
 
     function addItemToDeleteList(itemId) {
@@ -179,7 +183,6 @@
         } else {
             deleteItemsList.push(itemId);
         }
-        console.log(deleteItemsList);
     }
 
     var isDeleting = false;
@@ -211,7 +214,6 @@
                             $("#partialViewStartingInner").html(data);
                         },
                         error: function (data) {
-                            console.log(data);
                         }
                     });
                     $("#deleteItems").modal("hide");
@@ -221,7 +223,6 @@
             },
             error: function (err) {
                 isDeleting = false;
-                console.log(err);
             }
         });
     }
@@ -232,7 +233,6 @@
         const searchValue = $("#searchInput").val().toLowerCase();
         const pageSize = @Model.PageSize;
         const categoryId = $("#categoryId").val();
-        console.log(categoryId);
         $.ajax({
             url: '@Url.Action("ItemsFilter", "Menu")',
             type: 'GET',
@@ -312,7 +312,6 @@
     function saveChangesOfSwitch(itemId) {
         var idCustom = "flexSwitchCheckChecked" + itemId;
         var isAvailable = document.getElementById(idCustom).checked;
-        console.log(isAvailable);
         $.ajax({
             url: '@Url.Action("UpdateItemAvailability", "Menu")',
             type: 'POST',
@@ -362,9 +361,6 @@
         var currentCategoryId = $("#categoryId").val();
         var currentPageIndex = $("#PageIndex").val();
         var currentPageSize = $("#PageSize").val();
-        console.log(currentCategoryId);
-        console.log(currentPageIndex);
-        console.log(currentPageSize);
         $("#deleteItemButton").off("click").click(function () {
             $.ajax({
                 url: '@Url.Action("DeleteItem", "Menu")',
@@ -382,7 +378,6 @@
                                 $("#searchInput").val("");
                             },
                             error: function (data) {
-                                console.log(data);
                             }
                         });
                         $("#deleteItem").modal("hide");

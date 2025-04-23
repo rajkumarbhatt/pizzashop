@@ -311,7 +311,6 @@
             type: 'GET',
             data: { orderId: orderId },
             success: function (response) {
-                console.log(response);
                 $("#floatingTextarea2").val(response.message);
                 $("#OrderCommentModal").modal('show');
                 $.validator.unobtrusive.parse("#OrderCommentModal");
@@ -389,7 +388,6 @@
     }
 
     $(window).on('resize', function () {
-        console.log("Window resized");
         if ($(window).width() > 1600) {
             document.getElementById("thisDivIsImportant").style.width = "64%";
             document.getElementById("thisDivIsImportant").style.display = "block !important";
@@ -398,9 +396,7 @@
 
     @* resize js *@
         document.addEventListener("resize", function () {
-            console.log("Window resized");
             if (window.innerWidth > 1600) {
-                console.log("window is greater than 1600", innerWidth);
                 document.getElementById("thisDivIsImportant").classList.remove("d-none");
                 document.getElementById("thisDivIsImportant").style.width = "64% !important";
             }

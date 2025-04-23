@@ -77,9 +77,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body d-flex flex-column align-items-center justify-content-center">
-                <div class="col-12 row ">
+                <div class="col-12 row gap-2">
                     <div class="form-floating my-auto col-12 col-md-6">
-                        <select id="selectSection" class="form-select" aria-label="CategoryId"
+                        <select id="selectSection" class="border border-black form-select" aria-label="CategoryId" style="width: 98%;"
                             asp-for="@Model.waitingListModal.SectionId" onchange="getTables(this.value)">
                             <option value="" selected hidden>Select Section</option>
                             @foreach (var Section in Model.Sections)
@@ -90,7 +90,7 @@
                         <label for="NumberOfPeopleWaitingList" class="">Section*</label>
                     </div>
                     <button
-                        class="btn btn-outline-primary dropdown-toggle col-12 col-md-6 d-flex justify-content-between align-items-center"
+                        class="btn border border-black dropdown-toggle col-12 col-md-6 d-flex justify-content-between align-items-center" style="width: 48%;"
                         type="button" id="custom-multiselect" data-bs-toggle="dropdown" aria-expanded="false">
                         <span>Select Table(s)</span>
                         <span class="ms-auto dropdown-arrow"></span>
@@ -268,7 +268,6 @@
                     } else {
                         selectedTables.push(parseInt($(this).val()));
                     }
-                    console.log(selectedTables);
                 });
             },
             error: function (response) {

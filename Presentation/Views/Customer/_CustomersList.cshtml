@@ -10,6 +10,12 @@
             </tr>
         </thead>
     <tbody>
+        @if (@Model.Customers.Count() == 0)
+        {
+            <tr>
+                <td colspan="5" class="text-center font-weight-bold-slight">No Customers Found</td>
+            </tr>
+        }
         @foreach(var customer in @Model.Customers)
         {
             <tr class="cursor-pointer" onclick="showCustomerDetails(@customer.Id)">
@@ -33,7 +39,7 @@
         <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        Showing @((Model.pageIndex - 1) * Model.pageSize + 1) - 
+        Showing @(Model.totalPages == 0 ? 0 : (Model.pageIndex - 1) * Model.pageSize + 1) - 
         @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalCustomers)) of 
         @Model.totalCustomers
     </p>
@@ -190,7 +196,6 @@
     });
 
     $("#sortTotalAmount").click(function () {
-        console.log("sortTotalAmount");
         sortColumn = "totalAmount";
         if (isTotalAmountAsc) {
             sortDirection = "desc";
@@ -215,7 +220,6 @@
     });
 
     function showCustomerDetails(id) {
-        console.log(id);
         $.ajax({
             url: '@Url.Action("GetCustomerDetails", "Customer")',
             type: "GET",

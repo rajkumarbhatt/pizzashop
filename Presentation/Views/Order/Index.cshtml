@@ -1,19 +1,17 @@
 @model DAL.ViewModels.OrderViewModal
 
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
     <h1 class="main-page-heading">Orders</h1>
-    <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
-        <div class="input-group search-box">
-            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInputOrders" placeholder="Search">
+    <div id="ordersPageButtonsFirstRow"
+        class="d-flex flex-column flex-sm-row justify-content-center mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box w-100 w-sm-auto">
+            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInputOrders"
+                placeholder="Search">
             <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
         </div>
-        <p class="delete-styles d-block d-md-none">
-            <a id="exportBtnMobile" class="text-decoration-none text-black   add-user-link">
-                <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
-            </a>
-        </p>
-        <div class="d-none d-md-block">
-            <select name="" onchange="FilerOrdersBasedOnStatus(this.value)" id="OrderStatusSelect" class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;" >
+        <div class="d-block d-md-block w-100">
+            <select name="" onchange="FilerOrdersBasedOnStatus(this.value)" id="OrderStatusSelect"
+                class="w-100 form-select py-1 py-sm-2" style="width: 150px; height: 54px;">
                 <option value="All Status">All Status</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
@@ -21,15 +19,16 @@
                 <option value="Cancelled">Cancelled</option>
             </select>
         </div>
-        <div class="d-none d-md-block">
-            <select name="" onchange="FilerOrdersBasedOnTime(this.value)" id="OrderTimeSelect" class="form-select py-1 py-sm-2" style="width: 150px; height: 54px;" >
+        <div class="d-block d-md-block w-100">
+            <select name="" onchange="FilerOrdersBasedOnTime(this.value)" id="OrderTimeSelect"
+                class="w-100 form-select py-1 py-sm-2" style="width: 150px; height: 54px;">
                 <option value="All Time">All Time</option>
                 <option value="Today">Today</option>
                 <option value="This Week">This Week</option>
                 <option value="This Month">This Month</option>
             </select>
         </div>
-        <button id="exportOrdersBtn" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
+        <button id="exportOrdersBtn" class="d-block button-styles py-1 py-sm-2" style="height: 54px;">
             <a class="text-decoration-none text-white add-user-link">
                 <img src="~/images/icons/export.svg" class="p-1" style="width: 40px;" alt="">
                 <span class="text-white fw-bold">Export</span>
@@ -38,39 +37,47 @@
     </div>
 </div>
 
-<div class="d-flex justify-content-end mt-2 gap-2 align-items-center mx-3">
-    <div class="input-group search-box cursor-pointer" style="width: 200px;">
-        <div class="form-floating">
-            <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;" id="fromDate" value="dd-mm-yyyy">
-            <label for="fromDate" class="form-label cursor-pointer">From Date</label>
+<div class="ps-3 d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
+    <div id="orderPageButtonsSecondRow"
+        class="ps-3 d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box cursor-pointer w-100" style="width: 200px;">
+            <div class="form-floating">
+                <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;"
+                    id="fromDate" value="dd-mm-yyyy">
+                <label for="fromDate" class="form-label cursor-pointer">From Date</label>
+            </div>
+            <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
         </div>
-        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
-    </div>
-    <div class="input-group search-box cursor-pointer" style="width: 200px;">
-        <div class="form-floating">
-            <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;" id="toDate" value="dd-mm-yyyy">
-            <label for="toDate" class="form-label cursor-pointer">To Date</label>
+        <div class="input-group search-box cursor-pointer w-100" style="width: 200px;">
+            <div class="form-floating w-100">
+                <input type="text" class="w-100 form-control cursor-pointer search-input datepicker"
+                    style="height: 44px;" id="toDate" value="dd-mm-yyyy">
+                <label for="toDate" class="form-label cursor-pointer">To Date</label>
+            </div>
+            <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
         </div>
-        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon" alt="">
-    </div>
 
-    <div class="d-none d-md-block">
-    <p class="delete-styles d-block d-md-none">
-        <a asp-controller="UserList" asp-action="CreateUser"
-            class="text-decoration-none text-black   add-user-link">
-            <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
-        </a>
-    </p>
+        <div class="d-none d-md-block">
+            <p class="delete-styles d-block d-md-none">
+                <a asp-controller="UserList" asp-action="CreateUser"
+                    class="text-decoration-none text-black   add-user-link">
+                    <img src="~/images/icons/export-black.svg" class="p-1" style="width: 40px;" alt="">
+                </a>
+            </p>
+        </div>
+        <button id="SearchDate" class="w-100 d-block d-md-block button-styles py-1 py-sm-2"
+            style="height: 55px; width: 100px;">
+            <a class="text-decoration-none text-white add-user-link">
+                <span class="text-white fw-bold">Search</span>
+            </a>
+        </button>
+        <button id="ClearFilters" class="w-100 d-block d-md-block button-styles-contrast py-1 py-sm-2"
+            style="height: 55px; width: 100px;">
+            <a class="text-decoration-none add-user-link">
+                <span class=" fw-bold">Clear</span>
+            </a>
+        </button>
     </div>
-    <button id="SearchDate" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 44px; width: 100px;">
-        <a class="text-decoration-none text-white add-user-link">
-            <span class="text-white fw-bold">Search</span>
-        </a>
-    </button>
-    <button id="ClearFilters" class="d-none d-md-block button-styles-contrast py-1 py-sm-2" style="height: 44px; width: 100px;">
-        <a class="text-decoration-none add-user-link">
-            <span class=" fw-bold">Clear</span>
-        </a>
 </div>
 
 <!-- table partial-->
@@ -93,7 +100,6 @@
         var time = $("#OrderTimeSelect").val();
         var fromDate = $("#fromDate").val();
         var toDate = $("#toDate").val();
-        console.log(status, pageSize, searchValue);
         $.ajax({
             url: '@Url.Action("FilterOrders", "Order")',
             type: "GET",
@@ -111,7 +117,6 @@
         var status = $("#OrderStatusSelect").val();
         var fromDate = $("#fromDate").val();
         var toDate = $("#toDate").val();
-        console.log(time, pageSize, searchValue);
         $.ajax({
             url: '@Url.Action("FilterOrders", "Order")',
             type: "GET",
@@ -179,7 +184,7 @@
             autoclose: true,
             todayHighlight: true
         }).on('show', function () {
-            $(this).attr('readonly', true); 
+            $(this).attr('readonly', true);
         });
     });
 
@@ -189,7 +194,6 @@
         var searchValue = $("#searchInputOrders").val();
         var pageSize = $("#pageSizeSelectOrders").val();
         var status = $("#OrderStatusSelect").val();
-        console.log(typeof fromDate, toDate, pageSize, searchValue);
         var time = $("#OrderTimeSelect").val();
         $.ajax({
             url: '@Url.Action("FilterOrders", "Order")',
@@ -219,5 +223,5 @@
             }
         });
     });
-    
+
 </script>

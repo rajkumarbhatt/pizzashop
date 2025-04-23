@@ -115,7 +115,6 @@ $(document).ready(function () {
               }
           },
           error: function (xhr) {
-              console.log(xhr);
               if (xhr.responseJSON && xhr.responseJSON.message) {
                   toastr.error(xhr.responseJSON.message);
               } else {

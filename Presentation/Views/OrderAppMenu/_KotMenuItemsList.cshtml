@@ -2,6 +2,10 @@
 
 
 <div class="d-flex flex-wrap gap-3 mx-auto mt-3 justify-content-center justify-content-md-start ">
+    @if (@Model.MenuItemsKot.Count() == 0)
+    {
+        <h4 class=" ms-3 text-center font-weight-bold-slight">No Items Found</h4>
+    }
     @foreach (var item in @Model.MenuItemsKot)
     {
         var emptyHeartId = "empty-heart-" + item.Id;

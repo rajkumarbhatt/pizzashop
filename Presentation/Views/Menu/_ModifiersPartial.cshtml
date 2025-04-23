@@ -709,7 +709,6 @@
         var description = $("#AddModifierDescription21").val();
         var id = $("#AddModifierId").val();
         var modifierGroupIds = selectedModifiersGroupsAddModifier;
-        console.log(id);
         $.ajax({
             url: '@Url.Action("AddModifier", "Menu")',
             type: 'POST',
@@ -771,7 +770,6 @@
 
     function editModifier(modifierId) {
         var modifierGroupId = $("#modifierGroupId21").val();
-        console.log(modifierGroupId);
         $.ajax({
             url: '@Url.Action("EditModifier", "Menu")',
             type: 'GET',
@@ -819,7 +817,6 @@
     function showDivM (modifierGroupId) {
         modifierGroupId.classList.remove('d-none');
         var divId2 = modifierGroupId.id + "2";
-        console.log(divId2);
         $("#" + divId2).addClass('active-category-div');
     }
 

@@ -1267,3 +1267,34 @@ td {
   flex-direction: column;
   justify-content: space-between;
 }
+@media (max-width: 576px) {
+  #ordersPageButtonsFirstRow {
+    width: 90%;
+  }
+  #orderPageButtonsSecondRow {
+    width: 90%;
+  }
+  #customersPageButtons {
+    width: 90%;
+  }
+}
+@media (min-width: 576px) {
+  #orderPageButtonsSecondRow {
+    width: 60%;
+  }
+}
+@media (max-width: 1250px) {
+  #orderPageButtonsSecondRow {
+    width: 80%;
+  }
+}
+@media (max-width: 1000px) {
+  #orderPageButtonsSecondRow {
+    width: 90%;
+  }
+}
+@media (max-width: 900px) {
+  #orderPageButtonsSecondRow {
+    width: 100%;
+  }
+}

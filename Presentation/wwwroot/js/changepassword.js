@@ -54,7 +54,6 @@ $(document).ready(function () {
             data: JSON.stringify({ CurrentPassword: currentPassword, NewPassword: newPassword, ConfirmPassword: confirmPassword }),
             contentType: "application/json",
             success: function (data) {
-                console.log(data);
                 if (data.success) {
                     toastr.success(data.message);
                     setTimeout(function () {
@@ -67,7 +66,6 @@ $(document).ready(function () {
                 }
             },
             error: function (data) {
-                console.log(data);
                 toastr.error(data.message);
                 $('.loader-container').addClass('d-none');
             }

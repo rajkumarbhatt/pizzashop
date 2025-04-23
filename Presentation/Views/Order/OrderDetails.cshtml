@@ -158,7 +158,6 @@
 
     <script>
         function downloadPdfInvoice(orderId) {
-            console.log(orderId);
             const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
             $('.loader-container').removeClass('d-none');
             fetch(url, { method: "GET" })

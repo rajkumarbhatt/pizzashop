@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    console.log('Edit profile script loaded');
     
     // Get states based on selected country
     $('#select-country').change(function () {

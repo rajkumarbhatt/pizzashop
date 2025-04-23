@@ -118,8 +118,9 @@
             var decreaseQuantityCustomId = "decreaseQuantity" + itemId;
             var itemQuantityCustomId = "itemQuantity" + itemId;
             var accordianButtonCustomId = "accordianButton" + itemId;
+            var trashIconCustomId = "trashIcon" + itemId;
             var accordianItem = `
-                <div class="accordion-item mb-2 div-custom-accordian" onclick="openItemInstructionsModal(${itemId})" id="${accordianButtonCustomId}">
+                <div class="accordion-item mb-2 div-custom-accordian" id="${accordianButtonCustomId}">
                     <h2 class="accordion-header " id="headingOne">
                         <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
                             data-bs-target="#${customAccordianId}" aria-expanded="true" aria-controls="collapseOne">
@@ -127,13 +128,13 @@
                                 <p class="w-50 font-weight-bold-slight">${itemName}</p>
                                 <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
                                     style="width: 15%;">
-                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id)">-</span><span id="${itemQuantityCustomId}">1</span><span id="${increaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id)">+</span></p>
+                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id, event)">-</span><span id="${itemQuantityCustomId}">1</span><span id="${increaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id, event)">+</span></p>
                                 </div>
                                 <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
                                     <p id="${orderItemTotalPriceValueCustomId}">${itemPrice}</p>
                                     <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian"></p>
                                 </div>
-                                <div onclick="deleteItemFromOrder(${itemId})">
+                                <div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
                                     <img src="@Url.Content("~/images/icons/delete.svg")" class="small-image">
                                 </div>
                             </div>
@@ -215,14 +216,19 @@
         return true;
     }
 
-    function increaseQuantity (id) {
+    function increaseQuantity (id, event) {
+        event.stopPropagation();
         var itemId = id.split("increaseQuantity")[1];
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
         var newValue = currentValue + 1;
         var itemPriceElement = document.getElementById("orderItemTotalPriceValue" + itemId);
-        var itemPrice = itemPriceElement ? parseFloat(itemPriceElement.innerHTML) : 0;
-        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
+        var itemPrice = itemPriceElement ? parseFloat(itemPriceElement.innerHTML / currentValue) : 0;
+        var newItemPrice = itemPrice * newValue;
+        itemPriceElement.innerHTML = newItemPrice.toFixed(2);
+        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML / currentValue) || 0;
+        var orderModifiersNewTotalPriceValue = orderModifiersTotalPriceValue * newValue;
+        document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
         var subTotalElement = document.getElementById("orderSubtotalValue");
         var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
         document.getElementById(itemQuantityCustomId).innerHTML = newValue;
@@ -237,7 +243,7 @@
         });
     }
 
-    function decreaseQuantity (id) {
+    function decreaseQuantity (id, event) {
         var itemId = id.split("decreaseQuantity")[1];
         var itemQuantityCustomId = "itemQuantity" + itemId;
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
@@ -246,11 +252,14 @@
             type: 'GET',
             data: { orderId: orderId, itemId: itemId, currentQuantity: currentValue },
             success(response) {
-                console.log(response)
                 if (response.canDecrease) {
                     var newValue = currentValue - 1;
-                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
-                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
+                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML / currentValue);
+                    var newItemPrice = itemPrice * newValue;
+                    document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML = newItemPrice.toFixed(2);
+                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML / currentValue) || 0;
+                    var orderModifiersNewTotalPriceValue = orderModifiersTotalPriceValue * newValue;
+                    document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
                     var subTotalElement = document.getElementById("orderSubtotalValue");
                     var Subtotal = parseFloat(subTotalElement.innerHTML);
                     document.getElementById(itemQuantityCustomId).innerHTML = newValue;
@@ -287,15 +296,17 @@
                 }
             }
         });
+        event.stopPropagation();
     }
 
-    function deleteItemFromOrder (itemId) {
+    function deleteItemFromOrder (itemId, event) {
+        event.stopPropagation();
+        var itemId = itemId.split("trashIcon")[1];
         $.ajax({
             url: '@Url.Action("CanDeleteFromOrder", "OrderAppMenu")',
             type: 'GET',
             data: { orderId: orderId, itemId: itemId },
             success(response) {
-                console.log(response)
                 if (response.canDelete) {
                     var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
                     var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
@@ -417,7 +428,6 @@
             type: 'GET',
             data: { orderId: orderId, itemId: itemId },
             success: function (response) {
-                console.log(response);
                 $("#ItemNameInstruction").val(response.message);
                 $("#ItemwiseComment").modal('show');
                 itemIdCurrent = itemId;
@@ -426,6 +436,5 @@
                 console.error("error fetching order wise comment")
             }
         })
-        $("#ItemwiseComment").modal("show");
     }
 </script>

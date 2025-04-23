@@ -28,6 +28,12 @@
         </tr>
     </thead>
     <tbody class="">
+        @if (Model?.Users?.Count() == 0)
+        {
+            <tr>
+                <td colspan="6" class="text-center font-weight-bold-slight">No users found</td>
+            </tr>
+        }
         @foreach(var user in Model.Users) 
         {
             <tr class="text-start">
@@ -88,7 +94,7 @@
         <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        Showing @((Model.PageIndex - 1) * Model.PageSize + 1) - 
+        Showing @((Model.TotalPages == 0) ? 0 :(Model.PageIndex - 1) * Model.PageSize + 1) - 
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalUsers)) of 
         @Model.TotalUsers
     </p>
@@ -176,7 +182,6 @@
     });
 
     $("#sortRoles").click(function () {
-        console.log(ascendingRole);
         if (ascendingRole) {
             sortColumnDirection = "asc";
             ascendingRole = false;

@@ -26,6 +26,12 @@
             }
     </thead>
     <tbody>
+        @if (Model.Modifiers.Count == 0)
+        {
+            <tr>
+                <td colspan="5" class="text-center font-weight-bold-slight">No modifiers found</td>
+            </tr>
+        }
         @foreach (var modifier in Model.Modifiers)
         {
             <tr class="text-center">
@@ -65,7 +71,7 @@
         <option value="15" selected="@(Model.PageSizeModifier == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        Showing @((Model.PageIndexModifier - 1) * Model.PageSizeModifier + 1) -
+        Showing @(Model.TotalPagesModifier == 0 ? 0 : (Model.PageIndexModifier - 1) * Model.PageSizeModifier + 1) -
         @(Math.Min(Model.PageIndexModifier * Model.PageSizeModifier, Model.TotalModifiers)) of
         @Model.TotalModifiers
     </p>
@@ -114,7 +120,6 @@
         } else {
             deleteModifierList.push(modifierId);
         }
-        console.log(deleteModifierList);
     }
 
     $("#modifiers-name-checkbox-intermediate").click(function () {
@@ -129,7 +134,6 @@
                 deleteModifierList = deleteModifierList.filter(item => item !== parseInt($(this).val()));
             });
         }
-        console.log(deleteModifierList);
     });
 
     $(".modifiers-name-checkbox").click(function () {
@@ -156,7 +160,6 @@
             return;
         }
 
-        console.log(deleteModifierList);
         var modifierGroupId = $("#modifierGroupId21").val();
         $.ajax({
             url: '@Url.Action("DeleteSelectedModifiers", "Menu")',
@@ -239,7 +242,6 @@
     }
 
     $("#searchInputModifier").on("keyup", function () {
-        console.log($("#modifierGroupId21").val());
         clearTimeout($.data(this, 'timer'));
         var searchValue = $(this).val().toLowerCase();
         var modifierGroupId = $("#modifierGroupId21").val();
@@ -324,10 +326,8 @@
     
     
     $(".modifiers-name-checkbox").each(function () {
-        console.log(deleteModifierList);
         if (deleteModifierList.includes(parseInt($(this).val(), 10))) {
             $(this).prop("checked", true);
-            console.log($(this).val());
         }
     }); 
 

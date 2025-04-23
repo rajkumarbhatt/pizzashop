@@ -3,7 +3,6 @@ var controllers = ['Dashboard', 'UserList', 'RoleAndPermission', 'Menu', 'TableA
 
 var url = window.location.pathname;
 var controllerName = controllers.find(controller => url.includes(controller));
-// console.log(controllerName);
 
 $(document).ready(function () {
     $(".margin-left-sidebar-element").removeClass("active");
@@ -24,8 +23,7 @@ $(document).ready(function () {
     $("#" + controllerName + "-svg").attr("src", src);
 
     var srcMobile = $("#" + controllerName + "-svg-mobile").attr("src");
-    srcMobile = srcMobile.replace(".svg", "-active.svg"); 
-    console.log(srcMobile);
+    srcMobile = srcMobile.replace(".svg", "-active.svg");
     $("#" + controllerName + "-svg-mobile").attr("src", srcMobile);
 });
 

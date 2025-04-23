@@ -13,6 +13,12 @@
             </tr>
         </thead>
     <tbody>
+        @if(Model.Orders.Count() == 0)
+        {
+            <tr>
+                <td colspan="8" class="text-center font-weight-bold-slight">No Orders Found</td>
+            </tr>
+        }
         @foreach(var order in @Model.Orders)
         {
             <tr>
@@ -42,7 +48,7 @@
         <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        Showing @((Model.pageIndex - 1) * Model.pageSize + 1) - 
+        Showing @(Model.totalPages == 0 ? 0 : (Model.pageIndex - 1) * Model.pageSize + 1) - 
         @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalOrders)) of @Model.totalOrders
     </p>
 
@@ -58,7 +64,6 @@
 <script>
 
     function downloadPdfInvoice(orderId) {
-        console.log(orderId);
         const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
         $('.loader-container').removeClass('d-none');
         fetch(url, { method: "GET" })
@@ -196,7 +201,6 @@
     });
 
     $("#sortOrderId").click(function () {
-        console.log("sortOrderId");
         sortColumn = "id";
         if (isOrderIdAsc) {
             sortDirection = "desc";
@@ -223,7 +227,6 @@
     });
 
     $("#sortDate").click(function () {
-        console.log("sortDate");
         sortColumn = "date";
         if (isDateAsc) {
             sortDirection = "desc";
@@ -250,7 +253,6 @@
     });
 
     $("#sortCustomerNames").click(function () {
-        console.log("sortCustomerNames");
         sortColumn = "customerName";
         if (isCustomerNamesAsc) {
             sortDirection = "desc";
@@ -277,7 +279,6 @@
     });
 
     $("#sortTotalAmount").click(function () {
-        console.log("sortTotalAmount");
         sortColumn = "totalAmount";
         if (isTotalAmountAsc) {
             sortDirection = "desc";

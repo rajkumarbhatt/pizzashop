@@ -29,7 +29,6 @@ var changedPermissions = [];
 
 
 function changePermission (roleId, permissionId, permissionName) {
-    console.log("changePermission");
     var checked = document.getElementById(permissionName + roleId + permissionId).checked;
     var permission = {
         roleId: roleId,
@@ -38,7 +37,6 @@ function changePermission (roleId, permissionId, permissionName) {
         checked: checked
     };
     var index = changedPermissions.findIndex(p => p.roleId === roleId && p.permissionId === permissionId && p.permissionName === permissionName);
-    console.log(index, permission);
     if (index === -1) {
         changedPermissions.push(permission);
     } else {

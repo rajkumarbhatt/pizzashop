@@ -64,7 +64,6 @@
     }
 
     function addModifierGroupToList(id) {
-        console.log("Before: " + selectModifierGroups);
         var isChecked = document.getElementById(id).checked;
         var idInt = parseInt(id);
         if (isChecked) {
@@ -77,7 +76,6 @@
             selectModifierGroups = selectModifierGroups.filter((value) => value.Id !== idInt);
         }
         var selectModifierGroupsString = JSON.stringify(selectModifierGroups);
-        console.log("After: " + selectModifierGroups);
         $.ajax({
             type: "GET",
             url: "/Menu/GetModifierGroupData",
@@ -213,7 +211,6 @@
                 isMinMaxDataValid = false;
             }
         });
-        console.log(selectModifierGroups);
         return isMinMaxDataValid;
     }
 
@@ -270,7 +267,6 @@
 
     function SyncEditChanges() {
         selectModifierGroups = JSON.parse($("#ModifierGroupIdsEdit").val());
-        console.log(selectModifierGroups);
         selectModifierGroups.forEach(function (modifierGroup) {
             document.getElementById(modifierGroup.Id).checked = true;
             addTag(modifierGroup.Id, modifierGroup.Name);

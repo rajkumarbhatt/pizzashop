@@ -96,7 +96,6 @@
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
     function saveOrder() {
-        console.log(taxListNameAndAmount);
         var data = {
             OrderItems: itemList,
             Subtotal: parseFloat($('#orderSubtotalValue').text()),
@@ -104,7 +103,6 @@
             OrderId: orderIdTemp,
             OrderTaxes: taxListNameAndAmount,
         };
-        console.log(data);
         $.ajax({
             type: "POST",
             url: '@Url.Action("SaveOrder", "OrderAppMenu")',
@@ -123,7 +121,6 @@
     }
 
     function downloadPdfInvoice() {
-        console.log(orderId);
         const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
         $('.loader-container').removeClass('d-none');
         fetch(url, { method: "GET" })

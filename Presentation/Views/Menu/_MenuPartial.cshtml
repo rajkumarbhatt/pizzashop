@@ -386,10 +386,8 @@
     var deleteItemsList = [];
 
     function addItem() {
-        console.log(selectModifierGroups);
         initializeFormSubmit();
         if (isEditCalled) {
-            console.log("in if");
             UnSyncEditChanges();
             $.ajax({
                 type: "GET",
@@ -410,7 +408,6 @@
             });
             return;
         } else {
-            console.log("in else");
             triggerMultiSelect();
             $.ajax({
                 type: "GET",

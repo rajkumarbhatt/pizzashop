@@ -30,6 +30,12 @@
             }
         </thead>
     <tbody>
+        @if (Model?.Tables?.Count() == 0)
+        {
+            <tr>
+                <td colspan="4" class="text-center font-weight-bold-slight">No tables available</td>
+            </tr>
+        }
         @foreach (var table in Model.Tables)
         {
             <tr class="text-center">
@@ -74,7 +80,7 @@
         <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
     </select>
     <p class="px-1">
-        Showing @((Model.PageIndex - 1) * Model.PageSize + 1) -
+        Showing @(Model.TotalPages == 0 ? 0 : (Model.PageIndex - 1) * Model.PageSize + 1) -
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalTables)) of
         @Model.TotalTables
     </p>
@@ -105,7 +111,6 @@
                 }
                 $("#TableSection").val(data.sectionId);
                 $("#TableId").val(data.id);
-                console.log(data);
                 $("#addTableTitle").text("Edit Table");
                 $("#addTableModal").modal("show");
             }
@@ -126,7 +131,6 @@
                 deleteTableIds = deleteTableIds.filter(id => id !== parseInt($(this).val()));
             });
         }
-        console.log(deleteTableIds);
     });
 
     $(".table-name-checkbox").click(function () {
@@ -143,7 +147,6 @@
         } else {
             deleteTableIds.push(tableId);
         }
-        console.log(deleteTableIds);
     }
 
     function changeTables(sectionId) {
