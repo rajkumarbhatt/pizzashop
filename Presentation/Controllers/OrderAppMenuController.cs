@@ -80,47 +80,47 @@ namespace Presentation.Controllers
         public async Task<IActionResult> AddOrderWiseComment(int orderId, string comment)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.AddOrderWiseComment(orderId, comment, userId);
+            return await _kotMenuService.AddOrderWiseCommentAsync(orderId, comment, userId);
         }
         [HttpPost]
         public async Task<IActionResult> AddItemWiseComment(int orderId, int itemId, string comment)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.AddItemWiseComment(orderId, itemId, comment, userId);
+            return await _kotMenuService.AddItemWiseCommentAsync(orderId, itemId, comment, userId);
         }
         [HttpPost]
         public async Task<IActionResult> SaveOrder(SaveOrderViewModel saveOrderViewModel)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.SaveOrder(saveOrderViewModel, userId);
+            return await _kotMenuService.SaveOrderAsync(saveOrderViewModel, userId);
         }
         [HttpPost]
         public async Task<IActionResult> CompleteOrder(int orderId)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.CompleteOrder(orderId, userId);
+            return await _kotMenuService.CompleteOrderAsync(orderId, userId);
         }
         [HttpPost]
         public async Task<IActionResult> CancelOrder(int orderId)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.CancelOrder(orderId, userId);
+            return await _kotMenuService.CancelOrderAsync(orderId, userId);
         }
         [HttpPost]
         public async Task<IActionResult> SaveCustomerReview(SaveCustomerReviewViewModel saveCustomerReviewViewModel)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.SaveCustomerReview(saveCustomerReviewViewModel, userId);
+            return await _kotMenuService.SaveCustomerReviewAsync(saveCustomerReviewViewModel, userId);
         }
         [HttpGet]
         public async Task<JsonResult> CanDeleteFromOrder(int orderId, int itemId)
         {
-            return await _kotMenuService.CanDeleteFromOrder(orderId, itemId);
+            return await _kotMenuService.CanDeleteFromOrderAsync(orderId, itemId);
         }
         [HttpGet]
         public async Task<JsonResult> CanReduceFromOrder(int orderId, int itemId, int currentQuantity)
         {
-            return await _kotMenuService.CanReduceFromOrder(orderId, itemId, currentQuantity);
+            return await _kotMenuService.CanReduceFromOrderAsync(orderId, itemId, currentQuantity);
         }
     }
 }

@@ -14,6 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
 @model DAL.ViewModels.LoginViewModel;
+
 <div class="sma container-fluid row bg-color main-container position-absolute h-100">
     @* toaster *@
     <div class="loader-container d-none">
@@ -59,8 +60,8 @@
                 </div>
                 <div class="d-flex justify-content-between w-100 small">
                     <div>
-                        <input type="checkbox" name="remember-me" id="remember-me">
-                        <label for="remember-me">Remember me</label>
+                        <input type="checkbox" class="cursor-pointer" name="remember-me" id="remember-me">
+                        <label for="remember-me" class="cursor-pointer">Remember me</label>
                     </div>
                     <a asp-controller="ForgotPassword" asp-action="Index" class="text-decoration-none">Forgot
                         Password</a>

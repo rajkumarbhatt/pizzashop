@@ -24,7 +24,8 @@ namespace Presentaion.Controllers
 
         public async Task<IActionResult> IndexAsync(int pageIndex = 1, int pageSize = 5)
         {
-            UserListViewModel userListViewModel = await _userListService.GetUsersListViewModelAsync(pageIndex, pageSize);
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            UserListViewModel userListViewModel = await _userListService.GetUsersListViewModelAsync(pageIndex, pageSize, userId);
             return View(userListViewModel);
         }
 
@@ -50,7 +51,7 @@ namespace Presentaion.Controllers
             var countries = await _profileService.GetCountriesAsync();
             var states = await _profileService.GetStatesAsync(userViewModel.CountryId ?? 0);
             var cities = await _profileService.GetCitiesAsync(userViewModel.StateId ?? 0);
-            var roles = await _userListService.GetRolesAsync();
+            var roles = await _userListService.GetRolesAsync(userIdLoggedIn);
             ViewBag.Roles = roles;
             ViewBag.Countries = countries;
             ViewBag.States = states;
@@ -74,8 +75,9 @@ namespace Presentaion.Controllers
         [Route("UserList/CreateUser")]
         public async Task<IActionResult> CreateUserAsync()
         {
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             var countries = await _profileService.GetCountriesAsync();
-            var roles = await _userListService.GetRolesAsync();
+            var roles = await _userListService.GetRolesAsync(userIdLoggedIn);
             ViewBag.Roles = roles;
             ViewBag.Countries = countries;
             CreateUserViewModel createUserViewModel = await _userListService.GetCreateUserViewModelAsync();

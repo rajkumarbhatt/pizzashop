@@ -161,11 +161,12 @@
             }
             for (var i = 0; i < selectedModifiers.length; i++) {
                 var modifier = selectedModifiers[i];
+                var modifierCustomId = "modifier-" + modifier.ModifierName + "-" + itemId;
                 var row = `
                     <tr class="font-accordian">
                         <td>•</td>
                         <td>${modifier.ModifierName}</td>
-                        <td>${modifier.ModifierPrice}</td>
+                        <td id="${modifierCustomId}">${modifier.ModifierPrice}</td>
                     </tr>
                 `;
                 rows += row;
@@ -241,6 +242,16 @@
                 item.Quantity = parseInt(newValue);
             }
         });
+        @* update modifiers table *@
+        var selectedModifiersTable = document.getElementById("selectedModifiersTable-collapse" + itemId);
+        var selectedModifiers = selectedModifiersTable.getElementsByTagName("tr");
+        debugger
+        for (var i = 0; i < selectedModifiers.length; i++) {
+            var modifierPriceElement = selectedModifiers[i].getElementsByTagName("td")[2];
+            var modifierElementPrice = parseFloat(modifierPriceElement.innerHTML / currentValue);
+            var newModifierPrice = modifierElementPrice * newValue;
+            modifierPriceElement.innerHTML = newModifierPrice.toFixed(2);
+        }
     }
 
     function decreaseQuantity (id, event) {
@@ -274,6 +285,15 @@
                                 item.Quantity = parseInt(newValue);
                             }
                         });
+                        @* update modifiers table *@
+                        var selectedModifiersTable = document.getElementById("selectedModifiersTable-collapse" + itemId);
+                        var selectedModifiers = selectedModifiersTable.getElementsByTagName("tr");
+                        for (var i = 0; i < selectedModifiers.length; i++) {
+                            var modifierPriceElement = selectedModifiers[i].getElementsByTagName("td")[2];
+                            var modifierElementPrice = parseFloat(modifierPriceElement.innerHTML / currentValue);
+                            var newModifierPrice = modifierElementPrice * newValue;
+                            modifierPriceElement.innerHTML = newModifierPrice.toFixed(2);
+                        }
                     }
                     if (currentValue == 1) {
                         Subtotal -= (itemPrice + orderModifiersTotalPriceValue);

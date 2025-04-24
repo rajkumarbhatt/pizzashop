@@ -55,8 +55,7 @@
         $(".para-blue-color").removeClass("active-waiting-list");
         document.getElementById(paraId).classList.add("active-waiting-list");
         id = parseInt(id);
-        if (inReady)
-        {
+        if (inReady) {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetReadyItems", "KOT")',
@@ -84,4 +83,75 @@
             });
         }
     }
+
+    function updateTimers() {
+        $(".order-timer").each(function () {
+            @* add seconds and handle minutes hours accordingly *@
+            var currentTime = $(this).text();
+            if (currentTime === "N/A") {
+                return;
+            }
+            var timeParts = currentTime.split(" ");
+            if (timeParts.length === 6) {
+                // Format is "ahrs x mins y secs"
+                var hours = parseInt(timeParts[0].replace("hrs", ""));
+                var minutes = parseInt(timeParts[2].replace("mins", ""));
+                var seconds = parseInt(timeParts[4].replace("secs", ""));
+                seconds += 1;
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes += 1;
+                }
+                if (minutes >= 60) {
+                    minutes = 0;
+                    hours += 1;
+                }
+                $(this).text(
+                    hours + "hrs " +
+                    minutes + " mins " +
+                    seconds + " secs"
+                );
+            }
+            else if (timeParts.length === 4) {
+                // Format is "x mins y secs"
+                var minutes = parseInt(timeParts[0].replace("mins", ""));
+                var seconds = parseInt(timeParts[2].replace("secs", ""));
+                seconds += 1;
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes += 1;
+                }
+                $(this).text(
+                    minutes + " mins " +
+                    seconds + " secs"
+                );
+            }
+            else if (timeParts.length === 2) {
+                // Format is "y secs"
+                var seconds = parseInt(timeParts[0].replace("secs", ""));
+                var minutes = 0;
+                seconds += 1;
+                if (seconds >= 60) {
+                    seconds = 0;
+                    minutes += 1;
+                }
+                else {
+                    seconds = seconds;
+                }
+                var res = "";
+                if (minutes > 0) {
+                    res = minutes + " mins " + seconds + " secs";
+                }
+                else {
+                    res = seconds + " secs";
+                }
+                $(this).text(
+                    res
+                );
+
+            }
+        });
+    }
+
+    setInterval(updateTimers, 1000);
 </script>

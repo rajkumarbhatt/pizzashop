@@ -91,32 +91,27 @@
         <div class="d-flex flex-column justify-content-start align-items-start p-2 m-2">
             <h4 class="mb-3">Top Selling Items</h4>
             <div class="d-flex flex-column gap-2">
-                <div class="d-flex justify-content-start align-items-center gap-1">
-                    <p>#1</p>
-                    @{
-                        string profileImagePath = string.IsNullOrEmpty(@Model.TopSellingItems?[0].ImageUrl)
-                        ? "/images/dining-menu.png"
-                        : $"/images/item-images/{@Model.TopSellingItems?[0].ImageUrl}";
-                    }
-                    <img src="@profileImagePath" class="table-name-image profile-image-border object-fit-cover" alt="">
-                    <div>
-                        <p class="text-small">@Model.TopSellingItems?[0].Name</p>
-                        <p class="text-small">@Model.TopSellingItems?[0].NumberOfOrders order(s)</p>
+                @{
+                    var j = 1;
+                }
+                @foreach (var item in Model.TopSellingItems)
+                {
+                    string profileImagePath3 = string.IsNullOrEmpty(@item.ImageUrl)
+                    ? "/images/dining-menu.png"
+                    : $"/images/item-images/{@item.ImageUrl}";
+                    <div class="d-flex justify-content-start align-items-center gap-1">
+                        <div class="d-flex justify-content-start align-items-center gap-1">
+                            <p>#@j</p>
+                            <img src="@profileImagePath3" class="table-name-image profile-image-border object-fit-cover"
+                                alt="">
+                            <div>
+                                <p class="text-small">@item.Name</p>
+                                <p class="text-small">@item.NumberOfOrders order(s)</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-start align-items-center gap-1">
-                    <p>#2</p>
-                    @{
-                        string profileImagePath2 = string.IsNullOrEmpty(@Model.TopSellingItems?[1].ImageUrl)
-                        ? "/images/dining-menu.png"
-                        : $"/images/item-images/{@Model.TopSellingItems?[1].ImageUrl}";
-                    }
-                    <img src="@profileImagePath2" class="table-name-image profile-image-border object-fit-cover" alt="">
-                    <div>
-                        <p class="text-small">@Model.TopSellingItems?[1].Name</p>
-                        <p class="text-small">@Model.TopSellingItems?[1].NumberOfOrders order(s)</p>
-                    </div>
-                </div>
+                    j++;
+                }
             </div>
         </div>
     </div>
@@ -126,32 +121,24 @@
         <div class="d-flex flex-column justify-content-start align-items-start p-2 m-2">
             <h4 class="mb-3">Least Selling Items</h4>
             <div class="d-flex flex-column gap-2">
-                <div class="d-flex justify-content-start align-items-center gap-1">
-                    <p>#1</p>
-                    @{
-                        string profileImagePath3 = string.IsNullOrEmpty(@Model.LeastSellingItems?[0].ImageUrl)
-                        ? "/images/dining-menu.png"
-                        : $"/images/item-images/{@Model.LeastSellingItems?[0].ImageUrl}";
-                    }
-                    <img src="@profileImagePath3" class="table-name-image profile-image-border object-fit-cover" alt="">
-                    <div>
-                        <p class="text-small">@Model.LeastSellingItems?[0].Name</p>
-                        <p class="text-small">@Model.LeastSellingItems?[0].NumberOfOrders order(s)</p>
+                @{
+                    var i = 1;
+                }
+                @foreach (var item in Model.LeastSellingItems)
+                {
+                    string profileImagePath3 = string.IsNullOrEmpty(@item.ImageUrl)
+                    ? "/images/dining-menu.png"
+                    : $"/images/item-images/{@item.ImageUrl}";
+                    <div class="d-flex justify-content-start align-items-center gap-1">
+                        <p>#@i</p>
+                        <img src="@profileImagePath3" class="table-name-image profile-image-border object-fit-cover" alt="">
+                        <div>
+                            <p class="text-small">@item.Name</p>
+                            <p class="text-small">@item.NumberOfOrders order(s)</p>
+                        </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-start align-items-center gap-1">
-                    <p>#2</p>
-                    @{
-                        string profileImagePath4 = string.IsNullOrEmpty(@Model.LeastSellingItems?[1].ImageUrl)
-                        ? "/images/dining-menu.png"
-                        : $"/images/item-images/{@Model.LeastSellingItems?[1].ImageUrl}";
-                    }
-                    <img src="@profileImagePath4" class="table-name-image profile-image-border object-fit-cover" alt="">
-                    <div>
-                        <p class="text-small">@Model.LeastSellingItems?[1].Name</p>
-                        <p class="text-small">@Model.LeastSellingItems?[1].NumberOfOrders order(s)</p>
-                    </div>
-                </div>
+                    i++;
+                }
             </div>
         </div>
     </div>

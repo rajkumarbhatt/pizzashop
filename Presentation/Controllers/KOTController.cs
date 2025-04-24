@@ -38,7 +38,7 @@ public class KOTController : Controller
         int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
         if (inReady)
         {
-            kotViewModel = await _kotService.MarkItemsAsInPrepared(pageIndex, readyItems, orderId, categoryId, userId);
+            kotViewModel = await _kotService.MarkItemsAsInPreparedAsync(pageIndex, readyItems, orderId, categoryId, userId);
         }
         else
         {
@@ -47,9 +47,9 @@ public class KOTController : Controller
         return PartialView("_CardsPartial", kotViewModel); 
     }
     [HttpGet]
-    public async Task<IActionResult> GetReadyItems (int categoryId, int pageIndex = 1)
+    public async Task<IActionResult> GetReadyItemsAsync (int categoryId, int pageIndex = 1)
     {
-        KotViewModel kotViewModel = await _kotService.GetReadyItems(categoryId, pageIndex);
+        KotViewModel kotViewModel = await _kotService.GetReadyItemsAsync(categoryId, pageIndex);
         return PartialView("_CardsPartial", kotViewModel);
     }
 }

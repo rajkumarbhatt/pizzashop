@@ -154,29 +154,6 @@
             });
     });
 
-    document.getElementById("exportBtnMobile").addEventListener("click", function () {
-        const status = encodeURIComponent($("#OrderStatusSelect").val());
-        const time = encodeURIComponent($("#OrderTimeSelect").val());
-        const searchValue = encodeURIComponent($("#searchInputOrders").val());
-        const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}`;
-        $('.loader-container').removeClass('d-none');
-
-        fetch(url, { method: "GET" })
-            .then(response => response.blob())
-            .then(blob => {
-                const link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "Orders.xlsx";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                $('.loader-container').addClass('d-none');
-            })
-            .catch(error => {
-                console.error("Error exporting data:", error);
-                $('.loader-container').addClass('d-none');
-            });
-    });
 
     $(document).ready(function () {
         $('.datepicker').datepicker({

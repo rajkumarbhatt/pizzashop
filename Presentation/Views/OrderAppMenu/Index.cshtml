@@ -269,11 +269,12 @@
             var rows = "";
             for (var i = 0; i < item.modifiers.length; i++) {
                 var modifier = item.modifiers[i];
+                var modifierCustomId = "modifier-" + modifier.modifierName + "-" + item.itemId;
                 var row = `
                     <tr class="font-accordian">
                         <td>•</td>
                         <td>${modifier.modifierName}</td>
-                        <td>${modifier.modifierPrice}</td>
+                        <td id="${modifierCustomId}">${modifier.modifierPrice}</td>
                     </tr>
                 `;
                 rows += row;
