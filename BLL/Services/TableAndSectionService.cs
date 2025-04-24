@@ -237,5 +237,24 @@ namespace BLL.Services
             };
             return tableAndSectionViewModel;
         }
+        public async Task<TableAndSectionViewModel> SectionsFilterAsync(int sectionId, int pageIndex, int pageSize)
+        {
+            if (sectionId == -1)
+            {
+                sectionId = await _context.Sections.Where(s => s.IsDeleted == false).Select(s => s.Id).FirstOrDefaultAsync();
+            }
+            List<Table> tables = await _context.Tables.Where(t => t.SectionId == sectionId && t.IsDeleted == false).OrderBy(t => t.Id).ToListAsync();
+            TableAndSectionViewModel tableAndSectionViewModel = new TableAndSectionViewModel
+            {
+                Sections = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync(),
+                Tables = tables.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                PageSize = pageSize,
+                PageIndex = pageIndex,
+                TotalTables = tables.Count,
+                TotalPages = (int)Math.Ceiling((double)tables.Count / pageSize)
+            };
+
+            return tableAndSectionViewModel;
+        }
     }
 }

@@ -35,8 +35,8 @@
         @foreach (var modifierGroup in Model.ModifierGroups)
         {
             var divCustomIdModifier = "modifierGroup" + modifierGroup.Id;
-            var divCustomIdModifier2 = "modifierGroup" + modifierGroup.Id + "2";
-            var divCustomIdModifier4 = "modifierGroup" + modifierGroup.Id + "4";
+            var divCustomIdModifier2 = "modifierGroup" + modifierGroup.Id + "two";
+            var divCustomIdModifier4 = "modifierGroup" + modifierGroup.Id + "four";
             var bluedotModifier = "blue-dot" + modifierGroup.Id;
             var graydotModifier = "gray-dot" + modifierGroup.Id;
 
@@ -816,13 +816,13 @@
 
     function showDivM (modifierGroupId) {
         modifierGroupId.classList.remove('d-none');
-        var divId2 = modifierGroupId.id + "2";
+        var divId2 = modifierGroupId.id + "two";
         $("#" + divId2).addClass('active-category-div');
     }
 
     function hideDivM (modifierGroupId) {
         modifierGroupId.classList.add('d-none');
-        var divId2 = modifierGroupId.id + "2";
+        var divId2 = modifierGroupId.id + "two";
         $("#" + divId2).removeClass('active-category-div');
     }
 

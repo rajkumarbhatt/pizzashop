@@ -122,80 +122,13 @@
     </div>
 </div>
 
-@* add table modal *@
-<div class="modal fade" id="addTableModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered table-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addTableTitle">Add Table</h5>
-                <button onclick="clearAddTableForm()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row align-items-center">
-                    <div class="col-12 row">
-                        <div class="form-floating my-auto col-12 col-md-6">
-                            <input type="hidden" id="TableId" value="-1" />
-                            <input type="text" class="form-control" name="" id="TableName" required
-                                placeholder="ItemName">
-                            <span id="TableNameError" class="text-danger"></span>
-                            <label for="ItemName" class="">Name*</label>
-                        </div>
-                        <div class="col-12 col-md-6 p-2 form-floating">
-                            <select readonly id="TableSection" class="form-select cursor-none" aria-label="CategoryId" style="background-color: #E9ECEF">
-                                @foreach (var Section in Model.Sections)
-                                {
-                                    <option disabled value="@Section.Id">@Section.Name</option>
-                                }
-                            </select>
-                            <span id="TableSectionError" class="text-danger"></span>
-                            <label for="CategoryId" class="mx-2 mt-2">Section*</label>
-                        </div>
-                    </div>
-                    <div class="col-12 row">
-                        <div class="form-floating my-auto col-12 col-md-6">
-                            <input type="text" class="form-control" name="" id="TableCapacity" required
-                                placeholder="ItemName">
-                            <span id="TableCapacityError" class="text-danger"></span>
-                            <label for="ItemName" class="">Capacity*</label>
-                        </div>
-                        <div class="col-12 col-md-6 p-2 form-floating">
-                            <select readonly id="TableStatus" class="form-select cursor-none" aria-label="CategoryId" style="background-color: #E9ECEF">
-                                <option disabled value="Available">Available</option>
-                                <option disabled value="Occupied">Occupied</option>
-                            </select>
-                            <span id="TableStatusError" class="text-danger"></span>
-                            <label for="CategoryId" class="mx-2 mt-2">Status*</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end ">
-                <button id="AddTableButton" onclick="addTable()" type="button"
-                    class="btn btn-primary px-3">Save</button>
-                <a onclick="clearAddTableForm()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <script>
 
     var deleteTableIds = [];
 
-    function showDiv(divId) {
-        divId.classList.remove('d-none');
-        var divId2 = divId.id + "2";
-        $("#" + divId2).addClass('active-category-div'); 
-    }
-
-    function hideDiv(divId) {
-        divId.classList.add('d-none');
-        var divId2 = divId.id + "2";
-        $("#" + divId2).removeClass('active-category-div');
-    }
-
+    
     function addSection() {
         var sectionName = document.getElementById("SectionName").value;
         if (sectionName == "") {
@@ -211,10 +144,20 @@
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
-                    setTimeout(function () {
-                        location.reload();
-                        clearAddSectionForm();
-                    }, 1000);
+                    clearAddSectionForm();
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("SectionsFilter", "TableAndSection")',
+                        data: { pageIndex: 1, pageSize: @Model.PageSize, sectionId: sectionId },
+                        success: function (data) {
+                            $("#items-content").html(data);
+                            $("#addSectionModal").modal("hide");
+                            if (sectionId == "-1") {
+                                $("#SectionId").val(@Model.Sections[0].Id);
+                            }
+                            makeThisSectionActive($("#SectionId").val());
+                        }
+                    })
                 } else {
                     toastr.error(response.message);
                 }
@@ -256,9 +199,17 @@
                     isDeletingSections = false;
                     if (response.success) {
                         toastr.success(response.message);
-                        setTimeout(function () {
-                            location.reload();
-                        }, 1000);
+                        $("#SectionId").val(@Model.Sections[0].Id);
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("SectionsFilter", "TableAndSection")',
+                            data: { pageIndex: 1, pageSize: @Model.PageSize, sectionId: $("#SectionId").val() },
+                            success: function (data) {
+                                $("#items-content").html(data);
+                                makeThisSectionActive($("#SectionId").val());
+                            }
+                        });
+                        $("#deleteSectionModal").modal("hide");
                     } else {
                         toastr.error(response.message);
                     }
@@ -353,7 +304,7 @@
         $("#TableCapacity").on("input", function () {
             if ($("#TableCapacity").val() == "") {
                 document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
-            } else if ($("#TableCapacity").val() != "" && !/^[0-9]+$/.test($("#TableCapacity").val())) {
+            } else if ($("#TableCapacity").val() !== "" && !/^[0-9]+$/.test($("#TableCapacity").val())) {
                 document.getElementById("TableCapacityError").innerText = "Table Capacity should be a number.";
             } else {
                 document.getElementById("TableCapacityError").innerText = "";
@@ -361,10 +312,28 @@
         });
     });
 
+    function checkValidData() {
+        var tableName = document.getElementById("TableName").value;
+        var tableCapacity = document.getElementById("TableCapacity").value;
+        if (tableName == "") {
+            document.getElementById("TableNameError").innerText = "Table Name is required.";
+            return false;
+        }
+        if (tableCapacity == "") {
+            document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
+            return false;
+        }
+        if (!/^[0-9]+$/.test(tableCapacity)) {
+            document.getElementById("TableCapacityError").innerText = "Table Capacity should be a number.";
+            return false;
+        }
+        return true;
+    }
+
     function makeThisSectionActive (sectionId) {
         var divCustomIdTable = "divTable" + sectionId;
-        var divCustomIdTable2 = "divTable" + sectionId + "2";
-        var divCustomId4 = "divTable" + sectionId + "4";
+        var divCustomIdTable2 = "divTable" + sectionId + "two";
+        var divCustomId4 = "divTable" + sectionId + "four";
         var blueDotId = "blueDotTable" + sectionId;
         var grayDotId = "grayDotTable" + sectionId;
         $(".blue-dot-table").addClass('d-none');
@@ -393,6 +362,9 @@
         }
         if (tableCapacity == "") {
             document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
+            return;
+        }
+        if (checkValidData() == false) {
             return;
         }
         var pageIndex = $("#PageIndex").val();

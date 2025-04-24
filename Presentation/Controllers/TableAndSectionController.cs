@@ -76,5 +76,11 @@ namespace Presentaion.Controllers
             Table table = await _tableAndSectionService.GetTableByIdAsync(tableId);
             return new JsonResult(new { table.Id, table.Name, table.Status, table.Capacity, table.SectionId });
         }
+        [HttpGet]
+        public async Task<IActionResult> SectionsFilter(int pageIndex, int pageSize, int sectionId)
+        {
+            TableAndSectionViewModel tableAndSectionViewModel = await _tableAndSectionService.SectionsFilterAsync(sectionId, pageIndex, pageSize);
+            return PartialView("_SectionsPartial", tableAndSectionViewModel);
+        }
     }
 }

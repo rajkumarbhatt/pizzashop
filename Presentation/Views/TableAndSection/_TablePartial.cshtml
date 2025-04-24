@@ -95,7 +95,6 @@
 </div>
 
 <script>
-
     function editTableFunc(id) {
         $.ajax({
             url: '@Url.Action("EditTable", "TableAndSection")',
@@ -159,12 +158,7 @@
             success: function (data) {
                 $("#tablePartialView").html(data);
                 $("#SectionId").val(sectionId);
-                $(".menu-category-navigation-items-table").removeClass("active-nav-item");
-                $("#divTable" + sectionId + "4").addClass("active-nav-item");
-                $(".gray-dot-table").removeClass("d-none");
-                $("#grayDotTable" + sectionId).addClass("d-none");
-                $(".blue-dot-table").addClass("d-none");
-                $("#blueDotTable" + sectionId).removeClass("d-none");
+                makeThisSectionActive(sectionId);
             }
         });
     }
@@ -247,5 +241,4 @@
     if ($(".table-name-checkbox:checked").length === 0) {
         $("#DeleteTablesIntermediateCheckbox").prop("checked", false);
     }
-
 </script>

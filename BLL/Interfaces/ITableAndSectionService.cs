@@ -18,5 +18,6 @@ namespace BLL.Interfaces
         Task<IActionResult> AddTableAsync(int tableId, string tableName, string tableStatus, int tableCapacity, int sectionId, int userId);
         Task<Table> GetTableByIdAsync(int tableId);
         Task<TableAndSectionViewModel> GetTableAndSectionViewModelAsync();
+        Task<TableAndSectionViewModel> SectionsFilterAsync(int sectionId, int pageIndex, int pageSize);
     }
 }

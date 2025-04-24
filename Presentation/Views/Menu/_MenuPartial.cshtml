@@ -25,8 +25,8 @@
             @foreach (var category in Model.Categories)
             {
                 var divCustomId = "div" + category.Id;
-                var divCustomId2 = "div" + category.Id + "2";
-                var divCustomId4 = "div" + category.Id + "4";
+                var divCustomId2 = "div" + category.Id + "two";
+                var divCustomId4 = "div" + category.Id + "four";
                 var blueDotId = "blueDot" + category.Id;
                 var grayDotId = "grayDot" + category.Id;
  
@@ -433,13 +433,13 @@
     
     function showDiv(divId) {
         divId.classList.remove('d-none');
-        var divId2 = divId.id + "2";
+        var divId2 = divId.id + "two";
         $("#" + divId2).addClass('active-category-div');
     }
 
     function hideDiv(divId) {
         divId.classList.add('d-none');
-        var divId2 = divId.id + "2";
+        var divId2 = divId.id + "two";
         $("#" + divId2).removeClass('active-category-div');
     }
 

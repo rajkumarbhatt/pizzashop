@@ -229,7 +229,7 @@
         var searchValue = $("#searchInput").val().toLowerCase();
         var sortColumn = "FirstName";
         var sortColumnDirection = "asc";
-        $("#deleteButton").click(function () {
+        $("#deleteButton").off("click").click(function () {
             $.ajax({
                 type: "DELETE",
                 url: "/UserList/DeleteUser/" + id,

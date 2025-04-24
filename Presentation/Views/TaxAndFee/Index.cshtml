@@ -124,6 +124,24 @@
 
 <script>
 
+    function checkValidData () {
+        var taxName = document.getElementById("TaxName").value;
+        var taxAmount = document.getElementById("TaxAmount").value;
+        if (taxName == "") {
+            document.getElementById("TaxNameError").innerText = "Tax Name is required.";
+            return false;
+        }
+        if (taxAmount == "") {
+            document.getElementById("TaxAmountError").innerText = "Tax Amount is required.";
+            return false;
+        }
+        if (/^(0|[1-9]\d*)(\.\d+)?$/.test(taxAmount) == false) {
+            document.getElementById("TaxAmountError").innerText = "Invalid Tax Amount.";
+            return false;
+        }
+        return true;
+    }
+
     function addTax () {
         var taxId = $("#TaxId").val();
         var taxName = $("#TaxName").val();
@@ -139,7 +157,10 @@
             $("#TaxAmountError").text("Amount is required");
             return;
         }
-
+        if (checkValidData() == false)
+        {
+            return;
+        }
         $.ajax({
             type: "POST",
             url: '@Url.Action("AddTax", "TaxAndFee")',
