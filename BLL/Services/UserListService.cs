@@ -51,8 +51,13 @@ namespace BLL.Services
             return role?.Name ?? "";
         }
 
-        public async Task<List<Role>> GetRolesAsync()
+        public async Task<List<Role>> GetRolesAsync(int userId)
         {
+            int roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
+            if (roleId == 2)
+            {
+                return await _context.Roles.Where(r => r.Id != 1).ToListAsync();
+            }
             return await _context.Roles.ToListAsync();
         }
 
@@ -194,9 +199,14 @@ namespace BLL.Services
             return await _context.Users.CountAsync();
         }
 
-        public async Task<(List<User>, int totalRecords)> GetUsersAsync(int pageIndex, int pageSize)
+        public async Task<(List<User>, int totalRecords)> GetUsersAsync(int pageIndex, int pageSize, int userId)
         {
+            var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
             var query = _context.Users.Where(u => u.IsDeleted == false).OrderBy(u => u.FirstName);
+            if (roleId == 2)
+            {
+                query = (IOrderedQueryable<User>)query.Where(u => u.RoleId != 1);
+            }
             int totalRecords = await query.CountAsync();
             var users = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return (users, totalRecords);
@@ -204,7 +214,13 @@ namespace BLL.Services
 
         public async Task<(List<User>, int totalRecords)> GetUsersWithSearchAsync(int pageIndex, int pageSize, string searchValue, string sortColumn, string sortColumnDirection)
         {
+            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(_httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? "");
+            var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
             var query = _context.Users.Where(u => u.IsDeleted == false);
+            if (roleId == 2)
+            {
+                query = (IOrderedQueryable<User>)query.Where(u => u.RoleId != 1);
+            }
             if (!string.IsNullOrEmpty(searchValue))
             {
                 query = query.Where(u => (u.FirstName.ToLower().Contains(searchValue)) || (u.Email.ToLower().Contains(searchValue)) || (u.Phone.ToLower().Contains(searchValue)));
@@ -241,11 +257,10 @@ namespace BLL.Services
             return (users, totalRecords);
         }
 
-        public async Task<UserListViewModel> GetUsersListViewModelAsync(int pageIndex, int pageSize)
+        public async Task<UserListViewModel> GetUsersListViewModelAsync(int pageIndex, int pageSize, int userId)
         {
-            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(_httpContextAccessor.HttpContext?.Request?.Cookies["token"] ?? "");
             var roleId = await _navBarService.GetRoleIdFromUserIdAsync(userId);
-            var (users, totalUsers) = await GetUsersAsync(pageIndex, pageSize);
+            var (users, totalUsers) = await GetUsersAsync(pageIndex, pageSize, userId);
             var rolePermissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
             int totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
             var userListViewModel = new UserListViewModel

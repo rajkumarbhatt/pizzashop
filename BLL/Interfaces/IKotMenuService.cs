@@ -14,14 +14,16 @@ namespace BLL.Interfaces
         public Task<KotMenuViewModel> GetCustomerDetailsAsync(int orderId);
         public Task<JsonResult> UpdateCustomerDetailsAsync(WaitingListModal waitingListModal, int userId);
         public Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId);
-        public Task<IActionResult> UpdateOrderAmount (int orderId, int userId, float subTotal, float total);
+        public Task<IActionResult> UpdateOrderAmountAsync (int orderId, int userId, float subTotal, float total);
         public Task<JsonResult> GetOrderWiseCommentAsync (int orderId);
-        public Task<IActionResult> AddOrderWiseComment (int orderId, string comment, int userId);
-        public Task<IActionResult> SaveOrder (SaveOrderViewModel saveOrderViewModel, int userId);
-        public Task<IActionResult> CompleteOrder (int orderId, int userId);
-        public Task<IActionResult> CancelOrder (int orderId, int userId);
-        public Task<IActionResult> SaveCustomerReview (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
-        public Task<JsonResult> CanDeleteFromOrder (int orderId, int itemId);
-        public Task<JsonResult> CanReduceFromOrder (int orderId, int itemId, int currentQuantity);
+        public Task<JsonResult> GetItemWiseCommentAsync(int orderId, int itemId);
+        public Task<IActionResult> AddOrderWiseCommentAsync (int orderId, string comment, int userId);
+        public Task<IActionResult> AddItemWiseCommentAsync (int orderId, int itemId, string comment, int userId);
+        public Task<IActionResult> SaveOrderAsync (SaveOrderViewModel saveOrderViewModel, int userId);
+        public Task<IActionResult> CompleteOrderAsync (int orderId, int userId);
+        public Task<IActionResult> CancelOrderAsync (int orderId, int userId);
+        public Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
+        public Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId);
+        public Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity);
     }
 }

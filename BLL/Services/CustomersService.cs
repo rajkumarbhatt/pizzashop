@@ -167,7 +167,7 @@ public class CustomersService : ICustomerService
         List<OrderItem> orderItems = await _context.OrderItems
             .Where(oi => orders.Select(o => o.Id).Contains(oi.OrderId))
             .ToListAsync();
-        double averageBill = (double)(orders.Count != 0 ? orders.Average(o => o.TotalAmount) : 0);
+        double averageBill = Math.Round((double)(orders.Count != 0 ? orders.Average(o => o.TotalAmount) : 0), 2);
         string comingSince = orders.Count != 0 ? orders.LastOrDefault().CreatedAt.Value.ToString("dd/MM/yyyy hh:mm tt") : "N/A";
         string maxOrderAmount = orders.Count != 0 ? orders.Max(o => o.TotalAmount).ToString() : "N/A";
         CustomerHistory customerHistory = new CustomerHistory

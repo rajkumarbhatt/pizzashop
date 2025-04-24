@@ -43,18 +43,20 @@ namespace BLL.Services
                     {
                         OrderId = order?.Id ?? 0,
                         OrderDuration = (DateTime.Now - createdAt).Days > 0
-                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
+                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
                             : (DateTime.Now - createdAt).Hours > 0
-                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
-                            : $"{(DateTime.Now - createdAt).Minutes} mins",
+                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : (DateTime.Now - createdAt).Minutes > 0
+                            ? $"{(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : $"{(DateTime.Now - createdAt).Seconds} secs",
                         Section = await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Section.Name)
                             .FirstOrDefaultAsync(),
-                        Table = await _context.OrderTableMappings
+                        Table = string.Join(", ", await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Name)
-                            .FirstOrDefaultAsync(),
+                            .ToListAsync()),
                         OrderInstruction = order.Comment,
                     };
                     List<KotOrderCardItem> kotOrderCardItems = new List<KotOrderCardItem>();
@@ -95,9 +97,17 @@ namespace BLL.Services
                 pageIndex = 1;
             }
             int TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / pageSize);
-            if (pageIndex > TotalPages && TotalPages != 0)
+            if (pageIndex > TotalPages && TotalPages != 0 && orderId == null)
             {
                 pageIndex = TotalPages;
+            }
+            if (orderId != null)
+            {
+                kotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).ToList();
+            }
+            else
+            {
+                kotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
             }
             KotViewModel kotViewModel = new()
             {
@@ -105,7 +115,7 @@ namespace BLL.Services
                 PageSize = pageSize,
                 PageIndex = pageIndex,
                 TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4),
-                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
+                KotOrderCards = kotOrderCards
             };
             return kotViewModel;
         }
@@ -142,18 +152,20 @@ namespace BLL.Services
                     {
                         OrderId = order?.Id ?? 0,
                         OrderDuration = (DateTime.Now - createdAt).Days > 0
-                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
+                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
                             : (DateTime.Now - createdAt).Hours > 0
-                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
-                            : $"{(DateTime.Now - createdAt).Minutes} mins",
+                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : (DateTime.Now - createdAt).Minutes > 0
+                            ? $"{(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : $"{(DateTime.Now - createdAt).Seconds} secs",
                         Section = await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Section.Name)
                             .FirstOrDefaultAsync(),
-                        Table = await _context.OrderTableMappings
+                        Table = string.Join(", ", await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Name)
-                            .FirstOrDefaultAsync(),
+                            .ToListAsync()),
                         OrderInstruction = order.Comment,
                     };
                     List<KotOrderCardItem> kotOrderCardItems = new List<KotOrderCardItem>();
@@ -207,56 +219,71 @@ namespace BLL.Services
             };
             return kotViewModel;
         }
-        public async Task<KotViewModel> GetMarkedAsPreparedModalAsync(int orderId, int categoryId, bool inReady)
+        public async Task<KotViewModel> GetMarkedAsPreparedModalAsync(int pageIndex, int orderId, int categoryId, bool inReady)
         {
             KotViewModel kotViewModel = new();
             if (inReady)
             {
-                kotViewModel = await GetReadyItems(categoryId, orderId);
+                kotViewModel = await GetReadyItemsAsync(categoryId, pageIndex, orderId);
             }
             else
             {
-                kotViewModel = await GetKotByCategoryAsync(categoryId, 1, 4, orderId);
+                kotViewModel = await GetKotByCategoryAsync(categoryId, pageIndex, 4, orderId);
             }
             return kotViewModel;
         }
-        public async Task<KotViewModel> MarkItemsAsReadyAsync(List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
+        public async Task<KotViewModel> MarkItemsAsReadyAsync(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
         {
-            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.IsDeleted == false) ?? new Order();
-            if (order.Status == "Pending")
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                order.Status = "In Progress";
-                order.UpdatedAt = DateTime.Now;
-                order.UpdatedBy = userId;
-                _context.Orders.Update(order);
-                await _context.SaveChangesAsync();
-            }
-            Table table = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).FirstOrDefaultAsync() ?? new Table();
-            if (table.Status == "Assigned")
-            {
-                table.Status = "Running";
-                table.UpdatedAt = DateTime.Now;
-                table.UpdatedBy = userId;
-                _context.Tables.Update(table);
-                await _context.SaveChangesAsync();
-            }
-            foreach (var item in readyItems)
-            {
-                OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.ItemId == item.Id && oi.OrderId == orderId && oi.IsDeleted == false);
-                if (orderItem != null)
+                try
                 {
-                    orderItem.ReadyItemsCount = orderItem.ReadyItemsCount + item.Quantity;
-                    orderItem.UpdatedAt = DateTime.Now;
-                    orderItem.UpdatedBy = userId;
-                    _context.OrderItems.Update(orderItem);
-                    await _context.SaveChangesAsync();
+                    Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.IsDeleted == false) ?? new Order();
+                    if (order.Status == "Pending")
+                    {
+                        order.Status = "In Progress";
+                        order.UpdatedAt = DateTime.Now;
+                        order.UpdatedBy = userId;
+                        _context.Orders.Update(order);
+                        await _context.SaveChangesAsync();
+                    }
+                    List<Table> tables = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).ToListAsync() ?? new List<Table>();
+                    foreach (var table1 in tables)
+                    {
+                        if (table1.Status == "Assigned")
+                        {
+                            table1.Status = "Running";
+                            table1.UpdatedAt = DateTime.Now;
+                            table1.UpdatedBy = userId;
+                            _context.Tables.Update(table1);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    foreach (var item in readyItems)
+                    {
+                        OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.ItemId == item.Id && oi.OrderId == orderId && oi.IsDeleted == false);
+                        if (orderItem != null)
+                        {
+                            orderItem.ReadyItemsCount = orderItem.ReadyItemsCount + item.Quantity;
+                            orderItem.UpdatedAt = DateTime.Now;
+                            orderItem.UpdatedBy = userId;
+                            _context.OrderItems.Update(orderItem);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
                 }
             }
-            KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId, 1, 4);
+            KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId, pageIndex, 4);
             return kotViewModel;
         }
 
-        public async Task<KotViewModel> MarkItemsAsInPrepared(List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
+        public async Task<KotViewModel> MarkItemsAsInPreparedAsync(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
         {
             foreach (var item in readyItems)
             {
@@ -270,10 +297,10 @@ namespace BLL.Services
                     await _context.SaveChangesAsync();
                 }
             }
-            KotViewModel kotViewModel = await GetReadyItems(categoryId);
+            KotViewModel kotViewModel = await GetReadyItemsAsync(categoryId, pageIndex);
             return kotViewModel;
         }
-        public async Task<KotViewModel> GetReadyItems(int categoryId, int pageIndex = 1, int? orderId = null)
+        public async Task<KotViewModel> GetReadyItemsAsync(int categoryId, int pageIndex = 1, int? orderId = null)
         {
             List<Category>? categories = await _context.Categories.Where(c => c.IsDeleted == false).ToListAsync();
             List<KotOrderCard> kotOrderCards = new List<KotOrderCard>();
@@ -310,18 +337,20 @@ namespace BLL.Services
                     {
                         OrderId = order?.Id ?? 0,
                         OrderDuration = (DateTime.Now - createdAt).Days > 0
-                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
+                            ? $"{(DateTime.Now - createdAt).Days} days {(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
                             : (DateTime.Now - createdAt).Hours > 0
-                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins"
-                            : $"{(DateTime.Now - createdAt).Minutes} mins",
+                            ? $"{(DateTime.Now - createdAt).Hours} hrs {(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : (DateTime.Now - createdAt).Minutes > 0
+                            ? $"{(DateTime.Now - createdAt).Minutes} mins {(DateTime.Now - createdAt).Seconds} secs"
+                            : $"{(DateTime.Now - createdAt).Seconds} secs",
                         Section = await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Section.Name)
                             .FirstOrDefaultAsync(),
-                        Table = await _context.OrderTableMappings
+                        Table = string.Join(", ", await _context.OrderTableMappings
                             .Where(otm => otm.OrderId == order.Id && otm.IsDeleted == false)
                             .Select(otm => otm.Table.Name)
-                            .FirstOrDefaultAsync(),
+                            .ToListAsync()),
                         OrderInstruction = order.Comment,
                     };
                     List<KotOrderCardItem> kotOrderCardItems = new List<KotOrderCardItem>();
@@ -365,14 +394,22 @@ namespace BLL.Services
                 pageIndex = 1;
             }
             int TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4);
-            if (pageIndex > TotalPages && TotalPages != 0)
+            if (pageIndex > TotalPages && TotalPages != 0 && orderId == null)
             {
                 pageIndex = TotalPages;
+            }
+            if (orderId != null)
+            {
+                kotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).ToList();
+            }
+            else
+            {
+                kotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * 4).Take(4).ToList();
             }
             KotViewModel kotViewModel = new()
             {
                 Categories = categories.OrderBy(c => c.Id).ToList(),
-                KotOrderCards = kotOrderCards.OrderBy(k => k.OrderId).Skip((pageIndex - 1) * 4).Take(4).ToList(),
+                KotOrderCards = kotOrderCards,
                 PageSize = 4,
                 PageIndex = pageIndex,
                 TotalPages = (int)Math.Ceiling((double)kotOrderCards.Count / 4),

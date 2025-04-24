@@ -47,13 +47,13 @@ namespace BLL.Services
                         ItemId = oi.ItemId,
                         ItemName = oi.Item.Name,
                         ItemQuantity = oi.Quantity,
-                        ItemTotalPrice = (decimal?)(oi.Price),
+                        ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity) ?? 0,
                         Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Select(om => new ModifierDetails
                         {
                             ModifierName = om.Modifier.Name,
-                            ModifierPrice = (decimal?)om.Price
+                            ModifierPrice = (decimal?)om.Price * om.Quantity ?? 0,
                         }).ToList(),
-                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Sum(om => om.Price) ?? 0,
+                        ModifiersTotalPrice = (decimal?)_context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Sum(om => om.Price * om.Quantity) ?? 0,
                     }).ToListAsync();
 
                     orderDetailsCard.SectionName = sectionName;
@@ -78,7 +78,7 @@ namespace BLL.Services
             }
             if (orderDetailsCard.Taxes == null || orderDetailsCard.Taxes.Count == 0)
             {
-                orderDetailsCard.Taxes = await _context.TaxesFees.Where(tf => tf.IsDeleted == false).Select(tf => new InvoiceTax
+                orderDetailsCard.Taxes = await _context.TaxesFees.Where(tf => tf.IsDeleted == false && tf.IsEnabled == true).Select(tf => new InvoiceTax
                 {
                     TaxName = tf.Name,
                     TaxAmount = Math.Round((double)tf.Amount, 2),
@@ -340,7 +340,7 @@ namespace BLL.Services
             };
             return kotMenuViewModel;
         }
-        public async Task<IActionResult> UpdateOrderAmount(int orderId, int userId, float subTotal, float total)
+        public async Task<IActionResult> UpdateOrderAmountAsync(int orderId, int userId, float subTotal, float total)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             order.SubTotal = (decimal?)subTotal;
@@ -363,7 +363,19 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<IActionResult> AddOrderWiseComment(int orderId, string comment, int userId)
+        public async Task<JsonResult> GetItemWiseCommentAsync(int orderId, int itemId)
+        {
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            if (orderItem != null)
+            {
+                return new JsonResult(new { success = true, message = orderItem.Comment });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Order item not found" });
+            }
+        }
+        public async Task<IActionResult> AddOrderWiseCommentAsync(int orderId, string comment, int userId)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             if (order != null)
@@ -380,7 +392,24 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<IActionResult> SaveOrder(SaveOrderViewModel saveOrderViewModel, int userId)
+        public async Task<IActionResult> AddItemWiseCommentAsync(int orderId, int itemId, string comment, int userId)
+        {
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            if (orderItem != null)
+            {
+                orderItem.Comment = comment;
+                orderItem.UpdatedAt = DateTime.Now;
+                orderItem.UpdatedBy = userId;
+                _context.OrderItems.Update(orderItem);
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { success = true, message = "Comment added successfully" });
+            }
+            else
+            {
+                return new JsonResult(new { success = false, message = "Order item not found" });
+            }
+        }
+        public async Task<IActionResult> SaveOrderAsync(SaveOrderViewModel saveOrderViewModel, int userId)
         {
             List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
             if (saveOrderViewModel.OrderItems == null || saveOrderViewModel.OrderItems.Count == 0)
@@ -411,7 +440,7 @@ namespace BLL.Services
                     _context.OrderTaxes.Update(orderTax);
                     await _context.SaveChangesAsync();
                 }
-                await UpdateOrderAmount(saveOrderViewModel.OrderId, userId, 0, 0);
+                await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, 0, 0);
                 return new JsonResult(new { success = true, message = "Order saved successfully" });
             }
 
@@ -540,10 +569,10 @@ namespace BLL.Services
                     }
                 }
             }
-            await UpdateOrderAmount(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
+            await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
             return new JsonResult(new { success = true, message = "Order saved successfully" });
         }
-        public async Task<IActionResult> CompleteOrder(int orderId, int userId)
+        public async Task<IActionResult> CompleteOrderAsync(int orderId, int userId)
         {
             bool canComplete = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).AnyAsync(oi => oi.Quantity != oi.ReadyItemsCount);
             if (!canComplete)
@@ -586,7 +615,7 @@ namespace BLL.Services
             }
             
         }
-        public async Task<IActionResult> SaveCustomerReview (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
+        public async Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
         {
             CustomerReview customerReview = new CustomerReview 
             {
@@ -604,7 +633,7 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Review saved successfully" });
         }
-        public async Task<JsonResult> CanDeleteFromOrder (int orderId, int itemId)
+        public async Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
@@ -614,7 +643,7 @@ namespace BLL.Services
             } 
             return new JsonResult ( new {canDelete = true} );
         }
-        public async Task<JsonResult> CanReduceFromOrder (int orderId, int itemId, int currentQuantity)
+        public async Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity)
         {
             Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
             OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
@@ -624,7 +653,7 @@ namespace BLL.Services
             } 
             return new JsonResult ( new {canDecrease = true} );
         }
-        public async Task<IActionResult> CancelOrder(int orderId, int userId)
+        public async Task<IActionResult> CancelOrderAsync(int orderId, int userId)
         {
             List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
             if (orderItems.Count > 0)
