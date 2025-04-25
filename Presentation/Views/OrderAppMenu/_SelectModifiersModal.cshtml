@@ -108,17 +108,50 @@
         document.getElementById("AddModifiersButton").classList.add("d-none");
     }
 
+    function sameSelection () {
+        var selectedModifierIds = selectedModifiers.map(function (modifier) {
+                return modifier.ModifierId;
+        });
+        if (itemList.length > 0) {
+            for (var i = 0; i < itemList.length; i++) {
+                var item = itemList[i];
+                if (item.ModifierIds.length == selectedModifierIds.length) {
+                    var same = true;
+                    for (var j = 0; j < item.ModifierIds.length; j++) {
+                        if (item.ModifierIds[j] != selectedModifierIds[j]) {
+                            same = false;
+                            break;
+                        }
+                    }
+                    if (same) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     function addModifiers(itemId, itemName, itemPrice) {
         if (checkForMinMax()) {
+            var selectedModifierIds = selectedModifiers.map(function (modifier) {
+                return modifier.ModifierId;
+            });
+            selectedModifierIds = 'modifiers' + selectedModifierIds.join('-');
+            if (sameSelection()) {
+                increaseQuantity(itemId + "increaseQuantity" + selectedModifierIds, event);
+                $("#selectModifiersModal").modal("hide");
+                return;
+            }
             var accordianItemDetails = document.getElementById("accordianItemDetails");
-            var customAccordianId = "collapse" + itemId;
-            var orderItemTotalPriceValueCustomId = "orderItemTotalPriceValue" + itemId;
-            var orderModifiersTotalPriceValueCustomId = "orderModifiersTotalPriceValue" + itemId;
-            var increaseQuantityCustomId = "increaseQuantity" + itemId;
-            var decreaseQuantityCustomId = "decreaseQuantity" + itemId;
-            var itemQuantityCustomId = "itemQuantity" + itemId;
-            var accordianButtonCustomId = "accordianButton" + itemId;
-            var trashIconCustomId = "trashIcon" + itemId;
+            var customAccordianId = "id-" + itemId + "collapse" + selectedModifierIds;
+            var orderItemTotalPriceValueCustomId = itemId +"orderItemTotalPriceValue" + selectedModifierIds;
+            var orderModifiersTotalPriceValueCustomId = itemId +"orderModifiersTotalPriceValue" + selectedModifierIds;
+            var increaseQuantityCustomId = itemId +"increaseQuantity" + selectedModifierIds;
+            var decreaseQuantityCustomId = itemId +"decreaseQuantity" + selectedModifierIds;
+            var itemQuantityCustomId = itemId +"itemQuantity" + selectedModifierIds;
+            var accordianButtonCustomId = itemId +"accordianButton" + selectedModifierIds;
+            var trashIconCustomId = itemId +"trashIcon" + selectedModifierIds;
             var accordianItem = `
                 <div class="accordion-item mb-2 div-custom-accordian" id="${accordianButtonCustomId}">
                     <h2 class="accordion-header " id="headingOne">
@@ -161,7 +194,7 @@
             }
             for (var i = 0; i < selectedModifiers.length; i++) {
                 var modifier = selectedModifiers[i];
-                var modifierCustomId = "modifier-" + modifier.ModifierName + "-" + itemId;
+                var modifierCustomId = itemId + "modifier-" + modifier.ModifierName + "-" + selectedModifierIds;
                 var row = `
                     <tr class="font-accordian">
                         <td>•</td>
@@ -219,17 +252,17 @@
 
     function increaseQuantity (id, event) {
         event.stopPropagation();
-        var itemId = id.split("increaseQuantity")[1];
-        var itemQuantityCustomId = "itemQuantity" + itemId;
+        var itemId = id.split("increaseQuantity")[0];
+        var itemQuantityCustomId = itemId + "itemQuantity" + id.split("increaseQuantity")[1];
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
         var newValue = currentValue + 1;
-        var itemPriceElement = document.getElementById("orderItemTotalPriceValue" + itemId);
+        var itemPriceElement = document.getElementById(itemId + "orderItemTotalPriceValue" + id.split("increaseQuantity")[1]);
         var itemPrice = itemPriceElement ? parseFloat(itemPriceElement.innerHTML / currentValue) : 0;
         var newItemPrice = itemPrice * newValue;
         itemPriceElement.innerHTML = newItemPrice.toFixed(2);
-        var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML / currentValue) || 0;
+        var orderModifiersTotalPriceValue = parseFloat(document.getElementById(itemId + "orderModifiersTotalPriceValue" + id.split("increaseQuantity")[1]).innerHTML / currentValue) || 0;
         var orderModifiersNewTotalPriceValue = orderModifiersTotalPriceValue * newValue;
-        document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
+        document.getElementById(itemId + "orderModifiersTotalPriceValue" + id.split("increaseQuantity")[1]).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
         var subTotalElement = document.getElementById("orderSubtotalValue");
         var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
         document.getElementById(itemQuantityCustomId).innerHTML = newValue;
@@ -243,9 +276,8 @@
             }
         });
         @* update modifiers table *@
-        var selectedModifiersTable = document.getElementById("selectedModifiersTable-collapse" + itemId);
+        var selectedModifiersTable = document.getElementById("selectedModifiersTable-id-" + itemId + 'collapse'  + id.split("increaseQuantity")[1]);
         var selectedModifiers = selectedModifiersTable.getElementsByTagName("tr");
-        debugger
         for (var i = 0; i < selectedModifiers.length; i++) {
             var modifierPriceElement = selectedModifiers[i].getElementsByTagName("td")[2];
             var modifierElementPrice = parseFloat(modifierPriceElement.innerHTML / currentValue);
@@ -255,8 +287,9 @@
     }
 
     function decreaseQuantity (id, event) {
-        var itemId = id.split("decreaseQuantity")[1];
-        var itemQuantityCustomId = "itemQuantity" + itemId;
+        event.stopPropagation();
+        var itemId = id.split("decreaseQuantity")[0];
+        var itemQuantityCustomId = itemId + "itemQuantity" + id.split("decreaseQuantity")[1];
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
         $.ajax({
             url: '@Url.Action("CanReduceFromOrder", "OrderAppMenu")',
@@ -265,12 +298,12 @@
             success(response) {
                 if (response.canDecrease) {
                     var newValue = currentValue - 1;
-                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML / currentValue);
+                    var itemPrice = parseFloat(document.getElementById(itemId + "orderItemTotalPriceValue" + id.split("decreaseQuantity")[1]).innerHTML / currentValue);
                     var newItemPrice = itemPrice * newValue;
-                    document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML = newItemPrice.toFixed(2);
-                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML / currentValue) || 0;
+                    document.getElementById(itemId + "orderItemTotalPriceValue" + id.split("decreaseQuantity")[1]).innerHTML = newItemPrice.toFixed(2);
+                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById(itemId + "orderModifiersTotalPriceValue" + id.split("decreaseQuantity")[1]).innerHTML / currentValue) || 0;
                     var orderModifiersNewTotalPriceValue = orderModifiersTotalPriceValue * newValue;
-                    document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
+                    document.getElementById(itemId + "orderModifiersTotalPriceValue" + id.split("decreaseQuantity")[1]).innerHTML = orderModifiersNewTotalPriceValue.toFixed(2);
                     var subTotalElement = document.getElementById("orderSubtotalValue");
                     var Subtotal = parseFloat(subTotalElement.innerHTML);
                     document.getElementById(itemQuantityCustomId).innerHTML = newValue;
@@ -286,7 +319,7 @@
                             }
                         });
                         @* update modifiers table *@
-                        var selectedModifiersTable = document.getElementById("selectedModifiersTable-collapse" + itemId);
+                        var selectedModifiersTable = document.getElementById("selectedModifiersTable-id-" + itemId + 'collapse'  + id.split("decreaseQuantity")[1]);
                         var selectedModifiers = selectedModifiersTable.getElementsByTagName("tr");
                         for (var i = 0; i < selectedModifiers.length; i++) {
                             var modifierPriceElement = selectedModifiers[i].getElementsByTagName("td")[2];
@@ -299,7 +332,7 @@
                         Subtotal -= (itemPrice + orderModifiersTotalPriceValue);
                         Subtotal = Subtotal.toFixed(2);
                         subTotalElement.innerHTML = Subtotal;
-                        var accordianButtonCustomId = "accordianButton" + itemId;
+                        var accordianButtonCustomId = itemId + "accordianButton" + id.split("decreaseQuantity")[1];
                         var accordianItem = document.getElementById(accordianButtonCustomId);
                         accordianItem.remove();
                         itemList.filter(function (item) {
@@ -319,24 +352,31 @@
         event.stopPropagation();
     }
 
-    function deleteItemFromOrder (itemId, event) {
+    function deleteItemFromOrder (trashId, event) {
         event.stopPropagation();
-        var itemId = itemId.split("trashIcon")[1];
+        var itemId = trashId.split("trashIcon")[0];
+        var modifierIds = trashId.split("trashIcon")[1].split("-");
+        modifierIds[0] = modifierIds[0].split("modifiers")[1];
+        modifierIds = modifierIds.map(function (modifierId) {
+            return parseInt(modifierId);
+        });
+        modifierIds = JSON.stringify(modifierIds);
+        console.log(modifierIds);
         $.ajax({
             url: '@Url.Action("CanDeleteFromOrder", "OrderAppMenu")',
             type: 'GET',
-            data: { orderId: orderId, itemId: itemId },
+            data: { orderId: orderId, itemId: itemId, modifierIds: modifierIds },
             success(response) {
                 if (response.canDelete) {
-                    var itemPrice = parseFloat(document.getElementById("orderItemTotalPriceValue" + itemId).innerHTML);
-                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById("orderModifiersTotalPriceValue" + itemId).innerHTML) || 0;
-                    var currentQuantity = parseInt(document.getElementById("itemQuantity" + itemId).innerHTML);
+                    var itemPrice = parseFloat(document.getElementById(trashId.split("trashIcon")[0] + "orderItemTotalPriceValue" + trashId.split("trashIcon")[1]).innerHTML);
+                    var orderModifiersTotalPriceValue = parseFloat(document.getElementById(itemId + "orderModifiersTotalPriceValue" + trashId.split("trashIcon")[1]).innerHTML) || 0;
+                    var currentQuantity = parseInt(document.getElementById(itemId + "itemQuantity" + trashId.split("trashIcon")[1]).innerHTML);
                     var subTotalElement = document.getElementById("orderSubtotalValue");
                     var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
                     Subtotal -= (itemPrice + orderModifiersTotalPriceValue) * currentQuantity;
                     Subtotal = parseFloat(Subtotal).toFixed(2);
                     subTotalElement.innerHTML = Subtotal;
-                    var accordianButtonCustomId = "accordianButton" + itemId;
+                    var accordianButtonCustomId = itemId + "accordianButton" + trashId.split("trashIcon")[1];
                     var accordianItem = document.getElementById(accordianButtonCustomId);
                     accordianItem.remove();
                     updateTaxes(Subtotal);

@@ -26,7 +26,7 @@
         <h4 class="font-blue">Modifiers</h4>
         @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
         {
-            <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
+            <button type="button" class="delete-btn" onclick="openAddModifierGroupModal()">
                 <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
             </button>
         } 
@@ -110,7 +110,7 @@
                             <h4 class="font-blue">Modifier Group</h4>
                             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
                             {
-                                <button type="button" class="delete-btn" onclick="addModigierGroupFunc()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
+                                <button type="button" class="delete-btn" onclick="openAddModifierGroupModal()" data-bs-toggle="modal" data-bs-target="#AddModifierGroupModal">
                                     <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
                                 </button>
                             }
@@ -182,12 +182,12 @@
             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
             {
                 <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
-                    data-bs-toggle="modal" data-bs-target="#AddModifierModal" style="width: 49px; height: 49px;">
-                    <button class="text-decoration-none text-black btn  add-user-link">
+                     style="width: 49px; height: 49px;">
+                    <button onclick="openAddModifierModal()" class="text-decoration-none text-black btn  add-user-link">
                         <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
                     </button>
                 </p>
-                <button data-bs-toggle="modal" data-bs-target="#AddModifierModal" id="addModifierModal"
+                <button onclick="openAddModifierModal()" id="addModifierModal"
                     class="d-none d-md-block button-styles-header w-100 add-item-button">
                     <a class="text-decoration-none text-white add-user-link gap-2 d-flex justify-content-center">
                         <p>+</p>
@@ -247,7 +247,7 @@
                             <div class="col-12">
                                 <div class="form-floating my-auto">
                                     <input type="text" asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupName"
-                                        class="form-control" name="Model.CreateModifierGroupViewModel.ModifierGroupName"
+                                        class="form-control" name="CreateModifierGroupViewModel.ModifierGroupName"
                                         id="AddModifierName" required placeholder="name">
                                     <label for="category-name" class="">Name*</label>
                                     <span id="addMGName" asp-validation-for="@Model.CreateModifierGroupViewModel.ModifierGroupName" class="text-danger"></span>
@@ -260,7 +260,7 @@
                                     <input type="text"
                                         asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupDescription"
                                         class="form-control"
-                                        name="Model.CreateModifierGroupViewModel.ModifierGroupDescription"
+                                        name="CreateModifierGroupViewModel.ModifierGroupDescription"
                                         id="AddModifierDescription" required placeholder="Description*">
                                     <label for="category-description" class="">Description*</label>
                                 </div>
@@ -268,19 +268,19 @@
                         </div>
                         <input type="hidden" id="ModifierIdsAddModifierGroup"
                             asp-for="@Model.CreateModifierGroupViewModel.SelectedModifierIds"
-                            name="Model.CreateModifierGroupViewModel.SelectedModifierIds" />
+                            name="CreateModifierGroupViewModel.SelectedModifierIds" />
                         @if (Model.CreateModifierGroupViewModel != null && Model.CreateModifierGroupViewModel.ModifierGroupId != 0)
                         {
                             <input type="hidden" id="ModifierGroupId"
                                 asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
-                                name="Model.CreateModifierGroupViewModel.ModifierGroupId"
+                                name="CreateModifierGroupViewModel.ModifierGroupId"
                                 value="@Model.CreateModifierGroupViewModel.ModifierGroupId" />
                         }
                         else
                         {
                             <input type="hidden" id="ModifierGroupId"
                                 asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupId"
-                                name="Model.CreateModifierGroupViewModel.ModifierGroupId" value="-1"/>
+                                name="CreateModifierGroupViewModel.ModifierGroupId" value="-1"/>
                         }
                         <a onclick="openModalAllModifiers()" class="text-decoration-none cursor-pointer">+ Add Existing
                             Modifiers</a>
@@ -384,188 +384,168 @@
                 <button onclick="clearAddModifierModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
-            <div class="modal-body">
+            <form id="addModifierModalForm">
+                <div class="modal-body">
 
-                <div class="row align-items-center">
-                    <div class="col-12  row">
-                        <div class="dropdown dropdown-multiselect col-12 col-md-6 p-2">
-                            <button
-                                class="btn btn-outline-primary dropdown-toggle d-flex justify-content-between align-items-center"
-                                type="button" id="custom-multiselect" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <span>Select Modifier Group(s)</span>
-                                <span class="ms-auto dropdown-arrow"></span>
-                            </button>
-                            <ul class="dropdown-menu p-2" aria-labelledby="custom-multiselect" style="width: 98%;">
-                                @foreach (var modifierGroup in Model.ModifierGroups)
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="dropdown dropdown-multiselect col-12 col-md-6 p-2">
+                                <button
+                                    class="btn btn-outline-primary dropdown-toggle d-flex justify-content-between align-items-center"
+                                    type="button" id="custom-multiselect" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span>Select Modifier Group(s)</span>
+                                    <span class="ms-auto dropdown-arrow"></span>
+                                </button>
+                                <ul class="dropdown-menu p-2" aria-labelledby="custom-multiselect" style="width: 98%;">
+                                    @foreach (var modifierGroup in Model.ModifierGroups)
+                                    {
+                                        var customId = "AddModifier" + modifierGroup.Id;
+                                        <li>
+                                            <input onchange="addModifierGroupToModifier(id)" type="checkbox" style="height:1em;"
+                                                class="form-check-input multi-checkbox"
+                                                value="@modifierGroup.Id" id="@customId">
+                                            <label class="form-check-label" for="@customId">@modifierGroup.Name</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-12 col-md-6 form-floating">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Name != null)
                                 {
-                                    var customId = "AddModifier" + modifierGroup.Id;
-                                    <li>
-                                        <input onchange="addModifierGroupToModifier(id)" type="checkbox" style="height:1em;"
-                                            class="form-check-input multi-checkbox"
-                                            value="@modifierGroup.Id" id="@customId">
-                                        <label class="form-check-label" for="@customId">@modifierGroup.Name</label>
-                                    </li>
+                                    <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                        class="form-control" name="AddModifierViewModel.Name" 
+                                        value="@Model.AddModifierViewModel.Name"
+                                        id="AddModifierName21" required placeholder="name">
                                 }
-                            </ul>
-                        </div>
-                        <div class="col-12 col-md-6 form-floating">
-                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Name != null)
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Name" type="text"
-                                    class="form-control" name="AddModifierViewModel.Name" 
-                                    value="@Model.AddModifierViewModel.Name"
-                                    id="AddModifierName21" required placeholder="name">
-                            }
-                            else
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Name" type="text"
-                                    class="form-control" name="AddModifierViewModel.Name"
-                                    id="AddModifierName21" required placeholder="name">
-                            }
-                            <span id="AddModifierNameError" asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
-                            <label for="AddModifierName21" class="">Name*</label>
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                        class="form-control" name="AddModifierViewModel.Name"
+                                        id="AddModifierName21" required placeholder="name">
+                                }
+                                <span asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
+                                <label for="AddModifierName21" class="">Name*</label>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-12  row">
-                        <div class="form-floating pe-2 my-auto col-12 col-md-4">
-                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Rate"
-                                    value="@Model.AddModifierViewModel.Rate"
-                                    id="AddModifierRate" required placeholder="name">
-                            }
-                            else
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Rate"
-                                    id="AddModifierRate" required placeholder="name">
-                            }
-                            <label for="AddModifierRate" class="">Rate*</label>
-                            <span id="AddModifierRateError" asp-validation-for="@Model.AddModifierViewModel.Rate" class="text-danger"></span>
-                        </div>
-                        <div class="form-floating pe-2 my-auto col-12 col-md-4">
-                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Quantity != null)
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Quantity"
-                                    value="@Model.AddModifierViewModel.Quantity"
-                                    id="AddModifierQuantity" required placeholder="name">
-                            }
-                            else
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Quantity"
-                                    id="AddModifierQuantity" required placeholder="name">
-                            }
-                            <label for="AddModifierQuantity" class="">Quantity</label>
-                            <span id="AddModifierQuantityError" asp-validation-for="@Model.AddModifierViewModel.Quantity" class="text-danger"></span>
-                        </div>
-                        <div class="col-12 col-md-4 p-2 form-floating">
-                            <select asp-for="@Model.AddModifierViewModel.Unit"
-                                name="Model.AddModifierViewModel.Unit" id="AddModifierUnit"
-                                class="form-select" aria-label="Select Country">
-                                <option value="pcs">Pcs</option>
-                                <option value="plate">Plate</option>
-                                <option value="gm">Gm</option>
-                                <option value="ml">Ml</option>
-                            </select>
-                            <label for="select-country" class="mx-2 mt-2">Unit*</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row align-items-center">
-                    <div class="col-12  row">
-                        <div class="form-floating my-auto col-12 pt-2">
-                            @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Description != null)
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Description" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Description"
-                                    value="@Model.AddModifierViewModel.Description"
-                                    id="AddModifierDescription21" placeholder="name">
-                            }
-                            else
-                            {
-                                <input asp-for="@Model.AddModifierViewModel.Description" type="text"
-                                    class="form-control" name="Model.AddModifierViewModel.Description"
-                                    id="AddModifierDescription21" placeholder="name">
-                            }
-                            <label for="AddModifierDescription21" class="">Description</label>
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                        class="form-control" name="AddModifierViewModel.Rate"
+                                        value="@Model.AddModifierViewModel.Rate"
+                                        id="AddModifierRate" required placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                        class="form-control" name="AddModifierViewModel.Rate"
+                                        id="AddModifierRate" required placeholder="name">
+                                }
+                                <label for="AddModifierRate" class="">Rate*</label>
+                                <span asp-validation-for="@Model.AddModifierViewModel.Rate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Quantity != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                        class="form-control" name="AddModifierViewModel.Quantity"
+                                        value="@Model.AddModifierViewModel.Quantity"
+                                        id="AddModifierQuantity" required placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                        class="form-control" name="AddModifierViewModel.Quantity"
+                                        id="AddModifierQuantity" required placeholder="name">
+                                }
+                                <label for="AddModifierQuantity" class="">Quantity</label>
+                                <span  asp-validation-for="@Model.AddModifierViewModel.Quantity" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 col-md-4 p-2 form-floating">
+                                <select asp-for="@Model.AddModifierViewModel.Unit"
+                                    name="AddModifierViewModel.Unit" id="AddModifierUnit"
+                                    class="form-select" aria-label="Select Country">
+                                    <option value="pcs">Pcs</option>
+                                    <option value="plate">Plate</option>
+                                    <option value="gm">Gm</option>
+                                    <option value="ml">Ml</option>
+                                </select>
+                                <label for="select-country" class="mx-2 mt-2">Unit*</label>
+                            </div>
                         </div>
                     </div>
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="form-floating my-auto col-12 pt-2">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Description != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                        class="form-control" name="AddModifierViewModel.Description"
+                                        value="@Model.AddModifierViewModel.Description"
+                                        id="AddModifierDescription21" placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                        class="form-control" name="AddModifierViewModel.Description"
+                                        id="AddModifierDescription21" placeholder="name">
+                                }
+                                <label for="AddModifierDescription21" class="">Description</label>
+                                <span asp-validation-for="@Model.AddModifierViewModel.Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="AddModifierModifierGroupIds"
+                        asp-for="@Model.AddModifierViewModel.ModifierGroupIds"
+                        name="AddModifierViewModel.ModifierGroupIds" />
+                    @if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.Id != 0)
+                    {
+                        <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                            name="AddModifierViewModel.Id" value="@Model.AddModifierViewModel.Id" />
+                    }
+                    else
+                    {
+                        <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                            name="AddModifierViewModel.Id" value="-1" />
+                    }
                 </div>
-                <input type="hidden" id="AddModifierModifierGroupIds"
-                    asp-for="@Model.AddModifierViewModel.ModifierGroupIds"
-                    name="Model.AddModifierViewModel.ModifierGroupIds" />
-                @if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.Id != 0)
-                {
-                    <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
-                        name="Model.AddModifierViewModel.Id" value="@Model.AddModifierViewModel.Id" />
-                }
-                else
-                {
-                    <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
-                        name="Model.AddModifierViewModel.Id" value="-1" />
-                }
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button type="submit" onclick="addModifier()" id="AddModifierButton" class="btn btn-primary px-3">Save</button>
-                <a onclick="clearAddModifierModal()"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="submit" id="AddModifierButton" class="btn btn-primary px-3">Save</button>
+                    <a onclick="clearAddModifierModal()"><button type="button"
+                            class="btn btn-contrast px-3">Cancel</button></a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 
 <script>
 
-    @section Scripts {
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
-    }
 
     var deleteModifierList = [];
 
-   
+    function openAddModifierGroupModal() {
+        $("#addMGName").text("");
+        $("#AddModifierName").val("");
+        $("#AddModifierDescription").val("");
+        $("#AddModifierGroupModal").modal("show");
+        addModifierGroupFunc();
+        
+        selectedModifiers = [];
+    }
 
-    $(document).ready(function () {
-        $("#AddModifierName21").on("input", function () {
-            if ($("#AddModifierName21").val().length <= 0) {
-                $("#AddModifierNameError").text("Modifier's name is required.")
-            } else {
-                $("#AddModifierNameError").text("")
-            }
-        });
-
-        $("#AddModifierRate").on("input", function () {
-            if ($("#AddModifierRate").val().length <= 0) {
-                $("#AddModifierRateError").text("Modifier's rate is required.")
-            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#AddModifierRate").val()) == false) {
-                $("#AddModifierRateError").text("Rate must be a number.")
-            } else {
-                $("#AddModifierRateError").text("")
-            }
-        });
-
-        $("#AddModifierQuantity").on("input", function () {
-            if ($("#AddModifierQuantity").val().length <= 0) {
-                $("#AddModifierQuantityError").text("Modifier's quantity is required.")
-            } else if (/^[0-9]+$/.test($("#AddModifierQuantity").val()) == false) {
-                $("#AddModifierQuantityError").text("Quantity must be a number.")
-            } else {
-                $("#AddModifierQuantityError").text("")
-            }
-        });
-    });
-
-
-    function addModigierGroupFunc() {
+    function addModifierGroupFunc() {
         $("#AddModifierButton2").off("click").click(function () {
             var name = $("#AddModifierName").val();
             if (name.length <= 0) {
@@ -659,79 +639,50 @@
         }
     }
 
-    $(document).ready(function () {
-        $("#AddModifierName21").on("input", function () {
-            if ($("#AddModifierName21").val().length <= 0) {
-                $("#AddModifierNameError").text("Modifier's name is required.")
-            } else {
-                $("#AddModifierNameError").text("")
-            }
-        });
-
-        $("#AddModifierRate").on("input", function () {
-            if ($("#AddModifierRate").val().length <= 0) {
-                $("#AddModifierRateError").text("Modifier's rate is required.")
-            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#AddModifierRate").val()) == false) {
-                $("#AddModifierRateError").text("Rate must be a number.")
-            } else {
-                $("#AddModifierRateError").text("")
-            }
-        });
-
-        $("#AddModifierQuantity").on("input", function () {
-            if ($("#AddModifierQuantity").val().length <= 0) {
-                $("#AddModifierQuantityError").text("Modifier's quantity is required.")
-            } else if (!/^[0-9]+$/.test($("#AddModifierQuantity").val()) == false) {
-                $("#AddModifierQuantityError").text("Quantity must be a number.")
-            } else {
-                $("#AddModifierQuantityError").text("")
-            }
-        });
-    });
+    function openAddModifierModal() {
+        $("#AddModifierModal").modal("show");
+        $.validator.unobtrusive.parse("#AddModifierModal");
+        $("#AddModifierModalTitle").text("Add New Modifier");
+        addModifier();
+    }
 
     function addModifier() {
-        var name = $("#AddModifierName21").val();
-        if (name.length <= 0) {
-            $("#AddModifierNameError").text("Modifier's name is required.")
-            return;
-        }
-        var rate = $("#AddModifierRate").val();
-        if (rate.length <= 0) {
-            $("#AddModifierRateError").text("Modifier's rate is required.")
-            return;
-        }
-        var quantity = $("#AddModifierQuantity").val();
-        if (quantity.length <= 0) {
-            $("#AddModifierQuantityError").text("Modifier's quantity is required.")
-            return;
-        }
-        var unit = $("#AddModifierUnit").val();
-        var description = $("#AddModifierDescription21").val();
-        var id = $("#AddModifierId").val();
-        var modifierGroupIds = selectedModifiersGroupsAddModifier;
-        $.ajax({
-            url: '@Url.Action("AddModifier", "Menu")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ Name: name, Rate: rate, Quantity: quantity, Unit: unit, Description: description, ModifierGroupIds: modifierGroupIds, Id: id }),
-            success: function (data) {
-                if (data.success) {
-                    toastr.success(data.message);
-                    $("#AddModifierModal").modal("hide");
-                    $.ajax({
-                        url: '@Url.Action("ModifiersFilter", "Menu")',
-                        type: 'GET',
-                        data: { pageIndex: 1, pageSize: 5, modifierGroupId: $("#modifierGroupId21").val() },
-                        success: function (data) {
-                            $("#ModifiersTablePartial").html(data);
-                            clearAddModifierModal()
-                            $("#AddModifierModal").modal("hide");
-                        }
-                    });
-                } else {
-                    toastr.error(data.message);
-                }
+        $("#addModifierModalForm").off("submit").submit(function (e) {
+            e.preventDefault();
+            if (!$("#addModifierModalForm").valid()) {
+                return;
             }
+            var name = $("#AddModifierName21").val();
+            var rate = $("#AddModifierRate").val();
+            var quantity = $("#AddModifierQuantity").val();
+            var unit = $("#AddModifierUnit").val();
+            var description = $("#AddModifierDescription21").val();
+            var id = $("#AddModifierId").val();
+            var modifierGroupIds = selectedModifiersGroupsAddModifier;
+            $.ajax({
+                url: '@Url.Action("AddModifier", "Menu")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ Name: name, Rate: rate, Quantity: quantity, Unit: unit, Description: description, ModifierGroupIds: modifierGroupIds, Id: id }),
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+                        $("#AddModifierModal").modal("hide");
+                        $.ajax({
+                            url: '@Url.Action("ModifiersFilter", "Menu")',
+                            type: 'GET',
+                            data: { pageIndex: 1, pageSize: 5, modifierGroupId: $("#modifierGroupId21").val() },
+                            success: function (data) {
+                                $("#ModifiersTablePartial").html(data);
+                                clearAddModifierModal()
+                                $("#AddModifierModal").modal("hide");
+                            }
+                        });
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            });     
         });
     }
 
@@ -744,7 +695,7 @@
                 $("#modifiers-content").html(data);
                 $("#AddModifierGroupModal").modal("show");
                 $("#addModifierGroupModalTitle").text("Edit Modifier Group");
-                addModigierGroupFunc();
+                addModifierGroupFunc();
                 makeThisModifierGroupActive(modifierGroupId);
             },
             error: function (error) {
@@ -779,7 +730,9 @@
                 $("#modifiers-content").html(data);
                 $("#AddModifierModalTitle").text("Edit Modifier");
                 $("#AddModifierModal").modal('show');
+                $.validator.unobtrusive.parse("#AddModifierModal");
                 $("#modifierGroupId21").val(modifierGroupId);
+                addModifier();
                 makeThisModifierGroupActive(modifierGroupId);
             },
             error: function (error) {

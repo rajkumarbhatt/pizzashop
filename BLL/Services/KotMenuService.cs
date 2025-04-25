@@ -633,15 +633,54 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Review saved successfully" });
         }
-        public async Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId)
+        public async Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId, string modifierIds)
         {
-            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
-            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
-            if (orderItem.ReadyItemsCount > 0)
+            List<int> modifierIdsList = new List<int>();
+            if (!string.IsNullOrEmpty(modifierIds))
             {
-                return new JsonResult ( new {canDelete = false} );
-            } 
-            return new JsonResult ( new {canDelete = true} );
+                modifierIdsList = modifierIds.Trim('[', ']').Split(',').Select(int.Parse).ToList();
+            }
+            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+            List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.ItemId == itemId && oi.IsDeleted == false).ToListAsync();
+            if (orderItems.Count == 0)
+            {
+                return new JsonResult(new { canDelete = true });
+            }
+            else if (orderItems.Count == 1)
+            {
+                OrderItem orderItem = orderItems.FirstOrDefault() ?? new OrderItem ();
+                if (orderItem.ReadyItemsCount > 0)
+                {
+                    return new JsonResult(new { canDelete = false });
+                }
+                else
+                {
+                    return new JsonResult(new { canDelete = true });
+                }
+            }
+            else if (orderItems.Count > 1)
+            {
+                foreach (OrderItem orderItem in orderItems)
+                {
+                    List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
+                    List<int> modifierIds2 = orderModifiers.Select(om => om.ModifierId).ToList();
+                    if (modifierIds != null && modifierIdsList.Count > 0)
+                    {
+                        if (modifierIdsList.All(modifierId => modifierIds2.Contains(modifierId)))
+                        {
+                            if (orderItem.ReadyItemsCount > 0)
+                            {
+                                return new JsonResult(new { canDelete = false });
+                            }
+                            else
+                            {
+                                return new JsonResult(new { canDelete = true });
+                            }
+                        }
+                    }
+                }
+            }
+            return new JsonResult(new { canDelete = true });
         }
         public async Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity)
         {

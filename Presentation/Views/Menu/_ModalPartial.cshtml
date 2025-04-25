@@ -1,0 +1,63 @@
+@model DAL.ViewModels.MenuViewModel
+
+
+<div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddCategoryModalTitle">Add Category
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addCategoryForm" method="post">
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        @if (Model.AddEditCategoryViewModal != null && Model.AddEditCategoryViewModal.Id > 0)
+                        {
+                            <input type="hidden" asp-for="@Model.AddEditCategoryViewModal.Id"
+                                value="@Model.AddEditCategoryViewModal.Id" id="CategoryIdAddCategoryModal"
+                                name="AddEditCategoryViewModal.Id">
+                        }
+                        @if (Model.AddEditCategoryViewModal != null && Model.AddEditCategoryViewModal.Name != null)
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.AddEditCategoryViewModal.Name"
+                                value="@Model.AddEditCategoryViewModal.Name" id="CategoryName"
+                                name="AddEditCategoryViewModal.Name" placeholder="name">
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.AddEditCategoryViewModal.Name"
+                                id="CategoryName" name="AddEditCategoryViewModal.Name" placeholder="name">
+                        }
+                        <label for="category-name" class="">Name</label>
+                        <span id="CateGoryNameError" asp-validation-for="@Model.AddEditCategoryViewModal.Name" class="text-danger"></span>
+                    </div>
+                    <div class="form-floating">
+                        @if (Model.AddEditCategoryViewModal != null && Model.AddEditCategoryViewModal.Description !=
+                                                null)
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.AddEditCategoryViewModal.Description"
+                                value="@Model.AddEditCategoryViewModal.Description" id="CategoryDescription"
+                                name="AddEditCategoryViewModal.Description" placeholder="description">
+                        }
+                        else
+                        {
+                            <input type="text" class="form-control" asp-for="@Model.AddEditCategoryViewModal.Description"
+                                id="CategoryDescription" name="AddEditCategoryViewModal.Description"
+                                placeholder="description">
+                        }
+                        <label for="category-description" class="">Description</label>
+                        <span id="CateGoryDescriptionError" asp-validation-for="@Model.AddEditCategoryViewModal.Description"
+                            class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-3">Save</button>
+                    <a data-bs-dismiss="modal"><button type="button"
+                            class="btn btn-contrast px-3">Cancel</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

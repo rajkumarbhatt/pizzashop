@@ -72,19 +72,6 @@
 
 <script>
     function selectModifiers(id) {
-        if (itemList.length > 0) {
-            var found = false;
-            for (var i = 0; i < itemList.length; i++) {
-                if (itemList[i].ItemId == id) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                toastr.error("Item already exists in the order");
-                return;
-            }
-        }
         $.ajax({
             type: "GET",
             url: '@Url.Action("GetSelectModifiersModalData", "OrderAppMenu")',

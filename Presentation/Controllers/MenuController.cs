@@ -24,10 +24,20 @@ namespace Presentaion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddCategory(string categoryName, string categoryDescription)
+        public async Task<IActionResult> AddCategory(AddEditCategoryViewModel addEditCategoryViewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = "Invalid input" });
+            }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _categoryService.AddCategoryAsync(categoryName, categoryDescription, userId);
+            return await _categoryService.AddCategoryAsync(addEditCategoryViewModel, userId);
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditCategory(int categoryId)
+        {
+            MenuViewModel menuViewModel = await _categoryService.GetCategoryDetailsAsync(categoryId);
+            return PartialView("_ModalPartial", menuViewModel);
         }
 
         [HttpPut]
@@ -133,7 +143,7 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Invalid input" });
+                return new JsonResult(new { success = false, message = "Invalid input" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _categoryService.AddModifierGroupAsync(createModifierGroupViewModel, userId);

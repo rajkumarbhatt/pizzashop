@@ -23,7 +23,7 @@ namespace BLL.Interfaces
         public Task<IActionResult> CompleteOrderAsync (int orderId, int userId);
         public Task<IActionResult> CancelOrderAsync (int orderId, int userId);
         public Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
-        public Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId);
+        public Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId, string modifierIds);
         public Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity);
     }
 }

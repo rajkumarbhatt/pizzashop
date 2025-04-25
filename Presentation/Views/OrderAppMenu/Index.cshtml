@@ -220,18 +220,20 @@
             }, 500));
         });
     });
-
+    console.log("orderItems", orderItems);
     function syncItemsList() {
         orderItems.forEach((item) => {
+            var selectedModifierIds = item.modifiers.map(modifier => modifier.modifierId).join("-");
+            console.log("selectedModifierIds", selectedModifierIds);
             var accordianItemDetails = document.getElementById("accordianItemDetails");
-            var customAccordianId = "collapse" + item.itemId;
-            var orderItemTotalPriceValueCustomId = "orderItemTotalPriceValue" + item.itemId;
-            var orderModifiersTotalPriceValueCustomId = "orderModifiersTotalPriceValue" + item.itemId;
-            var increaseQuantityCustomId = "increaseQuantity" + item.itemId;
-            var decreaseQuantityCustomId = "decreaseQuantity" + item.itemId;
-            var itemQuantityCustomId = "itemQuantity" + item.itemId;
-            var accordianButtonCustomId = "accordianButton" + item.itemId;
-            var trashIconCustomId = "trashIcon" + item.itemId;
+            var customAccordianId = "id-" + itemId + "collapse" + selectedModifierIds;
+            var orderItemTotalPriceValueCustomId = itemId +"orderItemTotalPriceValue" + selectedModifierIds;
+            var orderModifiersTotalPriceValueCustomId = itemId +"orderModifiersTotalPriceValue" + selectedModifierIds;
+            var increaseQuantityCustomId = itemId +"increaseQuantity" + selectedModifierIds;
+            var decreaseQuantityCustomId = itemId +"decreaseQuantity" + selectedModifierIds;
+            var itemQuantityCustomId = itemId +"itemQuantity" + selectedModifierIds;
+            var accordianButtonCustomId = itemId +"accordianButton" + selectedModifierIds;
+            var trashIconCustomId = itemId +"trashIcon" + selectedModifierIds;
             var accordianItem = `
                 <div class="accordion-item mb-2 div-custom-accordian" onclick="openItemInstructionsModal(${item.itemId})" id="${accordianButtonCustomId}">
                     <h2 class="accordion-header " id="headingOne">

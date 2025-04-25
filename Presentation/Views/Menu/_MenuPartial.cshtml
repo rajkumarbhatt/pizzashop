@@ -16,7 +16,7 @@
             <h4 class="font-blue">Category</h4>
             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanEdit == true))
             {
-                <button type="button" class="delete-btn" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                <button onclick="OpenAddCategoryModal()" type="button" class="delete-btn">
                     <a> <img src="~/images/icons/plus-with-border.svg" class="menu-category-image" alt=""></a>
                 </button>
             }
@@ -29,7 +29,7 @@
                 var divCustomId4 = "div" + category.Id + "four";
                 var blueDotId = "blueDot" + category.Id;
                 var grayDotId = "grayDot" + category.Id;
- 
+
                 @if (Model.Categories[0].Id == category.Id)
                 {
                     <div onmouseenter="showDiv(@divCustomId)" onmouseleave="hideDiv(@divCustomId)"
@@ -48,7 +48,7 @@
                                 <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                     data-bs-target="#editCategoryModal">
                                     <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                            onclick="editCategory(@category.Id)"></a>
                                 </button>
                             }
                             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
@@ -79,7 +79,7 @@
                                 <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                     data-bs-target="#editCategoryModal">
                                     <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                            onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                            onclick="editCategory(@category.Id)"></a>
                                 </button>
                             }
                             @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && p.CanDelete == true))
@@ -172,7 +172,7 @@
                                             <button type="button" class="delete-btn bg-white" data-bs-toggle="modal"
                                                 data-bs-target="#editCategoryModal">
                                                 <a> <img src="~/images/icons/edit.svg" class="small-image " alt=""
-                                                        onclick="editCategory('@category.Id', '@category.Name', '@category.Description')"></a>
+                                                        onclick="editCategory(@category.Id)"></a>
                                             </button>
                                         }
                                         @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" &&
@@ -284,72 +284,8 @@
     </div>
 </div>
 
-@* add category *@
-<div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Add Category
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" name="category-name" id="CategoryName" required
-                        placeholder="name">
-                    <label for="category-name" class="">Name</label>
-                    <span id="categoryNameError" class="text-danger"></span>
-                </div>
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="category-description" id="CategoryDescription"
-                        required placeholder="category-description">
-                    <label for="category-description" class="">Description</label>
-                    <span id="categoryDescriptionError" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button onclick="AddCategory()" type="submit" class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-        </div>
-    </div>
-</div>
-
-@* edit category *@
-<div class="modal fade" id="editCategoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Edit Category
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input id="EditCategoryId" class="d-none">
-                    <input type="text" class="form-control" name="CategoryName" id="EditCategoryName" required
-                        placeholder="name">
-                    <label for="category-name" class="">Name</label>
-                    <span id="editCategoryNameError" class="text-danger"></span>
-                </div>
-                <div class="form-floating">
-                    <input type="text" class="form-control" name="category-description" id="EditCategoryDescription"
-                        required placeholder="category-description">
-                    <label for="category-description" class="">Description</label>
-                    <span id="editCategoryDescriptionError" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end">
-                <button onclick="EditCategory()" id="EditCategoryModal" type="button"
-                    class="btn btn-primary px-3">Save</button>
-                <a asp-controller="Menu" asp-action="Index"><button type="button"
-                        class="btn btn-contrast px-3">Cancel</button></a>
-            </div>
-        </div>
-    </div>
+<div id="menuModalsPartialStart">
+    <partial name="_ModalPartial" model="@Model" />
 </div>
 
 @* delete category *@
@@ -380,6 +316,11 @@
 <div id="AddItemModalPartial">
     <partial name="_AddItemPartial" model="@Model" />
 </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 <script>
     var isEditCalled = false;
@@ -396,11 +337,11 @@
                     selectModifierGroups = [];
                     $("#AddItemModalPartial").html(data);
                     triggerMultiSelect();
-                    initializeFormSubmit();                   
+                    initializeFormSubmit();
                     $("#AddItemModalHeading").text("Add Item");
                     $("#AddItemButton").text("Save");
                     $("#addItemModal").modal("show");
-                    $.validator.unobtrusive.parse("#AddItemForm"); 
+                    $.validator.unobtrusive.parse("#AddItemForm");
                 },
                 error: function (data) {
                     console.log(data);
@@ -416,11 +357,11 @@
                     selectModifierGroups = [];
                     $("#AddItemModalPartial").html(data);
                     triggerMultiSelect();
-                    initializeFormSubmit();                   
+                    initializeFormSubmit();
                     $("#AddItemModalHeading").text("Add Item");
                     $("#AddItemButton").text("Save");
                     $("#addItemModal").modal("show");
-                    $.validator.unobtrusive.parse("#AddItemForm"); 
+                    $.validator.unobtrusive.parse("#AddItemForm");
                 },
                 error: function (data) {
                     console.log(data);
@@ -430,7 +371,7 @@
         return;
     }
 
-    
+
     function showDiv(divId) {
         divId.classList.remove('d-none');
         var divId2 = divId.id + "two";
@@ -443,95 +384,73 @@
         $("#" + divId2).removeClass('active-category-div');
     }
 
+    function OpenAddCategoryModal() {
+        $("#CategoryName").val("");
+        $("#CategoryDescription").val("");
+        $("#CategoryIdAddCategoryModal").val("");
+        $("#CateGoryNameError").text("");
+        $("#CateGoryDescriptionError").text("");
+        $("#AddCategoryModalTitle").text("Add Category");
+        $("#categoryModal").modal("show");
+        $.validator.unobtrusive.parse("#addCategoryForm");
+        AddCategory();
+    }
+    
     function AddCategory() {
-        var Name = $("#CategoryName").val();
-        var Description = $("#CategoryDescription").val();
-        if (Name == "") {
-            $("#categoryNameError").text("Category Name is required");
-            return;
-        } else {
-            $("#categoryNameError").text("");
-        }
-        $.ajax({
-            url: '/Menu/AddCategory',
-            type: 'POST',
-            data: { categoryName: Name, categoryDescription: Description },
-            success: function (data) {
-                if (data.success) {
-                    toastr.success(data.message);
-
-                    $.ajax({
-                        type: "GET",
-                        url: "/Menu/RefreshItemsPartial",
-                        success: function (data) {
-                            $("#partialViewStarting").html(data);
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
-                    $("#categoryModal").modal("hide");
-                } else {
-                    if (data.message != null) {
-                        toastr.error(data.message);
-                    } else {
-                        toastr.error("Not Authorized");
-                    }
-                }
-            },
-            error: function (data) {
-                toastr.error(data.message);
+        $("#addCategoryForm").off("submit").on("submit", function (e) {
+            e.preventDefault();
+            if (!$("#addCategoryForm").valid()) {
+                return;
             }
+            var Id = 0;
+            console.log(parseInt($("#CategoryIdAddCategoryModal").val()));
+            if (parseInt($("#CategoryIdAddCategoryModal").val()) > 0)
+            {
+                Id = $("#CategoryIdAddCategoryModal").val()
+            }
+            var formData = 
+            {   
+                Id: Id,
+                Name: $("#CategoryName").val(),
+                Description: $("#CategoryDescription").val()
+            }
+            $.ajax({
+                url: '/Menu/AddCategory',
+                type: 'POST',
+                data: { addEditCategoryViewModel: formData },
+                success: function (data) {
+                    if (data.success) {
+                        toastr.success(data.message);
+
+                        $.ajax({
+                            type: "GET",
+                            url: "/Menu/RefreshItemsPartial",
+                            success: function (data) {
+                                $("#partialViewStarting").html(data);
+                            },
+                            error: function (data) {
+                                console.log(data);
+                            }
+                        });
+                        $("#categoryModal").modal("hide");
+                    } else {
+                        if (data.message != null) {
+                            toastr.error(data.message);
+                        } else {
+                            toastr.error("Not Authorized");
+                        }
+                    }
+                },
+                error: function (data) {
+                    toastr.error(data.message);
+                }
+            });
         });
     }
 
-    function EditCategory() {
-        var Id = $("#EditCategoryId").val();
-        var Name = $("#EditCategoryName").val();
-        var Description = $("#EditCategoryDescription").val();
-        if (Name == "") {
-            $("#editCategoryNameError").text("Category Name is required");
-            return;
-        } else {
-            $("#editCategoryNameError").text("");
-        }
-        $.ajax({
-            url: '/Menu/UpdateCategory',
-            type: 'PUT',
-            data: { categoryId: Id, categoryName: Name, categoryDescription: Description },
-            success: function (data) {
-                if (data.success) {
-                    toastr.success(data.message);
-                    $.ajax({
-                        type: "GET",
-                        url: "/Menu/RefreshItemsPartial",
-                        data: { categoryId: Id },
-                        success: function (data) {
-                            $("#partialViewStarting").html(data);
-                            makeThisCategoryActive(Id);
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
-                    $("#editCategoryModal").modal("hide");
-                } else {
-                    if (data.message != null) {
-                        toastr.error(data.message);
-                    } else {
-                        toastr.error("Not Authorized");
-                    }
-                }
-            },
-            error: function (data) {
-                toastr.error(data.message);
-            }
-        });
-    }
-
-    function showSearchBar () {
-      document.getElementById("mobile-search-bar").classList.remove("d-none");
-      document.getElementById("search-icon").classList.add("d-none");
+    function showSearchBar() {
+        document.getElementById("mobile-search-bar").classList.remove("d-none");
+        document.getElementById("search-icon").classList.add("d-none");
     }
 
 </script>

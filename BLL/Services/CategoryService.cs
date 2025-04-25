@@ -44,8 +44,23 @@ namespace BLL.Services
         {
             return await _context.ModifierModifiergroupMappings.Where(m => modifierGroupIds.Contains(m.ModifiergroupId)).ToListAsync();
         }
-        public async Task<JsonResult> AddCategoryAsync(string categoryName, string categoryDescription, int userId)
+        public async Task<JsonResult> AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, int userId)
         {
+            string categoryName = addEditCategoryViewModel.Name;
+            string categoryDescription = addEditCategoryViewModel.Description;
+            int categoryId = addEditCategoryViewModel.Id;
+            if (categoryId != 0)
+            {
+                Category categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+                if (categoryToUpdate != null)
+                {
+                    categoryToUpdate.Name = categoryName;
+                    categoryToUpdate.Description = categoryDescription;
+                    categoryToUpdate.UpdatedBy = userId;
+                    await _context.SaveChangesAsync();
+                    return new JsonResult(new { success = true, message = "Category updated successfully" });
+                }
+            }
             if (userId == null)
             {
                 return new JsonResult(new { success = false, message = "User not found" });
@@ -64,6 +79,25 @@ namespace BLL.Services
             await _context.Categories.AddAsync(category);
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Category added successfully" });
+        }
+        public async Task<MenuViewModel> GetCategoryDetailsAsync(int categoryId)
+        {
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+            if (category == null)
+            {
+                return new MenuViewModel();
+            }
+            var addEditCategoryViewModel = new AddEditCategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description
+            };
+            var menuViewModel = new MenuViewModel
+            {
+                AddEditCategoryViewModal = addEditCategoryViewModel
+            };
+            return menuViewModel;
         }
         public async Task<JsonResult> UpdateCategoryAsync(int categoryId, string categoryName, string categoryDescription, int userId)
         {

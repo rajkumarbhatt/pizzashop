@@ -113,9 +113,9 @@ namespace Presentation.Controllers
             return await _kotMenuService.SaveCustomerReviewAsync(saveCustomerReviewViewModel, userId);
         }
         [HttpGet]
-        public async Task<JsonResult> CanDeleteFromOrder(int orderId, int itemId)
+        public async Task<JsonResult> CanDeleteFromOrder(int orderId, int itemId, string modifierIds)
         {
-            return await _kotMenuService.CanDeleteFromOrderAsync(orderId, itemId);
+            return await _kotMenuService.CanDeleteFromOrderAsync(orderId, itemId, modifierIds);
         }
         [HttpGet]
         public async Task<JsonResult> CanReduceFromOrder(int orderId, int itemId, int currentQuantity)

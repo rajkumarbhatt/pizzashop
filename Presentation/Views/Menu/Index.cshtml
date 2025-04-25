@@ -290,15 +290,15 @@
 
     function UnSyncEditChanges() {
         let value = $("#ModifierGroupIdsEdit").val();
-        
+
         if (!value) {
             console.error("ModifierGroupIdsEdit value is empty or undefined.");
             return;
         }
-        
+
         try {
             selectModifierGroups = JSON.parse(value);
-            
+
             selectModifierGroups.forEach(function (modifierGroup) {
                 if (modifierGroup.Id) {
                     document.getElementById(modifierGroup.Id).checked = false;
@@ -313,10 +313,22 @@
 
 
     //edit category
-    function editCategory(categoryId, categoryName, categoryDescription) {
-        $("#EditCategoryName").val(categoryName);
-        $("#EditCategoryDescription").val(categoryDescription);
-        $("#EditCategoryId").val(categoryId);
+    function editCategory(categoryId) {
+        $.ajax({
+            url: '/Menu/EditCategory',
+            type: 'GET',
+            data: { categoryId: categoryId },
+            success: function (data) {
+                $("#menuModalsPartialStart").html(data);
+                $("#AddCategoryModalTitle").text("Edit Category");
+                $("#categoryModal").modal("show");
+                $.validator.unobtrusive.parse("#addCategoryForm");
+                AddCategory();
+            },
+            error: function (data) {
+                toastr.error(data.message);
+            }
+        })
     }
 
     //delete category

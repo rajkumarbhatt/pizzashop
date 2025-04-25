@@ -26,8 +26,8 @@ namespace DAL.ViewModels
         public int TotalPagesAllModifiers { get; set; }
         public int PageSizeAllModifiers { get; set; }
         public int TotalAllModifiers { get; set; }
-
         public CreateModifierGroupViewModel CreateModifierGroupViewModel { get; set; }
         public AddModifierViewModel AddModifierViewModel { get; set; }
+        public AddEditCategoryViewModel? AddEditCategoryViewModal { get; set; }
     }
 }
