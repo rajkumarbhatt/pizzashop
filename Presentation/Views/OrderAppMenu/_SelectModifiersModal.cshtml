@@ -108,14 +108,14 @@
         document.getElementById("AddModifiersButton").classList.add("d-none");
     }
 
-    function sameSelection () {
+    function sameSelection (itemId) {
         var selectedModifierIds = selectedModifiers.map(function (modifier) {
-                return modifier.ModifierId;
+            return modifier.ModifierId;
         });
         if (itemList.length > 0) {
             for (var i = 0; i < itemList.length; i++) {
                 var item = itemList[i];
-                if (item.ModifierIds.length == selectedModifierIds.length) {
+                if (item.ItemId == itemId && item.ModifierIds.length == selectedModifierIds.length) {
                     var same = true;
                     for (var j = 0; j < item.ModifierIds.length; j++) {
                         if (item.ModifierIds[j] != selectedModifierIds[j]) {
@@ -133,14 +133,16 @@
     }
 
     function addModifiers(itemId, itemName, itemPrice) {
+        debugger
         if (checkForMinMax()) {
             var selectedModifierIds = selectedModifiers.map(function (modifier) {
                 return modifier.ModifierId;
             });
             selectedModifierIds = 'modifiers' + selectedModifierIds.join('-');
-            if (sameSelection()) {
+            if (sameSelection(itemId)) {
                 increaseQuantity(itemId + "increaseQuantity" + selectedModifierIds, event);
                 $("#selectModifiersModal").modal("hide");
+                selectedModifiers = [];
                 return;
             }
             var accordianItemDetails = document.getElementById("accordianItemDetails");
@@ -222,6 +224,7 @@
                 ModifierIds: selectedModifiers.map(function (modifier) {
                     return modifier.ModifierId;
                 }),
+                OrderItemId: -1,
             });
             selectedModifiers = [];
             if ($("#taxListContainer").hasClass("d-none")) {
@@ -270,11 +273,33 @@
         Subtotal = Subtotal.toFixed(2);
         subTotalElement.innerHTML = Subtotal;
         updateTaxes(Subtotal);
-        itemList.filter(function (item) {
+        var modifierIds = id.split("increaseQuantity")[1].split("-");
+        modifierIds[0] = modifierIds[0].split("modifiers")[1];
+        modifierIds = modifierIds.map(function (modifierId) {
+            return parseInt(modifierId);
+        });
+        var OrderItemId = itemList.filter(function (item) {
             if (item.ItemId == itemId) {
-                item.Quantity = parseInt(newValue);
+                if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
+                    return item.OrderItemId;
+                }
             }
         });
+        if (OrderItemId[0].OrderItemId == -1) {
+            itemList.filter(function (item) {
+                if (item.ItemId == itemId) {
+                    if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
+                        item.Quantity = parseInt(newValue);
+                    }
+                }
+            });
+        } else {
+            itemList.filter(function (item) {
+                if (item.OrderItemId == OrderItemId[0].OrderItemId) {
+                    item.Quantity = parseInt(newValue);
+                }
+            });
+        }
         @* update modifiers table *@
         var selectedModifiersTable = document.getElementById("selectedModifiersTable-id-" + itemId + 'collapse'  + id.split("increaseQuantity")[1]);
         var selectedModifiers = selectedModifiersTable.getElementsByTagName("tr");
@@ -284,6 +309,7 @@
             var newModifierPrice = modifierElementPrice * newValue;
             modifierPriceElement.innerHTML = newModifierPrice.toFixed(2);
         }
+        console.log(itemList);
     }
 
     function decreaseQuantity (id, event) {
@@ -291,12 +317,24 @@
         var itemId = id.split("decreaseQuantity")[0];
         var itemQuantityCustomId = itemId + "itemQuantity" + id.split("decreaseQuantity")[1];
         var currentValue = parseInt(document.getElementById(itemQuantityCustomId).innerHTML);
+        var modifierIds = id.split("decreaseQuantity")[1].split("-");
+        modifierIds[0] = modifierIds[0].split("modifiers")[1];
+        modifierIds = modifierIds.map(function (modifierId) {
+            return parseInt(modifierId);
+        });
+        var OrderItemId = itemList.filter(function (item) {
+            if (item.ItemId == itemId) {
+                if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
+                    return item.OrderItemId;
+                }
+            }
+        });
         $.ajax({
             url: '@Url.Action("CanReduceFromOrder", "OrderAppMenu")',
             type: 'GET',
-            data: { orderId: orderId, itemId: itemId, currentQuantity: currentValue },
+            data: { orderItemId: OrderItemId[0].OrderItemId, currentQuantity: currentValue },
             success(response) {
-                if (response.canDecrease) {
+                if (response.canReduce) {
                     var newValue = currentValue - 1;
                     var itemPrice = parseFloat(document.getElementById(itemId + "orderItemTotalPriceValue" + id.split("decreaseQuantity")[1]).innerHTML / currentValue);
                     var newItemPrice = itemPrice * newValue;
@@ -314,7 +352,7 @@
                         updateTaxes(Subtotal);
                         hideTaxesDiv(Subtotal);
                         itemList.filter(function (item) {
-                            if (item.ItemId == itemId) {
+                            if (item.OrderItemId == OrderItemId[0].OrderItemId) {
                                 item.Quantity = parseInt(newValue);
                             }
                         });
@@ -360,12 +398,17 @@
         modifierIds = modifierIds.map(function (modifierId) {
             return parseInt(modifierId);
         });
-        modifierIds = JSON.stringify(modifierIds);
-        console.log(modifierIds);
+        var OrderItemId = itemList.filter(function (item) {
+            if (item.ItemId == itemId) {
+                if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
+                    return item.OrderItemId;
+                }
+            }
+        });
         $.ajax({
             url: '@Url.Action("CanDeleteFromOrder", "OrderAppMenu")',
             type: 'GET',
-            data: { orderId: orderId, itemId: itemId, modifierIds: modifierIds },
+            data: { orderItemId: OrderItemId[0].OrderItemId },
             success(response) {
                 if (response.canDelete) {
                     var itemPrice = parseFloat(document.getElementById(trashId.split("trashIcon")[0] + "orderItemTotalPriceValue" + trashId.split("trashIcon")[1]).innerHTML);
@@ -373,7 +416,7 @@
                     var currentQuantity = parseInt(document.getElementById(itemId + "itemQuantity" + trashId.split("trashIcon")[1]).innerHTML);
                     var subTotalElement = document.getElementById("orderSubtotalValue");
                     var Subtotal = parseFloat(subTotalElement.innerHTML) || 0;
-                    Subtotal -= (itemPrice + orderModifiersTotalPriceValue) * currentQuantity;
+                    Subtotal -= (itemPrice + orderModifiersTotalPriceValue);
                     Subtotal = parseFloat(Subtotal).toFixed(2);
                     subTotalElement.innerHTML = Subtotal;
                     var accordianButtonCustomId = itemId + "accordianButton" + trashId.split("trashIcon")[1];
@@ -383,7 +426,7 @@
                     makeTaxesZeroIfNecessary(Subtotal);
                     hideTaxesDiv(Subtotal);
                     itemList.filter(function (item) {
-                        if (item.ItemId == itemId) {
+                        if (item.OrderItemId == OrderItemId[0].OrderItemId) {
                             itemList.splice(itemList.indexOf(item), 1);
                         }
                     });
@@ -473,22 +516,29 @@
         }
     }
 
-    $(document).ready(function () {
-        if (isFirstLoad)
-        {
-            syncItemsList();
-            isFirstLoad = false;
-        }
-    });
+    
 
-    function openItemInstructionsModal(itemId)
+    function openItemInstructionsModal(itemId, id)
     {
+        var modifierIds = id.split("accordianButton")[1].split("-");
+        modifierIds[0] = modifierIds[0].split("modifiers")[1];
+        modifierIds = modifierIds.map(function (modifierId) {
+            return parseInt(modifierId);
+        });
+        var OrderItemId = itemList.filter(function (item) {
+            if (item.ItemId == itemId) {
+                if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
+                    return item.OrderItemId;
+                }
+            }
+        });
         $.ajax({
             url: '/OrderAppMenu/GetItemWiseComment',
             type: 'GET',
-            data: { orderId: orderId, itemId: itemId },
+            data: { orderItemId: OrderItemId[0].OrderItemId },
             success: function (response) {
                 $("#ItemNameInstruction").val(response.message);
+                $("#ItemIdCurrentInput").val(OrderItemId[0].OrderItemId);
                 $("#ItemwiseComment").modal('show');
                 itemIdCurrent = itemId;
             },
@@ -497,4 +547,81 @@
             }
         })
     }
+
+    function syncItemsList() {
+        orderItems.forEach((item) => {
+            var selectedModifierIds = 'modifiers' + item.modifiers.map(modifier => parseInt(modifier.modifierId)).join("-"); 
+            var itemId2 = item.itemId;
+            var accordianItemDetails = document.getElementById("accordianItemDetails");
+            var customAccordianId = "id-" + itemId2 + "collapse" + selectedModifierIds;
+            var orderItemTotalPriceValueCustomId = itemId2 +"orderItemTotalPriceValue" + selectedModifierIds;
+            var orderModifiersTotalPriceValueCustomId = itemId2 +"orderModifiersTotalPriceValue" + selectedModifierIds;
+            var increaseQuantityCustomId = itemId2 +"increaseQuantity" + selectedModifierIds;
+            var decreaseQuantityCustomId = itemId2 +"decreaseQuantity" + selectedModifierIds;
+            var itemQuantityCustomId = itemId2 +"itemQuantity" + selectedModifierIds;
+            var accordianButtonCustomId = itemId2 +"accordianButton" + selectedModifierIds;
+            var trashIconCustomId = itemId2 +"trashIcon" + selectedModifierIds;
+            var accordianItem = `
+                <div class="accordion-item mb-2 div-custom-accordian" onclick="openItemInstructionsModal(${item.itemId}, id)" id="${accordianButtonCustomId}">
+                    <h2 class="accordion-header " id="headingOne">
+                        <button class="accordion-button font-accordian" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#${customAccordianId}" aria-expanded="true" aria-controls="collapseOne">
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head">
+                                <p class="w-50 font-weight-bold-slight">${item.itemName}</p>
+                                <div class="quantity-card-order-items d-flex justify-content-center align-items-center p-1 mx-auto my-auto"
+                                    style="width: 15%;">
+                                    <p> <span class="p-2" id="${decreaseQuantityCustomId}" onclick="decreaseQuantity(id, event)">-</span><span id="${itemQuantityCustomId}">${item.itemQuantity}</span><span id="${increaseQuantityCustomId}" class="p-2" onclick="increaseQuantity(id, event)">+</span></p>
+                                </div>
+                                <div style="width: 15%;" class="d-flex flex-column gap-2 font-accordian-head">
+                                    <p id="${orderItemTotalPriceValueCustomId}">${item.itemTotalPrice}</p>
+                                    <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian">${item.modifiersTotalPrice}</p>
+                                </div>
+                                <div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
+                                    <img src="@Url.Content("~/images/icons/delete.svg")" class="small-image">
+                                </div>
+                            </div>
+                        </button>
+                    </h2>
+
+                    <div id="${customAccordianId}" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <table class="" style="width: 25%;">
+                                <tbody id="selectedModifiersTable-${customAccordianId}">
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            `;
+            var rows = "";
+            for (var i = 0; i < item.modifiers.length; i++) {
+                var modifier = item.modifiers[i];
+                var modifierCustomId = itemId2 + "modifier-" + modifier.ModifierName + "-" + selectedModifierIds;
+                var row = `
+                    <tr class="font-accordian">
+                        <td>•</td>
+                        <td>${modifier.modifierName}</td>
+                        <td id="${modifierCustomId}">${modifier.modifierPrice}</td>
+                    </tr>
+                `;
+                rows += row;
+            }
+            accordianItemDetails.insertAdjacentHTML("beforeend", accordianItem);
+            var selectedModifiersTable = document.getElementById("selectedModifiersTable-" + customAccordianId);
+            selectedModifiersTable.insertAdjacentHTML("beforeend", rows);
+            itemList.push({
+                ItemId: parseInt(item.itemId),
+                Quantity: parseInt(item.itemQuantity),
+                ModifierIds: item.modifiers.map(modifier => parseInt(modifier.modifierId)),
+                OrderItemId: parseInt(item.orderItemId),
+            });
+            if ($("#taxListContainer").hasClass("d-none")) {
+                $("#taxListContainer").removeClass("d-none");
+            }
+        })
+        console.log("itemList", itemList);
+    }
+
 </script>

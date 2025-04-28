@@ -85,8 +85,12 @@
             }
         </tbody>
     </table>
-
-    <script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+<script>
     
     function editTax(id) {
         $.ajax({

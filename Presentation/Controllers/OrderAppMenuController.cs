@@ -72,9 +72,9 @@ namespace Presentation.Controllers
             return await _kotMenuService.GetOrderWiseCommentAsync(orderId);
         }
         [HttpGet]
-        public async Task<JsonResult> GetItemWiseComment(int orderId, int itemId)
+        public async Task<JsonResult> GetItemWiseComment(int orderItemId)
         {
-            return await _kotMenuService.GetItemWiseCommentAsync(orderId, itemId);
+            return await _kotMenuService.GetItemWiseCommentAsync(orderItemId);
         }
         [HttpPost]
         public async Task<IActionResult> AddOrderWiseComment(int orderId, string comment)
@@ -83,10 +83,10 @@ namespace Presentation.Controllers
             return await _kotMenuService.AddOrderWiseCommentAsync(orderId, comment, userId);
         }
         [HttpPost]
-        public async Task<IActionResult> AddItemWiseComment(int orderId, int itemId, string comment)
+        public async Task<IActionResult> AddItemWiseComment(int orderItemId, string comment)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.AddItemWiseCommentAsync(orderId, itemId, comment, userId);
+            return await _kotMenuService.AddItemWiseCommentAsync(orderItemId, comment, userId);
         }
         [HttpPost]
         public async Task<IActionResult> SaveOrder(SaveOrderViewModel saveOrderViewModel)
@@ -113,14 +113,20 @@ namespace Presentation.Controllers
             return await _kotMenuService.SaveCustomerReviewAsync(saveCustomerReviewViewModel, userId);
         }
         [HttpGet]
-        public async Task<JsonResult> CanDeleteFromOrder(int orderId, int itemId, string modifierIds)
+        public async Task<JsonResult> CanDeleteFromOrder(int orderItemId)
         {
-            return await _kotMenuService.CanDeleteFromOrderAsync(orderId, itemId, modifierIds);
+            return await _kotMenuService.CanDeleteFromOrderAsync(orderItemId);
         }
         [HttpGet]
-        public async Task<JsonResult> CanReduceFromOrder(int orderId, int itemId, int currentQuantity)
+        public async Task<JsonResult> CanReduceFromOrder(int orderItemId, int currentQuantity)
         {
-            return await _kotMenuService.CanReduceFromOrderAsync(orderId, itemId, currentQuantity);
+            return await _kotMenuService.CanReduceFromOrderAsync(orderItemId, currentQuantity);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetOrderDetails(int orderId)
+        {
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetKotMenuAsync(orderId);
+            return PartialView("_OrderItemDetailsPartial", kotMenuViewModel);
         }
     }
 }

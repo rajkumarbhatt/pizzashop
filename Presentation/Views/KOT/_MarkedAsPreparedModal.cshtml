@@ -30,7 +30,7 @@
                     <div style="">
                         @foreach (var item in @Model.KotOrderCards[0].OrderItems)
                         {
-                            var checkboxId = "checkbox-" + item.Id;
+                            var checkboxId = item.Id + "checkbox" + item.OrderItemId + "-" + item.ItemQuantity;
                             <div class="d-flex justify-content-between mt-2">
                                 <div class="">
                                     <div class="d-flex gap-2">
@@ -42,7 +42,7 @@
                                     {
                                         <div class="ms-3 d-flex justify-content-start gap-2 align-items-center">
                                             <p>•</p>
-                                            <p>@modifier</p>
+                                            <p>@modifier.ModifierName</p>
                                         </div>
                                     }
                                     @if (!String.IsNullOrEmpty(item.ItemInstruction))
@@ -55,9 +55,9 @@
                                 </div>
                                 <div class="">
                                     @{
-                                        var decreaseQuantityId = "decreaseQuantity-" + item.Id + "-" + item.ItemQuantity;
-                                        var increaseQuantityId = "increaseQuantity-" + item.Id + "-" + item.ItemQuantity;
-                                        var quantityId = "quantity-" + item.Id;
+                                        var decreaseQuantityId = item.Id + "decreaseQuantity" + item.OrderItemId + "-" + item.ItemQuantity;
+                                        var increaseQuantityId = item.Id + "increaseQuantity" + item.OrderItemId + "-" + item.ItemQuantity;
+                                        var quantityId = item.Id + "quantity" + item.OrderItemId + "-" + item.ItemQuantity;
                                     }
                                     <div class="quantity-div-border p-2 me-2 cursor-pointer">
                                         <span id="@decreaseQuantityId" class="p-1 px-2" onclick="decreaseQuanity(id)"> - </span>
@@ -93,9 +93,10 @@
         readyItems = [];
     }
     function decreaseQuanity(id) {
-        var itemId = id.split("-")[1];
-        var itemQuantity = id.split("-")[2];
-        var quantityId = "quantity-" + itemId;
+        var itemId = id.split("decreaseQuantity")[0];
+        var orderItemId = id.split("decreaseQuantity")[1].split("-")[0];
+        var itemQuantity = id.split("decreaseQuantity")[1].split("-")[1];
+        var quantityId = itemId + "quantity" + orderItemId + "-" + itemQuantity;
         var quantityElement = document.getElementById(quantityId);
         var currentQuantity = parseInt(quantityElement.innerText);
         if (inReady) {
@@ -114,9 +115,10 @@
     }
 
     function increaseQuantity(id) {
-        var itemId = id.split("-")[1];
-        var itemQuantity = id.split("-")[2];
-        var quantityId = "quantity-" + itemId;
+        var itemId = id.split("increaseQuantity")[0];
+        var orderItemId = id.split("increaseQuantity")[1].split("-")[0];
+        var itemQuantity = id.split("increaseQuantity")[1].split("-")[1];
+        var quantityId = itemId + "quantity" + orderItemId + "-" + itemQuantity;
         var quantityElement = document.getElementById(quantityId);
         var currentQuantity = parseInt(quantityElement.innerText);
         if (currentQuantity >= itemQuantity) {
@@ -128,23 +130,31 @@
 
     $(".ready-item-checkbox").change(function () {
         var checkboxId = $(this).attr("id");
-        var itemId = checkboxId.split("-")[1];
-        var itemQuantity = $("#quantity-" + itemId).text();
+        var itemId = checkboxId.split("checkbox")[0];
+        var orderItemId = checkboxId.split("checkbox")[1].split("-")[0];
+        var itemQuantity = checkboxId.split("checkbox")[1].split("-")[1];
         if ($(this).is(":checked")) {
-            readyItems.push(itemId)
+            readyItems.push(
+                {
+                    Id: parseInt(itemId),
+                    OrderItemId: parseInt(orderItemId),
+                    Quantity : parseInt(itemQuantity),
+                }
+            )
         } else {
-            readyItems = readyItems.filter(item => item !== itemId);
+            readyItems = readyItems.filter(item => item.Id !== parseInt(itemId) || !item.Modifiers.every(modifier => modifierIds.includes(modifier.toString())));   
         }
     });
 
     function markItemAsReady() {
         var listToSend = [];
         readyItems.forEach(id => {
-            var quantityId = "quantity-" + id;
+            var quantityId = id.Id + "quantity" + id.OrderItemId + "-" + id.Quantity;
             var readyCount = document.getElementById(quantityId).innerText;
             listToSend.push({
-                Id: parseInt(id),
-                Quantity: parseInt(readyCount)
+                Id: parseInt(id.Id),
+                Quantity: parseInt(readyCount),
+                OrderItemId: parseInt(id.OrderItemId),
             });
         })
         if (listToSend.length === 0) {

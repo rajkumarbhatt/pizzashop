@@ -162,8 +162,13 @@ namespace BLL.Services
             return new JsonResult(new { success = true, message = "Table deleted successfully" });
         }
 
-        public async Task<IActionResult> AddTableAsync(int tableId, string tableName, string tableStatus, int tableCapacity, int sectionId, int userId)
+        public async Task<IActionResult> AddTableAsync(AddTableViewModal addTableViewModal, int userId)
         {
+            string tableName = addTableViewModal.TableName;
+            string tableStatus = addTableViewModal.TableStatus;
+            int tableCapacity = addTableViewModal.TableCapacity;
+            int sectionId = addTableViewModal.SectionId;
+            int tableId = addTableViewModal.TableId;
             if (tableId == -1)
             {
                 if (await _context.Tables.AnyAsync(t => t.Name.ToLower() == tableName.ToLower() && t.SectionId == sectionId && t.IsDeleted == false))

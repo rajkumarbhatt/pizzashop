@@ -80,42 +80,48 @@ namespace BLL.Services
             return taxAndFeeViewModel;
         }
 
-        public async Task<IActionResult> AddTaxAsync(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount, int userId)
+        public async Task<IActionResult> AddTaxAsync(AddTaxViewModal addTaxViewModal, int userId)
         {
+            string taxName = addTaxViewModal.TaxName ?? string.Empty;
+            string taxType = addTaxViewModal.TaxType ?? string.Empty;
+            decimal taxAmount = addTaxViewModal.TaxAmount ?? 0;
+            bool isEnabled = addTaxViewModal.IsEnabled;
+            int taxId = addTaxViewModal.TaxId;
             if (taxId == -1)
             {
-            if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.IsDeleted == false))
-            {
-                return new JsonResult(new { success = false, message = "Tax already exists" });
-            }
-            TaxesFee tax = new TaxesFee
-            {
-                Name = taxName,
-                IsEnabled = isEnabled,
-                TaxType = taxType,
-                Amount = taxAmount,
-                CreatedBy = (short)(short?)userId,
-                CreatedAt = DateTime.Now
-            };
-            await _context.TaxesFees.AddAsync(tax);
-            await _context.SaveChangesAsync();
-            return new JsonResult(new { success = true, message = "Tax added successfully" });
+                if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.IsDeleted == false))
+                {
+                    return new JsonResult(new { success = false, message = "Tax already exists" });
+                }
+                TaxesFee tax = new TaxesFee
+                {
+                    Name = taxName,
+                    IsEnabled = isEnabled,
+                    TaxType = taxType,
+                    Amount = taxAmount,
+                    CreatedBy = (short)(short?)userId,
+                    CreatedAt = DateTime.Now
+                };
+                await _context.TaxesFees.AddAsync(tax);
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { success = true, message = "Tax added successfully" });
             }
             else
             {
-            if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.Id != taxId && t.IsDeleted == false))
-            {
-                return new JsonResult(new { success = false, message = "Tax already exists" });
-            }
-            TaxesFee tax = await _context.TaxesFees.FindAsync(taxId);
-            tax.Name = taxName;
-            tax.IsEnabled = isEnabled;
-            tax.TaxType = taxType;
-            tax.Amount = taxAmount;
-            tax.UpdatedBy = (short?)userId;
-            tax.UpdatedAt = DateTime.Now;
-            await _context.SaveChangesAsync();
-            return new JsonResult(new { success = true, message = "Tax updated successfully" });
+                if (await _context.TaxesFees.AnyAsync(t => t.Name.ToLower() == taxName.ToLower() && t.Id != taxId && t.IsDeleted == false))
+                {
+                    return new JsonResult(new { success = false, message = "Tax already exists" });
+                }
+                TaxesFee tax = await _context.TaxesFees.FindAsync(taxId);
+                tax.Name = taxName;
+                tax.IsEnabled = isEnabled;
+                tax.TaxType = taxType;
+                tax.Amount = taxAmount;
+                tax.UpdatedBy = (short?)userId;
+                tax.UpdatedAt = DateTime.Now;
+                _context.TaxesFees.Update(tax);
+                await _context.SaveChangesAsync();
+                return new JsonResult(new { success = true, message = "Tax updated successfully" });
             }
         }
 

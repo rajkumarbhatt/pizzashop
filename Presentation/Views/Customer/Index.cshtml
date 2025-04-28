@@ -108,6 +108,11 @@
             $('#toDate').datepicker('setStartDate', fromDate);
         });
 
+        $('#toDate').on('change', function () {
+            var toDate = $(this).datepicker('getDate');
+            $('#fromDate').datepicker('setEndDate', toDate);
+        });
+
         $("#cancelDatePickerButton").click(function () {
             $("#fromDate").val("dd-mm-yyyy");
             $("#toDate").val("dd-mm-yyyy");
@@ -167,6 +172,10 @@
                     success: function (data) {
                         $("#customersTablePartial").html(data);
                         $("#CustomDatepickerModal").modal("hide");
+                        $("#fromDate").val("dd-mm-yyyy");
+                        $("#toDate").val("dd-mm-yyyy");
+                        $("#errorMessageFromDate").text("");
+                        $("#errorMessageToDate").text("");
                     }
                 });
             });

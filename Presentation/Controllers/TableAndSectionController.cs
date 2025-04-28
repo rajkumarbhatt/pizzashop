@@ -64,10 +64,14 @@ namespace Presentaion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTable(int tableId, string tableName, string tableStatus, int tableCapacity, int sectionId)
+        public async Task<IActionResult> AddTable(AddTableViewModal addTableViewModal)
         {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = "Invalid Data" });
+            }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _tableAndSectionService.AddTableAsync(tableId, tableName, tableStatus, tableCapacity, sectionId, userId);
+            return await _tableAndSectionService.AddTableAsync(addTableViewModal, userId);
         }
 
         [HttpGet]

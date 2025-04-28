@@ -94,6 +94,12 @@
         "disabled" : "")> &gt;</ button >
 </div>
 
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
 <script>
     function editTableFunc(id) {
         $.ajax({

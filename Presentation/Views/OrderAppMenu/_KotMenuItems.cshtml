@@ -156,6 +156,7 @@
     @* itemwise comment modal *@
     <div class="modal fade" id="ItemwiseComment" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <input type="hidden" id="ItemIdCurrentInput" />
         <div class="modal-dialog modal-dialog-centered order-comment-modal-width">
             <div class="modal-content">
                 <div class="modal-header">
@@ -342,11 +343,12 @@
     }
     
     function addItemWiseComment() {
+        var modifierIds
         var comment = $("#ItemNameInstruction").val();
         $.ajax({
             url: '/OrderAppMenu/AddItemWiseComment',
             type: 'POST',
-            data: { orderId: orderId, itemId: itemIdCurrent, comment: comment },
+            data: { orderItemId: $("#ItemIdCurrentInput").val(), comment: comment },
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);

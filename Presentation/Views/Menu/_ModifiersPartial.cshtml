@@ -643,6 +643,20 @@
         $("#AddModifierModal").modal("show");
         $.validator.unobtrusive.parse("#AddModifierModal");
         $("#AddModifierModalTitle").text("Add New Modifier");
+        $("#custom-multiselect span:first-child").text("Select Categories");
+        $(".text-danger").text("");
+        $(".multi-checkbox").change(function () {
+        var selected = [];
+        $(".multi-checkbox:checked").each(function () {
+            selected.push($(this).next("label").text());
+        });
+
+        if (selected.length > 0) {
+            $("#custom-multiselect span:first-child").text(selected.join(", "));
+        } else {
+            $("#custom-multiselect span:first-child").text("Select Categories");
+        }
+    });
         addModifier();
     }
 
@@ -704,20 +718,20 @@
         });
     }
 
-    $(document).ready(function () {
-        $(".multi-checkbox").change(function () {
-            var selected = [];
-            $(".multi-checkbox:checked").each(function () {
-                selected.push($(this).next("label").text());
-            });
 
-            if (selected.length > 0) {
-                $("#custom-multiselect span:first-child").text(selected.join(", "));
-            } else {
-                $("#custom-multiselect span:first-child").text("Select Categories");
-            }
+    $(".multi-checkbox").change(function () {
+        var selected = [];
+        $(".multi-checkbox:checked").each(function () {
+            selected.push($(this).next("label").text());
         });
+
+        if (selected.length > 0) {
+            $("#custom-multiselect span:first-child").text(selected.join(", "));
+        } else {
+            $("#custom-multiselect span:first-child").text("Select Categories");
+        }
     });
+    
 
     function editModifier(modifierId) {
         var modifierGroupId = $("#modifierGroupId21").val();

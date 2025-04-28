@@ -16,7 +16,7 @@ public class DashboardService : IDashboardService
         int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
         return dt.AddDays(-1 * diff).Date;
     }
-    public async Task<DashboardViewModel> GetDashboardDataAsync(string? TimePeriod = "Current Month")
+    public async Task<DashboardViewModel> GetDashboardDataAsync(string? TimePeriod = "Current Month", string? fromDate2 = null, string? toDate2 = null)
     {
         DateTime fromDate = DateTime.Now;
         DateTime toDate = DateTime.Now;
@@ -40,6 +40,14 @@ public class DashboardService : IDashboardService
         {
             fromDate = DateTime.Now.Date;
             toDate = fromDate.AddDays(1);
+        } 
+        else if (TimePeriod == "Custom Date")
+        {
+            if (fromDate2 != null && toDate2 != null)
+            {
+                fromDate = DateTime.Parse(fromDate2);
+                toDate = DateTime.Parse(toDate2);
+            }
         }
 
         DashboardViewModel dashboardData = new DashboardViewModel
@@ -88,7 +96,8 @@ public class DashboardService : IDashboardService
                     "This Week" => Enumerable.Range(0, 7).Select(day => fromDate.AddDays(day).ToString("dddd")).ToList(),
                     "This Year" => Enumerable.Range(1, 12).Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM")).ToList(),
                     "Today" => Enumerable.Range(0, 12).Select(hour => $"{8 + hour}:00 - {8 + hour + 1}:00").ToList(),
-                    _ => new List<string>()
+                    "Custom Date" => Enumerable.Range(1, 12).Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM")).ToList(),
+                    _ => new List<string>(),
                 },
                 Values = TimePeriod switch
                 {
@@ -128,6 +137,15 @@ public class DashboardService : IDashboardService
                         (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
                     )
                     .ToList(),
+                    "Custome Date" => Enumerable.Range(1, 12)
+                    .Select(month => new DateTime(DateTime.Now.Year, month, 1))
+                    .GroupJoin(
+                        _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                        date => date.Month,
+                        order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Month : 0,
+                        (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
+                    )
+                    .ToList(),
                     _ => new List<decimal>()
                 }
             },
@@ -139,6 +157,7 @@ public class DashboardService : IDashboardService
                     "This Week" => Enumerable.Range(0, 7).Select(day => fromDate.AddDays(day).ToString("dddd")).ToList(),
                     "This Year" => Enumerable.Range(1, 12).Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM")).ToList(),
                     "Today" => Enumerable.Range(0, 12).Select(hour => $"{8 + hour}:00 - {8 + hour + 1}:00").ToList(),
+                    "Custom Date" => Enumerable.Range(1, 12).Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM")).ToList(),
                     _ => new List<string>()
                 },
                 Values = TimePeriod switch
@@ -176,6 +195,15 @@ public class DashboardService : IDashboardService
                         _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
                         date => date.Hour,
                         customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Hour : 0,
+                        (date, customers) => (decimal)customers.Count()
+                    )
+                    .ToList(),
+                    "Custom Date" => Enumerable.Range(1, 12)
+                    .Select(month => new DateTime(DateTime.Now.Year, month, 1))
+                    .GroupJoin(
+                        _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                        date => date.Month,
+                        customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Month : 0,
                         (date, customers) => (decimal)customers.Count()
                     )
                     .ToList(),

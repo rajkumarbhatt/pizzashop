@@ -77,13 +77,18 @@ namespace BLL.Services
                         {
                             kotOrderCardItems.Add(new KotOrderCardItem
                             {
+                                OrderItemId = orderItem.Id,
                                 Id = item.Id,
                                 ItemName = item.Name,
                                 ItemQuantity = orderItem.Quantity - (orderItem.ReadyItemsCount ?? 0),
                                 ItemReadyItemsCount = orderItem.ReadyItemsCount ?? 0,
                                 ItemInstruction = orderItem.Comment,
                                 Modifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false)
-                                    .Select(om => om.Modifier.Name)
+                                    .Select(om => new ModifierDetails
+                                    {
+                                        ModifierId = om.ModifierId,
+                                        ModifierName = om.Modifier.Name,
+                                    })
                                     .ToListAsync(),
                             });
                         }
@@ -186,12 +191,17 @@ namespace BLL.Services
                         {
                             kotOrderCardItems.Add(new KotOrderCardItem
                             {
+                                OrderItemId = orderItem.Id,
                                 Id = item.Id,
                                 ItemName = item.Name,
                                 ItemQuantity = (int)(orderItem.Quantity - (orderItem.ReadyItemsCount ?? 0)),
                                 ItemInstruction = orderItem.Comment,
                                 Modifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false)
-                                    .Select(om => om.Modifier.Name)
+                                    .Select(om => new ModifierDetails
+                                    {
+                                        ModifierId = om.ModifierId,
+                                        ModifierName = om.Modifier.Name,
+                                    })
                                     .ToListAsync(),
                             });
                         }
@@ -261,7 +271,7 @@ namespace BLL.Services
                     }
                     foreach (var item in readyItems)
                     {
-                        OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.ItemId == item.Id && oi.OrderId == orderId && oi.IsDeleted == false);
+                        OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == item.OrderItemId && oi.IsDeleted == false);
                         if (orderItem != null)
                         {
                             orderItem.ReadyItemsCount = orderItem.ReadyItemsCount + item.Quantity;
@@ -287,7 +297,7 @@ namespace BLL.Services
         {
             foreach (var item in readyItems)
             {
-                OrderItem? orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.ItemId == item.Id && oi.OrderId == orderId && oi.IsDeleted == false);
+                OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == item.OrderItemId && oi.IsDeleted == false);
                 if (orderItem != null)
                 {
                     orderItem.ReadyItemsCount = orderItem.ReadyItemsCount - item.Quantity;
@@ -371,12 +381,17 @@ namespace BLL.Services
                         {
                             kotOrderCardItems.Add(new KotOrderCardItem
                             {
+                                OrderItemId = orderItem.Id,
                                 Id = item.Id,
                                 ItemName = item.Name,
                                 ItemQuantity = orderItem.ReadyItemsCount ?? 0,
                                 ItemInstruction = orderItem.Comment,
                                 Modifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false)
-                                    .Select(om => om.Modifier.Name)
+                                    .Select(om => new ModifierDetails
+                                    {
+                                        ModifierId = om.ModifierId,
+                                        ModifierName = om.Modifier.Name,
+                                    })
                                     .ToListAsync(),
                             });
                         }

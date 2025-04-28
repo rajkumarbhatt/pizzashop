@@ -20,16 +20,13 @@
             <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
         </div>
         <p class="delete-styles d-block d-md-none">
-            <a asp-controller="UserList" asp-action="CreateUser"
-                class="text-decoration-none text-black   add-user-link">
+            <a class="text-decoration-none text-black   add-user-link">
                 <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
             </a>
         </p>
         @if (permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true))
         {
-            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
-                <a class="text-decoration-none text-white add-user-link">+
-                    Add Tax</a></button>
+            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;"><a class="text-decoration-none text-white add-user-link">+ Add Tax</a></button>
         }
     </div>
 </div>
@@ -71,101 +68,85 @@
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered table-modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addTaxModalTitle">Add Tax
-                </h5>
-                <button onclick="clearAddTaxModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row align-items-center">
-                    <form id="addTaxForm" class="col-12">
-                        <div class="col-12 row">
-                            <div class="form-floating my-auto col-12 col-md-6">
-                                <input type="hidden" id="TaxId" value="-1" />
-                                <input type="text" class="form-control" name="" id="TaxName" required
-                                    placeholder="ItemName">
-                                <span id="TaxNameError" class="text-danger"></span>
-                                <label for="ItemName" class="">Name*</label>
-                            </div>
-                            <div class="col-12 col-md-6 p-2 form-check form-switch">
-                                <div class="form-check form-switch d-flex justify-content-start align-items-center">
-                                    <input class="form-check-input form-check-switch" type="checkbox" id="IsEnabled" style="height: 2.0em; width: 3.5em;">
-                                    <label for="CategoryId" class="mx-2 mt-2">IsEnabled</label>
+            <form id="AddTaxFormModal" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTaxModalTitle">Add Tax
+                    </h5>
+                    <button onclick="clearAddTaxModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row align-items-center">
+                            <div class="col-12 row">
+                                <div class="form-floating my-auto col-12 col-md-6">
+                                    <input type="hidden" id="TaxId" value="-1" />
+                                    <input asp-for="@Model.AddTaxModal.TaxName" type="text" class="form-control" name="AddTaxModal.TaxName" id="TaxName" required
+                                        placeholder="ItemName">
+                                    <label for="ItemName" class="">Name*</label>
+                                    <span asp-validation-for="AddTaxModal.TaxName" class="text-danger"></span>
+                                </div>
+                                <div class="col-12 col-md-6 p-2 form-check form-switch">
+                                    <div class="form-check form-switch d-flex justify-content-start align-items-center">
+                                        <input class="form-check-input form-check-switch" type="checkbox" id="IsEnabled" style="height: 2.0em; width: 3.5em;">
+                                        <label for="CategoryId" class="mx-2 mt-2">IsEnabled</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 row">
-                            <div class="col-12 col-md-6 p-2 form-floating ">
-                                <select id="TaxType" class="form-select" aria-label="CategoryId">
-                                    <option value="Percentage">Percentage</option>
-                                    <option value="Fixed Amount">Fixed Amount</option>
-                                </select>
-                                <span id="TableStatusError" class="text-danger"></span>
-                                <label for="CategoryId" class="mx-2 mt-2">Status*</label>
+                            <div class="col-12 row">
+                                <div class="col-12 col-md-6 p-2 form-floating ">
+                                    <select id="TaxType" class="form-select" aria-label="CategoryId">
+                                        <option value="Percentage">Percentage</option>
+                                        <option value="Fixed Amount">Fixed Amount</option>
+                                    </select>
+                                    <span id="TableStatusError" class="text-danger"></span>
+                                    <label for="CategoryId" class="mx-2 mt-2">Status*</label>
+                                </div>
+                                <div class="form-floating my-auto col-12 col-md-6">
+                                    <input asp-for="@Model.AddTaxModal.TaxAmount" type="text" class="form-control" name="AddTaxModal.TaxAmount" id="TaxAmount" required
+                                        placeholder="ItemName" value="0">
+                                    <label for="ItemName" class="">Amount*</label>
+                                    <span asp-validation-for="AddTaxModal.TaxAmount" class="text-danger"></span>
+                                </div>
                             </div>
-                            <div class="form-floating my-auto col-12 col-md-6">
-                                <input type="text" class="form-control" name="" id="TaxAmount" required
-                                    placeholder="ItemName" value="0">
-                                <span id="TaxAmountError" class="text-danger"></span>
-                                <label for="ItemName" class="">Amount*</label>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-end ">
-                <button type="submit" id="AddTableButton" onclick="addTax()" type="button"
-                    class="btn btn-primary px-3">Save</button>
-                <a onclick="clearAddTaxModal()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
-            </div>
+                <div class="modal-footer d-flex justify-content-end ">
+                    <button id="AddTableButton" onclick="addTax()" type="button"
+                        class="btn btn-primary px-3">Save</button>
+                    <a onclick="clearAddTaxModal()" data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 <script>
 
-    function checkValidData () {
-        var taxName = document.getElementById("TaxName").value;
-        var taxAmount = document.getElementById("TaxAmount").value;
-        if (taxName == "") {
-            document.getElementById("TaxNameError").innerText = "Tax Name is required.";
-            return false;
-        }
-        if (taxAmount == "") {
-            document.getElementById("TaxAmountError").innerText = "Tax Amount is required.";
-            return false;
-        }
-        if (/^(0|[1-9]\d*)(\.\d+)?$/.test(taxAmount) == false) {
-            document.getElementById("TaxAmountError").innerText = "Invalid Tax Amount.";
-            return false;
-        }
-        return true;
-    }
-
     function addTax () {
+        if (!$("#AddTaxFormModal").valid()) {
+            return;
+        }
         var taxId = $("#TaxId").val();
         var taxName = $("#TaxName").val();
         var isEnabled = $("#IsEnabled").is(":checked");
         var taxType = $("#TaxType").val();
         var taxAmount = $("#TaxAmount").val();
-
-        if (taxName == "") {
-            $("#TaxNameError").text("Name is required");
-            return;
-        }
-        if (taxAmount == "0") {
-            $("#TaxAmountError").text("Amount is required");
-            return;
-        }
-        if (checkValidData() == false)
-        {
-            return;
-        }
+        data = {
+            TaxId: taxId,
+            TaxName: taxName,
+            IsEnabled: isEnabled,
+            TaxType: taxType,
+            TaxAmount: taxAmount
+        };
         $.ajax({
             type: "POST",
             url: '@Url.Action("AddTax", "TaxAndFee")',
-            data: { taxId: taxId, taxName: taxName, isEnabled: isEnabled, taxType: taxType, taxAmount: taxAmount },
+            data: { addTaxViewModal: data },
             success: function (data) {
+                console.log(data);
                 if (data.success) {
                     toastr.success(data.message);
                     $.ajax({
@@ -202,26 +183,7 @@
         }, 300));
     });
 
-    $(document).ready(function () {
-        $("#TaxName").on("input", function () {
-            if ($("#TaxName").val() != "") {
-                $("#TaxNameError").text("");
-            } else {
-                $("#TaxNameError").text("Tax name is required");
-            }
-        });
-
-        $("#TaxAmount").on("input", function () {
-            if ($("#TaxAmount").val() == "0") {
-                $("#TaxAmountError").text("Tax amount is required");
-            } else if (/^(0|[1-9]\d*)(\.\d+)?$/.test($("#TaxAmount").val())) {
-                $("#TaxAmountError").text("");
-            } else {
-                $("#TaxAmountError").text("Invalid amount");
-            }
-        });
-    });
-
+    
     function clearAddTaxModal() {
         $("#TaxName").val("");
         $("#TaxType").val("Percentage");

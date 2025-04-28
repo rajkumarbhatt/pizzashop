@@ -44,12 +44,14 @@ namespace BLL.Services
 
                     List<OrderItemDetials> orderItemDetails = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).Select(oi => new OrderItemDetials
                     {
+                        OrderItemId = oi.Id,
                         ItemId = oi.ItemId,
                         ItemName = oi.Item.Name,
                         ItemQuantity = oi.Quantity,
                         ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity) ?? 0,
                         Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Select(om => new ModifierDetails
                         {
+                            ModifierId = om.ModifierId,
                             ModifierName = om.Modifier.Name,
                             ModifierPrice = (decimal?)om.Price * om.Quantity ?? 0,
                         }).ToList(),
@@ -363,9 +365,9 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<JsonResult> GetItemWiseCommentAsync(int orderId, int itemId)
+        public async Task<JsonResult> GetItemWiseCommentAsync(int orderItemId)
         {
-            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
             if (orderItem != null)
             {
                 return new JsonResult(new { success = true, message = orderItem.Comment });
@@ -392,9 +394,9 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "Order not found" });
             }
         }
-        public async Task<IActionResult> AddItemWiseCommentAsync(int orderId, int itemId, string comment, int userId)
+        public async Task<IActionResult> AddItemWiseCommentAsync(int orderItemId, string comment, int userId)
         {
-            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == itemId) ?? new OrderItem();
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
             if (orderItem != null)
             {
                 orderItem.Comment = comment;
@@ -411,166 +413,120 @@ namespace BLL.Services
         }
         public async Task<IActionResult> SaveOrderAsync(SaveOrderViewModel saveOrderViewModel, int userId)
         {
-            List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
-            if (saveOrderViewModel.OrderItems == null || saveOrderViewModel.OrderItems.Count == 0)
+            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
-                foreach (var orderItem in orderItems)
+                try
                 {
-                    orderItem.IsDeleted = true;
-                    orderItem.UpdatedAt = DateTime.Now;
-                    orderItem.UpdatedBy = userId;
-                    _context.OrderItems.Update(orderItem);
-                    await _context.SaveChangesAsync();
-                    List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
-                    foreach (OrderModifier orderModifier in orderModifiers)
-                    {
-                        orderModifier.IsDeleted = true;
-                        orderModifier.UpdatedAt = DateTime.Now;
-                        orderModifier.UpdatedBy = userId;
-                        _context.OrderModifiers.Update(orderModifier);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-                List<OrderTaxis> orderTaxes2 = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
-                foreach (var orderTax in orderTaxes2)
-                {
-                    orderTax.TaxAmount = 0;
-                    orderTax.UpdatedAt = DateTime.Now;
-                    orderTax.UpdatedBy = userId;
-                    _context.OrderTaxes.Update(orderTax);
-                    await _context.SaveChangesAsync();
-                }
-                await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, 0, 0);
-                return new JsonResult(new { success = true, message = "Order saved successfully" });
-            }
+                    List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
 
-            foreach (var orderItem in saveOrderViewModel.OrderItems)
-            {
-                OrderItem orderItem1 = orderItems.FirstOrDefault(oi => oi.ItemId == orderItem.ItemId);
-                if (orderItem1 != null)
-                {
-                    orderItem1.Quantity = orderItem.Quantity;
-                    orderItem1.Price = (double?)_context.Items.FirstOrDefault(i => i.Id == orderItem.ItemId)?.Price;
-                    orderItem1.UpdatedAt = DateTime.Now;
-                    orderItem1.UpdatedBy = userId;
-                    _context.OrderItems.Update(orderItem1);
-                    await _context.SaveChangesAsync();
-                    List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem1.Id && om.IsDeleted == false).ToListAsync();
-                    foreach (OrderModifier orderModifier in orderModifiers)
+                    foreach (var orderItem in saveOrderViewModel.OrderItems)
                     {
-                        orderModifier.Quantity = orderItem.Quantity;
-                        orderModifier.Price = (double?)_context.Modifiers.FirstOrDefault(i => i.Id == orderModifier.ModifierId)?.Price;
-                        orderModifier.UpdatedAt = DateTime.Now;
-                        orderModifier.UpdatedBy = userId;
-                        _context.OrderModifiers.Update(orderModifier);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-                else
-                {
-                    OrderItem newOrderItem = new OrderItem
-                    {
-                        OrderId = saveOrderViewModel.OrderId,
-                        ItemId = orderItem.ItemId,
-                        Quantity = orderItem.Quantity,
-                        Price = (double?)_context.Items.FirstOrDefault(i => i.Id == orderItem.ItemId)?.Price,
-                        CreatedBy = userId,
-                        CreatedAt = DateTime.Now,
-                        UpdatedBy = userId,
-                        UpdatedAt = DateTime.Now,
-                        IsDeleted = false,
-                        ReadyItemsCount = 0,
-                    };
-                    await _context.OrderItems.AddAsync(newOrderItem);
-                    await _context.SaveChangesAsync();
-
-                    List<OrderModifier> orderModifiers = new List<OrderModifier>();
-                    foreach (var modifier in orderItem.ModifierIds)
-                    {
-                        OrderModifier orderModifier = new OrderModifier
+                        if (orderItem.OrderItemId == -1)
                         {
-                            OrderItemId = newOrderItem.Id,
-                            ModifierId = modifier,
-                            Price = (double?)_context.Modifiers.FirstOrDefault(i => i.Id == modifier)?.Price,
-                            CreatedBy = userId,
-                            CreatedAt = DateTime.Now,
-                            UpdatedBy = userId,
-                            UpdatedAt = DateTime.Now,
-                            IsDeleted = false,
-                            Quantity = orderItem.Quantity
-                        };
-                        orderModifiers.Add(orderModifier);
-                        await _context.OrderModifiers.AddAsync(orderModifier);
-                        await _context.SaveChangesAsync();
+                            OrderItem newOrderItem = new OrderItem
+                            {
+                                OrderId = saveOrderViewModel.OrderId,
+                                ItemId = orderItem.ItemId,
+                                Quantity = orderItem.Quantity,
+                                Price = (double?)_context.Items.FirstOrDefault(i => i.Id == orderItem.ItemId).Price,
+                                CreatedAt = DateTime.Now,
+                                IsDeleted = false,
+                                ReadyItemsCount = 0,
+                                CreatedBy = userId,
+                                UpdatedAt = DateTime.Now,
+                                UpdatedBy = userId,
+                            };
+                            await _context.OrderItems.AddAsync(newOrderItem);
+                            await _context.SaveChangesAsync();
 
-                    }
-                }
-            }
-            List<int> orderItemIds = saveOrderViewModel.OrderItems.Select(oi => oi.ItemId).ToList();
-            List<int> previousOrderItemIds = orderItems.Select(oi => oi.ItemId).ToList();
-            List<int> orderItemIdsToDelete = previousOrderItemIds.Except(orderItemIds).ToList();
-            if (orderItemIdsToDelete.Count > 0)
-            {
-                foreach (var orderItemId in orderItemIdsToDelete)
-                {
-                    OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.ItemId == orderItemId && oi.OrderId == saveOrderViewModel.OrderId);
-                    if (orderItem != null)
-                    {
-                        orderItem.IsDeleted = true;
-                        orderItem.UpdatedAt = DateTime.Now;
-                        orderItem.UpdatedBy = userId;
-                        _context.OrderItems.Update(orderItem);
-                        await _context.SaveChangesAsync();
-                        List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
-                        foreach (OrderModifier orderModifier in orderModifiers)
+                            foreach (var id in orderItem.ModifierIds)
+                            {
+                                OrderModifier orderModifier = new OrderModifier
+                                {
+                                    OrderItemId = newOrderItem.Id,
+                                    ModifierId = id,
+                                    Price = (double?)_context.Modifiers.FirstOrDefault(m => m.Id == id).Price,
+                                    Quantity = orderItem.Quantity,
+                                    CreatedAt = DateTime.Now,
+                                    IsDeleted = false,
+                                    CreatedBy = userId,
+                                    UpdatedAt = DateTime.Now,
+                                    UpdatedBy = userId,
+                                };
+                                await _context.OrderModifiers.AddAsync(orderModifier);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        else
                         {
-                            orderModifier.IsDeleted = true;
-                            orderModifier.UpdatedAt = DateTime.Now;
-                            orderModifier.UpdatedBy = userId;
-                            _context.OrderModifiers.Update(orderModifier);
+                            OrderItem existingOrderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItem.OrderItemId);
+                            if (existingOrderItem != null)
+                            {
+                                existingOrderItem.Quantity = orderItem.Quantity;
+                                existingOrderItem.UpdatedAt = DateTime.Now;
+                                existingOrderItem.UpdatedBy = userId;
+                                _context.OrderItems.Update(existingOrderItem);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                    }
+
+                    foreach (var orderItem in orderItems)
+                    {
+                        if (saveOrderViewModel.OrderItems.All(oi => oi.OrderItemId != orderItem.Id))
+                        {
+                            orderItem.IsDeleted = true;
+                            orderItem.UpdatedAt = DateTime.Now;
+                            orderItem.UpdatedBy = userId;
+                            _context.OrderItems.Update(orderItem);
                             await _context.SaveChangesAsync();
                         }
                     }
-                }
-            }
 
-            List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
-            if (orderTaxes.Count == 0)
-            {
-                foreach (var orderTax in saveOrderViewModel.OrderTaxes)
-                {
-                    OrderTaxis orderTaxis = new OrderTaxis
+                    List<OrderTaxis> orderTaxes = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
+                    if (orderTaxes.Count == 0)
                     {
-                        OrderId = saveOrderViewModel.OrderId,
-                        TaxId = _context.TaxesFees.FirstOrDefault(tf => tf.Name == orderTax.TaxName).Id,
-                        TaxAmount = (decimal)orderTax.TaxAmount,
-                        CreatedAt = DateTime.Now,
-                        CreatedBy = userId,
-                        UpdatedAt = DateTime.Now,
-                        UpdatedBy = userId,
-                    };
-                    await _context.OrderTaxes.AddAsync(orderTaxis);
-                    await _context.SaveChangesAsync();
-                }
-            }
-            else
-            {
-                foreach (var orderTax in orderTaxes)
-                {
-                    OrderTaxis orderTaxis = await _context.OrderTaxes.FirstOrDefaultAsync(ot => ot.OrderId == orderTax.OrderId);
-                    if (orderTaxis != null)
-                    {
-                        TaxesFee tax = await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTax.TaxId);
-                        orderTaxis.TaxAmount = (decimal)saveOrderViewModel.OrderTaxes.FirstOrDefault(ot => ot.TaxName == tax.Name).TaxAmount;
-                        orderTaxis.UpdatedAt = DateTime.Now;
-                        orderTaxis.UpdatedBy = userId;
-                        _context.OrderTaxes.Update(orderTaxis);
-                        await _context.SaveChangesAsync();
+                        foreach (var orderTax in saveOrderViewModel.OrderTaxes)
+                        {
+                            OrderTaxis orderTaxis = new OrderTaxis
+                            {
+                                OrderId = saveOrderViewModel.OrderId,
+                                TaxId = _context.TaxesFees.FirstOrDefault(tf => tf.Name == orderTax.TaxName).Id,
+                                TaxAmount = (decimal)orderTax.TaxAmount,
+                                CreatedAt = DateTime.Now,
+                                CreatedBy = userId,
+                                UpdatedAt = DateTime.Now,
+                                UpdatedBy = userId,
+                            };
+                            await _context.OrderTaxes.AddAsync(orderTaxis);
+                            await _context.SaveChangesAsync();
+                        }
                     }
+                    else
+                    {
+                        foreach (var orderTax in orderTaxes)
+                        {
+                            if (orderTax != null)
+                            {
+                                TaxesFee tax = await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTax.TaxId);
+                                orderTax.TaxAmount = (decimal)saveOrderViewModel.OrderTaxes.FirstOrDefault(ot => ot.TaxName == tax.Name).TaxAmount;
+                                orderTax.UpdatedAt = DateTime.Now;
+                                orderTax.UpdatedBy = userId;
+                                _context.OrderTaxes.Update(orderTax);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                    }
+                    await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
+                    await transaction.CommitAsync();
+                    return new JsonResult(new { success = true, message = "Order saved successfully" });
+                }
+                catch (Exception)
+                {
+                    await transaction.RollbackAsync();
+                    return new JsonResult(new { success = false, message = "An error occurred while saving the order" });
                 }
             }
-            await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
-            return new JsonResult(new { success = true, message = "Order saved successfully" });
         }
         public async Task<IActionResult> CompleteOrderAsync(int orderId, int userId)
         {
@@ -613,11 +569,11 @@ namespace BLL.Services
             {
                 return new JsonResult(new { success = false, message = "All items must be served before completing the order" });
             }
-            
+
         }
-        public async Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
+        public async Task<IActionResult> SaveCustomerReviewAsync(SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
         {
-            CustomerReview customerReview = new CustomerReview 
+            CustomerReview customerReview = new CustomerReview
             {
                 OrderId = saveCustomerReviewViewModel.OrderId,
                 CustomerId = await _context.Orders.Where(o => o.Id == saveCustomerReviewViewModel.OrderId).Select(o => o.CustomerId).FirstOrDefaultAsync(),
@@ -633,64 +589,37 @@ namespace BLL.Services
             await _context.SaveChangesAsync();
             return new JsonResult(new { success = true, message = "Review saved successfully" });
         }
-        public async Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId, string modifierIds)
+        public async Task<JsonResult> CanDeleteFromOrderAsync(int orderItemId)
         {
-            List<int> modifierIdsList = new List<int>();
-            if (!string.IsNullOrEmpty(modifierIds))
-            {
-                modifierIdsList = modifierIds.Trim('[', ']').Split(',').Select(int.Parse).ToList();
-            }
-            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
-            List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.ItemId == itemId && oi.IsDeleted == false).ToListAsync();
-            if (orderItems.Count == 0)
+            if (orderItemId == -1)
             {
                 return new JsonResult(new { canDelete = true });
             }
-            else if (orderItems.Count == 1)
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
+            if (orderItem.ReadyItemsCount > 0)
             {
-                OrderItem orderItem = orderItems.FirstOrDefault() ?? new OrderItem ();
-                if (orderItem.ReadyItemsCount > 0)
-                {
-                    return new JsonResult(new { canDelete = false });
-                }
-                else
-                {
-                    return new JsonResult(new { canDelete = true });
-                }
+                return new JsonResult(new { canDelete = false });
             }
-            else if (orderItems.Count > 1)
+            else
             {
-                foreach (OrderItem orderItem in orderItems)
-                {
-                    List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
-                    List<int> modifierIds2 = orderModifiers.Select(om => om.ModifierId).ToList();
-                    if (modifierIds != null && modifierIdsList.Count > 0)
-                    {
-                        if (modifierIdsList.All(modifierId => modifierIds2.Contains(modifierId)))
-                        {
-                            if (orderItem.ReadyItemsCount > 0)
-                            {
-                                return new JsonResult(new { canDelete = false });
-                            }
-                            else
-                            {
-                                return new JsonResult(new { canDelete = true });
-                            }
-                        }
-                    }
-                }
+                return new JsonResult(new { canDelete = true });
             }
-            return new JsonResult(new { canDelete = true });
         }
-        public async Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity)
+        public async Task<JsonResult> CanReduceFromOrderAsync(int orderItemId, int currentQuantity)
         {
-            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
-            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(o => o.OrderId == orderId && o.IsDeleted == false && o.ItemId == itemId) ?? new OrderItem();
+            if (orderItemId == -1)
+            {
+                return new JsonResult(new { canReduce = true });
+            }
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
             if (orderItem.ReadyItemsCount > currentQuantity - 1 && orderItem.ReadyItemsCount > 0)
             {
-                return new JsonResult ( new {canDecrease = false} );
-            } 
-            return new JsonResult ( new {canDecrease = true} );
+                return new JsonResult(new { canReduce = false });
+            }
+            else
+            {
+                return new JsonResult(new { canReduce = true });
+            }
         }
         public async Task<IActionResult> CancelOrderAsync(int orderId, int userId)
         {

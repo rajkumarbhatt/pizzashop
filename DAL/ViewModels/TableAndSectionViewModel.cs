@@ -11,5 +11,6 @@ namespace DAL.ViewModels
         public int PageIndex { get; set; }
         public int TotalTables { get; set; }
         public int TotalPages { get; set; }
+        public AddTableViewModal? AddTableViewModal { get; set; }
     }
 }

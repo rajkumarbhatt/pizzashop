@@ -50,10 +50,14 @@ namespace Presentaion.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTax(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount)
+        public async Task<IActionResult> AddTax(AddTaxViewModal addTaxViewModal)
         {
+            if (!ModelState.IsValid)
+            {
+                return new JsonResult(new { success = false, message = "Invalid Data" });
+            }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"]);
-            return await _taxAndFeeService.AddTaxAsync(taxId, taxName, isEnabled, taxType, taxAmount, userId);
+            return await _taxAndFeeService.AddTaxAsync(addTaxViewModal, userId);
         }
 
         [HttpGet]

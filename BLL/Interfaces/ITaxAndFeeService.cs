@@ -13,7 +13,7 @@ namespace BLL.Interfaces
         public Task<IActionResult> SaveChangesOfIsEnabledAsync(bool isEnabled, int id, int userId);
         public Task<IActionResult> DeleteAsync(int id, int userId);
         public Task<TaxAndFeeViewModel> SearchAsync(string searchValue);
-        public Task<IActionResult> AddTaxAsync(int taxId, string taxName, bool isEnabled, string taxType, decimal taxAmount, int userId);
+        public Task<IActionResult> AddTaxAsync(AddTaxViewModal addTaxViewModal, int userId);
         public Task<IActionResult> EditAsync(int taxId);
         public Task<TaxAndFeeViewModel> GetTaxAndFeeViewModelAsync();
     }

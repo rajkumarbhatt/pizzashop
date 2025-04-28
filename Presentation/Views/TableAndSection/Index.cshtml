@@ -122,7 +122,11 @@
     </div>
 </div>
 
-
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
 
 <script>
 
@@ -292,43 +296,6 @@
         });
     }
 
-    $(document).ready(function () {
-        $("#TableName").on("input", function () {
-            if ($("#TableName").val() != "") {
-                document.getElementById("TableNameError").innerText = "";
-            } else {
-                document.getElementById("TableNameError").innerText = "Table Name is required.";
-            }
-        });
-
-        $("#TableCapacity").on("input", function () {
-            if ($("#TableCapacity").val() == "") {
-                document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
-            } else if ($("#TableCapacity").val() !== "" && !/^[0-9]+$/.test($("#TableCapacity").val())) {
-                document.getElementById("TableCapacityError").innerText = "Table Capacity should be a number.";
-            } else {
-                document.getElementById("TableCapacityError").innerText = "";
-            }
-        });
-    });
-
-    function checkValidData() {
-        var tableName = document.getElementById("TableName").value;
-        var tableCapacity = document.getElementById("TableCapacity").value;
-        if (tableName == "") {
-            document.getElementById("TableNameError").innerText = "Table Name is required.";
-            return false;
-        }
-        if (tableCapacity == "") {
-            document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
-            return false;
-        }
-        if (!/^[0-9]+$/.test(tableCapacity)) {
-            document.getElementById("TableCapacityError").innerText = "Table Capacity should be a number.";
-            return false;
-        }
-        return true;
-    }
 
     function makeThisSectionActive (sectionId) {
         var divCustomIdTable = "divTable" + sectionId;
@@ -347,31 +314,26 @@
     }
 
     function addTable() {
+        if (!$("#AddTableModalForm").valid()) {
+            return;
+        }
         var tableName = document.getElementById("TableName").value;
         var tableSection = document.getElementById("TableSection").value;
         var tableCapacity = document.getElementById("TableCapacity").value;
         var tableStatus = document.getElementById("TableStatus").value;
         var tableId = document.getElementById("TableId").value;
-        if (tableName == "") {
-            document.getElementById("TableNameError").innerText = "Table Name is required.";
-            return;
-        }
-        if (tableSection == "") {
-            document.getElementById("TableSectionError").innerText = "Table Section is required.";
-            return;
-        }
-        if (tableCapacity == "") {
-            document.getElementById("TableCapacityError").innerText = "Table Capacity is required.";
-            return;
-        }
-        if (checkValidData() == false) {
-            return;
-        }
         var pageIndex = $("#PageIndex").val();
+        data = {
+            TableId: tableId,
+            TableName: tableName,
+            SectionId: tableSection,
+            TableCapacity: tableCapacity,
+            TableStatus: tableStatus,
+        };
         $.ajax({
             type: "POST",
             url: '@Url.Action("AddTable", "TableAndSection")',
-            data: { tableId: tableId, tableName: tableName, sectionId: tableSection, tableCapacity: tableCapacity, tableStatus: tableStatus },
+            data: { addTableViewModal: data },
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
@@ -409,10 +371,6 @@
         document.getElementById("TableSection").value = 1;
         document.getElementById("TableCapacity").value = "";
         document.getElementById("TableStatus").value = "Available";
-        document.getElementById("TableNameError").innerText = "";
-        document.getElementById("TableSectionError").innerText = "";
-        document.getElementById("TableCapacityError").innerText = "";
-        document.getElementById("TableStatusError").innerText = "";
         document.getElementById("addTableTitle").innerText = "Add Table";   
     }
 

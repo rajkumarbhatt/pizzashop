@@ -319,5 +319,10 @@
             var fromDate = $(this).datepicker('getDate');
             $('#toDate').datepicker('setStartDate', fromDate);
         });
+
+        $('#toDate').on('change', function () {
+            var toDate = $(this).datepicker('getDate');
+            $('#fromDate').datepicker('setEndDate', toDate);
+        });
     })
 </script>

@@ -2,6 +2,7 @@ namespace DAL.ViewModels;
 
 public class OrderItemDetials
 {
+    public int? OrderItemId { get; set; }
     public string? ItemName { get; set; }
     public int? ItemQuantity { get; set; }
     public decimal? ItemTotalPrice { get; set; }

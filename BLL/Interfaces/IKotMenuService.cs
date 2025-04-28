@@ -16,14 +16,14 @@ namespace BLL.Interfaces
         public Task<KotMenuViewModel> GetSelectModifiersModalDataAsync(int itemId);
         public Task<IActionResult> UpdateOrderAmountAsync (int orderId, int userId, float subTotal, float total);
         public Task<JsonResult> GetOrderWiseCommentAsync (int orderId);
-        public Task<JsonResult> GetItemWiseCommentAsync(int orderId, int itemId);
+        public Task<JsonResult> GetItemWiseCommentAsync(int orderItemId);
         public Task<IActionResult> AddOrderWiseCommentAsync (int orderId, string comment, int userId);
-        public Task<IActionResult> AddItemWiseCommentAsync (int orderId, int itemId, string comment, int userId);
+        public Task<IActionResult> AddItemWiseCommentAsync (int orderItemId, string comment, int userId);
         public Task<IActionResult> SaveOrderAsync (SaveOrderViewModel saveOrderViewModel, int userId);
         public Task<IActionResult> CompleteOrderAsync (int orderId, int userId);
         public Task<IActionResult> CancelOrderAsync (int orderId, int userId);
         public Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
-        public Task<JsonResult> CanDeleteFromOrderAsync (int orderId, int itemId, string modifierIds);
-        public Task<JsonResult> CanReduceFromOrderAsync (int orderId, int itemId, int currentQuantity);
+        public Task<JsonResult> CanDeleteFromOrderAsync (int orderItemId);
+        public Task<JsonResult> CanReduceFromOrderAsync (int orderItemId, int currentQuantity);
     }
 }

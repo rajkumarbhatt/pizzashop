@@ -92,7 +92,9 @@
 
 
 <script>
-
+    setTimeout(() => {
+        syncItemsList();
+    }, 100);
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
     function saveOrder() {
@@ -110,12 +112,24 @@
             success: function (response) {
                 if (response.success) {
                     toastr.success(response.message);
+                    $.ajax({
+                        url: '@Url.Action("GetOrderDetails", "OrderAppMenu")',
+                        method: 'GET',
+                        data: { orderId: orderIdTemp },
+                        success: function (response) {
+                            itemList = [];
+                            $("#orderItemDetailsPartial").html(response);
+                        },
+                        error: function () {
+                            toastr.error("Failed to load order details.");
+                        }
+                    })
                 } else {
                     toastr.error(response.message);
                 }
             },
-            error: function (xhr, status, error) {
-                console.error("Error:", error);
+            error: function (response) {
+                toastr.error("An error occurred while saving the order.");
             }
         })
     }
