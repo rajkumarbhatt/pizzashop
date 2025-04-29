@@ -7,6 +7,7 @@ namespace Presentation.Controllers
 {
 
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class CustomerController : Controller
     {
         private readonly ICustomerService _customerService;

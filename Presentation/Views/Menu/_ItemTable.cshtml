@@ -384,16 +384,12 @@
         });
     }
 
-
-
     $(document).off("one").one('keydown', function (e) {
         if (e.key === "Delete" && isItem) {
             deleteSelectedItems();
         }
     });
-
     
-
     deleteItemsList.forEach(item => {
         $(".item-name-checkbox").each(function () {
             if (parseInt($(this).val()) === item) {

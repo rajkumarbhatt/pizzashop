@@ -5,6 +5,7 @@ using DAL.ViewModels;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class DashboardController : Controller
     {
         private readonly IJwtService _jwtService;
@@ -44,9 +45,9 @@ namespace Presentaion.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
-        public async Task<IActionResult> GetUpdatedData(string TimePeriod)
+        public async Task<IActionResult> GetUpdatedData(string TimePeriod, string? fromDate = null, string? toDate = null)        
         {
-            DashboardViewModel dashboardViewModel = await _dashboardService.GetDashboardDataAsync(TimePeriod);
+            DashboardViewModel dashboardViewModel = await _dashboardService.GetDashboardDataAsync(TimePeriod, fromDate, toDate);
             return PartialView("_DashboardPartial", dashboardViewModel);
         }
     }

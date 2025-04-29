@@ -5,11 +5,13 @@
     <h1 class=" col-6 col-sm-8 col-lg-9 main-page-heading">Dashboard</h1>
     <!-- dropdown -->
     <div class="col pe-2">
-        <select name="select-duration" id="select-duration" class="form-select" aria-label="Select Duration">
+        <select name="select-duration" id="select-duration" class="form-select" aria-label="Select Duration" onfocus="this.selectedIndex=-1;">
             <option value="Current Month" selected>Current Month</option>
-            <option value="This Week">Last 7 Days</option>
+            <option value="Last 7 Days">Last 7 Days</option>
+            <option value="Last 30 Days">Last 30 Days</option>
             <option value="This Year">Last Year</option>
             <option value="Today">Today</option>
+            <option value="Custom Date">Custom Date</option>
         </select>
     </div>
 </div>
@@ -18,19 +20,151 @@
     <partial name="_DashboardPartial" model="Model" />
 </div>
 
+@* custom datepicker modal *@
+<div class="modal fade" id="CustomDatepickerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
+                <button id="closeDatePickerModalButton" type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex mx-auto gap-3">
+                <div class="d-flex flex-column ">
+                    <div class="input-group search-box cursor-pointer" style="width: 200px;">
+                        <div class="form-floating">
+                            <input type="text" class="form-control cursor-pointer search-input datepicker"
+                                style="height: 44px;" id="fromDate" value="dd-mm-yyyy">
+                            <label for="fromDate" class="form-label cursor-pointer">From Date</label>
+                        </div>
+                        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon"
+                            alt="">
+                    </div>
+                    <span class="text-danger" id="errorMessageFromDate"></span>
+                </div>
+                <div class="d-flex flex-column">
+                    <div class="input-group search-box cursor-pointer" style="width: 200px;">
+                        <div class="form-floating">
+                            <input type="text" class="form-control cursor-pointer search-input datepicker"
+                                style="height: 44px;" id="toDate" value="dd-mm-yyyy">
+                            <label for="toDate" class="form-label cursor-pointer">To Date</label>
+                        </div>
+                        <img src="~/images/icons/calender.svg" class="small-image cursor-pointer anchor-tag search-icon"
+                            alt="">
+                    </div>
+                    <span class="text-danger" id="errorMessageToDate"></span>
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+                <button id="ApplyDateChangesButton" type="submit" class="btn btn-primary px-3">Submit</button>
+                <a><button data-bs-dismiss="modal" aria-label="Close" type="button" id="cancelDatePickerButton"
+                        class="btn btn-contrast px-3">Cancel</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $("#select-duration").change(function () {
         var selectedValue = $(this).val();
-        $.ajax({
-            url: '@Url.Action("GetUpdatedData", "Dashboard")',
-            type: 'GET',
-            data: { TimePeriod: selectedValue },
-            success: function (data) {
-                $("#dashboardPartialStarting").html(data);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching data:", error);
-            }
-        });
+        if (selectedValue === "Custom Date") {
+            $("#errorMessageFromDate").text("");
+            $("#errorMessageToDate").text("");
+            $("#CustomDatepickerModal").modal("show");
+            $("#ApplyDateChangesButton").off("click").click(function () {
+                var fromDate = $("#fromDate").val();
+                var toDate = $("#toDate").val();
+                if (fromDate == "dd-mm-yyyy") {
+                    $("#errorMessageFromDate").text("Please select a valid date.");
+                    return;
+                }
+                if (toDate == "dd-mm-yyyy") {
+                    $("#errorMessageToDate").text("Please select a valid date.");
+                    return;
+                }
+                $.ajax({
+                    url: '@Url.Action("GetUpdatedData", "Dashboard")',
+                    type: "GET",
+                    data: { TimePeriod: selectedValue, fromDate: fromDate, toDate: toDate },
+                    success: function (data) {
+                        $("#dashboardPartialStarting").html(data);
+                        $("#fromDate").val("dd-mm-yyyy");
+                        $("#toDate").val("dd-mm-yyyy");
+                        $("#errorMessageFromDate").text("");
+                        $("#errorMessageToDate").text("");
+                        $("#CustomDatepickerModal").modal("hide");
+                    }
+                });
+            });
+        } 
+        else {
+            $.ajax({
+                url: '@Url.Action("GetUpdatedData", "Dashboard")',
+                type: 'GET',
+                data: { TimePeriod: selectedValue },
+                success: function (data) {
+                    $("#dashboardPartialStarting").html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        }
     });
+
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: true
+        }).on('show', function () {
+            $(this).attr('readonly', true);
+        });
+
+        $('.datepicker').datepicker('setEndDate', new Date());
+
+        $('#fromDate').on('change', function () {
+            var fromDate = $(this).datepicker('getDate');
+            $('#toDate').datepicker('setStartDate', fromDate);
+        });
+
+        $('#toDate').on('change', function () {
+            var toDate = $(this).datepicker('getDate');
+            $('#fromDate').datepicker('setEndDate', toDate);
+        });
+
+        $("#cancelDatePickerButton").click(function () {
+            $("#fromDate").val("dd-mm-yyyy");
+            $("#toDate").val("dd-mm-yyyy");
+            $.ajax({
+                url: '@Url.Action("GetUpdatedData", "Dashboard")',
+                type: "GET",
+                data: { TimePeriod: $("#select-duration").val() },
+                success: function (data) {
+                    $("#dashboardPartialStarting").html(data);
+                }
+            });
+            $("#errorMessageFromDate").text("");
+            $("#errorMessageToDate").text("");
+        });
+
+        $("#closeDatePickerModalButton").click(function () {
+            $("#fromDate").val("dd-mm-yyyy");
+            $("#toDate").val("dd-mm-yyyy");
+            $.ajax({
+                url: '@Url.Action("GetUpdatedData", "Dashboard")',
+                type: "GET",
+                data: { TimePeriod: $("#select-duration").val() },
+                success: function (data) {
+                    $("#dashboardPartialStarting").html(data);
+                }
+            });
+            $("#errorMessageFromDate").text("");
+            $("#errorMessageToDate").text("");
+        });
+
+    });
+
+
 </script>

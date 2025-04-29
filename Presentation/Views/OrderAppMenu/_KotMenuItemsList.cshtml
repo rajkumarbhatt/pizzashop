@@ -1,5 +1,9 @@
 @model DAL.ViewModels.KotMenuViewModel
-
+@{
+    <script>
+        var itemTaxes = @Html.Raw(Json.Serialize(Model.ItemTaxes));
+    </script>
+}
 
 <div class="d-flex flex-wrap gap-3 mx-auto mt-3 justify-content-center justify-content-md-start ">
     @if (@Model.MenuItemsKot.Count() == 0)
@@ -10,7 +14,7 @@
     {
         var emptyHeartId = "empty-heart-" + item.Id;
         var filledHeartId = "filled-heart-" + item.Id;
-        <div onclick="selectModifiers(@item.Id)" class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
+        <div onclick="selectModifiers('@item.Id', '@item.Name', '@item.Price')" class="menu-item-kot-div d-flex shadow-sm cursor-pointer">
             <div class="kot-menu-item-image-div shadow p-1 w-50 ">
                 <div class="w-100 h-100 ">
                     @{
@@ -33,7 +37,8 @@
                     {
                         <div class="top-right-border-nonveg"></div>
                     }
-                    else {
+                    else
+                    {
                         <div class="top-right-border-vegan"></div>
                     }
                 </div>
@@ -71,17 +76,32 @@
 }
 
 <script>
-    function selectModifiers(id) {
+    var itemTaxList = itemTaxes;
+    function selectModifiers(id, name, price) {
         $.ajax({
-            type: "GET",
-            url: '@Url.Action("GetSelectModifiersModalData", "OrderAppMenu")',
+            url: '@Url.Action("AreModifiersSelected", "OrderAppMenu")',
+            type: 'GET',
             data: { itemId: id },
             success: function (data) {
-                $("#SelectModifiersPartialStaring").html(data);
-                $("#selectModifiersModal").modal("show");
+                if (data.areModifiersSelected) {
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetSelectModifiersModalData", "OrderAppMenu")',
+                        data: { itemId: id },
+                        success: function (data) {
+                            $("#SelectModifiersPartialStaring").html(data);
+                            $("#selectModifiersModal").modal("show");
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error loading partial view:", error);
+                        }
+                    })
+                } else {
+                    addModifiers(id, name, price, true);
+                }
             },
             error: function (xhr, status, error) {
-                console.error("Error loading partial view:", error);
+                console.error(xhr.responseText);
             }
         })
     }

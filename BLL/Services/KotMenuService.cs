@@ -14,6 +14,11 @@ namespace BLL.Services
         {
             _context = context;
         }
+        public async Task<string> GetOrderStatusAsync(int orderId)
+        {
+            string orderStatus = await _context.Orders.Where(o => o.Id == orderId).Select(o => o.Status).FirstOrDefaultAsync() ?? "Pending";
+            return orderStatus;
+        }
         public async Task<KotMenuViewModel> GetKotMenuAsync(int? orderId)
         {
             bool areItemsAdded = false;
@@ -92,13 +97,27 @@ namespace BLL.Services
             {
                 areItemsAdded = true;
             }
+            List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
+            List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+            foreach (var item in itemList)
+            {
+                ItemTaxes itemTaxes1 = new ItemTaxes
+                {
+                    ItemId = item.Id,
+                    IsDefault = item.DefaultTax ?? false,
+                    TaxPercentage = (decimal)item.TaxPercentage,
+                    ItemPrice = (decimal)item.Price
+                };
+                itemTaxes.Add(itemTaxes1);
+            }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
                 Categories = categories,
                 MenuItemsKot = menuItemsKot,
                 OrderDetailsCard = orderDetailsCard,
                 TaxesFees = orderDetailsCard.Taxes,
-                AreItemsAdded = areItemsAdded
+                AreItemsAdded = areItemsAdded,
+                ItemTaxes = itemTaxes,
             };
 
             return kotMenuViewModel;
@@ -418,6 +437,47 @@ namespace BLL.Services
                 try
                 {
                     List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
+                    if (saveOrderViewModel.OrderItems == null || saveOrderViewModel.OrderItems.Count == 0)
+                    {
+                        foreach (var orderItem in orderItems)
+                        {
+                            orderItem.IsDeleted = true;
+                            orderItem.UpdatedAt = DateTime.Now;
+                            orderItem.UpdatedBy = userId;
+                            _context.OrderItems.Update(orderItem);
+                            await _context.SaveChangesAsync();
+
+                            List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
+
+                            if (orderModifiers != null && orderModifiers.Count > 0)
+                            {
+                                foreach (var orderModifier in orderModifiers)
+                                {
+                                    orderModifier.IsDeleted = true;
+                                    orderModifier.UpdatedAt = DateTime.Now;
+                                    orderModifier.UpdatedBy = userId;
+                                    _context.OrderModifiers.Update(orderModifier);
+                                    await _context.SaveChangesAsync();
+                                }
+                            }
+                        }
+
+                        List<OrderTaxis> orderTaxes2 = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
+                        if (orderTaxes2 != null && orderTaxes2.Count > 0)
+                        {
+                            foreach (var orderTax in orderTaxes2)
+                            {
+                                orderTax.TaxAmount = 0;
+                                orderTax.UpdatedAt = DateTime.Now;
+                                orderTax.UpdatedBy = userId;
+                                _context.OrderTaxes.Update(orderTax);
+                                await _context.SaveChangesAsync();
+                            }
+                        }
+                        await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
+                        await transaction.CommitAsync();
+                        return new JsonResult(new { success = true, message = "Order saved successfully" });
+                    }
 
                     foreach (var orderItem in saveOrderViewModel.OrderItems)
                     {
@@ -438,23 +498,25 @@ namespace BLL.Services
                             };
                             await _context.OrderItems.AddAsync(newOrderItem);
                             await _context.SaveChangesAsync();
-
-                            foreach (var id in orderItem.ModifierIds)
+                            if (orderItem.ModifierIds != null && orderItem.ModifierIds.Count > 0)
                             {
-                                OrderModifier orderModifier = new OrderModifier
+                                foreach (var id in orderItem.ModifierIds)
                                 {
-                                    OrderItemId = newOrderItem.Id,
-                                    ModifierId = id,
-                                    Price = (double?)_context.Modifiers.FirstOrDefault(m => m.Id == id).Price,
-                                    Quantity = orderItem.Quantity,
-                                    CreatedAt = DateTime.Now,
-                                    IsDeleted = false,
-                                    CreatedBy = userId,
-                                    UpdatedAt = DateTime.Now,
-                                    UpdatedBy = userId,
-                                };
-                                await _context.OrderModifiers.AddAsync(orderModifier);
-                                await _context.SaveChangesAsync();
+                                    OrderModifier orderModifier = new OrderModifier
+                                    {
+                                        OrderItemId = newOrderItem.Id,
+                                        ModifierId = id,
+                                        Price = (double?)_context.Modifiers.FirstOrDefault(m => m.Id == id).Price,
+                                        Quantity = orderItem.Quantity,
+                                        CreatedAt = DateTime.Now,
+                                        IsDeleted = false,
+                                        CreatedBy = userId,
+                                        UpdatedAt = DateTime.Now,
+                                        UpdatedBy = userId,
+                                    };
+                                    await _context.OrderModifiers.AddAsync(orderModifier);
+                                    await _context.SaveChangesAsync();
+                                }
                             }
                         }
                         else
@@ -467,6 +529,19 @@ namespace BLL.Services
                                 existingOrderItem.UpdatedBy = userId;
                                 _context.OrderItems.Update(existingOrderItem);
                                 await _context.SaveChangesAsync();
+
+                                List<OrderModifier> existingOrderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.OrderItemId && om.IsDeleted == false).ToListAsync();
+                                if (existingOrderModifiers != null && existingOrderModifiers.Count > 0)
+                                {
+                                    foreach (var existingOrderModifier in existingOrderModifiers)
+                                    {
+                                        existingOrderModifier.Quantity = orderItem.Quantity;
+                                        existingOrderModifier.UpdatedAt = DateTime.Now;
+                                        existingOrderModifier.UpdatedBy = userId;
+                                        _context.OrderModifiers.Update(existingOrderModifier);
+                                        await _context.SaveChangesAsync();
+                                    }
+                                }
                             }
                         }
                     }
@@ -534,6 +609,10 @@ namespace BLL.Services
             if (!canComplete)
             {
                 List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
+                if (orderItems == null || orderItems.Count == 0)
+                {
+                    return new JsonResult(new { success = false, message = "No items found in the order, kindly cancel the order" });
+                }
                 List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
                 foreach (OrderTableMapping orderTableMapping in orderTableMappings)
                 {
@@ -620,6 +699,15 @@ namespace BLL.Services
             {
                 return new JsonResult(new { canReduce = true });
             }
+        }
+        public async Task<JsonResult> AreModifiersSelectedAsync(int itemId)
+        {
+            int modifierGroupCount = await _context.ItemModifiergroups.Where(im => im.ItemId == itemId).CountAsync();
+            if (modifierGroupCount > 0)
+            {
+                return new JsonResult(new { areModifiersSelected = true });
+            }
+            return new JsonResult(new { areModifiersSelected = false });
         }
         public async Task<IActionResult> CancelOrderAsync(int orderId, int userId)
         {

@@ -8,6 +8,7 @@ using Presentaion.Controllers;
 namespace Presentation.Controllers;
 
 [CustomAuth]
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class OrderController : Controller
 {
     private readonly IOrderService _orderService;

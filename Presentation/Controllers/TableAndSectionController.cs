@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class TableAndSection : Controller
     {
         private readonly ITableAndSectionService _tableAndSectionService;

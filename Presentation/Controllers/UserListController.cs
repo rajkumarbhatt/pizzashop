@@ -6,6 +6,7 @@ using BLL.Interfaces;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class UserListController : Controller
     {
         private readonly IJwtService _jwtService;

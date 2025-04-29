@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class MenuController : Controller
     { 
         private readonly ICategoryService _categoryService;

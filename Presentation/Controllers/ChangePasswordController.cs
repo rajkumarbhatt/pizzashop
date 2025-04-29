@@ -8,6 +8,7 @@ using BLL.Interfaces;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ChangePasswordController : Controller
     {
         private readonly IChangePasswordService _changePasswordService;

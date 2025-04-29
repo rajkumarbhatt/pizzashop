@@ -62,7 +62,6 @@
 <script>
     var url = window.location.href;
     var orderId = url.substring(url.lastIndexOf('/') + 1);
-
     function selectModifier(id) {
         if (orderId != "Menu") {
             var modifierId = parseInt(id.split("-")[1]);
@@ -71,25 +70,23 @@
             var maxSelection = parseInt(id.split("-")[4]);
             var modifierPrice = parseFloat(id.split("-")[5]);
             var modifierName = id.split("-")[6];
-            var selectedModifierGroup = selectedModifiers.filter(function (modifier) {
-                return modifier.ModifierGroupId === modifierGroupId;
-            });
-            var selectedModifier = selectedModifiers.filter(function (modifier) {
-                return modifier.ModifierId === modifierId;
-            });
-            var elements = document.getElementsByClassName("modifer-card-add-item-kot");
-            if (selectedModifier.length == 0) {
-                if (selectedModifierGroup.length < maxSelection) {
-                    selectedModifiers.push({ ModifierId: modifierId, ModifierGroupId: modifierGroupId, ModifierPrice: modifierPrice, ModifierName: modifierName });
+            var selectedModifier = {
+                ModifierId: modifierId,
+                ModifierGroupId: modifierGroupId,
+                ModifierPrice: modifierPrice,
+                ModifierName: modifierName
+            };
+            if (selectedModifiers.find(modifier => (modifier.ModifierId === modifierId && modifier.ModifierGroupId === modifierGroupId))) {
+                selectedModifiers = selectedModifiers.filter(modifier => !(modifier.ModifierId === modifierId && modifier.ModifierGroupId === modifierGroupId));
+                document.getElementById(id).classList.remove("selected-modifier");
+            } else {
+                var currentModifierGroupSelected = selectedModifiers.filter(modifier => modifier.ModifierGroupId === modifierGroupId);
+                if (currentModifierGroupSelected.length < maxSelection) {
+                    selectedModifiers.push(selectedModifier);
                     document.getElementById(id).classList.add("selected-modifier");
                 } else {
                     toastr.error("You can select maximum " + maxSelection + " modifiers from this group");
                 }
-            } else {
-                selectedModifiers = selectedModifiers.filter(function (modifier) {
-                    return modifier.ModifierId !== modifierId;
-                });
-                document.getElementById(id).classList.remove("selected-modifier");
             }
         }
     }
@@ -112,6 +109,20 @@
         var selectedModifierIds = selectedModifiers.map(function (modifier) {
             return modifier.ModifierId;
         });
+        if (selectedModifierIds.length == 0)
+        {
+            var isThere = false;
+            itemList.forEach(function (item) {
+                if (item.ItemId == itemId && item.ModifierIds.length == 0) {
+                    isThere = true;
+                }
+            }) 
+            if (isThere) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         if (itemList.length > 0) {
             for (var i = 0; i < itemList.length; i++) {
                 var item = itemList[i];
@@ -132,9 +143,8 @@
         return false;
     }
 
-    function addModifiers(itemId, itemName, itemPrice) {
-        debugger
-        if (checkForMinMax()) {
+    function addModifiers(itemId, itemName, itemPrice, isDirect) {
+        if (isDirect || checkForMinMax()) {
             var selectedModifierIds = selectedModifiers.map(function (modifier) {
                 return modifier.ModifierId;
             });
@@ -179,7 +189,7 @@
                     <div id="${customAccordianId}" class="accordion-collapse collapse" aria-labelledby="headingOne"
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <table class="" style="width: 25%;">
+                            <table class="" style="width: 35%;">
                                 <tbody id="selectedModifiersTable-${customAccordianId}">
                                     
                                 </tbody>
@@ -216,8 +226,13 @@
             Subtotal = Subtotal + parseFloat(itemPrice) + totalModifiersPrice;
             subTotalElement.innerHTML = Subtotal.toFixed(2);
             selectedModifiersTable.insertAdjacentHTML("beforeend", rows);
-            var modal = bootstrap.Modal.getInstance(document.getElementById('selectModifiersModal'));
-            modal.hide();
+            $("#selectModifiersModal").modal("hide");
+            var itemTax = itemTaxList.find(item => item.itemId == itemId);
+            var itemTaxAmount = 0;
+            if (itemTax.isDefault)
+            {
+                itemTaxAmount = parseFloat((itemTax.itemPrice * itemTax.taxPercentage / 100).toFixed(2));
+            }
             itemList.push({
                 ItemId: parseInt(itemId),
                 Quantity: parseInt(1),
@@ -225,12 +240,15 @@
                     return modifier.ModifierId;
                 }),
                 OrderItemId: -1,
+                ItemTax: itemTaxAmount
             });
             selectedModifiers = [];
             if ($("#taxListContainer").hasClass("d-none")) {
                 $("#taxListContainer").removeClass("d-none");
             }
             updateTaxes(Subtotal);
+            console.log(itemList);
+            console.log(itemTax);
         }
     }
     
@@ -280,6 +298,10 @@
         });
         var OrderItemId = itemList.filter(function (item) {
             if (item.ItemId == itemId) {
+                if (item.ModifierIds.length == 0)
+                {
+                    return item.OrderItemId;
+                }
                 if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
                     return item.OrderItemId;
                 }
@@ -288,6 +310,9 @@
         if (OrderItemId[0].OrderItemId == -1) {
             itemList.filter(function (item) {
                 if (item.ItemId == itemId) {
+                    if (item.ModifierIds.length == 0) {
+                        item.Quantity = parseInt(newValue);
+                    }
                     if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
                         item.Quantity = parseInt(newValue);
                     }
@@ -324,6 +349,9 @@
         });
         var OrderItemId = itemList.filter(function (item) {
             if (item.ItemId == itemId) {
+                if (item.ModifierIds.length == 0) {
+                    return item.OrderItemId;
+                }
                 if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
                     return item.OrderItemId;
                 }
@@ -400,6 +428,9 @@
         });
         var OrderItemId = itemList.filter(function (item) {
             if (item.ItemId == itemId) {
+                if (item.ModifierIds.length == 0) {
+                    return item.OrderItemId;
+                }
                 if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
                     return item.OrderItemId;
                 }
@@ -500,9 +531,26 @@
                 document.getElementById(taxId).innerHTML = taxValue.toFixed(2);
             }
         }
+        var otherTax = 0;
+        itemList.forEach(function (item) {
+            if (item.ItemTax > 0) {
+                otherTax += item.ItemTax;
+            }
+        });
+        if (taxListNameAndAmount.find(item => item.TaxName == "Other Tax")) {
+            taxListNameAndAmount.find(item => item.TaxName == "Other Tax").TaxAmount = otherTax.toFixed(2);
+        } else {
+            taxListNameAndAmount.push({ TaxName: "Other Tax", TaxAmount: otherTax.toFixed(2) });
+        }   
         totalTax = parseFloat(totalTax).toFixed(2);
         var orderTotalValue = document.getElementById("orderTotalValue");
-        var orderTotal = parseFloat(Subtotal) + parseFloat(totalTax);
+        var otherTaxValue = document.getElementById("otherTaxValue");
+        if (otherTax > 0) {
+            otherTaxValue.innerHTML = otherTax.toFixed(2);
+        } else {
+            otherTaxValue.innerHTML = 0;
+        }
+        var orderTotal = parseFloat(Subtotal) + parseFloat(totalTax) + parseFloat(otherTax);
         orderTotal = parseFloat(orderTotal).toFixed(2);
         orderTotalValue.innerHTML = orderTotal;
     }
@@ -516,8 +564,6 @@
         }
     }
 
-    
-
     function openItemInstructionsModal(itemId, id)
     {
         var modifierIds = id.split("accordianButton")[1].split("-");
@@ -527,6 +573,9 @@
         });
         var OrderItemId = itemList.filter(function (item) {
             if (item.ItemId == itemId) {
+                if (item.ModifierIds.length == 0) {
+                    return item.OrderItemId;
+                }
                 if (item.ModifierIds.every(m => modifierIds.includes(m)) && modifierIds.every(m => item.ModifierIds.includes(m))) {
                     return item.OrderItemId;
                 }
@@ -586,7 +635,7 @@
                     <div id="${customAccordianId}" class="accordion-collapse collapse" aria-labelledby="headingOne"
                         data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            <table class="" style="width: 25%;">
+                            <table class="" style="width: 35%;">
                                 <tbody id="selectedModifiersTable-${customAccordianId}">
                                     
                                 </tbody>
@@ -617,11 +666,12 @@
                 ModifierIds: item.modifiers.map(modifier => parseInt(modifier.modifierId)),
                 OrderItemId: parseInt(item.orderItemId),
             });
+            var Subtotal = parseFloat(document.getElementById("orderSubtotalValue").innerHTML) || 0;
+            updateTaxes(Subtotal)
             if ($("#taxListContainer").hasClass("d-none")) {
                 $("#taxListContainer").removeClass("d-none");
             }
         })
-        console.log("itemList", itemList);
     }
 
 </script>

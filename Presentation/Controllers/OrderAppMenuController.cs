@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class OrderAppMenu : Controller
     {
         private readonly IKotMenuService _kotMenuService;
@@ -17,6 +18,11 @@ namespace Presentation.Controllers
         [Route("/OrderApp/Menu/{orderId}")]
         public async Task<ActionResult> Index(int? orderId)
         {
+            string orderStatus = await _kotMenuService.GetOrderStatusAsync(orderId ?? 0);
+            if (orderStatus == "Completed" || orderStatus == "Cancelled")
+            {
+                return RedirectToAction("Index", "PageNotFound");
+            }
             KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetKotMenuAsync(orderId);
             return View(kotMenuViewModel);
         }
@@ -127,6 +133,11 @@ namespace Presentation.Controllers
         {
             KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetKotMenuAsync(orderId);
             return PartialView("_OrderItemDetailsPartial", kotMenuViewModel);
+        }
+        [HttpGet]
+        public async Task<JsonResult> AreModifiersSelected(int itemId)
+        {
+            return await _kotMenuService.AreModifiersSelectedAsync(itemId);
         }
     }
 }

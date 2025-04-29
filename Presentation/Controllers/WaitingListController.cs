@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers
 {
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class WaitingListController : Controller
     {
         private readonly IWaitingListService _waitingListService;

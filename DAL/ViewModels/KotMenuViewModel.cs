@@ -10,6 +10,7 @@ namespace DAL.ViewModels
         public AddModifiersModal? AddModifiersModal { get; set; }
         public OrderDetailsCard? OrderDetailsCard { get; set; }
         public List<InvoiceTax>? TaxesFees { get; set; }
+        public List<ItemTaxes>? ItemTaxes { get; set; }
         public bool? AreItemsAdded { get; set; }
     }
 }

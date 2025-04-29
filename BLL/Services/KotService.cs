@@ -307,6 +307,40 @@ namespace BLL.Services
                     await _context.SaveChangesAsync();
                 }
             }
+            List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
+            bool isRunning = false;
+            foreach (var orderItem in orderItems)
+            {
+                if (orderItem.ReadyItemsCount > 0)
+                {
+                    isRunning = true;
+                    break;
+                }
+            }
+            if (isRunning == false)
+            {
+                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.IsDeleted == false) ?? new Order();
+                if (order.Status == "In Progress")
+                {
+                    order.Status = "Pending";
+                    order.UpdatedAt = DateTime.Now;
+                    order.UpdatedBy = userId;
+                    _context.Orders.Update(order);
+                    await _context.SaveChangesAsync();
+                }
+                List<Table> tables = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).ToListAsync() ?? new List<Table>();
+                foreach (var table1 in tables)
+                {
+                    if (table1.Status == "Running")
+                    {
+                        table1.Status = "Assigned";
+                        table1.UpdatedAt = DateTime.Now;
+                        table1.UpdatedBy = userId;
+                        _context.Tables.Update(table1);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
             KotViewModel kotViewModel = await GetReadyItemsAsync(categoryId, pageIndex);
             return kotViewModel;
         }

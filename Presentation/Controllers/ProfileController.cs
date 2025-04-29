@@ -7,6 +7,7 @@ using BLL.Interfaces;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ProfileController : Controller
     {
         private readonly IProfileService _ProfileService;   

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
 
+[ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
 public class KOTController : Controller
 {
     private readonly IKotService _kotService;

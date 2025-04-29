@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.Differencing;
 namespace Presentaion.Controllers
 {
     [CustomAuth]
+    [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class RoleAndPermission : Controller
     {
         private readonly IJwtService _jwtService;

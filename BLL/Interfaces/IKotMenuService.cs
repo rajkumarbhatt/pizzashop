@@ -6,6 +6,7 @@ namespace BLL.Interfaces
 {
     public interface IKotMenuService
     {
+        public Task<string> GetOrderStatusAsync(int orderId);
         public Task<KotMenuViewModel> GetKotMenuAsync(int? orderId);
         public Task<KotMenuViewModel> GetKotMenuItemsBasedOnCategoryAsync(int categoryId);
         public Task<KotMenuViewModel> SearchMenuItemsKotAsync(string search, int categoryId);
@@ -25,5 +26,6 @@ namespace BLL.Interfaces
         public Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
         public Task<JsonResult> CanDeleteFromOrderAsync (int orderItemId);
         public Task<JsonResult> CanReduceFromOrderAsync (int orderItemId, int currentQuantity);
+        public Task<JsonResult> AreModifiersSelectedAsync (int itemId);
     }
 }
