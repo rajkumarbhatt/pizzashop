@@ -69,16 +69,22 @@ namespace BLL.Services
                     orderDetailsCard.SubTotal = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.SubTotal).FirstOrDefault() ?? 0;
                     orderDetailsCard.Taxes = await _context.OrderTaxes.Where(ot => ot.OrderId == orderId).Select(ot => new InvoiceTax
                     {
-                        TaxName = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
-                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Name
-                            : null,
+                        TaxName = ot.TaxId == 0
+                            ? "Other Tax"
+                            : _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                                ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Name
+                                : null,
                         TaxAmount = Math.Round((double)ot.TaxAmount, 2),
-                        TaxType = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
-                            ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType
-                            : null,
-                        TaxRate = _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
-                            ? (double?)_context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Amount
-                            : 0
+                        TaxType = ot.TaxId == 0
+                            ? "Fixed"
+                            : _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                                ? _context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).TaxType
+                                : null,
+                        TaxRate = ot.TaxId == 0
+                            ? 0
+                            : _context.TaxesFees.Any(tf => tf.Id == ot.TaxId)
+                                ? (double?)_context.TaxesFees.FirstOrDefault(tf => tf.Id == ot.TaxId).Amount
+                                : 0
                     }).ToListAsync();
                     orderDetailsCard.TotalPrice = (decimal?)_context.Orders.Where(o => o.Id == orderId).Select(o => o.TotalAmount).FirstOrDefault() ?? 0;
                 }
@@ -92,6 +98,13 @@ namespace BLL.Services
                     TaxType = tf.TaxType,
                     TaxRate = _context.TaxesFees.Any(t => t.Id == tf.Id) ? (double?)_context.TaxesFees.FirstOrDefault(t => t.Id == tf.Id).Amount : 0
                 }).ToListAsync();
+                orderDetailsCard.Taxes.Add(new InvoiceTax
+                {
+                    TaxName = "Other Tax",
+                    TaxAmount = 0,
+                    TaxType = "Fixed",
+                    TaxRate = 0
+                });
             }
             else
             {
@@ -218,9 +231,23 @@ namespace BLL.Services
                         IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
                     }).ToListAsync();
             }
+            List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
+            List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+            foreach (var item in itemList)
+            {
+                ItemTaxes itemTaxes1 = new ItemTaxes
+                {
+                    ItemId = item.Id,
+                    IsDefault = item.DefaultTax ?? false,
+                    TaxPercentage = (decimal)item.TaxPercentage,
+                    ItemPrice = (decimal)item.Price
+                };
+                itemTaxes.Add(itemTaxes1);
+            }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
-                MenuItemsKot = menuItemsKot
+                MenuItemsKot = menuItemsKot,
+                ItemTaxes = itemTaxes,
             };
             return kotMenuViewModel;
         }
@@ -355,9 +382,23 @@ namespace BLL.Services
                 modifierGroups.Add(modifierGroup);
             }
             addModifiersModal.ModifierGroups = modifierGroups;
+            List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
+            List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+            foreach (var item2 in itemList)
+            {
+                ItemTaxes itemTaxes1 = new ItemTaxes
+                {
+                    ItemId = item2.Id,
+                    IsDefault = item2.DefaultTax ?? false,
+                    TaxPercentage = (decimal)item2.TaxPercentage,
+                    ItemPrice = (decimal)item2.Price
+                };
+                itemTaxes.Add(itemTaxes1);
+            }
             KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
             {
-                AddModifiersModal = addModifiersModal
+                AddModifiersModal = addModifiersModal,
+                ItemTaxes = itemTaxes,
             };
             return kotMenuViewModel;
         }
@@ -566,7 +607,7 @@ namespace BLL.Services
                             OrderTaxis orderTaxis = new OrderTaxis
                             {
                                 OrderId = saveOrderViewModel.OrderId,
-                                TaxId = _context.TaxesFees.FirstOrDefault(tf => tf.Name == orderTax.TaxName).Id,
+                                TaxId = orderTax.TaxName == "Other Tax" ? 0 : _context.TaxesFees.FirstOrDefault(tf => tf.Name == orderTax.TaxName).Id,
                                 TaxAmount = (decimal)orderTax.TaxAmount,
                                 CreatedAt = DateTime.Now,
                                 CreatedBy = userId,
@@ -583,12 +624,23 @@ namespace BLL.Services
                         {
                             if (orderTax != null)
                             {
-                                TaxesFee tax = await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTax.TaxId);
-                                orderTax.TaxAmount = (decimal)saveOrderViewModel.OrderTaxes.FirstOrDefault(ot => ot.TaxName == tax.Name).TaxAmount;
-                                orderTax.UpdatedAt = DateTime.Now;
-                                orderTax.UpdatedBy = userId;
-                                _context.OrderTaxes.Update(orderTax);
-                                await _context.SaveChangesAsync();
+                                if (orderTax.TaxId == 0)
+                                {
+                                    orderTax.TaxAmount = (decimal)saveOrderViewModel.OrderTaxes.FirstOrDefault(ot => ot.TaxName == "Other Tax").TaxAmount;
+                                    orderTax.UpdatedAt = DateTime.Now;
+                                    orderTax.UpdatedBy = userId;
+                                    _context.OrderTaxes.Update(orderTax);
+                                    await _context.SaveChangesAsync();
+                                }
+                                else
+                                {
+                                    TaxesFee tax = await _context.TaxesFees.FirstOrDefaultAsync(tf => tf.Id == orderTax.TaxId);
+                                    orderTax.TaxAmount = (decimal)saveOrderViewModel.OrderTaxes.FirstOrDefault(ot => ot.TaxName == tax.Name).TaxAmount;
+                                    orderTax.UpdatedAt = DateTime.Now;
+                                    orderTax.UpdatedBy = userId;
+                                    _context.OrderTaxes.Update(orderTax);
+                                    await _context.SaveChangesAsync();
+                                }
                             }
                         }
                     }
@@ -656,9 +708,9 @@ namespace BLL.Services
             {
                 OrderId = saveCustomerReviewViewModel.OrderId,
                 CustomerId = await _context.Orders.Where(o => o.Id == saveCustomerReviewViewModel.OrderId).Select(o => o.CustomerId).FirstOrDefaultAsync(),
-                Food = saveCustomerReviewViewModel.FoodRating,
-                Ambience = saveCustomerReviewViewModel.AmbienceRating,
-                Service = saveCustomerReviewViewModel.ServiceRating,
+                Food = (short)saveCustomerReviewViewModel.FoodRating,
+                Ambience = (short)saveCustomerReviewViewModel.AmbienceRating,
+                Service = (short)saveCustomerReviewViewModel.ServiceRating,
                 AverageRating = (decimal)Math.Round((double)(saveCustomerReviewViewModel.FoodRating + saveCustomerReviewViewModel.AmbienceRating + saveCustomerReviewViewModel.ServiceRating) / 3, 1),
                 Comment = saveCustomerReviewViewModel.OrderReviewByCustomer,
                 CreatedBy = userId,

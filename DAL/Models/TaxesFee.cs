@@ -26,6 +26,4 @@ public partial class TaxesFee
     public DateTime? UpdatedAt { get; set; }
 
     public bool? IsDeleted { get; set; }
-
-    public virtual ICollection<OrderTaxis> OrderTaxes { get; set; } = new List<OrderTaxis>();
 }

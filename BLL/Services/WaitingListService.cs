@@ -110,7 +110,7 @@ namespace BLL.Services
 
         public async Task<IActionResult> GetCustomerSuggestionsAsync(string email)
         {
-            List<Customer> customers = await _context.Customers.Where(c => c.Email.Contains(email)).ToListAsync();
+            List<Customer> customers = await _context.Customers.Where(c => c.Email.ToLower().Contains(email.ToLower())).ToListAsync();
             customers.RemoveAll(c => _context.WaitingLists.Any(w => w.CustomerId == c.Id && w.IsDeleted == false));
             customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed" && o.Status != "Cancelled"));
             List<CustomerDetailsSuggestions> customerSuggetions = new List<CustomerDetailsSuggestions>();

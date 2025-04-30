@@ -193,7 +193,10 @@ public class CustomersService : ICustomerService
     public async Task<byte[]> ExportCustomersAsync(string time, string searchValue, string fromDate, string toDate)
     {
         var customers = await GetCustomersBasedOnFiltersAsync(time, searchValue, fromDate, toDate);
-
+        if (customers.Count == 0)
+        {
+            return null;
+        }
         using (var workbook = new XLWorkbook())
         {
             var worksheet = workbook.Worksheets.Add("Orders");

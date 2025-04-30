@@ -37,9 +37,9 @@
     </div>
 </div>
 
-<div class="ps-3 d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
+<div class=" d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
     <div id="orderPageButtonsSecondRow"
-        class="ps-3 d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
+        class="d-flex flex-column flex-sm-row justify-content-end mt-2 gap-2 align-items-center mx-3">
         <div class="input-group search-box cursor-pointer w-100" style="width: 200px;">
             <div class="form-floating">
                 <input type="text" class="form-control cursor-pointer search-input datepicker" style="height: 44px;"
@@ -135,14 +135,25 @@
         var fromDate = $("#fromDate").val();
         var toDate = $("#toDate").val();
         const url = `@Url.Action("ExportOrders", "Order")?status=${status}&time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
+
         $('.loader-container').removeClass('d-none');
 
         fetch(url, { method: "GET" })
-            .then(response => response.blob())
-            .then(blob => {
+            .then(async (response) => {
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.includes("application/json")) {
+                    const jsonResponse = await response.json();
+                    if (!jsonResponse.success) {
+                        toastr.error(jsonResponse.message);
+                    }
+                    $('.loader-container').addClass('d-none');
+                    return;
+                }
+                const blob = await response.blob();
                 const link = document.createElement("a");
                 link.href = window.URL.createObjectURL(blob);
-                link.download = "Orders.xlsx";
+                const currentDate = new Date().toISOString().slice(0, 10);
+                link.download = `Orders_${currentDate}.xlsx`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -150,6 +161,7 @@
             })
             .catch(error => {
                 console.error("Error exporting data:", error);
+                toastr.error("An error occurred while exporting orders.");
                 $('.loader-container').addClass('d-none');
             });
     });

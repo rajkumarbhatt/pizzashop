@@ -167,7 +167,7 @@
                 @if (permissionList != null && permissionList.Any(x => x.Name == "TableAndSection" && x.CanEdit == true))
                 {
                     <p class="delete-styles d-block d-md-none d-flex justify-content-center align-items-center"
-                        data-bs-toggle="modal" data-bs-target="#addTableModal" style="width: 49px; height: 49px;">
+                        onclick="openAddTableModal()" style="width: 49px; height: 49px;">
                         <button class="text-decoration-none text-black btn  add-user-link">
                             <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
                         </button>

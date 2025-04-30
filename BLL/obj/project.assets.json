@@ -13487,11 +13487,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\BLL\\BLL.csproj",
       "projectName": "BLL",
-      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\BLL.csproj",
+      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\BLL\\BLL.csproj",
       "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\BLL\\obj\\",
+      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\BLL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -13506,8 +13506,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj": {
-              "projectPath": "C:\\Users\\pci88\\Desktop\\Internship-Tasks\\PizzaShop\\DAL\\DAL.csproj"
+            "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj"
             }
           }
         }

@@ -20,6 +20,4 @@ public partial class OrderTaxis
     public int? UpdatedBy { get; set; }
 
     public virtual Order Order { get; set; } = null!;
-
-    public virtual TaxesFee Tax { get; set; } = null!;
 }

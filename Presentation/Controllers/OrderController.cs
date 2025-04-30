@@ -39,6 +39,10 @@ public class OrderController : Controller
     public async Task<IActionResult> ExportOrders(string status, string time, string searchValue, string fromDate, string toDate)
     {
         byte[] fileBytes = await _orderService.ExportOrdersAsync(status, time, searchValue, fromDate, toDate);
+        if (fileBytes == null)
+        {
+            return Json(new { success = false, message = "No orders to export" });
+        }
         return File(fileBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Orders.xlsx");
     }
 

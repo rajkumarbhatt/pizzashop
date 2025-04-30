@@ -32,12 +32,22 @@
                 <div id="taxListContainer" class="d-none">
                     @foreach (var tax in Model.TaxesFees)
                     {
-                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
-                        taxList += customTaxId + ",";
-                        <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
-                            <p>@tax.TaxName</p>
-                            <p id="@customTaxId">@tax.TaxAmount</p>
-                        </div>
+                        if (tax.TaxName == "Other Tax")
+                        {
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>@tax.TaxName</p>
+                                <p id="otherTaxValue">@tax.TaxAmount</p>
+                            </div>
+                        }
+                        else
+                        {
+                            var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
+                            taxList += customTaxId + ",";
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>@tax.TaxName</p>
+                                <p id="@customTaxId">@tax.TaxAmount</p>
+                            </div>
+                        }
                     }
                     <input type="hidden" id="taxAmountIds" value="@taxList" />
                 </div>
@@ -47,20 +57,26 @@
                 <div id="taxListContainer">
                     @foreach (var tax in Model.TaxesFees)
                     {
-                        var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
-                        taxList += customTaxId + ",";
-                        <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
-                            <p>@tax.TaxName</p>
-                            <p id="@customTaxId">@tax.TaxAmount</p>
-                        </div>
+                        if (tax.TaxName == "Other Tax")
+                        {
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>@tax.TaxName</p>
+                                <p id="otherTaxValue">@tax.TaxAmount</p>
+                            </div>
+                        }
+                        else
+                        {
+                            var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
+                            taxList += customTaxId + ",";
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>@tax.TaxName</p>
+                                <p id="@customTaxId">@tax.TaxAmount</p>
+                            </div>
+                        }
                     }
                     <input type="hidden" id="taxAmountIds" value="@taxList" />
                 </div>
             }
-            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
-                <p>Other Tax</p>
-                <p id="otherTaxValue">0.00</p>
-            </div>
         }
         <div class="d-flex justify-content-between align-items-center w-100 font-accordian-head font-tax-head">
             <p>Total</p>

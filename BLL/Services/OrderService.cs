@@ -38,7 +38,7 @@ public class OrderService : IOrderService
                 CustomerName = customer.Name ?? "N/A",
                 Status = order.Status ?? "N/A",
                 PaymentMode = order.PaymentMode ?? "N/A",
-                AvgRating = (double)(customerReview.AverageRating ?? 0),
+                AvgRating = (double?)(customerReview.AverageRating) ?? 0,
                 TotalAmount = order.TotalAmount
             };
 
@@ -80,7 +80,7 @@ public class OrderService : IOrderService
                 CustomerName = customer.Name ?? "N/A",
                 Status = order2.Status ?? "N/A",
                 PaymentMode = order2.PaymentMode ?? "N/A",
-                AvgRating = (double)(customerReview.AverageRating ?? 0),
+                AvgRating = (double)customerReview.AverageRating,
                 TotalAmount = order2.TotalAmount
             };
 
@@ -163,7 +163,7 @@ public class OrderService : IOrderService
                 CustomerName = customer.Name ?? "N/A",
                 Status = order.Status ?? "N/A",
                 PaymentMode = order.PaymentMode ?? "N/A",
-                AvgRating = (double)(customerReview.AverageRating ?? 0),
+                AvgRating = (double)customerReview.AverageRating,
                 TotalAmount = order.TotalAmount
             };
 
@@ -230,7 +230,7 @@ public class OrderService : IOrderService
             SubTotal = (double?)o.SubTotal,
             InvoiceTaxes = o.OrderTaxes.Select(ot => new InvoiceTax
             {
-                TaxName = ot.Tax.Name ?? "N/A",
+                TaxName = _context.TaxesFees.Where(t => t.Id == ot.TaxId).Select(t => t.Name).FirstOrDefault() ?? "N/A",
                 TaxAmount = (double)ot.TaxAmount
             }).ToList(),
             Total = (double?)o.TotalAmount,
@@ -336,7 +336,10 @@ public class OrderService : IOrderService
         {
             orders = orders.Where(o => DateTime.Parse(o.Date) >= DateTime.Parse(fromDate) && DateTime.Parse(o.Date) <= DateTime.Parse(toDate)).ToList();
         }
-
+        if (orders.Count == 0)
+        {
+            return null;
+        }
         using (var workbook = new XLWorkbook())
         {
             var worksheet = workbook.Worksheets.Add("Orders");

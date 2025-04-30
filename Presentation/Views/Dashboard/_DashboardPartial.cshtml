@@ -69,16 +69,16 @@
 <!-- 2 - tiles -->
 <div class="row d-flex  justify-content-md-center align-items-center justify-content-around">
     <!-- tile -->
-    <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2 p-2" style="height: 415px;">
+    <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2 p-2" style="height: 100%;">
         <h3>Revenue</h3>
-        <div class="chart-container" style=" width:100%">
+        <div class="chart-container">
             <canvas id="revenueChart"></canvas>
         </div>
     </div>
     <!-- tile -->
-    <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2 p-2" style="height: 415px;">
+    <div class="col-10 m-2 col-lg-6   form-bg   shadow tile-group-2 p-2" style="height: 100%;">
         <h3>Customer Growth</h3>
-        <div class="chart-container" style=" width:100%">
+        <div class="chart-container">
             <canvas id="customerGrowthChart"></canvas>
         </div>
     </div>
@@ -186,12 +186,14 @@
             datasets: [{
                 label: 'Revenue',
                 data: revenueData.values,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(153, 102, 255, 1)',
+                backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderWidth: 2,
+                fill: true,
                 tension: 0.4
             }]
         },
+
         options: {
             responsive: true,
             plugins: {
@@ -230,6 +232,7 @@
                 borderColor: 'rgba(153, 102, 255, 1)',
                 backgroundColor: 'rgba(153, 102, 255, 0.2)',
                 borderWidth: 2,
+                fill: true,
                 tension: 0.4
             }]
         },

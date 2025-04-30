@@ -104,6 +104,7 @@
                 $("#TaxId").val(data.tax.id);
                 $("#IsEnabled").prop("checked", data.tax.isEnabled);
                 $("#addTaxModalTitle").text("Edit Tax");
+                $('.text-danger').text("");
                 $("#addTax").modal("show");
             },
             error: function (data) {

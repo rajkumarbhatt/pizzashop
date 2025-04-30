@@ -1,9 +1,4 @@
 @model DAL.ViewModels.KotMenuViewModel
-@{
-    <script>
-        var itemTaxes = @Html.Raw(Json.Serialize(Model.ItemTaxes));
-    </script>
-}
 
 <div class="d-flex flex-wrap gap-3 mx-auto mt-3 justify-content-center justify-content-md-start ">
     @if (@Model.MenuItemsKot.Count() == 0)
@@ -76,7 +71,7 @@
 }
 
 <script>
-    var itemTaxList = itemTaxes;
+    
     function selectModifiers(id, name, price) {
         $.ajax({
             url: '@Url.Action("AreModifiersSelected", "OrderAppMenu")',
@@ -93,7 +88,7 @@
                             $("#selectModifiersModal").modal("show");
                         },
                         error: function (xhr, status, error) {
-                            console.error("Error loading partial view:", error);
+                            console.error("Error loading modifiers:", error);
                         }
                     })
                 } else {

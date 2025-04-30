@@ -226,17 +226,19 @@ public partial class PizzaShopContext : DbContext
 
         modelBuilder.Entity<CustomerReview>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("customer_reviews_pkey");
+            entity.HasKey(e => e.Id).HasName("reviews_pkey");
 
             entity.ToTable("customer_reviews");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("nextval('reviews_id_seq'::regclass)")
+                .HasColumnName("id");
             entity.Property(e => e.Ambience).HasColumnName("ambience");
             entity.Property(e => e.AverageRating)
-                .HasPrecision(1, 1)
+                .HasPrecision(2, 1)
                 .HasColumnName("average_rating");
             entity.Property(e => e.Comment)
-                .HasMaxLength(200)
+                .HasMaxLength(100)
                 .HasColumnName("comment");
             entity.Property(e => e.CreatedBy).HasColumnName("created_by");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
@@ -245,24 +247,15 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Service).HasColumnName("service");
             entity.Property(e => e.UpdatedBy).HasColumnName("updated_by");
 
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.CustomerReviewCreatedByNavigations)
-                .HasForeignKey(d => d.CreatedBy)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("customer_reviews_created_by_fkey");
-
             entity.HasOne(d => d.Customer).WithMany(p => p.CustomerReviews)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("customer_reviews_customer_id_fkey");
+                .HasConstraintName("reviews_customer_id_fkey");
 
             entity.HasOne(d => d.Order).WithMany(p => p.CustomerReviews)
                 .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("customer_reviews_order_id_fkey");
-
-            entity.HasOne(d => d.UpdatedByNavigation).WithMany(p => p.CustomerReviewUpdatedByNavigations)
-                .HasForeignKey(d => d.UpdatedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("customer_reviews_updated_by_fkey");
+                .HasConstraintName("reviews_order_id_fkey");
         });
 
         modelBuilder.Entity<Invoice>(entity =>
@@ -708,10 +701,6 @@ public partial class PizzaShopContext : DbContext
             entity.HasOne(d => d.Order).WithMany(p => p.OrderTaxes)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("order_taxes_order_id_fkey");
-
-            entity.HasOne(d => d.Tax).WithMany(p => p.OrderTaxes)
-                .HasForeignKey(d => d.TaxId)
-                .HasConstraintName("order_taxes_tax_id_fkey");
         });
 
         modelBuilder.Entity<Permission>(entity =>

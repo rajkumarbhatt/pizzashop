@@ -212,7 +212,6 @@ public class OrderAppService : IOrderAppService
                         return new JsonResult(new { success = false, message = "Customers can't be managed in selected table" });
                     }
                 }
-
                 Customer customer = new Customer();
                 foreach (int tableId in tableIds)
                 {
@@ -226,7 +225,6 @@ public class OrderAppService : IOrderAppService
                         return new JsonResult(new { success = false, message = "Customers can be managed in less than selected tables" });
                     }
                 }
-
                 if (tableIds.Count >= 1)
                 {
                     List<Table> tables = await _context.Tables.Where(t => t.IsDeleted == false && t.SectionId == waitingListModal.SectionId && t.Capacity >= waitingListModal.NumberOfPeople && t.Status == "Available" && tableIds.Contains(t.Id) == false).ToListAsync();

@@ -19,14 +19,14 @@
             <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInput" placeholder="Search">
             <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
         </div>
-        <p class="delete-styles d-block d-md-none">
+        <p onclick="openAddTaxModal()" class="delete-styles d-block d-md-none">
             <a class="text-decoration-none text-black   add-user-link">
                 <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
             </a>
         </p>
         @if (permissionList.Any(p => p.Name == "TaxAndFee" && p.CanEdit == true))
         {
-            <button data-bs-toggle="modal" data-bs-target="#addTax" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;"><a class="text-decoration-none text-white add-user-link">+ Add Tax</a></button>
+            <button onclick="openAddTaxModal()" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;"><a class="text-decoration-none text-white add-user-link">+ Add Tax</a></button>
         }
     </div>
 </div>
@@ -124,7 +124,10 @@
     }
 }
 <script>
-
+    function openAddTaxModal() {
+        $(".text-danger").text("");
+        $("#addTax").modal("show");
+    }
     function addTax () {
         if (!$("#AddTaxFormModal").valid()) {
             return;

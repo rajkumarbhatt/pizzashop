@@ -198,50 +198,41 @@
     }
 
     document.getElementById("exportOrdersBtn").addEventListener("click", function () {
-        const time = encodeURIComponent($("#CustomersTimeSelect").val());
-        const searchValue = encodeURIComponent($("#searchInputCustomers").val().toLowerCase());
-        const fromDate = encodeURIComponent($("#fromDate").val());
-        const toDate = encodeURIComponent($("#toDate").val());
-        const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
-        $('.loader-container').removeClass('d-none');
-        fetch(url, { method: "GET" })
-            .then(response => response.blob())
-            .then(blob => {
-                const link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "Orders.xlsx";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                $('.loader-container').addClass('d-none');
-            })
-            .catch(error => {
-                console.error("Error exporting data:", error);
-                $('.loader-container').addClass('d-none');
-            });
-    });
+    const time = encodeURIComponent($("#CustomersTimeSelect").val());
+    const searchValue = encodeURIComponent($("#searchInputCustomers").val().toLowerCase());
+    const fromDate = encodeURIComponent($("#fromDate").val());
+    const toDate = encodeURIComponent($("#toDate").val());
+    const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
+    
+    $('.loader-container').removeClass('d-none');
 
-    document.getElementById("exportOrdersBtn2").addEventListener("click", function () {
-        const time = encodeURIComponent($("#CustomersTimeSelect").val());
-        const searchValue = encodeURIComponent($("#searchInputCustomers").val().toLowerCase());
-        const fromDate = encodeURIComponent($("#fromDate").val());
-        const toDate = encodeURIComponent($("#toDate").val());
-        const url = `@Url.Action("ExportCustomers", "Customer")?time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
-        $('.loader-container').removeClass('d-none');
-        fetch(url, { method: "GET" })
-            .then(response => response.blob())
-            .then(blob => {
-                const link = document.createElement("a");
-                link.href = window.URL.createObjectURL(blob);
-                link.download = "Orders.xlsx";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+    fetch(url, { method: "GET" })
+        .then(async (response) => {
+            const contentType = response.headers.get("content-type");
+            if (contentType && contentType.includes("application/json")) {
+                const jsonResponse = await response.json();
+                if (!jsonResponse.success) {
+                    toastr.error(jsonResponse.message);
+                }
                 $('.loader-container').addClass('d-none');
-            })
-            .catch(error => {
-                console.error("Error exporting data:", error);
-                $('.loader-container').addClass('d-none');
-            });
-    });
+                return;
+            }
+
+            const blob = await response.blob();
+            const link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            const currentDate = new Date().toISOString().slice(0, 10);
+            link.download = `Customers_${currentDate}.xlsx`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            $('.loader-container').addClass('d-none');
+        })
+        .catch(error => {
+            console.error("Error exporting data:", error);
+            toastr.error("An error occurred while exporting customers.");
+            $('.loader-container').addClass('d-none');
+        });
+});
+
 </script>

@@ -33,7 +33,12 @@ namespace Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> ExportCustomers(string time, string searchValue, string fromDate, string toDate)
         {
-            return File(await _customerService.ExportCustomersAsync(time, searchValue, fromDate, toDate), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customers.xlsx");
+            var customers = await _customerService.ExportCustomersAsync(time, searchValue, fromDate, toDate);
+            if (customers == null)
+            {
+                return Json(new { success = false, message = "No customers to export" });
+            }
+            return File(customers, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Customers.xlsx");
         }
 
         [HttpGet]
