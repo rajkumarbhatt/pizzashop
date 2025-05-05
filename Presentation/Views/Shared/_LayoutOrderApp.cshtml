@@ -42,7 +42,7 @@
                     </a>
                     <h3 class="text-white">PIZZASHOP</h3>
                 </div>
-                <div class="justify-content-center gap-1 align-items-center d-none d-md-flex">
+                <div id="orderAppNavbarButtonsToHide" class="justify-content-center gap-1 align-items-center d-none d-md-flex">
                     <div class="d-flex justify-content-center gap-2 align-items-center">
                         @if (@RoleId == 2)
                         {
@@ -116,7 +116,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="d-block d-md-none me-2" data-bs-toggle="offcanvas" data-bs-target="#navbarOrderApp">
+                <div id="orderAppNavbarHamburgerToHide" class="d-block d-md-none me-2" data-bs-toggle="offcanvas" data-bs-target="#navbarOrderApp">
                     <img src="~/images/icons/hamburger.svg" class="navbar-image" alt="">
                 </div>
             </nav>

@@ -47,8 +47,10 @@ namespace Presentaion.Controllers
                 return false;
             }
 
-            var roleId = int.Parse(user.Claims.ElementAt(4).Value);
+            int roleId = int.Parse(user.Claims.ElementAt(4).Value);
+            int userId = int.Parse(user.Claims.ElementAt(0).Value);
             INavBarService _navBarService = new NavBarService(db);
+            bool isUserAuthenticated = await _navBarService.IsFirstTimeLoginAsync(userId);
             IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
             var permissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
             var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
@@ -68,16 +70,16 @@ namespace Presentaion.Controllers
                 return false;
             }
 
-            if (requestedUrl.ToLower().Contains("edit") || requestedUrl.ToLower().Contains("update") || requestedUrl.ToLower().Contains("create") || requestedUrl.ToLower().Contains("add"))
+            if (isUserAuthenticated && (requestedUrl.ToLower().Contains("edit") || requestedUrl.ToLower().Contains("update") || requestedUrl.ToLower().Contains("create") || requestedUrl.ToLower().Contains("add")))
             {
                 return permission.CanView == true && permission.CanEdit == true;
             }
-            else if (requestedUrl.ToLower().Contains("delete"))
+            else if (isUserAuthenticated && requestedUrl.ToLower().Contains("delete"))
             {
                 return permission.CanView == true && permission.CanDelete == true;
             }
 
-            return permission.CanView == true;
+            return permissionName == "Dashboard" ? true : isUserAuthenticated && permission.CanView == true;
         }
     }
 }

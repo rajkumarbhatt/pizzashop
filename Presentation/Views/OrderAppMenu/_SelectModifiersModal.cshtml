@@ -694,4 +694,20 @@
         })
     }
 
+    $("#serviceTaxCheckBox").change(function () {
+        if ($(this).is(":checked")) {
+            var serviceTaxAmount = taxListNameAndAmount.find(item => item.TaxName == "Service Tax").TaxAmount;
+            var serviceTaxElement = document.getElementsByClassName("service-tax-value");
+            serviceTaxElement[0].innerHTML = serviceTaxAmount;
+            var updatedTotal = parseFloat(document.getElementById("orderTotalValue").innerHTML) + parseFloat(serviceTaxAmount);
+            document.getElementById("orderTotalValue").innerHTML = updatedTotal.toFixed(2);
+        } else {
+            var serviceTaxAmount = taxListNameAndAmount.find(item => item.TaxName == "Service Tax").TaxAmount;
+            var serviceTaxElement = document.getElementsByClassName("service-tax-value");
+            serviceTaxElement[0].innerHTML = 0;
+            var updatedTotal = parseFloat(document.getElementById("orderTotalValue").innerHTML) - parseFloat(serviceTaxAmount);
+            document.getElementById("orderTotalValue").innerHTML = updatedTotal.toFixed(2);
+        }
+    });
+
 </script>

@@ -35,6 +35,16 @@ namespace BLL.Services
                 IsFavourite = _context.CustomerFavourites.FirstOrDefault(cf => cf.ItemId == m.Id && cf.IsDeleted == false) != null
             }).ToListAsync();
 
+            if (orderId == 0)
+            {
+                KotMenuViewModel kotMenuViewModel1 = new KotMenuViewModel
+                {
+                    Categories = categories,
+                    MenuItemsKot = menuItemsKot
+                };
+                return kotMenuViewModel1;
+            }
+
             if (orderId != null)
             {
                 List<int> tableIds = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).Select(otb => otb.TableId).ToListAsync();
@@ -694,13 +704,19 @@ namespace BLL.Services
                     _context.OrderTableMappings.Update(orderTableMapping);
                     await _context.SaveChangesAsync();
                 }
+                Invoice invoice = new Invoice
+                {
+                    OrderId = orderId,
+                    InvoiceNo = "INV" + orderId.ToString()
+                };
+                await _context.Invoices.AddAsync(invoice);
+                await _context.SaveChangesAsync();
                 return new JsonResult(new { success = true, message = "Order completed successfully" });
             }
             else
             {
                 return new JsonResult(new { success = false, message = "All items must be served before completing the order" });
             }
-
         }
         public async Task<IActionResult> SaveCustomerReviewAsync(SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId)
         {

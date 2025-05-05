@@ -1252,6 +1252,10 @@ td {
     width: 34% !important;
     display: block !important;
   }
+  #thisDivIsImportant {
+    /* width: 66% ; */
+    display: block !important;
+  }
 }
 .selected-table-waiting-list {
   background-color: #0066a7;
@@ -1302,4 +1306,10 @@ td {
 .chart-container {
   width: 100%;
   height: 100%;
+}
+.h-47 {
+  height: 47px !important;
+}
+.customer-details-modal-styles {
+  height: 500px;
 }

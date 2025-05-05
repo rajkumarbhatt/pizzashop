@@ -228,8 +228,6 @@
         $("#waitingTokenForm").trigger("reset");
         $("#waitingTokenForm").find("input[type=hidden]").val("-1");
         $("#emailSuggestions").hide();
-        $("#AssignTableToCustomerForm").find(".text-danger").each(function () {
-            $(this).text("");
-        });
+        $(".text-danger").text("");
     }
 </script>

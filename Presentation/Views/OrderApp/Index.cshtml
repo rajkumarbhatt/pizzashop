@@ -292,9 +292,7 @@
         $("#SectionDropDownOffcanvas").val("");
         $("#IdOffCanvasWaitingToken").val("-1");
         $("#emailSuggestionsOffcanvas").hide();
-        $("#waitingTokenForm").find(".text-danger").each(function () {
-            $(this).text("");
-        });
+        $(".text-danger").text("");
         $("#EmailOffCanvasWaitingToken").attr("readonly", false);
         document.getElementById('EmailOffCanvasWaitingToken').style.backgroundColor = "white";
         document.getElementById('EmailOffCanvasWaitingToken').classList.remove("cursor-none");

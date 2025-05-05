@@ -39,6 +39,18 @@
                                 <p id="otherTaxValue">@tax.TaxAmount</p>
                             </div>
                         }
+                        else if (tax.TaxName == "Service Tax")
+                        {
+                            var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
+                            taxList += customTaxId + ",";
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>
+                                    <input id="serviceTaxCheckBox" checked class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                    @tax.TaxName
+                                </p>
+                                <p id="@customTaxId" class="service-tax-value">@tax.TaxAmount</p>
+                            </div>
+                        }
                         else
                         {
                             var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
@@ -117,6 +129,9 @@
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
     function saveOrder() {
+        if ($("#serviceTaxCheckBox").is(":checked") == false) {
+            taxListNameAndAmount = taxListNameAndAmount.filter(tax => !tax.TaxName.includes("Service Tax"));
+        }
         var data = {
             OrderItems: itemList,
             Subtotal: parseFloat($('#orderSubtotalValue').text()),

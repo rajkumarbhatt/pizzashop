@@ -112,11 +112,11 @@
                 <label for="first-name" class="mx-2 mt-2">Zipcode</label>
             </div>
             <div class="col-12 col-sm-4 p-2 form-floating">
-                <input type="text" class="form-control" name="Address" id="address" placeholder="Address"
+                <input type="text" class="form-control" name="Address" id="address" placeholder="Address" asp-for="@Model.Address"
                     value=@Model.Address>
                 <label for="address" class="mx-2 mt-2">Address</label>
             </div>
-            <!-- phone-number -->
+            <!-- phone-number --> 
             <div class="col-12 col-sm-4 p-2 form-floating">
                 <input type="text" asp-for="@Model.PhoneNumber" class="form-control" name="PhoneNumber" id="phone-number" placeholder="phone-number"
                     value=@Model.PhoneNumber>

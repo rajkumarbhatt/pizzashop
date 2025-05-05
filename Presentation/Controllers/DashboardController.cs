@@ -26,13 +26,13 @@ namespace Presentaion.Controllers
             var username = await _navBarService.GetUsernameFromUserIdAsync(userId);
             var roleId  = await _navBarService.GetRoleIdFromUserIdAsync(userId);
             await _jwtService.SetSessionParametersAsync(userId, username, roleId);
-            if (roleId == 3)
-            {
-                return RedirectToAction("Index", "KOT");
-            }
             if (hasLoggedInBefore == false)
             {
                 return RedirectToAction("NewPassword","ResetPassword");
+            }
+            if (roleId == 3)
+            {
+                return RedirectToAction("Index", "KOT");
             }
             DashboardViewModel dashboardViewModel = await _dashboardService.GetDashboardDataAsync("Current Month");
             return View(dashboardViewModel);

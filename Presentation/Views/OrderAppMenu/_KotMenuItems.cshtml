@@ -28,7 +28,7 @@
                         <p>Vegan</p>
                     </div>
                 </div>
-                @if (Model.OrderDetailsCard.TableNames != null)
+                @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.TableNames != null)
                 {
                     <div class="custom-eye-border d-none" id="showOrderDetailsTabButton" onclick="showOrderDetailsTab()">
                         <img src="~/images/icons/show-order-details.svg" class="navbar-image d-block p-2" alt="">
@@ -43,11 +43,11 @@
     @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.TableNames != null)
     {
         <div id="thisIsSecondImportant" class="bg-white d-none" style="height: 84vh;">
-            <div class="p-3 ">
+            <div class="p-1 p-sm-3 ">
                 @* header *@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex gap-1">
-                        <div class="bg-for-table-image">
+                        <div class="bg-for-table-image h-47">
                             <img src="~/images/icons/kot-navbar-tables-black.svg" class="navbar-image p-2" alt="">
                         </div>
                         <div>
@@ -57,14 +57,14 @@
                         </div>
                     </div>
                     <div class="d-flex gap-3">
-                        <div class="table-card-kot-menu-icon-border cursor-pointer" data-bs-toggle="modal"
+                        <div class="table-card-kot-menu-icon-border cursor-pointer h-47" data-bs-toggle="modal"
                             data-bs-target="#QrCodeMenuModal">
                             <img src="~/images/icons/kot-menu-qr-code.svg" class="navbar-image p-2" alt="">
                         </div>
-                        <div class="table-card-kot-menu-icon-border cursor-pointer" onclick="getCustomerDetails()">
+                        <div class="table-card-kot-menu-icon-border cursor-pointer h-47" onclick="getCustomerDetails()">
                             <img src="~/images/icons/kot-menu-customer-details.svg" class="navbar-image p-2" alt="">
                         </div>
-                        <div class="table-card-kot-menu-icon-border cursor-pointer" onclick="getOrderWiseComment()">
+                        <div class="table-card-kot-menu-icon-border cursor-pointer h-47" onclick="getOrderWiseComment()">
                             <img src="~/images/icons/kot-menu-comment.svg" class="navbar-image p-2" alt="">
                         </div>
                         <div id="hideOrderDetailsTabButton" class="cursor-pointer hide-order-details-icon d-none"
@@ -249,13 +249,21 @@
     var url = window.location.href;
     var orderId = url.substring(url.lastIndexOf('/') + 1);
     if (orderId == "Menu") {
-        document.getElementById("thisDivIsImportant").style.width = "100%";
+        document.getElementById("thisDivIsImportant").style.width = "100% !important";
         document.getElementById("thisIsSecondImportant").classList.add("d-none");
+        document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-none");
+    } else if (orderId == 0) {
+        document.getElementById("thisDivIsImportant").style.width = "100%";
+        @* document.getElementById("thisIsSecondImportant").classList.add("d-none"); *@
+        document.getElementById("orderAppNavbarButtonsToHide").classList.add("d-md-none");
+        document.getElementById("orderAppNavbarHamburgerToHide").classList.add("d-none");
     }
     else {
         document.getElementById("thisDivIsImportant").style.width = "66%";
         document.getElementById("thisIsSecondImportant").classList.remove("d-none");
         document.getElementById("thisIsSecondImportant").style.width = "34%";
+        document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-md-none");
+        document.getElementById("orderAppNavbarHamburgerToHide").classList.remove("d-none");
     }
 
     function getCustomerDetails() {

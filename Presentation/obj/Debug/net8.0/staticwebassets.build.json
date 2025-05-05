@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "63Z9vsfkydZoKPRAca4Mv9252yWZil8A6rJZVTg+3nU=",
+  "Hash": "nB/tA63q/gTOBnhghqZqDY9fjIzhgnqON1t46i5IheU=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -5278,25 +5278,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\qr-code.png"
-    },
-    {
-      "Identity": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\QR.png",
-      "SourceId": "Presentation",
-      "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\",
-      "BasePath": "_content/Presentation",
-      "RelativePath": "images/QR.png",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\images\\QR.png"
     },
     {
       "Identity": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\sidebar-icons\\customers-active.svg",

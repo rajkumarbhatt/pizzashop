@@ -201,7 +201,7 @@ public class OrderService : IOrderService
         {
             Id = o.Id,
             InvoiceNumber = "N/A",
-            PaidOn = "N/A",
+            PaidOn = o.Status == "Completed" ? o.UpdatedAt.HasValue ? o.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm:ss") : "N/A" : "N/A",
             ModifiedOn = o.UpdatedAt.HasValue ? o.UpdatedAt.Value.ToString("dd/MM/yyyy HH:mm:ss") : "N/A",
             PlacedOn = o.CreatedAt.HasValue ? o.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm:ss") : "N/A",
             OrderDuration = "N/A",
@@ -230,7 +230,7 @@ public class OrderService : IOrderService
             SubTotal = (double?)o.SubTotal,
             InvoiceTaxes = o.OrderTaxes.Select(ot => new InvoiceTax
             {
-                TaxName = _context.TaxesFees.Where(t => t.Id == ot.TaxId).Select(t => t.Name).FirstOrDefault() ?? "N/A",
+                TaxName = _context.TaxesFees.Where(t => t.Id == ot.TaxId).Select(t => t.Name).FirstOrDefault() ?? "Other Tax",
                 TaxAmount = (double)ot.TaxAmount
             }).ToList(),
             Total = (double?)o.TotalAmount,
@@ -316,7 +316,7 @@ public class OrderService : IOrderService
             }
             invoiceTaxes += "<tr><td></td><td>Total Amount Due</td><td></td><td></td><td style='text-align: right;'>" + orderDetailsViewModel.Total + "</td></tr>";
             htmlContent = htmlContent.Replace("{{invoiceTaxes}}", invoiceTaxes);
-            htmlContent = htmlContent.Replace("{{paymentType}}", "N/A");
+            htmlContent = htmlContent.Replace("{{paymentType}}", orderDetailsViewModel.OrderStatus == "Completed" ? "Cash" : "N/A");
             PdfWriter writer = new PdfWriter(ms);
             PdfDocument pdf = new PdfDocument(writer);
             ConverterProperties converterProperties = new ConverterProperties();
