@@ -3,14 +3,11 @@
 
 @{
     var permissionList = new List<PermissionModel>();
-
     if (Context.Session.Get("permissions") != null)
     {
         permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
     }
-
     var userId = Context.Session.GetInt32("UserId");
-    
 }
 
 <table id="userTable" class="table table-responsive"  style="white-space: nowrap;">
@@ -45,7 +42,8 @@
                 <td><img src=@profileImagePath class="table-name-image profile-image-border object-fit-cover"> @user.FirstName @user.LastName</td>
                 <td>@user.Email</td>
                 <td>@user.Phone</td>
-                <td>@if(user.RoleId == 1)
+                <td>
+                    @if(user.RoleId == 1)
                     {
                         <span class="">Super Admin</span>
                     }
@@ -57,7 +55,8 @@
                     {
                         <span class="">Chef</span>
                     }</td>
-                <td>@if(user.Status == true)
+                <td>
+                    @if(user.Status == true)
                     {
                         <span class="active-user">Active</span>
                     }
@@ -65,7 +64,6 @@
                     {
                         <span class="inactive-user">Inactive</span>
                     }
-
                 </td>
                 <td>
                     @if (@userId != user.Id)
@@ -98,164 +96,16 @@
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalUsers)) of 
         @Model.TotalUsers
     </p>
-
-
-    <div>
-            </div>
     <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
-
     <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.PageIndex == Model.TotalPages) || Model.TotalPages == 0) ? "disabled" : "")>&gt;</button>
-    </div>
 </div>
 
 <script>
-
     var sortColumn;
     var ascendingName;
     var ascendingRole;
     var sortColumnDirection;
-
-    $("#nextButton").click(function () {
-        const currentPageIndex = @Model.PageIndex;
-        const nextPageIndex = currentPageIndex + 1;
-        const searchValue = $("#searchInput").val().toLowerCase();
-        const pageSize = @Model.PageSize;
-        $.ajax({
-            url: '@Url.Action("SearchUser", "UserList")',
-            type: 'GET',
-            data: { pageIndex: nextPageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-            success: function (data) {
-                $("#partialViewStarting").html(data);
-            }
-        });
-    });
-
-    $("#previousButton").click(function () {
-        const currentPageIndex = @Model.PageIndex;
-        const previousPageIndex = currentPageIndex - 1;
-        const searchValue = $("#searchInput").val().toLowerCase();
-        const pageSize = @Model.PageSize;
-        $.ajax({
-            url: '@Url.Action("SearchUser", "UserList")',
-            type: 'GET',
-            data: { pageIndex: previousPageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-            success: function (data) {
-                $("#partialViewStarting").html(data);
-            }
-        });
-    });
-
-    function changePageSize(pageSize) {
-        const currentPageIndex = 1; 
-        const searchValue = $("#searchInput").val().toLowerCase();
-        $.ajax({
-            url: '@Url.Action("SearchUser", "UserList")',
-            type: 'GET',
-            data: { pageIndex: currentPageIndex, pageSize: pageSize,  searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-            success: function (data) {
-                $("#partialViewStarting").html(data);
-            }
-        });
-    }
-
-    $("#sortNames").click(function () {
-        if (ascendingName) {
-            sortColumnDirection = "asc";
-            ascendingName = false;
-        } else {
-            sortColumnDirection = "desc";
-            ascendingName = true;
-        }
-        sortColumn = "FirstName";
-        const currentPageIndex = 1;
-        const pageSize = @Model.PageSize;
-        const searchValue = $("#searchInput").val().toLowerCase();
-        $.ajax({
-            url: '@Url.Action("SearchUser", "UserList")',
-            type: 'GET',
-            @* if ascending than call descennding *@
-            data: { pageIndex: currentPageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-            success: function (data) {
-                $("#partialViewStarting").html(data);
-            }
-        });
-    });
-
-    $("#sortRoles").click(function () {
-        if (ascendingRole) {
-            sortColumnDirection = "asc";
-            ascendingRole = false;
-        } else {
-            sortColumnDirection = "desc";
-            ascendingRole = true;
-        }
-        const currentPageIndex = 1;
-        const pageSize = @Model.PageSize;
-        sortColumn = "RoleId";
-        const searchValue = $("#searchInput").val().toLowerCase();
-        $.ajax({
-            url: '@Url.Action("SearchUser", "UserList")',
-            type: 'GET',
-            data: { pageIndex: currentPageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-            success: function (data) {
-                $("#partialViewStarting").html(data);
-            }
-        });
-    });
-
-    $("#searchInput").on("keyup", function () {
-        clearTimeout($.data(this, 'timer'));
-        var searchValue = $(this).val().toLowerCase();
-        if (searchValue == "") {
-            searchValue = null;
-        }
-        $(this).data('timer', setTimeout(function () {
-            const currentPageIndex = 1;
-            const pageSize = @Model.PageSize;
-            $.ajax({
-                url: '@Url.Action("SearchUser", "UserList")',
-                type: 'GET',
-                data: { pageIndex: currentPageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-                success: function (data) {
-                    $("#partialViewStarting").html(data);
-                }
-            });
-        }, 300));
-    });
-
-    function openModel(id) {
-        var pageIndex = @Model.PageIndex;
-        var pageSize = @Model.PageSize;
-        var searchValue = $("#searchInput").val().toLowerCase();
-        var sortColumn = "FirstName";
-        var sortColumnDirection = "asc";
-        $("#deleteButton").off("click").click(function () {
-            $.ajax({
-                type: "DELETE",
-                url: "/UserList/DeleteUser/" + id,
-                data: { id: id },
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        $.ajax({
-                            url: '@Url.Action("SearchUser", "UserList")',
-                            type: 'GET',
-                            data: { pageIndex: pageIndex, pageSize: pageSize, searchValue: searchValue, sortColumn: sortColumn, sortColumnDirection: sortColumnDirection },
-                            success: function (data) {
-                                $("#partialViewStarting").html(data);
-                            }
-                        });
-                    } else {
-                        toastr.error(data.message);
-                    }
-                },
-                error: function () {
-                    toastr.error("Error");
-                }
-            });
-        });
-    }
-        
+    var pageIndexOfModal = @Model.PageIndex;
+    var pageSizeOfModal = @Model.PageSize;
 </script>
-
-        </div>
+<script src="~/js/userListTable.js" asp-append-version="true"></script>

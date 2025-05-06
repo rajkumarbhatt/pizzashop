@@ -70,34 +70,4 @@
     }
 }
 
-<script>
-    
-    function selectModifiers(id, name, price) {
-        $.ajax({
-            url: '@Url.Action("AreModifiersSelected", "OrderAppMenu")',
-            type: 'GET',
-            data: { itemId: id },
-            success: function (data) {
-                if (data.areModifiersSelected) {
-                    $.ajax({
-                        type: "GET",
-                        url: '@Url.Action("GetSelectModifiersModalData", "OrderAppMenu")',
-                        data: { itemId: id },
-                        success: function (data) {
-                            $("#SelectModifiersPartialStaring").html(data);
-                            $("#selectModifiersModal").modal("show");
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("Error loading modifiers:", error);
-                        }
-                    })
-                } else {
-                    addModifiers(id, name, price, true);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        })
-    }
-</script>
+<script src="~/js/orderAppMenu.js" asp-append-version="true"></script>

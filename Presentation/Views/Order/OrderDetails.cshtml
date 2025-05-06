@@ -156,23 +156,4 @@
         </table>
     </div>
 
-    <script>
-        function downloadPdfInvoice(orderId) {
-            const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
-            $('.loader-container').removeClass('d-none');
-            fetch(url, { method: "GET" })
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `Order_${orderId}.pdf`;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    $('.loader-container').addClass('d-none');
-                })
-                .catch(error => {
-                });
-        }
-    </script>
+    <script src="/js/orderDetails.js" asp-append-version="true"></script>

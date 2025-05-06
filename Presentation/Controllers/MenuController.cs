@@ -172,7 +172,7 @@ namespace Presentaion.Controllers
         public async Task<IActionResult> EditModifier(int modifierId, int modifierGroupId)
         {
             MenuViewModel menuViewModel = await _categoryService.GetModifierDataAsync(modifierId, modifierGroupId);
-            return PartialView("_ModifiersPartial", menuViewModel);
+            return PartialView("_AddEditModifierPartial", menuViewModel);
         }
 
         [HttpDelete]

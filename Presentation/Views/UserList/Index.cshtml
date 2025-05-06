@@ -3,59 +3,57 @@
 
 @{
     var permissionList = new List<PermissionModel>();
-
     if (Context.Session.Get("permissions") != null)
     {
         permissionList = System.Text.Json.JsonSerializer.Deserialize<List<PermissionModel>>(Context.Session.Get("permissions"));
     }
-
 }
 
-  <div class="d-flex justify-content-between align-items-center">
-  
-                <h1 class="main-page-heading">User</h1>
-                <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
-                    <div class="input-group search-box">
-                        <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInput" placeholder="Search">
-                        <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
-                    </div>
-                    <p class="delete-styles d-block d-md-none">
-                        <a asp-controller="UserList" asp-action="CreateUser" class="text-decoration-none text-black   add-user-link">
-                            <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
-                        </a>
-                    </p>
-                    @if(permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
-                    {
-                        <button id="redirectToCreateUser" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
-                        <a class="text-decoration-none text-white add-user-link">+
-                            Add User</a></button>
-                    }
-                </div>
-            </div>
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="main-page-heading">User</h1>
+    <div class="d-flex justify-content-center mt-2 gap-2 align-items-center mx-3">
+        <div class="input-group search-box">
+            <input type="text" class="form-control search-input py-1 py-sm-2" id="searchInput" placeholder="Search">
+            <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
+        </div>
+        <p class="delete-styles d-block d-md-none">
+            <a asp-controller="UserList" asp-action="CreateUser"
+                class="text-decoration-none text-black   add-user-link">
+                <img src="~/images/icons/plus-header.svg" class="p-2 menu-category-image-delete" alt="">
+            </a>
+        </p>
+        @if (permissionList.Any(p => p.Name == "Users" && p.CanEdit == true))
+        {
+            <button id="redirectToCreateUser" class="d-none d-md-block button-styles py-1 py-sm-2" style="height: 54px;">
+                <a class="text-decoration-none text-white add-user-link">+
+                    Add User</a></button>
+        }
+    </div>
+</div>
 
-            <!-- table -->
-            
+<!-- table -->
 <div id="partialViewStarting" class="table-responsive col-11 form-bg mx-4 p-3 shadow my-3 mx-auto">
-                
-                <partial name="_UserList" model="@Model" />
-
-        <div class="modal fade" id="deleteModel"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModelLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModelLabel">Delete Confirmation</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                     <div class="modal-body d-flex flex-column align-items-center">
-                        <img src="~/images/icons/warning.svg" class="medium-image" alt="">
-                        <p>Are you sure you want to delete the user?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="deleteButton" class="btn btn-primary px-3" data-bs-dismiss="modal">Yes</button>
-                        <a asp-controller="UserList" ><button type="button" class="btn btn-contrast px-3">No</button></a>
-                    </div>
-                </div>
+    <partial name="_UserList" model="@Model" />
+</div>
+<div class="modal fade" id="deleteModel" data-bs-keyboard="false" tabindex="-1" aria-labelledby="deleteModelLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModelLabel">Delete Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex flex-column align-items-center">
+                <img src="~/images/icons/warning.svg" class="medium-image" alt="">
+                <p>Are you sure you want to delete the user?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="deleteButton" class="btn btn-primary px-3"
+                    data-bs-dismiss="modal">Yes</button>
+                <a asp-controller="UserList"><button type="button" class="btn btn-contrast px-3">No</button></a>
             </div>
         </div>
+    </div>
+</div>
 
-    <script src="~/js/userList.js" asp-append-version="true"></script>
+<script src="~/js/userList.js" asp-append-version="true"></script>

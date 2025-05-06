@@ -90,42 +90,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script>
-    
-    function editTax(id) {
-        $.ajax({
-            type: "GET",
-            url: "@Url.Action("Edit", "TaxAndFee")",
-            data: { id: id },
-            success: function (data) {
-                $("#TaxName").val(data.tax.name);
-                $("#TaxType").val(data.tax.taxType);
-                $("#TaxAmount").val(data.tax.amount);
-                $("#TaxId").val(data.tax.id);
-                $("#IsEnabled").prop("checked", data.tax.isEnabled);
-                $("#addTaxModalTitle").text("Edit Tax");
-                $('.text-danger').text("");
-                $("#addTax").modal("show");
-            },
-            error: function (data) {
-                toastr.error("Unauthorized Access");
-            }
-        });
-    }
-
-    function saveChangesOfIsEnabled(id) {
-        var isEnabled = document.getElementById("isEnabled" + id).checked;
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("SaveChangesOfEnabled", "TaxAndFee")",
-            data: { id: id, isEnabled: isEnabled },
-            success: function (data) {
-                console.log(data);
-            },
-            error: function (data) {
-                console.log(data);
-            }
-        });
-    }
-
-</script>
+<script src="~/js/taxesAndFeesPartial.js" asp-append-version="true"></script>

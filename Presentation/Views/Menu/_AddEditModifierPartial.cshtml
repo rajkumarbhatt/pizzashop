@@ -1,0 +1,164 @@
+@model DAL.ViewModels.MenuViewModel
+@if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.ModifierGroupIds != null)
+{
+    <script>
+        var selectedModifiersGroupsAddModifier2 = @Html.Raw(Json.Serialize(Model.AddModifierViewModel.ModifierGroupIds));
+        selectedModifiersGroupsAddModifier2 = selectedModifiersGroupsAddModifier2.map(x => parseInt(x));
+        $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier2);
+        selectedModifiersGroupsAddModifier2.forEach(x => {
+            var customId = "AddModifier" + x;
+            $("#" + customId).prop("checked", true);
+        });
+    </script>
+}
+@* add new modifier modal *@
+<div class="modal fade" id="AddModifierModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-add-modifier-group modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddModifierModalTitle">Add New Modifier
+                </h5>
+                <button onclick="clearAddModifierModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <form id="addModifierModalForm">
+                <div class="modal-body">
+
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="dropdown dropdown-multiselect col-12 col-md-6 p-2">
+                                <button
+                                    class="btn btn-outline-primary dropdown-toggle d-flex justify-content-between align-items-center"
+                                    type="button" id="custom-multiselect" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <span>Select Modifier Group(s)</span>
+                                    <span class="ms-auto dropdown-arrow"></span>
+                                </button>
+                                <ul class="dropdown-menu p-2" aria-labelledby="custom-multiselect" style="width: 98%;">
+                                    @foreach (var modifierGroup in Model.ModifierGroups)
+                                    {
+                                        var customId = "AddModifier" + modifierGroup.Id;
+                                        <li>
+                                            <input onchange="addModifierGroupToModifier(id)" type="checkbox" style="height:1em;"
+                                                class="form-check-input multi-checkbox"
+                                                value="@modifierGroup.Id" id="@customId">
+                                            <label class="form-check-label" for="@customId">@modifierGroup.Name</label>
+                                        </li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="col-12 col-md-6 form-floating">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Name != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                        class="form-control" name="AddModifierViewModel.Name" 
+                                        value="@Model.AddModifierViewModel.Name"
+                                        id="AddModifierName21" required placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Name" type="text"
+                                        class="form-control" name="AddModifierViewModel.Name"
+                                        id="AddModifierName21" required placeholder="name">
+                                }
+                                <span asp-validation-for="@Model.AddModifierViewModel.Name" class="text-danger"></span>
+                                <label for="AddModifierName21" class="">Name*</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Rate != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                        class="form-control" name="AddModifierViewModel.Rate"
+                                        value="@Model.AddModifierViewModel.Rate"
+                                        id="AddModifierRate" required placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Rate" type="text"
+                                        class="form-control" name="AddModifierViewModel.Rate"
+                                        id="AddModifierRate" required placeholder="name">
+                                }
+                                <label for="AddModifierRate" class="">Rate*</label>
+                                <span asp-validation-for="@Model.AddModifierViewModel.Rate" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating pe-2 my-auto col-12 col-md-4">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Quantity != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                        class="form-control" name="AddModifierViewModel.Quantity"
+                                        value="@Model.AddModifierViewModel.Quantity"
+                                        id="AddModifierQuantity" required placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Quantity" type="text"
+                                        class="form-control" name="AddModifierViewModel.Quantity"
+                                        id="AddModifierQuantity" required placeholder="name">
+                                }
+                                <label for="AddModifierQuantity" class="">Quantity</label>
+                                <span  asp-validation-for="@Model.AddModifierViewModel.Quantity" class="text-danger"></span>
+                            </div>
+                            <div class="col-12 col-md-4 p-2 form-floating">
+                                <select asp-for="@Model.AddModifierViewModel.Unit"
+                                    name="AddModifierViewModel.Unit" id="AddModifierUnit"
+                                    class="form-select" aria-label="Select Country">
+                                    <option value="pcs">Pcs</option>
+                                    <option value="plate">Plate</option>
+                                    <option value="gm">Gm</option>
+                                    <option value="ml">Ml</option>
+                                </select>
+                                <label for="select-country" class="mx-2 mt-2">Unit*</label>
+                                <span asp-validation-for="@Model.AddModifierViewModel.Unit" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-12  row">
+                            <div class="form-floating my-auto col-12 pt-2">
+                                @if(Model.AddModifierViewModel !=null && Model.AddModifierViewModel.Description != null)
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                        class="form-control" name="AddModifierViewModel.Description"
+                                        value="@Model.AddModifierViewModel.Description"
+                                        id="AddModifierDescription21" placeholder="name">
+                                }
+                                else
+                                {
+                                    <input asp-for="@Model.AddModifierViewModel.Description" type="text"
+                                        class="form-control" name="AddModifierViewModel.Description"
+                                        id="AddModifierDescription21" placeholder="name">
+                                }
+                                <label for="AddModifierDescription21" class="">Description</label>
+                                <span asp-validation-for="@Model.AddModifierViewModel.Description" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="AddModifierModifierGroupIds"
+                        asp-for="@Model.AddModifierViewModel.ModifierGroupIds"
+                        name="AddModifierViewModel.ModifierGroupIds" />
+                    @if(Model.AddModifierViewModel != null && Model.AddModifierViewModel.Id != 0)
+                    {
+                        <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                            name="AddModifierViewModel.Id" value="@Model.AddModifierViewModel.Id" />
+                    }
+                    else
+                    {
+                        <input type="hidden" id="AddModifierId" asp-for="@Model.AddModifierViewModel.Id"
+                            name="AddModifierViewModel.Id" value="-1" />
+                    }
+                </div>
+                <div class="modal-footer d-flex justify-content-end">
+                    <button type="submit" id="AddModifierButton" class="btn btn-primary px-3">Save</button>
+                    <a onclick="clearAddModifierModal()"><button type="button"
+                            class="btn btn-contrast px-3">Cancel</button></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="~/js/menuModifiers.js" asp-append-version="true"></script>

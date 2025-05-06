@@ -341,6 +341,10 @@
       "PackagePath": "staticwebassets\\images\\item-images\\112a49b0-d9ef-47d8-8eec-77ca60a18ac0.jfif"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\135b2016-cec3-42d1-81a5-830e0405ec4f.png",
+      "PackagePath": "staticwebassets\\images\\item-images\\135b2016-cec3-42d1-81a5-830e0405ec4f.png"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\1419109a-4994-4e65-bf36-996912228cd2.jfif",
       "PackagePath": "staticwebassets\\images\\item-images\\1419109a-4994-4e65-bf36-996912228cd2.jfif"
     },
@@ -471,6 +475,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\54e26431-1579-4f73-938f-55cecca570b6.jpg",
       "PackagePath": "staticwebassets\\images\\item-images\\54e26431-1579-4f73-938f-55cecca570b6.jpg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\562a6fc0-4b00-4ee4-ac21-796d5295ea01.png",
+      "PackagePath": "staticwebassets\\images\\item-images\\562a6fc0-4b00-4ee4-ac21-796d5295ea01.png"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\item-images\\5a030677-1dec-45f5-93a8-1a5c05168268.jfif",
@@ -815,6 +823,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\3012ed5b-02d8-4fa9-b171-ab49ae690e6e.png",
       "PackagePath": "staticwebassets\\images\\profile-images\\3012ed5b-02d8-4fa9-b171-ab49ae690e6e.png"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\3255b9e5-48e2-407a-8dce-c313fe051cf4.png",
+      "PackagePath": "staticwebassets\\images\\profile-images\\3255b9e5-48e2-407a-8dce-c313fe051cf4.png"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\329c0763-1dec-4d62-aad9-9795ca8a77cd.jfif",
@@ -1181,8 +1193,20 @@
       "PackagePath": "staticwebassets\\js\\createUser.js"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\customers.js",
+      "PackagePath": "staticwebassets\\js\\customers.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\customersPartial.js",
+      "PackagePath": "staticwebassets\\js\\customersPartial.js"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\dashboard.js",
       "PackagePath": "staticwebassets\\js\\dashboard.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\dashboardCharts.js",
+      "PackagePath": "staticwebassets\\js\\dashboardCharts.js"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\editProfile.js",
@@ -1197,6 +1221,10 @@
       "PackagePath": "staticwebassets\\js\\forgotPassword.js"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\kot.js",
+      "PackagePath": "staticwebassets\\js\\kot.js"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\layout.js",
       "PackagePath": "staticwebassets\\js\\layout.js"
     },
@@ -1209,6 +1237,54 @@
       "PackagePath": "staticwebassets\\js\\menu.js"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuAddItemPartial.js",
+      "PackagePath": "staticwebassets\\js\\menuAddItemPartial.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuAllModifiersPartial.js",
+      "PackagePath": "staticwebassets\\js\\menuAllModifiersPartial.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuItems.js",
+      "PackagePath": "staticwebassets\\js\\menuItems.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuItemsTable.js",
+      "PackagePath": "staticwebassets\\js\\menuItemsTable.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuModifiers.js",
+      "PackagePath": "staticwebassets\\js\\menuModifiers.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\menuModifiersTable.js",
+      "PackagePath": "staticwebassets\\js\\menuModifiersTable.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\orderApp.js",
+      "PackagePath": "staticwebassets\\js\\orderApp.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\orderAppMenu.js",
+      "PackagePath": "staticwebassets\\js\\orderAppMenu.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\orderAppPartial.js",
+      "PackagePath": "staticwebassets\\js\\orderAppPartial.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\orderDetails.js",
+      "PackagePath": "staticwebassets\\js\\orderDetails.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\orders.js",
+      "PackagePath": "staticwebassets\\js\\orders.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\ordersPartial.js",
+      "PackagePath": "staticwebassets\\js\\ordersPartial.js"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\resetPassword.js",
       "PackagePath": "staticwebassets\\js\\resetPassword.js"
     },
@@ -1217,12 +1293,40 @@
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\tablesAndSections.js",
+      "PackagePath": "staticwebassets\\js\\tablesAndSections.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\tablesAndSectionsPartialSections.js",
+      "PackagePath": "staticwebassets\\js\\tablesAndSectionsPartialSections.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\tablesAndSectionsTablePartial.js",
+      "PackagePath": "staticwebassets\\js\\tablesAndSectionsTablePartial.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\taxesAndFees.js",
+      "PackagePath": "staticwebassets\\js\\taxesAndFees.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\taxesAndFeesPartial.js",
+      "PackagePath": "staticwebassets\\js\\taxesAndFeesPartial.js"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\userList.js",
       "PackagePath": "staticwebassets\\js\\userList.js"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\userListTable.js",
+      "PackagePath": "staticwebassets\\js\\userListTable.js"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\viewPermissions.js",
       "PackagePath": "staticwebassets\\js\\viewPermissions.js"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\js\\waitingList.js",
+      "PackagePath": "staticwebassets\\js\\waitingList.js"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\lib\\bootstrap\\LICENSE",

@@ -32,11 +32,8 @@
 </div>
 
 <!-- table -->
-
 <div id="partialViewStarting" class="table-responsive col-11 form-bg mx-4 p-3 shadow my-3 mx-auto">
-
     <partial name="_TaxAndFeeTable" model="@Model" />
-    
 </div>
 
 @* delete tax modal *@
@@ -123,107 +120,4 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-<script>
-    function openAddTaxModal() {
-        $(".text-danger").text("");
-        $("#addTax").modal("show");
-    }
-    function addTax () {
-        if (!$("#AddTaxFormModal").valid()) {
-            return;
-        }
-        var taxId = $("#TaxId").val();
-        var taxName = $("#TaxName").val();
-        var isEnabled = $("#IsEnabled").is(":checked");
-        var taxType = $("#TaxType").val();
-        var taxAmount = $("#TaxAmount").val();
-        data = {
-            TaxId: taxId,
-            TaxName: taxName,
-            IsEnabled: isEnabled,
-            TaxType: taxType,
-            TaxAmount: taxAmount
-        };
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("AddTax", "TaxAndFee")',
-            data: { addTaxViewModal: data },
-            success: function (data) {
-                console.log(data);
-                if (data.success) {
-                    toastr.success(data.message);
-                    $.ajax({
-                        type: "GET",
-                        url: '@Url.Action("GetTaxes", "TaxAndFee")',
-                        success: function (data) {
-                            $("#partialViewStarting").html(data);
-                            clearAddTaxModal();
-                        }
-                    });
-                    $("#addTax").modal("hide");
-                } else {
-                    toastr.error(data.message);
-                }
-            },
-            error: function (data) {
-                console.log(data);
-            }
-        });
-    }
-
-    $("#searchInput").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        clearTimeout($.data(this, 'timer'));
-        $(this).data('timer', setTimeout(function () {
-            $.ajax({
-                type: "GET",
-                url: '@Url.Action("Search", "TaxAndFee")',
-                data: { searchValue : value },
-                success: function (data) {
-                    $("#partialViewStarting").html(data);
-                }
-            });
-        }, 300));
-    });
-
-    
-    function clearAddTaxModal() {
-        $("#TaxName").val("");
-        $("#TaxType").val("Percentage");
-        $("#TaxAmount").val("0");
-        $("#TaxId").val("-1");
-        $("#IsEnabled").prop("checked", false);
-        $("#addTaxModalTitle").text("Add Tax");
-    }
-
-    
-    
-    function deleteTax(id) {
-        $("#deleteTax").modal("show");
-        $("#deleteTaxButton").off("click").click(function () {
-            $.ajax({
-                type: "DELETE",
-                url: "@Url.Action("Delete", "TaxAndFee")",
-                data: { id: id },
-                success: function (data) {
-                    if (data.success) {
-                        toastr.success(data.message);
-                        $.ajax({
-                            type: "GET",
-                            url: "@Url.Action("GetTaxes", "TaxAndFee")",
-                            success: function (data) {
-                                $("#partialViewStarting").html(data);
-                            }
-                        });
-                    } else {
-                        toastr.error("Unauthorized Access");
-                    }
-                },
-                error: function (data) {
-                    toastr.error("Unauthorized Access");
-                }
-            });
-        });
-    }
-
-</script>
+<script src="~/js/taxesAndFees.js" asp-append-version="true"></script>

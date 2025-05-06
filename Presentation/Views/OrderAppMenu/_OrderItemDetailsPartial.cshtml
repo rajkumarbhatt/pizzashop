@@ -66,7 +66,7 @@
             }
             else
             {
-                <div id="taxListContainer">
+                <div id="taxListContainer" class="d-none">
                     @foreach (var tax in Model.TaxesFees)
                     {
                         if (tax.TaxName == "Other Tax")
@@ -74,6 +74,25 @@
                             <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
                                 <p>@tax.TaxName</p>
                                 <p id="otherTaxValue">@tax.TaxAmount</p>
+                            </div>
+                        }
+                        else if (tax.TaxName == "Service Tax")
+                        {
+                            var customTaxId = tax.TaxType + "-" + tax.TaxName + "-" + tax.TaxAmount + "-" + tax.TaxRate;
+                            taxList += customTaxId + ",";
+                            <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
+                                <p>
+                                    @if (@tax.TaxAmount > 0)
+                                    {
+                                        <input id="serviceTaxCheckBox" checked class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                    }
+                                    else
+                                    {
+                                        <input id="serviceTaxCheckBox" class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                    }
+                                    @tax.TaxName
+                                </p>
+                                <p id="@customTaxId" class="service-tax-value">@tax.TaxAmount</p>
                             </div>
                         }
                         else
@@ -128,110 +147,5 @@
     }, 100);
     var urlTemp = window.location.href;
     var orderIdTemp = parseInt(urlTemp.substring(urlTemp.lastIndexOf('/') + 1));
-    function saveOrder() {
-        if ($("#serviceTaxCheckBox").is(":checked") == false) {
-            taxListNameAndAmount = taxListNameAndAmount.filter(tax => !tax.TaxName.includes("Service Tax"));
-        }
-        var data = {
-            OrderItems: itemList,
-            Subtotal: parseFloat($('#orderSubtotalValue').text()),
-            Total: parseFloat($('#orderTotalValue').text()),
-            OrderId: orderIdTemp,
-            OrderTaxes: taxListNameAndAmount,
-        };
-        $.ajax({
-            type: "POST",
-            url: '@Url.Action("SaveOrder", "OrderAppMenu")',
-            data: { saveOrderViewModel: data },
-            success: function (response) {
-                if (response.success) {
-                    toastr.success(response.message);
-                    $.ajax({
-                        url: '@Url.Action("GetOrderDetails", "OrderAppMenu")',
-                        method: 'GET',
-                        data: { orderId: orderIdTemp },
-                        success: function (response) {
-                            itemList = [];
-                            $("#orderItemDetailsPartial").html(response);
-                        },
-                        error: function () {
-                            toastr.error("Failed to load order details.");
-                        }
-                    })
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-            error: function (response) {
-                toastr.error("An error occurred while saving the order.");
-            }
-        })
-    }
-
-    function downloadPdfInvoice() {
-        const url = '@Url.Action("DownloadInvoice", "Order")' + "?orderId=" + orderId;
-        $('.loader-container').removeClass('d-none');
-        fetch(url, { method: "GET" })
-            .then(response => response.blob())
-            .then(blob => {
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Order_${orderId}.pdf`;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                $('.loader-container').addClass('d-none');
-            })
-            .catch(error => {
-            });
-    }
-
-    function completeOrder() {
-        $("#CompleteOrderModal").modal("show");
-        $("#completeOrderButton").off("click").on("click", function () {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("CompleteOrder", "OrderAppMenu")',
-                data: { orderId: orderIdTemp },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        $("#CompleteOrderModal").modal("hide");
-                        $("#CustomerRatingModal").modal("show");
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error:", error);
-                }
-            });
-        });
-    }
-
-    function cancelOrder() {
-        $("#CancelOrderModal").modal("show");
-        $("#cancelOrderButton").off("click").on("click", function () {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("CancelOrder", "OrderAppMenu")',
-                data: { orderId: orderIdTemp },
-                success: function (response) {
-                    if (response.success) {
-                        toastr.success(response.message);
-                        setTimeout(function () {
-                            window.location.href = "/OrderApp";
-                        }, 1000);
-                        $("#CancelOrderModal").modal("hide");
-                    } else {
-                        toastr.error(response.message);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error:", error);
-                }
-            });
-        });
-    }
 </script>
+<script src="/js/orderAppMenu.js" asp-append-version="true"></script>

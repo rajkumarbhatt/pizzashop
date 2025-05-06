@@ -191,8 +191,7 @@
         </div>
     </div>
 
-    
-@* add table modal *@
+    @* add table modal *@
 <div class="modal fade" id="addTableModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered table-modal">
@@ -251,26 +250,11 @@
     </div>
 </div>
 
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
 
-<script>
-
-    var deleteTableIds = [];
-
-    function showDiv(divId) {
-        divId.classList.remove('d-none');
-        var divId2 = divId.id + "two";
-        $("#" + divId2).addClass('active-category-div'); 
-    }
-
-    function hideDiv(divId) {
-        divId.classList.add('d-none');
-        var divId2 = divId.id + "two";
-        $("#" + divId2).removeClass('active-category-div');
-    }
-
-</script>
+<script src="~/js/tablesAndSectionsPartialSections.js"></script>
