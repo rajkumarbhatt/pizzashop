@@ -23,7 +23,6 @@ function addTax () {
         url: '/TaxAndFee/AddTax',
         data: { addTaxViewModal: data },
         success: function (data) {
-            console.log(data);
             if (data.success) {
                 toastr.success(data.message);
                 $.ajax({

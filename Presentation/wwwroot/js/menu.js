@@ -1,25 +1,5 @@
-
-
-$(document).ready(function() {
-
-    function showSearchBar () {
-      document.getElementById("mobile-search-bar").classList.remove("d-none");
-      document.getElementById("search-icon").classList.add("d-none");
-    }
-
-    window.addEventListener('mouseup',function(event){
-        var mobileSearchBar = document.getElementById('mobile-search-bar');
-        if(event.target != mobileSearchBar && event.target.parentNode != mobileSearchBar){
-            mobileSearchBar.classList.add('d-none');
-            document.getElementById("search-icon").classList.remove("d-none");
-        }
-    });  
-});
-   
-    
-
-
-function triggerMultiSelect(){
+function triggerMultiSelect() {
+    try {
         const selectElement = document.getElementById('SelectModifierGroup');
         const customMultiSelect = document.querySelector('.custom-multi-select');
         const dropdownOptions = customMultiSelect.querySelector('.dropdown-options');
@@ -28,97 +8,126 @@ function triggerMultiSelect(){
         const clearAllButton = customMultiSelect.querySelector('.clear-all');
         const dropdownToggle = customMultiSelect.querySelector('.dropdown-toggle');
 
-        // Empty the dropdown options container
         dropdownOptions.innerHTML = '';
 
-        // Build the custom dropdown options from the <select> element
         selectElement.querySelectorAll('option').forEach(option => {
-            const value = option.value;
-            const text = option.textContent;
+            try {
+                const value = option.value;
+                const text = option.textContent;
 
-            // Create a custom option
-            const customOption = document.createElement('div');
-            customOption.className = 'option';
-            customOption.setAttribute('data-value', value);
-            customOption.innerHTML = `
-      <input type="checkbox" id=${value} onchange="addModifierGroupToList(id)">
-      <label for="custom-option-${value}">${text}</label>
-    `;
+                const customOption = document.createElement('div');
+                customOption.className = 'option';
+                customOption.setAttribute('data-value', value);
+                customOption.innerHTML = `
+                    <input type="checkbox" id=${value} onchange="addModifierGroupToList(id)">
+                    <label for="custom-option-${value}">${text}</label>
+                `;
 
-            // Add the custom option to the dropdown
-            dropdownOptions.appendChild(customOption);
+                dropdownOptions.appendChild(customOption);
 
-            // Sync the selected state with the <select> element
-            const checkbox = customOption.querySelector('input[type="checkbox"]');
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    option.selected = true; // Sync with <select>
-                    addTag(value, text); // Add tag
-                } else {
-                    option.selected = false; // Sync with <select>
-                    removeTag(value); // Remove tag
-                }
-            });
+                const checkbox = customOption.querySelector('input[type="checkbox"]');
+                checkbox.addEventListener('change', () => {
+                    try {
+                        if (checkbox.checked) {
+                            option.selected = true;
+                            addTag(value, text);
+                        } else {
+                            option.selected = false;
+                            removeTag(value);
+                        }
+                    } catch (error) {
+                        console.error("Error in checkbox change event:", error);
+                    }
+                });
+            } catch (error) {
+                console.error("Error in option processing:", error);
+            }
         });
 
-        // Function to add a tag
         function addTag(value, text) {
-            const tag = document.createElement('div');
-            tag.className = 'tag';
-            tag.setAttribute('data-value', value);
-            tag.innerHTML = `
-      ${text}
-      <span class="tag-delete"></span>
-    `;
+            try {
+                const tag = document.createElement('div');
+                tag.className = 'tag';
+                tag.setAttribute('data-value', value);
+                tag.innerHTML = `
+                    ${text}
+                    <span class="tag-delete"></span>
+                `;
 
-            // Add tag to the selected tags container
-            selectedTagsContainer.appendChild(tag);
+                selectedTagsContainer.appendChild(tag);
 
-            // Remove tag when delete button is clicked
-            tag.querySelector('.tag-delete').addEventListener('click', () => {
-                tag.remove();
-                const option = selectElement.querySelector(`option[value="${value}"]`);
-                if (option) {
-                    option.selected = false; // Sync with <select>
-                }
-                const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
-                if (checkbox) {
-                    checkbox.checked = false; // Uncheck the checkbox
-                }
-            });
-        }
-
-        // Function to remove a tag
-        function removeTag(value) {
-            const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
-            if (tag) {
-                tag.remove();
+                tag.querySelector('.tag-delete').addEventListener('click', () => {
+                    try {
+                        tag.remove();
+                        const option = selectElement.querySelector(`option[value="${value}"]`);
+                        if (option) {
+                            option.selected = false;
+                        }
+                        const checkbox = dropdownOptions.querySelector(`input[id="custom-option-${value}"]`);
+                        if (checkbox) {
+                            checkbox.checked = false;
+                        }
+                    } catch (error) {
+                        console.error("Error in tag delete event:", error);
+                    }
+                });
+            } catch (error) {
+                console.error("Error in addTag function:", error);
             }
         }
 
-        // Clear all selected tags
+        function removeTag(value) {
+            try {
+                const tag = selectedTagsContainer.querySelector(`[data-value="${value}"]`);
+                if (tag) {
+                    tag.remove();
+                }
+            } catch (error) {
+                console.error("Error in removeTag function:", error);
+            }
+        }
+
         clearAllButton.addEventListener('click', () => {
-            selectedTagsContainer.innerHTML = '';
-            selectElement.querySelectorAll('option').forEach(option => {
-                option.selected = false; // Unselect all options in <select>
-            });
-            dropdownOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                checkbox.checked = false; // Uncheck all checkboxes
-            });
+            try {
+                selectedTagsContainer.innerHTML = '';
+                selectElement.querySelectorAll('option').forEach(option => {
+                    option.selected = false;
+                });
+                dropdownOptions.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+            } catch (error) {
+                console.error("Error in clearAllButton click event:", error);
+            }
         });
-        // Toggle dropdown visibility
+
         searchInput.addEventListener('focus', () => {
-            dropdownOptions.style.display = 'block';
+            try {
+                dropdownOptions.style.display = 'block';
+            } catch (error) {
+                console.error("Error in searchInput focus event:", error);
+            }
         });
 
         searchInput.addEventListener('blur', () => {
-            setTimeout(() => {
-                dropdownOptions.style.display = 'none';
-            }, 200);
+            try {
+                setTimeout(() => {
+                    dropdownOptions.style.display = 'none';
+                }, 200);
+            } catch (error) {
+                console.error("Error in searchInput blur event:", error);
+            }
         });
+    } catch (error) {
+        console.error("Error in triggerMultiSelect function:", error);
+    }
 }
 
-function untriggerMultiSelect () {
-    const customMultiSelect = document.querySelector('.custom-multi-select');
-    customMultiSelect.innerHTML = '';
+function untriggerMultiSelect() {
+    try {
+        const customMultiSelect = document.querySelector('.custom-multi-select');
+        customMultiSelect.innerHTML = '';
+    } catch (error) {
+        console.error("Error in untriggerMultiSelect function:", error);
+    }
 }

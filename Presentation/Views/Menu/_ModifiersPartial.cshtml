@@ -142,21 +142,11 @@
     </div>
 <input type="hidden" id="modifierGroupId21" value="@Model.ModifierGroups[0].Id"/>
 <div class="col-12 col-md-8 col-lg-9">
-    <div class="d-flex menu-mobile-header-div justify-content-between pt-3 pt-sm-2 align-items-center">
+    <div class="d-flex flex-column flex-sm-row menu-mobile-header-div justify-content-between pt-3 pt-sm-2 align-items-center">
         <h4 class="px-sm-4 py-2">Modifiers</h4>
         <div class="d-flex justify-content-center gap-2 align-items-center mx-3">
-            <div class="input-group search-box d-none d-md-block">
+            <div class="input-group search-box d-block">
                 <input type="text" id="searchInputModifier" class="form-control search-input py-1 py-sm-2"
-                    placeholder="Search">
-                <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
-            </div>
-            <p class="delete-styles d-none" id="search-icon-modifier" onclick="showSearchBarModifier()">
-                <a class="text-decoration-none text-black add-user-link">
-                    <img src="~/images/icons/search-header.svg" class="p-2 menu-category-image-delete" alt="">
-                </a>
-            </p>
-            <div id="mobile-search-bar-modifier" class="input-group search-box d-none d-md-none">
-                <input id="searchInputModifierMobile" type="text" class="form-control search-input py-1 py-sm-2"
                     placeholder="Search">
                 <img src="~/images/icons/search-icon.svg" class="small-image anchor-tag  search-icon" alt="">
             </div>
@@ -188,13 +178,8 @@
     </div>
 
     <div class="table-responsive col-12 form-bg mx-4 p-3 mb-3 mx-auto">
-
-
         <div id="ModifiersTablePartial" class="">
-
-
             <partial name="_ModifiersTable" model="@Model" />
-
         </div>
     </div>
 

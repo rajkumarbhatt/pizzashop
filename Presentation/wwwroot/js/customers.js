@@ -1,3 +1,4 @@
+var lastSelected = "All Time";
 $(document).ready(function () {
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
@@ -19,36 +20,10 @@ $(document).ready(function () {
         $('#fromDate').datepicker('setEndDate', toDate);
     });
 
-    $("#cancelDatePickerButton").click(function () {
-        $("#fromDate").val("dd-mm-yyyy");
-        $("#toDate").val("dd-mm-yyyy");
-        $.ajax({
-            url: '/Customer/FilterCustomers',
-            type: "GET",
-            data: { pageIndex: 1, pageSize: $("#pageSizeSelectOrders").val(), searchValue: $("#searchInputCustomers").val().toLowerCase(), time: $("#CustomersTimeSelect").val(), sort: sortColumn, order: sortDirection, fromDate: "dd-mm-yyyy", toDate: "dd-mm-yyyy" },
-            success: function (data) {
-                $("#customersTablePartial").html(data);
-            }
-        });
-        $("#errorMessageFromDate").text("");
-        $("#errorMessageToDate").text("");
-    });
+});
 
-    $("#closeDatePickerModalButton").click(function () {
-        $("#fromDate").val("dd-mm-yyyy");
-        $("#toDate").val("dd-mm-yyyy");
-        $.ajax({
-            url: '/Customer/FilterCustomers',
-            type: "GET",
-            data: { pageIndex: 1, pageSize: $("#pageSizeSelectOrders").val(), searchValue: $("#searchInputCustomers").val().toLowerCase(), time: $("#CustomersTimeSelect").val(), sort: sortColumn, order: sortDirection, fromDate: "dd-mm-yyyy", toDate: "dd-mm-yyyy" },
-            success: function (data) {
-                $("#customersTablePartial").html(data);
-            }
-        });
-        $("#errorMessageFromDate").text("");
-        $("#errorMessageToDate").text("");
-    });
-
+$(".closeDatePickerModalButton").click(function () {
+    $("#CustomersTimeSelect").val(lastSelected);
 });
 
 function FilerOrdersBasedOnTime(value) {
@@ -85,6 +60,7 @@ function FilerOrdersBasedOnTime(value) {
         });
         return;
     }
+    lastSelected = value;
     var pageIndex = 1;
     var pageSize = $("#pageSizeSelectOrders").val();
     var searchValue = $("#searchInputCustomers").val().toLowerCase();

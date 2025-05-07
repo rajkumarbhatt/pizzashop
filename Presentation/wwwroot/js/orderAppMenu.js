@@ -177,8 +177,13 @@ function clearModifiersList() {
   }
 }
 
-if (orderId == "Menu") {
-  document.getElementById("AddModifiersButton").classList.add("d-none");
+if (typeof orderId !== "undefined") {
+  if (orderId == "Menu") {
+    var addModifierButton = document.getElementById("AddModifiersButton");
+    if (addModifierButton) {
+      addModifierButton.classList.add("d-none");
+    }
+  }
 }
 
 function sameSelection(itemId) {
@@ -266,7 +271,7 @@ function addModifiers(itemId, itemName, itemPrice, isDirect) {
                                 <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian"></p>
                             </div>
                             <div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
-                                <img src="~/images/icons/delete.svg" class="small-image">
+                                <img src="/images/icons/delete.svg" class="small-image">
                             </div>
                         </div>
                     </button>
@@ -859,7 +864,7 @@ function syncItemsList() {
                                 <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian">${item.modifiersTotalPrice}</p>
                             </div>
                             <div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
-                                <img src="~/images/icons/delete.svg" class="small-image">
+                                <img src="/images/icons/delete.svg" class="small-image">
                             </div>
                         </div>
                     </button>
@@ -939,7 +944,6 @@ $("#serviceTaxCheckBox")
         updatedTotal.toFixed(2);
       taxListNameAndAmount[element].TaxAmount = "49";
     } else {
-      console.log(serviceTaxAmount);
       var serviceTaxElement =
         document.getElementsByClassName("service-tax-value");
       serviceTaxElement[0].innerHTML = 0;
@@ -966,7 +970,6 @@ function saveOrder() {
     OrderId: orderIdTemp,
     OrderTaxes: taxListNameAndAmount,
   };
-  console.log(data);
   $.ajax({
     type: "POST",
     url: "/OrderAppMenu/SaveOrder",
@@ -1105,7 +1108,7 @@ function addToFavourites(id, event) {
     data: { itemId: itemId },
     success: function (response) {
       if (response.success) {
-        console.log(response.message);
+        // console.log(response.message);
       } else {
         console.error(response.message);
       }
@@ -1141,30 +1144,33 @@ function removeFromFavourites(id, event) {
   event.stopPropagation();
 }
 
-if (orderId == "Menu") {
-  document.getElementById("thisDivIsImportant").style.width = "100% !important";
-  document.getElementById("thisIsSecondImportant").classList.add("d-none");
-  document
-    .getElementById("orderAppNavbarButtonsToHide")
-    .classList.remove("d-none");
-} else if (orderId == 0) {
-  document.getElementById("thisDivIsImportant").style.width = "100%";
-  document
-    .getElementById("orderAppNavbarButtonsToHide")
-    .classList.add("d-md-none");
-  document
-    .getElementById("orderAppNavbarHamburgerToHide")
-    .classList.add("d-none");
-} else {
-  document.getElementById("thisDivIsImportant").style.width = "66%";
-  document.getElementById("thisIsSecondImportant").classList.remove("d-none");
-  document.getElementById("thisIsSecondImportant").style.width = "34%";
-  document
-    .getElementById("orderAppNavbarButtonsToHide")
-    .classList.remove("d-md-none");
-  document
-    .getElementById("orderAppNavbarHamburgerToHide")
-    .classList.remove("d-none");
+if (typeof orderId !== "undefined") {
+  if (orderId == "Menu") {
+    document.getElementById("thisDivIsImportant").style.width = "100% !important";
+    var secondImpDev = document.getElementById("thisIsSecondImportant");
+    if (secondImpDev) {
+      document.getElementById("thisIsSecondImportant").classList.add("d-none");
+    }  
+    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-none");
+  } else if (orderId == 0) {
+    document.getElementById("thisDivIsImportant").style.width = "100%";
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.add("d-md-none");
+    document
+      .getElementById("orderAppNavbarHamburgerToHide")
+      .classList.add("d-none");
+  } else {
+    document.getElementById("thisDivIsImportant").style.width = "66%";
+    document.getElementById("thisIsSecondImportant").classList.remove("d-none");
+    document.getElementById("thisIsSecondImportant").style.width = "34%";
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.remove("d-md-none");
+    document
+      .getElementById("orderAppNavbarHamburgerToHide")
+      .classList.remove("d-none");
+  }
 }
 
 function getCustomerDetails() {

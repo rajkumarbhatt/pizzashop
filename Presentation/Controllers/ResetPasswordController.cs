@@ -26,17 +26,17 @@ namespace Presentaion.Controllers
         {
             if (await _resetPasswordService.IsLinkPresentAsync(token))
             {
-            return RedirectToAction("Index", "PageNotFound");
+                return RedirectToAction("Index", "PageNotFound");
             }
 
             if (await _resetPasswordService.IsTokenValidAsync(token))
             {
-            ResetPasswordViewModel resetPasswordViewModel = await _resetPasswordService.GetResetPasswordViewModelAsync(token);
-            return View(resetPasswordViewModel);
+                ResetPasswordViewModel resetPasswordViewModel = await _resetPasswordService.GetResetPasswordViewModelAsync(token);
+                return View(resetPasswordViewModel);
             }
             else
             {
-            return View("Index", "PageNotFound");
+                return View("Index", "PageNotFound");
             }
         }
 
@@ -46,20 +46,20 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Validation errors" });
+                return new JsonResult(new { success = false, message = "Validation errors" });
             }
             if (await _resetPasswordService.IsLinkPresentAsync(model.Token))
             {
-            return new JsonResult(new { success = false, message = "Link already used" });
+                return new JsonResult(new { success = false, message = "Link already used" });
             }
             var userId = model.UserId;
             if (await _resetPasswordService.IsTokenValidAsync(model.Token))
             {
-            return await _resetPasswordService.ResetPassword2Async(userId, model.NewPassword, model.Token);
+                return await _resetPasswordService.ResetPassword2Async(userId, model.NewPassword, model.Token);
             }
             else
             {
-            return new JsonResult(new { success = false, message = "Token expired" });
+                return new JsonResult(new { success = false, message = "Token expired" });
             }
         }
 
@@ -74,16 +74,16 @@ namespace Presentaion.Controllers
         {
             try
             {
-            if (!ModelState.IsValid)
-            {
-                return new JsonResult(new { success = false, message = "Validation errors" });
-            }
-            var userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _resetPasswordService.ResetPasswordAsync(userId, model.NewPassword);
+                if (!ModelState.IsValid)
+                {
+                    return new JsonResult(new { success = false, message = "Validation errors" });
+                }
+                var userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+                return await _resetPasswordService.ResetPasswordAsync(userId, model.NewPassword);
             }
             catch (Exception ex)
             {
-            return new JsonResult(new { success = false, message = ex.Message });
+                return new JsonResult(new { success = false, message = ex.Message });
             }
         }
 

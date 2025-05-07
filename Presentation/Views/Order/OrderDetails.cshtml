@@ -1,13 +1,13 @@
 @model DAL.ViewModels.OrderDetailsViewModel
 
-<div class="mx-auto d-flex justify-content-between align-items-center" style="width: 65%;">
+<div class="mx-auto d-flex justify-content-between align-items-center w-65">
     <h1 class="main-page-heading">Order Details</h1>
     <a asp-controller="Order" asp-action="Index" style="width: 80px; height: 38px;">
-        <button class="btn btn-contrast mx-4" style="width: 80px; height: 38px;">< Back</button>
+        <button class="btn btn-contrast mx-0 mx-sm-1" style="width: 80px; height: 38px;">< Back</button>
     </a>
 </div>
 
-<div class="ps-4 form-bg p-2 my mx-auto table-responsive" style="width: 61.5%;">
+<div class="ps-4 form-bg p-2 my mx-auto table-responsive w-61">
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex gap-2 align-items-center">
             <h4>Order Summary</h4>
@@ -42,8 +42,8 @@
         </div>
     </div>
 </div>
-<div class="d-flex gap-2 p-2 my mx-auto table-responsive" style="width: 61.5%;">
-    <div class="ps-4 form-bg p-2 my mx-auto table-responsive d-flex gap-3 flex-column" style="width: 50%">
+<div class="d-flex flex-column flex-sm-row gap-2 p-2 my mx-auto table-responsive w-61">
+    <div class="ps-4 form-bg p-2 my mx-auto table-responsive d-flex gap-3 flex-column w-100 w-sm-50">
         <div class="pt-2">
             <img src="~/images/icons/customer-details.svg" class="small-image cursor-pointer anchor-tag " alt="">
             <span style="font-weight: 650;">
@@ -57,7 +57,7 @@
             <p>Email: @Model.CustomerEmail</p>
         </div>
     </div>
-    <div class="ps-4 form-bg p-2 my mx-auto table-responsive d-flex gap-3 flex-column" style="width: 50%">
+    <div class="ps-4 form-bg p-2 my mx-auto table-responsive d-flex gap-3 flex-column w-100 w-sm-50">
         <div class="pt-2">
             <img src="~/images/icons/table-details.svg" class="small-image cursor-pointer anchor-tag " alt="">
             <span style="font-weight: 650;">
@@ -79,7 +79,7 @@
     </div>
 </div>
 
-<div class="ps-4 form-bg p-2 my mx-auto table-responsive" style="width: 61.5%;">
+<div class="ps-4 form-bg p-2 my mx-auto table-responsive w-61">
     <span style="font-weight: 650;">Order Items</span>
     <table id="userTable" class="table table-responsive" style="white-space: nowrap;">
         <thead class="">

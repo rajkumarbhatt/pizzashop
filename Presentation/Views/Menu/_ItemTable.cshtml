@@ -21,7 +21,8 @@
             <th>Rate</th>
             <th>Quantity</th>
             <th>Available</th>
-             @if(permissionList != null && permissionList.Any(p => p.Name == "Menu" && (p.CanEdit == true || p.CanDelete == true)))
+            @if (permissionList != null && permissionList.Any(p => p.Name == "Menu" && (p.CanEdit == true || p.CanDelete
+                        == true)))
             {
                 <th>Action</th>
             }
@@ -68,15 +69,15 @@
                     @if (item.IsAvailable ?? false)
                     {
                         <div class="form-check form-switch">
-                            <input disabled  style="opacity:1" class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
-                                type="checkbox" checked id="@idCustom">
+                            <input disabled style="opacity:1" class="form-check-input form-check-switch"
+                                onclick="saveChangesOfSwitch(@item.Id)" type="checkbox" checked id="@idCustom">
                         </div>
                     }
                     else
                     {
                         <div class="form-check form-switch">
-                            <input disabled  style="opacity:1" class="form-check-input form-check-switch" onclick="saveChangesOfSwitch(@item.Id)"
-                                type="checkbox" id="@idCustom">
+                            <input disabled style="opacity:1" class="form-check-input form-check-switch"
+                                onclick="saveChangesOfSwitch(@item.Id)" type="checkbox" id="@idCustom">
                         </div>
                     }
                 </td>
@@ -100,27 +101,26 @@
     </tbody>
 </table>
 <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
-    <p>Items per page: </p>
-    <select id="PageSize" class="form-select pagination-dropdown text-black" aria-label="Items per page"
-        onchange="changePageSize(this.value)">
-        <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
-        <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
-        <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
-    </select>
+    <div class="d-flex align-items-center gap-2">
+        <p>Items per page: </p>
+        <select id="PageSize" class="form-select pagination-dropdown text-black" aria-label="Items per page"
+            onchange="changePageSize(this.value)">
+            <option value="5" selected="@(Model.PageSize == 5 ? "selected" : null)">5</option>
+            <option value="10" selected="@(Model.PageSize == 10 ? "selected" : null)">10</option>
+            <option value="15" selected="@(Model.PageSize == 15 ? "selected" : null)">15</option>
+        </select>
+    </div>
     <p class="px-1">
         <input type="hidden" id="PageIndex" value="pageIndexItemsOfModal" />
         Showing @(Model.TotalPages == 0 ? 0 : (Model.PageIndex - 1) * Model.PageSize + 1) -
         @(Math.Min(Model.PageIndex * Model.PageSize, Model.TotalItems)) of
         @Model.TotalItems
     </p>
-
-
-    <div>
+    <div class="d-flex gap-2 gap-sm-0">
+        <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
+        <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.PageIndex == Model.TotalPages)
+                                                                                            || Model.TotalPages == 0) ? "disabled" : "")> &gt;</button>
     </div>
-    <button id="previousButton" class="p-1 px-2" @(Model.PageIndex == 1 ? "disabled" : "")>&lt;</button>
-
-    <button id="nextButton" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.PageIndex == Model.TotalPages) || Model.TotalPages == 0) ?
-        "disabled" : "")> &gt;</ button >
 </div>
 
 
@@ -151,5 +151,6 @@
 <script>
     var pageIndexItemsOfModal = @Model.PageIndex;
     var pageSizeItemsOfModal = @Model.PageSize;
+    var defaultCategoryId = @Model.Categories[0].Id;
 </script>
 <script src="/js/menuItemsTable.js" asp-append-version="true"></script>

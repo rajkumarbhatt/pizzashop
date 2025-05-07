@@ -1,25 +1,27 @@
 @model DAL.ViewModels.OrderViewModal
-<table id="ordersTable" class="table table-responsive"  style="white-space: nowrap;">
-        <thead class="color-head-order">
-            <tr class="text-start">
-                <th>Order <img src="~/images/icons/sorting-icon-table.svg" id="sortOrderId" class="small-image"></th>
-                <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortDate" class="small-image"></th>
-                <th>Customer <img src="~/images/icons/sorting-icon-table.svg" id="sortCustomerNames" class="small-image"></th>
-                <th>Status</th>
-                <th>Payment Mode</th>
-                <th>Rating</th>
-                <th>Total Amount <img src="~/images/icons/sorting-icon-table.svg" id="sortTotalAmount" class="small-image"></th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+<table id="ordersTable" class="table table-responsive" style="white-space: nowrap;">
+    <thead class="color-head-order">
+        <tr class="text-start">
+            <th>Order <img src="~/images/icons/sorting-icon-table.svg" id="sortOrderId" class="small-image"></th>
+            <th>Date <img src="~/images/icons/sorting-icon-table.svg" id="sortDate" class="small-image"></th>
+            <th>Customer <img src="~/images/icons/sorting-icon-table.svg" id="sortCustomerNames" class="small-image">
+            </th>
+            <th>Status</th>
+            <th>Payment Mode</th>
+            <th>Rating</th>
+            <th>Total Amount <img src="~/images/icons/sorting-icon-table.svg" id="sortTotalAmount" class="small-image">
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
     <tbody>
-        @if(Model.Orders.Count() == 0)
+        @if (Model.Orders.Count() == 0)
         {
             <tr>
                 <td colspan="8" class="text-center font-weight-bold-slight">No Orders Found</td>
             </tr>
         }
-        @foreach(var order in @Model.Orders)
+        @foreach (var order in @Model.Orders)
         {
             <tr>
                 <td>@order.Id</td>
@@ -30,7 +32,8 @@
                 <td class="rating" data-rating="@order.AvgRating"></td>
                 <td>@order.TotalAmount</td>
                 <td>
-                    <img onclick="downloadPdfInvoice(@order.Id)" src="~/images/icons/pdf-icon.svg" class="small-image" alt="">
+                    <img onclick="downloadPdfInvoice(@order.Id)" src="~/images/icons/pdf-icon.svg" class="small-image"
+                        alt="">
                     <img onclick="viewOrderDetails(@order.Id)" src="~/images/icons/view-eye.svg" class="small-image" alt="">
                 </td>
             </tr>
@@ -40,24 +43,22 @@
 
 
 <div class="d-flex flex-column flex-sm-row align-items-center justify-content-end g-3 me-sm-5">
-    <p>Items per page: </p>
-    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
-        onchange="changePageSizeOrders(this.value)" id="pageSizeSelectOrders">
-        <option value="5" selected="@(Model.pageSize == 5 ? "selected" : null)">5</option>
-        <option value="10" selected="@(Model.pageSize == 10 ? "selected" : null)">10</option>
-        <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
-    </select>
+    <div class="d-flex align-items-center gap-2">
+        <p>Items per page: </p>
+        <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+            onchange="changePageSizeOrders(this.value)" id="pageSizeSelectOrders">
+            <option value="5" selected="@(Model.pageSize == 5 ? "selected" : null)">5</option>
+            <option value="10" selected="@(Model.pageSize == 10 ? "selected" : null)">10</option>
+            <option value="15" selected="@(Model.pageSize == 15 ? "selected" : null)">15</option>
+        </select>
+    </div>
     <p class="px-1">
-        Showing @(Model.totalPages == 0 ? 0 : (Model.pageIndex - 1) * Model.pageSize + 1) - 
+        Showing @(Model.totalPages == 0 ? 0 : (Model.pageIndex - 1) * Model.pageSize + 1) -
         @(Math.Min(Model.pageIndex * Model.pageSize, Model.totalOrders)) of @Model.totalOrders
     </p>
-
-
-    <div>
-            </div>
-    <button id="previousButtonOrders" class="p-1 px-2" @(Model.pageIndex == 1 ? "disabled" : "")>&lt;</button>
-
-    <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.pageIndex == Model.totalPages) || Model.totalPages == 0) ? "disabled" : "")>&gt;</button>
+    <div class="d-flex gap-2 gap-sm-0">
+        <button id="previousButtonOrders" class="p-1 px-2" @(Model.pageIndex == 1 ? "disabled" : "")>&lt;</button>
+        <button id="nextButtonOrders" class="p-1 px-2 ms-1 border-1 border-secondary" @(((Model.pageIndex == Model.totalPages) || Model.totalPages == 0) ? "disabled" : "")>&gt;</button>
     </div>
 </div>
 

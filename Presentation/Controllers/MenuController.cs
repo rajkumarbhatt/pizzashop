@@ -10,7 +10,7 @@ namespace Presentaion.Controllers
     [CustomAuth]
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class MenuController : Controller
-    { 
+    {
         private readonly ICategoryService _categoryService;
         private IJwtService _jwtService;
         public MenuController(ICategoryService categoryService, IJwtService jwtService)
@@ -89,17 +89,17 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Invalid input" });
+                return new JsonResult(new { success = false, message = "Invalid input" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             var itemName = await _categoryService.AddItemAsync(addItemViewModel, userId);
             if (itemName == null)
             {
-            return new JsonResult(new { success = false, message = "Item already exists" });
+                return new JsonResult(new { success = false, message = "Item already exists" });
             }
             if (itemName == "thisisnotacceptable")
             {
-            return new JsonResult(new { success = false, message = "Invalid Image" });
+                return new JsonResult(new { success = false, message = "Invalid Image" });
             }
             return await _categoryService.UpdateItemModifierGroupAsync(addItemViewModel, itemName, userId);
         }
@@ -150,7 +150,7 @@ namespace Presentaion.Controllers
             return await _categoryService.AddModifierGroupAsync(createModifierGroupViewModel, userId);
         }
 
-        [HttpGet] 
+        [HttpGet]
         public async Task<IActionResult> EditModifierGroup(int modifierGroupId)
         {
             MenuViewModel menuViewModel = await _categoryService.GetModifierGroupDetailsAsync(modifierGroupId);
@@ -159,10 +159,10 @@ namespace Presentaion.Controllers
 
         [HttpPost]
         public async Task<IActionResult> AddModifier([FromBody] AddModifierViewModel createModifierViewModel)
-        {   
+        {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Invalid input" });
+                return new JsonResult(new { success = false, message = "Invalid input" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _categoryService.AddModifierAsync(createModifierViewModel, userId);

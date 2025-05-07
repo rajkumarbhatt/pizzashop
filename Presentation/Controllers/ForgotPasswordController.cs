@@ -6,7 +6,7 @@ using DAL.DBContext;
 
 namespace Presentaion.Controllers
 {
-    
+
     public class ForgotPasswordController : Controller
     {
         private readonly IEmailService _emailService;

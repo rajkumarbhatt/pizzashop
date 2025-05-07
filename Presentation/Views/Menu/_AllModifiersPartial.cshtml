@@ -36,27 +36,26 @@
         }
 </table>
 <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
-    <p>Modifiers per page: </p>
-    <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
-        onchange="changePageSizeAllModifiers(this.value)">
-        <option value="5" selected="@(Model.PageSizeAllModifiers == 5 ? "selected" : null)">5</option>
-        <option value="10" selected="@(Model.PageSizeAllModifiers == 10 ? "selected" : null)">10</option>
-        <option value="15" selected="@(Model.PageSizeAllModifiers == 15 ? "selected" : null)">15</option>
-    </select>
+    <div class="d-flex align-items-center gap-2">
+        <p>Modifiers per page: </p>
+        <select class="form-select pagination-dropdown text-black" aria-label="Items per page"
+            onchange="changePageSizeAllModifiers(this.value)">
+            <option value="5" selected="@(Model.PageSizeAllModifiers == 5 ? "selected" : null)">5</option>
+            <option value="10" selected="@(Model.PageSizeAllModifiers == 10 ? "selected" : null)">10</option>
+            <option value="15" selected="@(Model.PageSizeAllModifiers == 15 ? "selected" : null)">15</option>
+        </select>
+    </div>
     <p class="px-1">
         Showing @(Model.TotalAllModifiers == 0 ? 0 : (Model.PageIndexAllModifiers - 1) * Model.PageSizeAllModifiers + 1) -
         @(Math.Min(Model.PageIndexAllModifiers * Model.PageSizeAllModifiers, Model.TotalAllModifiers)) of
         @Model.TotalAllModifiers
     </p>
-
-
-    <div>
-    </div>
-    <button type="button" id="previousButtonAllModifiers" class="p-1 px-2" @(Model.PageIndexAllModifiers == 1 ?
+    <div class="d-flex gap-2 gap-sm-0">
+        <button type="button" id="previousButtonAllModifiers" class="p-1 px-2" @(Model.PageIndexAllModifiers == 1 ?
         "disabled" : "")> &lt;</ button >
-
-    <button type="button" id="nextButtonAllModifiers" class="p-1 px-2 ms-1 border-1 border-secondary"
-        @(((Model.PageIndexAllModifiers == Model.TotalPagesAllModifiers) || Model.TotalPagesAllModifiers == 0) ? "disabled" : "")> &gt;</ button>
+        <button type="button" id="nextButtonAllModifiers" class="p-1 px-2 ms-1 border-1 border-secondary"
+        @(((Model.PageIndexAllModifiers == Model.TotalPagesAllModifiers) || Model.TotalPagesAllModifiers == 0) ? "disabled" : "")> &gt;</button>
+    </div>
 </div>
 </div>
 </div>

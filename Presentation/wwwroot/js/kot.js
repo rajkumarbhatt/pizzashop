@@ -41,7 +41,7 @@ function updateTimers() {
         }
         var timeParts = currentTime.split(" ");
         if (timeParts.length === 6) {
-            // Format is "ahrs x mins y secs"
+            // Format is "a hrs x mins y secs"
             var hours = parseInt(timeParts[0].replace("hrs", ""));
             var minutes = parseInt(timeParts[2].replace("mins", ""));
             var seconds = parseInt(timeParts[4].replace("secs", ""));
@@ -100,8 +100,6 @@ function updateTimers() {
         }
     });
 }
-
-setInterval(updateTimers, 1000);
 
 function clearMarkAsReadyList() {
     readyItems = [];

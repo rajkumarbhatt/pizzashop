@@ -247,5 +247,3 @@ function updateTimers() {
         }
     });
 }
-
-setInterval(updateTimers, 1000);

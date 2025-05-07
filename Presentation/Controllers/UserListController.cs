@@ -66,7 +66,7 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Validation Error" });
+                return new JsonResult(new { success = false, message = "Validation Error" });
             }
             var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _userListService.UpdateUserDataFromUserIdAsync(userIdLoggedIn, userViewModel);
@@ -91,7 +91,7 @@ namespace Presentaion.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Validation Error" });
+                return new JsonResult(new { success = false, message = "Validation Error" });
             }
             var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             await _emailService.SendCreateUserEmailAsync(createUserViewModel.Email, createUserViewModel.Password);

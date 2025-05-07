@@ -19,21 +19,21 @@ public class KOTController : Controller
     {
         KotViewModel kotViewModel = await _kotService.GetKotViewModelAsync(1, 4);
         return View(kotViewModel);
-    }    
+    }
     [HttpGet]
-    public async Task<IActionResult> GetKotByCategory (int categoryId, int pageIndex = 1, int pageSize = 4)
+    public async Task<IActionResult> GetKotByCategory(int categoryId, int pageIndex = 1, int pageSize = 4)
     {
         KotViewModel kotViewModel = await _kotService.GetKotByCategoryAsync(categoryId, pageIndex, pageSize);
         return PartialView("_CardsPartial", kotViewModel);
     }
     [HttpGet]
-    public async Task<IActionResult> GetMarkedAsPreparedModal (int pageIndex, int orderId, int categoryId, bool inReady)
+    public async Task<IActionResult> GetMarkedAsPreparedModal(int pageIndex, int orderId, int categoryId, bool inReady)
     {
         KotViewModel kotViewModel = await _kotService.GetMarkedAsPreparedModalAsync(pageIndex, orderId, categoryId, inReady);
         return PartialView("_MarkedAsPreparedModal", kotViewModel);
     }
     [HttpPost]
-    public async Task<IActionResult> MarkItemsAsReady (int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, bool inReady)
+    public async Task<IActionResult> MarkItemsAsReady(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, bool inReady)
     {
         KotViewModel kotViewModel = new KotViewModel();
         int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
@@ -45,10 +45,10 @@ public class KOTController : Controller
         {
             kotViewModel = await _kotService.MarkItemsAsReadyAsync(pageIndex, readyItems, orderId, categoryId, userId);
         }
-        return PartialView("_CardsPartial", kotViewModel); 
+        return PartialView("_CardsPartial", kotViewModel);
     }
     [HttpGet]
-    public async Task<IActionResult> GetReadyItemsAsync (int categoryId, int pageIndex = 1)
+    public async Task<IActionResult> GetReadyItemsAsync(int categoryId, int pageIndex = 1)
     {
         KotViewModel kotViewModel = await _kotService.GetReadyItemsAsync(categoryId, pageIndex);
         return PartialView("_CardsPartial", kotViewModel);

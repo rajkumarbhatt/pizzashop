@@ -29,7 +29,7 @@ namespace Presentation.Controllers
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Invalid Data" });
+                return new JsonResult(new { success = false, message = "Invalid Data" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _orderAppService.AddToWaitingListAsync(waitingListModal, userId);
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
 
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Invalid Data" });
+                return new JsonResult(new { success = false, message = "Invalid Data" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _orderAppService.AssignTablesToCustomerAsync(waitingListModal, tableIdArray, userId);

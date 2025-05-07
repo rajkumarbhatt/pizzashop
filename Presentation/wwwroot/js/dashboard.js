@@ -1,3 +1,4 @@
+let previousSelectedValue = "Current Month";
 $(document).ready(function() {
 	$("#select-duration").change(function() {
 		var selectedValue = $(this).val();
@@ -33,6 +34,7 @@ $(document).ready(function() {
 				});
 			});
 		} else {
+			previousSelectedValue = selectedValue;
 			$.ajax({
 				url: '/Dashboard/GetUpdatedData',
 				type: 'GET',
@@ -87,3 +89,31 @@ $(document).ready(function() {
 		$("#errorMessageToDate").text("");
 	});
 });
+
+$(".closeDatePickerModalButton").click(function () {
+    $("#select-duration").val(previousSelectedValue);
+});
+
+
+
+
+
+window.ChatWidgetConfig = {
+	webhook: {
+		url: 'https://mrbhatt2348.app.n8n.cloud/webhook/f406671e-c954-4691-b39a-66c90aa2f103/chat',
+		route: 'general'
+	},
+	branding: {
+		logo: 'https://i.ibb.co/DHMyqyQh/pizzashop-logo.png',
+		name: 'PIZZASHOP', 
+		welcomeText: 'Hi 👋, how can we help?', 
+		responseTimeText: 'We typically respond right away' 
+	},	
+	style: {
+		primaryColor: '#854fff',
+		secondaryColor: '#6b3fd4', 
+		position: 'right',
+		backgroundColor: '#ffffff', 
+		fontColor: '#333333' //
+	}
+};

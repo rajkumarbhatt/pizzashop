@@ -63,25 +63,24 @@
     </tbody>
 </table>
 <div class="d-flex flex-column flex flex-sm-row align-items-center justify-content-end g-3">
-    <p>Items per page: </p>
-    <select id="PageSizeModifiers" class="form-select pagination-dropdown text-black" aria-label="Items per page"
-        onchange="changePageSizeModifier(this.value)">
-        <option value="5" selected="@(Model.PageSizeModifier == 5 ? "selected" : null)">5</option>
-        <option value="10" selected="@(Model.PageSizeModifier == 10 ? "selected" : null)">10</option>
-        <option value="15" selected="@(Model.PageSizeModifier == 15 ? "selected" : null)">15</option>
-    </select>
+    <div class="d-flex align-items-center gap-2">
+        <p>Items per page: </p>
+        <select id="PageSizeModifiers" class="form-select pagination-dropdown text-black" aria-label="Items per page"
+            onchange="changePageSizeModifier(this.value)">
+            <option value="5" selected="@(Model.PageSizeModifier == 5 ? "selected" : null)">5</option>
+            <option value="10" selected="@(Model.PageSizeModifier == 10 ? "selected" : null)">10</option>
+            <option value="15" selected="@(Model.PageSizeModifier == 15 ? "selected" : null)">15</option>
+        </select>
+    </div>
     <p class="px-1">
         Showing @(Model.TotalPagesModifier == 0 ? 0 : (Model.PageIndexModifier - 1) * Model.PageSizeModifier + 1) -
         @(Math.Min(Model.PageIndexModifier * Model.PageSizeModifier, Model.TotalModifiers)) of
         @Model.TotalModifiers
     </p>
-
-
-    <div>
+    <div class="d-flex gap-2 gap-sm-0">
+        <button id="previousButtonModifier" class="p-1 px-2" @(Model.PageIndexModifier == 1 ? "disabled" : "")>&lt;</button>
+        <button id="nextButtonModifier" class="p-1 px-2 ms-1 border-1 border-secondary"@(((Model.PageIndexModifier == Model.TotalPagesModifier) || Model.TotalPagesModifier == 0) ? "disabled" : "")> &gt;</button>
     </div>
-    <button id="previousButtonModifier" class="p-1 px-2" @(Model.PageIndexModifier == 1 ? "disabled" : "")>&lt;</button>
-
-    <button id="nextButtonModifier" class="p-1 px-2 ms-1 border-1 border-secondary"@(((Model.PageIndexModifier == Model.TotalPagesModifier) || Model.TotalPagesModifier == 0) ? "disabled" : "")> &gt;</ button >
 </div>
 
 @* delete modififer modal *@

@@ -24,8 +24,10 @@ $("#DeleteTablesIntermediateCheckbox").click(function () {
     if ($(this).is(":checked")) {
         $(".table-name-checkbox").prop("checked", true);
         $(".table-name-checkbox").each(function () {
-            if (!deleteTableIds.includes(parseInt($(this).val()))) {
-                deleteTableIds.push(parseInt($(this).val()));
+            if (typeof deleteTableIds !== "undefined") {
+                if (!deleteTableIds.includes(parseInt($(this).val()))) {
+                    deleteTableIds.push(parseInt($(this).val()));
+                }
             }
         });
     } else {
@@ -131,8 +133,10 @@ $("#searchInput").on("keyup", function () {
 });
 
 $('.table-name-checkbox').each(function () {
-    if (deleteTableIds.includes(parseInt($(this).val()))) {
-        $(this).prop('checked', true);
+    if (typeof deleteTableIds !== "undefined") {
+        if (deleteTableIds.includes(parseInt($(this).val()))) {
+            $(this).prop('checked', true);
+        }
     }
 });
 

@@ -51,6 +51,14 @@ namespace BLL.Services
             int categoryId = addEditCategoryViewModel.Id;
             if (categoryId != 0)
             {
+                if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryName.ToLower() && c.Id != categoryId && c.IsDeleted == false))
+                {
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Category already exists"
+                    });
+                }
                 Category categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
                 if (categoryToUpdate != null)
                 {
@@ -756,7 +764,7 @@ namespace BLL.Services
                         message = "Modifier group not found"
                     });
                 }
-                if (await _context.ModifierGroups.AnyAsync(m => m.Name.ToLower() == createModifierGroupViewModel.ModifierGroupName.ToLower() && m.Id != createModifierGroupViewModel.ModifierGroupId))
+                if (await _context.ModifierGroups.AnyAsync(m => m.Name.ToLower() == createModifierGroupViewModel.ModifierGroupName.ToLower() && m.Id != createModifierGroupViewModel.ModifierGroupId && m.IsDeleted == false))
                 {
                     return new JsonResult(new
                     {
@@ -999,6 +1007,7 @@ namespace BLL.Services
         }
         public async Task<MenuViewModel> RefreshItemsPartialAsync(int categoryId = -1, int pageIndex = 1, int pageSize = 5, string? searchValue = null)
         {
+            categoryId = categoryId == 0 ? -1 : categoryId;
             var categories = await GetCategoriesAsync();
             categoryId = categoryId == -1 ? categories.FirstOrDefault()?.Id ?? 0 : categoryId;
             var items = await GetItemsBasedOnSearchAsync(categoryId, searchValue ?? "");
@@ -1097,7 +1106,7 @@ namespace BLL.Services
             var modifierIds = selectedModifiers.Select(m => m.Id).ToList();
             var modifiers1 = await _context.ModifierModifiergroupMappings
                 .Where(m => m.ModifiergroupId == modifierGroupId)
-                .Select(m => m.Modifier)
+                .Select(m => m.Modifier).OrderBy(m => m.Id)
                 .ToListAsync();
 
             var modifierGroups = await GetModifierGroupsAsync();

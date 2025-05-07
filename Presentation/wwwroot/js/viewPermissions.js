@@ -42,7 +42,6 @@ function changePermission (roleId, permissionId, permissionName) {
     } else {
         changedPermissions[index] = permission;
     }
-    console.log(changedPermissions);
 }
 
 function savePermissions() {

@@ -10,7 +10,7 @@ namespace Presentaion.Controllers
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
     public class ProfileController : Controller
     {
-        private readonly IProfileService _ProfileService;   
+        private readonly IProfileService _ProfileService;
         private readonly IJwtService _jwtService;
         public ProfileController(IProfileService ProfileService, IJwtService jwtService)
         {
@@ -27,7 +27,7 @@ namespace Presentaion.Controllers
             ViewBag.Country = country;
             ViewBag.State = state;
             ViewBag.City = city;
-            return View(ProfileViewModel); 
+            return View(ProfileViewModel);
         }
 
         public async Task<IActionResult> Edit()
@@ -40,13 +40,13 @@ namespace Presentaion.Controllers
             ViewBag.Cities = cities;
             return View(profileViewModel);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> EditProfile(ProfileViewModel ProfileViewModel)
         {
             if (!ModelState.IsValid)
             {
-            return new JsonResult(new { success = false, message = "Validation errors" });
+                return new JsonResult(new { success = false, message = "Validation errors" });
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             return await _ProfileService.UpdateUserDataFromUserIdAsync(userId, ProfileViewModel);
@@ -56,7 +56,7 @@ namespace Presentaion.Controllers
         {
             var states = await _ProfileService.GetStatesAsync(countryId);
             return Json(states);
-        } 
+        }
 
         public async Task<JsonResult> GetCities(int stateId)
         {

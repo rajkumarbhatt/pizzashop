@@ -40,10 +40,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="staticBackdropLabel">Select Date Range</h5>
-                <button id="closeDatePickerModalButton" type="button" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" class="btn-close closeDatePickerModalButton" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
-            <div class="modal-body d-flex mx-auto gap-3">
+            <div class="modal-body d-flex flex-column flex-sm-row mx-auto gap-3">
                 <div class="d-flex flex-column ">
                     <div class="input-group search-box cursor-pointer" style="width: 200px;">
                     <div class="form-floating">
@@ -71,8 +71,8 @@
         </div>
         <div class="modal-footer d-flex justify-content-center">
             <button id="ApplyDateChangesButton" type="submit" class="btn btn-primary px-3">Submit</button>
-            <a><button data-bs-dismiss="modal" aria-label="Close" type="button" id="cancelDatePickerButton"
-                    class="btn btn-contrast px-3">Cancel</button></a>
+            <a><button data-bs-dismiss="modal" aria-label="Close" type="button" 
+                    class="btn btn-contrast px-3 closeDatePickerModalButton">Cancel</button></a>
         </div>
     </div>
 </div>
