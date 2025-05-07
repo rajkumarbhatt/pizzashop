@@ -16,10 +16,10 @@ namespace Presentaion.Controllers
             if (requestedUrl == null || !IsAuthorizedAsync(context.HttpContext.User, requestedUrl).Result)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary
-            {
-                { "controller", "PageNotFound" },
-                { "action", "Index" }
-            });
+                {
+                    { "controller", "PageNotFound" },
+                    { "action", "NotAuthorized" }
+                });
             }
         }
 

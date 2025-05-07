@@ -516,7 +516,7 @@ function AddCategory() {
                         toastr.success(data.message);
                         $.ajax({
                             type: "GET",
-                            data: { categoryId: Id },
+                            data: { categoryId: Id, pageIndex: pageIndexItemsOfModal, pageSize: pageSizeItemsOfModal },
                             url: "/Menu/RefreshItemsPartial",
                             success: function (data) {
                                 $("#partialViewStarting").html(data);

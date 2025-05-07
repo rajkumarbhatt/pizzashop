@@ -1,0 +1,52 @@
+@{
+    Layout = null;
+    ViewBag.Title = "Page Not Found";
+}
+    <title>
+        Page Not Found
+    </title>
+
+<style>
+    body {
+        background-color: #d9f0ff;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .logo {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    .error-code {
+        font-size: 100px;
+        font-weight: bold;
+        color: #0056b3;
+    }
+
+    .error-message {
+        font-size: 20px;
+        color: #333;
+    }
+
+    .sub-message {
+        color: #0056b3;
+    }
+</style>
+    <div class="container">
+        <div class="logo" style="display: flex; gap: 10px; justify-content: center; align-items: center;">
+            <img src="~/images/logos/pizzashop_logo.png" style="width: 90px; height: 80px;" alt="Logo" /> 
+            <p style="font-size: 35px;">PIZZASHOP</p>
+        </div>
+        <div class="error-code">401</div>
+        <div class="error-message">Not Authorized</div>
+        <p class="sub-message">Oops, you are not authorized to view this page</p>
+    </div>

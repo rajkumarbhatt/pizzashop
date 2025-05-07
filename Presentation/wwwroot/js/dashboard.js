@@ -114,6 +114,6 @@ window.ChatWidgetConfig = {
 		secondaryColor: '#6b3fd4', 
 		position: 'right',
 		backgroundColor: '#ffffff', 
-		fontColor: '#333333' //
+		fontColor: '#333333' 
 	}
 };

@@ -31,7 +31,7 @@ function addModifierGroupFunc() {
                         $.ajax({
                             type: "GET",
                             url: "/Menu/RefreshModifiersPartial",
-                            data: { modifierGroupId: modifierGroupId },
+                            data: { modifierGroupId: modifierGroupId, pageIndex: pageIndexOfModifierFromModal, pageSize: pageSizeOfModifierFromModal },
                             success: function (data) {
                                 $("#modifiers-content").html(data);
                                 selectedModifiers = [];
@@ -189,7 +189,7 @@ function editModifierGroup(modifierGroupId) {
         $.ajax({
             url: '/Menu/EditModifierGroup',
             type: 'GET',
-            data: { modifierGroupId: modifierGroupId },
+            data: { modifierGroupId: modifierGroupId, pageIndex: pageIndexOfModifierFromModal, pageSize: pageSizeOfModifierFromModal },
             success: function (data) {
                 $("#modifiers-content").html(data);
                 $("#AddModifierGroupModal").modal("show");

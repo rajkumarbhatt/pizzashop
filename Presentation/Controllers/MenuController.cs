@@ -93,7 +93,7 @@ namespace Presentaion.Controllers
             }
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
             var itemName = await _categoryService.AddItemAsync(addItemViewModel, userId);
-            if (itemName == null)
+            if (itemName == "itemalreadyexists")
             {
                 return new JsonResult(new { success = false, message = "Item already exists" });
             }
@@ -151,9 +151,9 @@ namespace Presentaion.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> EditModifierGroup(int modifierGroupId)
+        public async Task<IActionResult> EditModifierGroup(int modifierGroupId, int pageIndex, int pageSize)
         {
-            MenuViewModel menuViewModel = await _categoryService.GetModifierGroupDetailsAsync(modifierGroupId);
+            MenuViewModel menuViewModel = await _categoryService.GetModifierGroupDetailsAsync(modifierGroupId, pageIndex, pageSize);
             return PartialView("_ModifiersPartial", menuViewModel);
         }
 
