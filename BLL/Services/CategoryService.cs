@@ -46,8 +46,8 @@ namespace BLL.Services
         }
         public async Task<JsonResult> AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, int userId)
         {
-            string categoryName = addEditCategoryViewModel.Name;
-            string categoryDescription = addEditCategoryViewModel.Description;
+            string categoryName = addEditCategoryViewModel.Name ?? string.Empty;
+            string categoryDescription = addEditCategoryViewModel.Description ?? string.Empty;
             int categoryId = addEditCategoryViewModel.Id;
             if (categoryId != 0)
             {
@@ -59,7 +59,7 @@ namespace BLL.Services
                         message = "Category already exists"
                     });
                 }
-                Category categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
+                Category categoryToUpdate = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId) ?? new Category();
                 if (categoryToUpdate != null)
                 {
                     categoryToUpdate.Name = categoryName;
@@ -72,14 +72,6 @@ namespace BLL.Services
                         message = "Category updated successfully"
                     });
                 }
-            }
-            if (userId == null)
-            {
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = "User not found"
-                });
             }
             if (await _context.Categories.AnyAsync(c => c.Name.ToLower() == categoryName.ToLower() && c.IsDeleted == false))
             {
@@ -125,14 +117,6 @@ namespace BLL.Services
         }
         public async Task<JsonResult> UpdateCategoryAsync(int categoryId, string categoryName, string categoryDescription, int userId)
         {
-            if (userId == null)
-            {
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = "User not found"
-                });
-            }
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
             if (category == null)
             {
@@ -162,14 +146,6 @@ namespace BLL.Services
         }
         public async Task<JsonResult> DeleteCategoryAsync(int categoryId, int userId)
         {
-            if (userId == null)
-            {
-                return new JsonResult(new
-                {
-                    success = false,
-                    message = "User not found"
-                });
-            }
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Id == categoryId);
             if (category == null)
             {
@@ -247,44 +223,7 @@ namespace BLL.Services
             {
                 if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.IsDeleted == false))
                 {
-                    return null;
-                }
-                else if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.IsDeleted == true))
-                {
-                    var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == addItemViewModel.ItemName && i.IsDeleted == true);
-                    item.IsDeleted = false;
-                    item.CategoryId = addItemViewModel.CategoryId;
-                    item.Name = addItemViewModel.ItemName;
-                    item.ItemType = addItemViewModel.Type;
-                    item.Price = addItemViewModel.Rate;
-                    item.Quantity = addItemViewModel.Quantity;
-                    item.Unit = addItemViewModel.Unit;
-                    item.IsAvailable = addItemViewModel.IsAvailable;
-                    item.DefaultTax = addItemViewModel.IsDefaultTaxable;
-                    item.TaxPercentage = addItemViewModel.TaxPercentage ?? 0;
-                    item.ShortCode = addItemViewModel.ShortCode ?? "";
-                    item.Description = addItemViewModel.Description;
-                    item.UpdatedBy = userId;
-                    item.UpdatedAt = DateTime.Now;
-
-                    if (addItemViewModel.Image != null)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
-                        if (!addItemViewModel.Image.ContentType.Contains("image"))
-                        {
-                            return "thisisnotacceptable";
-                        }
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
-                        using (var fileStream = new FileStream(path, FileMode.Create))
-                        {
-                            await addItemViewModel.Image.CopyToAsync(fileStream);
-                        }
-                        item.ImageUrl = fileName;
-                    }
-
-                    item.IsAvailable = addItemViewModel.Quantity > 0;
-                    await _context.SaveChangesAsync();
-                    return item.Name;
+                    return "itemalreadyexists";
                 }
                 else
                 {
@@ -322,8 +261,6 @@ namespace BLL.Services
                         }
                         item.ImageUrl = fileName;
                     }
-
-                    item.IsAvailable = addItemViewModel.Quantity > 0;
                     await _context.Items.AddAsync(item);
                     await _context.SaveChangesAsync();
                     return item.Name;
@@ -333,57 +270,11 @@ namespace BLL.Services
             {
                 if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.Id != addItemViewModel.Id && i.IsDeleted == false))
                 {
-                    return null;
-                }
-                else if (await _context.Items.AnyAsync(i => i.Name.ToLower() == addItemViewModel.ItemName.ToLower() && i.Id != addItemViewModel.Id && i.IsDeleted == true))
-                {
-                    var itemToDelete = await _context.Items.FirstOrDefaultAsync(i => i.Id == addItemViewModel.Id && i.IsDeleted == true);
-                    if (itemToDelete != null)
-                    {
-                        itemToDelete.IsDeleted = true;
-                        itemToDelete.UpdatedBy = userId;
-                        itemToDelete.UpdatedAt = DateTime.Now;
-                        await _context.SaveChangesAsync();
-                    }
-
-                    var item = await _context.Items.FirstOrDefaultAsync(i => i.Name == addItemViewModel.ItemName && i.Id != addItemViewModel.Id && i.IsDeleted == true);
-                    item.IsDeleted = false;
-                    item.CategoryId = addItemViewModel.CategoryId;
-                    item.Name = addItemViewModel.ItemName;
-                    item.ItemType = addItemViewModel.Type;
-                    item.Price = addItemViewModel.Rate;
-                    item.Quantity = addItemViewModel.Quantity;
-                    item.Unit = addItemViewModel.Unit;
-                    item.IsAvailable = addItemViewModel.IsAvailable;
-                    item.DefaultTax = addItemViewModel.IsDefaultTaxable;
-                    item.TaxPercentage = addItemViewModel.TaxPercentage ?? 0;
-                    item.ShortCode = addItemViewModel.ShortCode ?? "";
-                    item.Description = addItemViewModel.Description;
-                    item.UpdatedBy = userId;
-                    item.UpdatedAt = DateTime.Now;
-
-                    if (addItemViewModel.Image != null)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(addItemViewModel.Image.FileName);
-                        if (!addItemViewModel.Image.ContentType.Contains("image"))
-                        {
-                            return "thisisnotacceptable";
-                        }
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/item-images", fileName);
-                        using (var fileStream = new FileStream(path, FileMode.Create))
-                        {
-                            await addItemViewModel.Image.CopyToAsync(fileStream);
-                        }
-                        item.ImageUrl = fileName;
-                    }
-
-                    item.IsAvailable = addItemViewModel.Quantity > 0;
-                    await _context.SaveChangesAsync();
-                    return item.Name;
+                    return "itemalreadyexists";
                 }
                 else
                 {
-                    var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == addItemViewModel.Id);
+                    var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == addItemViewModel.Id) ?? new Item();
                     item.CategoryId = addItemViewModel.CategoryId;
                     item.Name = addItemViewModel.ItemName;
                     item.ItemType = addItemViewModel.Type;
@@ -414,7 +305,6 @@ namespace BLL.Services
                         item.ImageUrl = fileName;
                     }
 
-                    item.IsAvailable = addItemViewModel.Quantity > 0;
                     await _context.SaveChangesAsync();
                     return item.Name;
                 }
@@ -440,15 +330,7 @@ namespace BLL.Services
                         message = "Item added successfully"
                     });
                 }
-                var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(addItemViewModel.ModifierGroupIds);
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
+                var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(addItemViewModel.ModifierGroupIds) ?? new List<ModifierGroupData>();
                 if (string.IsNullOrEmpty(addItemViewModel.ModifierGroupIds))
                 {
                     return new JsonResult(new
@@ -473,8 +355,8 @@ namespace BLL.Services
                     {
                         ItemId = item.Id,
                         ModifiergroupId = modifierGroupId,
-                        MinValue = (short?)modifierGroupData.FirstOrDefault(m => m.Id == modifierGroupId).MinimumQuantity,
-                        MaxValue = (short?)modifierGroupData.FirstOrDefault(m => m.Id == modifierGroupId).MaximumQuantity,
+                        MinValue = (short?)modifierGroupData?.FirstOrDefault(m => m.Id == modifierGroupId)?.MinimumQuantity,
+                        MaxValue = (short?)modifierGroupData?.FirstOrDefault(m => m.Id == modifierGroupId)?.MaximumQuantity,
                         CreatedBy = userId,
                         UpdatedBy = userId
                     };
@@ -503,15 +385,7 @@ namespace BLL.Services
                         message = "Item updated successfully"
                     });
                 }
-                var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(addItemViewModel.ModifierGroupIds);
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
+                var modifierGroupData = JsonConvert.DeserializeObject<List<ModifierGroupData>>(addItemViewModel.ModifierGroupIds) ?? new List<ModifierGroupData>();
                 if (string.IsNullOrEmpty(addItemViewModel.ModifierGroupIds))
                 {
                     return new JsonResult(new
@@ -542,8 +416,8 @@ namespace BLL.Services
                     {
                         ItemId = item.Id,
                         ModifiergroupId = modifierGroupId,
-                        MinValue = (short?)modifierGroupData.FirstOrDefault(m => m.Id == modifierGroupId).MinimumQuantity,
-                        MaxValue = (short?)modifierGroupData.FirstOrDefault(m => m.Id == modifierGroupId).MaximumQuantity,
+                        MinValue = (short?)modifierGroupData?.FirstOrDefault(m => m.Id == modifierGroupId)?.MinimumQuantity,
+                        MaxValue = (short?)modifierGroupData?.FirstOrDefault(m => m.Id == modifierGroupId)?.MaximumQuantity,
                         CreatedBy = userId,
                         UpdatedBy = userId
                     };
@@ -569,13 +443,13 @@ namespace BLL.Services
             var modifierGroupData = new List<ModifierGroupData>();
             foreach (var itemModifierGroup in itemModifierGroups)
             {
-                var modifierGroup = await _context.ModifierGroups.FirstOrDefaultAsync(m => m.Id == itemModifierGroup.ModifiergroupId);
+                var modifierGroup = await _context.ModifierGroups.FirstOrDefaultAsync(m => m.Id == itemModifierGroup.ModifiergroupId) ?? new ModifierGroup();
                 modifierGroupData.Add(new ModifierGroupData
                 {
                     Id = modifierGroup.Id,
                     Name = modifierGroup.Name,
-                    MinimumQuantity = (int)itemModifierGroup.MinValue,
-                    MaximumQuantity = (int)itemModifierGroup.MaxValue
+                    MinimumQuantity = (int)(itemModifierGroup.MinValue ?? 0),
+                    MaximumQuantity = (int)(itemModifierGroup.MaxValue ?? 0),
                 });
             }
             var addItemViewModel = new AddItemViewModel
@@ -585,10 +459,10 @@ namespace BLL.Services
                 ItemName = item.Name,
                 Type = item.ItemType,
                 Rate = item.Price,
-                Quantity = (int)item.Quantity,
-                Unit = item.Unit,
-                IsAvailable = (bool)item.IsAvailable,
-                IsDefaultTaxable = (bool)item.DefaultTax,
+                Quantity = (int)(item.Quantity ?? 0),
+                Unit = item.Unit ?? "",
+                IsAvailable = (bool)(item.IsAvailable ?? false),
+                IsDefaultTaxable = (bool)(item.DefaultTax ?? false),
                 TaxPercentage = item.TaxPercentage,
                 ShortCode = item.ShortCode,
                 Description = item.Description,
@@ -702,14 +576,6 @@ namespace BLL.Services
         {
             if (createModifierGroupViewModel.ModifierGroupId == -1)
             {
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
                 if (await _context.ModifierGroups.AnyAsync(m => m.Name.ToLower() == createModifierGroupViewModel.ModifierGroupName.ToLower() && m.IsDeleted == false))
                 {
                     return new JsonResult(new
@@ -727,7 +593,7 @@ namespace BLL.Services
                 };
                 await _context.ModifierGroups.AddAsync(modifierGroup);
                 await _context.SaveChangesAsync();
-                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds;
+                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds ?? new List<int>();
                 foreach (var modifierId in modifierGroupIds)
                 {
                     var modifierModifierGroupMapping = new ModifierModifiergroupMapping
@@ -747,14 +613,6 @@ namespace BLL.Services
             }
             else
             {
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
                 var modifierGroup = await _context.ModifierGroups.FirstOrDefaultAsync(m => m.Id == createModifierGroupViewModel.ModifierGroupId);
                 if (modifierGroup == null)
                 {
@@ -777,7 +635,7 @@ namespace BLL.Services
                 modifierGroup.UpdatedBy = userId;
                 modifierGroup.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
-                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds;
+                var modifierGroupIds = createModifierGroupViewModel.SelectedModifierIds ?? new List<int>();
                 var existingModifierGroupIds = await _context.ModifierModifiergroupMappings
                     .Where(m => m.ModifiergroupId == modifierGroup.Id)
                     .Select(m => m.ModifierId)
@@ -796,7 +654,7 @@ namespace BLL.Services
                 foreach (var modifierId in deleteModifierGroupIds)
                 {
                     var modifierModifierGroupMapping = await _context.ModifierModifiergroupMappings
-                        .FirstOrDefaultAsync(m => m.ModifierId == modifierId && m.ModifiergroupId == modifierGroup.Id);
+                        .FirstOrDefaultAsync(m => m.ModifierId == modifierId && m.ModifiergroupId == modifierGroup.Id) ?? new ModifierModifiergroupMapping();
                     _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
                 }
                 await _context.SaveChangesAsync();
@@ -1051,7 +909,6 @@ namespace BLL.Services
                 (modifierGroups.FirstOrDefault()?.Id ?? 1) :
                 modifierGroupId;
             var modifiers = await GetModifiersBasedOnSearchAsync(modifierId, searchValue ?? "");
-            var pageIndexModifier = 1;
             var pageSizeModifier = 5;
             var totalModifiers = modifiers.Count;
             var allModifiers = await GetAllModifiersAsync(searchValue ?? "");
@@ -1066,8 +923,8 @@ namespace BLL.Services
                 TotalItems = items.Count,
                 ModifierGroups = modifierGroups,
                 Modifiers = modifiers.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
-                PageIndexModifier = pageIndexModifier,
-                PageSizeModifier = pageSizeModifier,
+                PageIndexModifier = pageIndex,
+                PageSizeModifier = pageSize,
                 TotalPagesModifier = TotalPagesModifier,
                 TotalModifiers = totalModifiers,
                 PageIndexAllModifiers = 1,
@@ -1090,7 +947,7 @@ namespace BLL.Services
             };
             return menuViewModel;
         }
-        public async Task<MenuViewModel> GetModifierGroupDetailsAsync(int modifierGroupId)
+        public async Task<MenuViewModel> GetModifierGroupDetailsAsync(int modifierGroupId, int pageIndex = 1, int pageSize = 5)
         {
             var modifierGroup = await _context.ModifierGroups.FirstOrDefaultAsync(m => m.Id == modifierGroupId);
             if (modifierGroup == null)
@@ -1110,8 +967,7 @@ namespace BLL.Services
                 .ToListAsync();
 
             var modifierGroups = await GetModifierGroupsAsync();
-            var modifiers = await GetAllModifiersAsync(null);
-
+            var modifiers = await GetAllModifiersAsync("");
             var createModifierGroupViewModel = new CreateModifierGroupViewModel
             {
                 ModifierGroupId = modifierGroup.Id,
@@ -1126,14 +982,14 @@ namespace BLL.Services
                 CreateModifierGroupViewModel = createModifierGroupViewModel,
                 AllModifiers = modifiers.Skip(0).Take(5).ToList(),
                 ModifierGroups = modifierGroups,
-                Modifiers = modifiers1.Skip(0).Take(5).ToList(),
+                Modifiers = modifiers1.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(),
                 PageIndexAllModifiers = 1,
                 TotalAllModifiers = modifiers.Count,
                 PageSizeAllModifiers = 5,
                 TotalPagesAllModifiers = (int)Math.Ceiling(modifiers.Count / (double)5),
-                PageIndexModifier = 1,
+                PageIndexModifier = pageIndex,
                 TotalModifiers = modifiers1.Count,
-                PageSizeModifier = 5,
+                PageSizeModifier = pageSize,
                 TotalPagesModifier = (int)Math.Ceiling(modifiers1.Count / (double)5)
             };
 
@@ -1160,8 +1016,8 @@ namespace BLL.Services
                 Id = modifier.Id,
                 Name = modifier.Name,
                 Rate = modifier.Price,
-                Quantity = (int)modifier.Quantity,
-                Unit = modifier.Unit,
+                Quantity = (int)(modifier.Quantity ?? 0),
+                Unit = modifier.Unit ?? "",
                 Description = modifier.Description,
                 ModifierGroupIds = modifierGroupIds
             };
@@ -1190,14 +1046,6 @@ namespace BLL.Services
         {
             if (addModifierViewModel.Id == -1)
             {
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
                 if (await _context.Modifiers.AnyAsync(m => m.Name.ToLower() == addModifierViewModel.Name.ToLower()))
                 {
                     return new JsonResult(new
@@ -1218,7 +1066,7 @@ namespace BLL.Services
                 };
                 await _context.Modifiers.AddAsync(modifier);
                 await _context.SaveChangesAsync();
-                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds ?? new List<int>();
                 foreach (var modifierGroupId in modifierGroupIds)
                 {
                     var modifierModifierGroupMapping = new ModifierModifiergroupMapping
@@ -1237,14 +1085,6 @@ namespace BLL.Services
             }
             else
             {
-                if (userId == null)
-                {
-                    return new JsonResult(new
-                    {
-                        success = false,
-                        message = "User not found"
-                    });
-                }
                 var modifier = await _context.Modifiers.FirstOrDefaultAsync(m => m.Id == addModifierViewModel.Id);
                 if (modifier == null)
                 {
@@ -1270,7 +1110,7 @@ namespace BLL.Services
                 modifier.UpdatedBy = userId;
                 modifier.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
-                var modifierGroupIds = addModifierViewModel.ModifierGroupIds;
+                var modifierGroupIds = addModifierViewModel.ModifierGroupIds ?? new List<int>();
                 var existingModifierGroupIds = await _context.ModifierModifiergroupMappings
                     .Where(m => m.ModifierId == modifier.Id)
                     .Select(m => m.ModifiergroupId)
@@ -1290,7 +1130,7 @@ namespace BLL.Services
                 foreach (var modifierGroupId in deleteModifierGroupIds)
                 {
                     var modifierModifierGroupMapping = await _context.ModifierModifiergroupMappings
-                        .FirstOrDefaultAsync(m => m.ModifierId == modifier.Id && m.ModifiergroupId == modifierGroupId);
+                        .FirstOrDefaultAsync(m => m.ModifierId == modifier.Id && m.ModifiergroupId == modifierGroupId) ?? new ModifierModifiergroupMapping();
                     _context.ModifierModifiergroupMappings.Remove(modifierModifierGroupMapping);
                     await _context.SaveChangesAsync();
                 }

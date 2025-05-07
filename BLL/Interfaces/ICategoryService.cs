@@ -29,7 +29,7 @@ namespace BLL.Interfaces
         public Task<IActionResult> DeleteModifierGroupAsync(int modifierGroupId, int userId);
         public Task<List<Modifier>> GetAllModifiersAsync(string searchValue);
         public Task<JsonResult> AddModifierGroupAsync(CreateModifierGroupViewModel createModifierGroupViewModel, int userId);
-        public Task<MenuViewModel> GetModifierGroupDetailsAsync(int modifierGroupId);
+        public Task<MenuViewModel> GetModifierGroupDetailsAsync(int modifierGroupId, int pageIndex, int pageSize);
         public Task<IActionResult> AddModifierAsync(AddModifierViewModel createModifierViewModel, int userId);
         public Task<MenuViewModel> GetModifierDataAsync(int modifierId, int modifierGroupId);
         public Task<IActionResult> DeleteSelectedModifiersAsync(List<int> modifierIds, int modifierGroupId, int userId);
