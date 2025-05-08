@@ -4,6 +4,7 @@ namespace DAL.ViewModels;
 
 public class OrderDetailsCard 
 {
+    public string? OrderStatus { get; set; }
     public string? SectionName { get; set; }
     public string? TableNames { get; set; }
     public List<OrderItemDetials>? OrderItemDetails { get; set; }

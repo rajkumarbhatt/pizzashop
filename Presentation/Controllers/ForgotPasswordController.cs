@@ -18,6 +18,11 @@ namespace Presentaion.Controllers
 
         public IActionResult Index()
         {
+            string token = Request.Cookies["token"] ?? "";
+            if (!string.IsNullOrEmpty(token))
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
             return View();
         }
 

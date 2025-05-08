@@ -32,8 +32,17 @@
                 <td class="rating" data-rating="@order.AvgRating"></td>
                 <td>@order.TotalAmount</td>
                 <td>
-                    <img onclick="downloadPdfInvoice(@order.Id)" src="~/images/icons/pdf-icon.svg" class="small-image"
+                    @if(order.Status == "Completed")
+                    {
+                        <img onclick="downloadPdfInvoice(@order.Id)" src="~/images/icons/pdf-icon.svg" class="small-image"
                         alt="">
+                    } else if (order.Status == "Cancelled") {
+                        <img onclick="showErrorToastr('The order is cancelled. You cannot download the invoice')" src="~/images/icons/pdf-icon-disabled.svg" class="small-image"
+                        alt="">
+                    } else {
+                        <img onclick="showErrorToastr('The order is not yet completed. Please try again later.')" src="~/images/icons/pdf-icon-disabled.svg" class="small-image"
+                        alt="">
+                    }
                     <img onclick="viewOrderDetails(@order.Id)" src="~/images/icons/view-eye.svg" class="small-image" alt="">
                 </td>
             </tr>

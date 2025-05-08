@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using BLL.Services;
-using AspNetCoreHero.ToastNotification;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using BLL.Interfaces;
 using DAL.DBContext;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,12 +32,36 @@ builder.Services.AddScoped<IWaitingListService, WaitingListService>();
 builder.Services.AddScoped<IKotMenuService, KotMenuService>();
 builder.Services.AddScoped<IKotService, KotService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
-builder.Services.AddNotyf(config =>
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+builder.Host.UseSerilog((context, services, configuration) =>
 {
-    config.DurationInSeconds = 3;
-    config.IsDismissable = true;
-    config.Position = NotyfPosition.BottomRight;
+    configuration
+        .WriteTo.File("logs/log.txt")
+        .Filter.ByIncludingOnly(logEvent =>
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ChangePasswordService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CategoryService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.DashboardService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.EmailService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.JwtService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotMenuService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.LoginService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.NavBarService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderAppService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ProfileService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ResetPasswordService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.RoleAndPermissionService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TableAndSectionService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TaxAndFeeService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.UserListService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.WaitingListService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotService") ||
+            logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CustomersService"));
 });
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -50,7 +74,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = "http://localhost:5125",
             ValidAudience = "http://localhost:5125",
-            // ClockSkew = TimeSpan.Zero,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test1232133454353533636gfhgfhxfdsfsdfsdfghgfhfghfghgfhfghfhfgh"))
         };
         options.Events = new JwtBearerEvents
@@ -72,7 +95,7 @@ var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/PageNotFound/Index");
     app.UseHsts();
 }
 

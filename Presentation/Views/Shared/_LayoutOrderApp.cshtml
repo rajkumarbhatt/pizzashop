@@ -24,7 +24,7 @@
 }
 
 <body>
-    @* toaster *@
+    @* loader *@
     <div class="loader-container d-none">
         <div class="loader"></div>
     </div>
@@ -35,7 +35,7 @@
         <div class="col-12  main-content-background">
 
             <!-- navbar -->
-            <nav class="navbar d-flex  justify-content-md-between align-items-center">
+            <nav class="navbar d-flex justify-content-md-between align-items-center">
                 <div class="ms-3 d-flex justify-content-center gap-1 align-items-center">
                     <a asp-controller="OrderApp" asp-action="Index" class="navbar-brand bg-white w-auto">
                         <img src="~/images/logos/pizzashop_logo.png" class="logo navbar-image" alt="">
@@ -182,7 +182,7 @@
     }
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-    @await Component.InvokeAsync("Notyf")
+    @* @await Component.InvokeAsync("Notyf") *@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 

@@ -260,3 +260,7 @@ $(document).ready(function () {
         $('#fromDate').datepicker('setEndDate', toDate);
     });
 })
+
+function showErrorToastr(message) {
+    toastr.error(message);
+}

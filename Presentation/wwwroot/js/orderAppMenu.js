@@ -1146,30 +1146,23 @@ function removeFromFavourites(id, event) {
 
 if (typeof orderId !== "undefined") {
   if (orderId == "Menu") {
-    document.getElementById("thisDivIsImportant").style.width = "100% !important";
+    document.getElementById("thisDivIsImportant").style.width ="100% !important";
     var secondImpDev = document.getElementById("thisIsSecondImportant");
     if (secondImpDev) {
       document.getElementById("thisIsSecondImportant").classList.add("d-none");
-    }  
-    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-none");
+    }
+    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-md-none");
+    document.getElementById("orderAppNavbarButtonsToHide").classList.add("d-none");
   } else if (orderId == 0) {
     document.getElementById("thisDivIsImportant").style.width = "100%";
-    document
-      .getElementById("orderAppNavbarButtonsToHide")
-      .classList.add("d-md-none");
-    document
-      .getElementById("orderAppNavbarHamburgerToHide")
-      .classList.add("d-none");
+    document.getElementById("orderAppNavbarButtonsToHide").classList.add("d-md-none");
+    document.getElementById("orderAppNavbarHamburgerToHide").classList.add("d-none");
   } else {
     document.getElementById("thisDivIsImportant").style.width = "66%";
     document.getElementById("thisIsSecondImportant").classList.remove("d-none");
     document.getElementById("thisIsSecondImportant").style.width = "34%";
-    document
-      .getElementById("orderAppNavbarButtonsToHide")
-      .classList.remove("d-md-none");
-    document
-      .getElementById("orderAppNavbarHamburgerToHide")
-      .classList.remove("d-none");
+    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-md-none");
+    document.getElementById("orderAppNavbarHamburgerToHide").classList.remove("d-none");
   }
 }
 
@@ -1304,18 +1297,21 @@ function hideOrderDetailsTab() {
   $("#hideOrderDetailsTabButton").addClass("d-none");
 }
 
-$(window).on("resize", function () {
-  if ($(window).width() > 1600) {
-    document.getElementById("thisDivIsImportant").style.width = "64%";
-    document.getElementById("thisDivIsImportant").style.display =
-      "block !important";
+if (typeof orderId !== "undefined") {
+  if (orderId != "Menu") {
+    $(window).on("resize", function () {
+        document.getElementById("thisDivIsImportant").style.width = "64%";
+        document.getElementById("thisDivIsImportant").style.display = "block !important";
+    });
   }
-});
+}
 
-document.addEventListener("resize", function () {
-  if (window.innerWidth > 1600) {
-    document.getElementById("thisDivIsImportant").classList.remove("d-none");
-    document.getElementById("thisDivIsImportant").style.width =
-      "64% !important";
-  }
-});
+function showErrorToastr() {
+  toastr.error("The order is still in progress");
+}
+
+function redirectToOrderApp() {
+  setTimeout(function () {
+    window.location.href = "/OrderApp";
+  }, 500);
+}

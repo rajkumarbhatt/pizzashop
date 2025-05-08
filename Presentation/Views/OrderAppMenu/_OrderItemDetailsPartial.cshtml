@@ -132,8 +132,16 @@
                 style="width: 30%;">Save</button>
             <button onclick="completeOrder()" class="order-item-details button btn btn-contrast"
                 style="width: 30%;">Complete</button>
-            <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
+            @if(Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderStatus != null && Model.OrderDetailsCard.OrderStatus == "Completed")
+            {
+                <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
                 style="width: 30%;">Generate Invoice</button>
+            }
+            else
+            {
+                <button onclick="showErrorToastr()" class="order-item-details button btn btn-contrast"
+                style="width: 30%;">Generate Invoice</button>
+            }
             <button onclick="cancelOrder()" class="order-item-details button btn btn-contrast"
                 style="width: 30%;">Cancel</button>
         </div>

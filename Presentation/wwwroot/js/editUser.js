@@ -63,7 +63,7 @@ $(document).ready(function () {
     $(".loader-container").removeClass("d-none");
     $.ajax({
       url: "/UserList/EditUser/" + userId,
-      type: "PUT",
+      type: "POST",
       data: formData,
       processData: false,
       contentType: false,

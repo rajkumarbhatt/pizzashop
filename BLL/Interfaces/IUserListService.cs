@@ -8,7 +8,7 @@ namespace BLL.Interfaces
     public interface IUserListService
     {
         public Task<List<User>> GetUsersAsync();
-        public Task<JsonResult> DeleteUserAsync(int userId);
+        public Task<JsonResult> DeleteUserAsync(int userId, int userIdLoggedIn);
         public Task<User> GetUserDataByIdAsync(int userId);
         public Task<string> GetRoleByIdAsync(int roleId);
         public Task<List<Role>> GetRolesAsync(int userId);

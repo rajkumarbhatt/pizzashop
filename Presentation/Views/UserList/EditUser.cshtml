@@ -107,14 +107,14 @@
                 <label for="select-city" class="mx-2 mt-2">City</label>
             </div>
             <div class="col-12 col-sm-4 p-2 form-floating">
-                <input type="text" class="form-control" name="ZipCode" id="zipcode" placeholder="Zipcode"
-                    value=@Model.ZipCode>
+                <input type="text" class="form-control" name="ZipCode" id="zipcode" placeholder="Zipcode" asp-for="@Model.ZipCode" value=@Model.ZipCode>
                 <label for="first-name" class="mx-2 mt-2">Zipcode</label>
+                <span asp-validation-for="@Model.ZipCode" class="text-danger"></span>
             </div>
             <div class="col-12 col-sm-4 p-2 form-floating">
-                <input type="text" class="form-control" name="Address" id="address" placeholder="Address" asp-for="@Model.Address"
-                    value=@Model.Address>
+                <input type="text" class="form-control" name="Address" id="address" placeholder="Address" asp-for="@Model.Address" value=@Model.Address>
                 <label for="address" class="mx-2 mt-2">Address</label>
+                <span asp-validation-for="@Model.Address" class="text-danger"></span>
             </div>
             <!-- phone-number --> 
             <div class="col-12 col-sm-4 p-2 form-floating">

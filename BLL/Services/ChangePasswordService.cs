@@ -1,8 +1,6 @@
-using DAL.Models;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.JSInterop.Implementation;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
+using Microsoft.Extensions.Logging;
 using DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,40 +9,67 @@ namespace BLL.Services
     public class ChangePasswordService : IChangePasswordService
     {
         private readonly PizzaShopContext _context;
-        public ChangePasswordService(PizzaShopContext context)
+        private readonly ILogger<ChangePasswordService> _logger;
+
+        public ChangePasswordService(PizzaShopContext context, ILogger<ChangePasswordService> logger)
         {
             _context = context;
+            _logger = logger;
         }
+
         public async Task<IActionResult> ChangePasswordAsync(int userId, string newPassword, string oldPassword)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            if (user != null)
+            try
             {
-                if (BCrypt.Net.BCrypt.Verify(oldPassword, user.Password))
+                _logger.LogInformation("Attempting to change password for user with ID {UserId}", userId);
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
                 {
-                    user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
-                    await _context.SaveChangesAsync();
-                    return new JsonResult(new
+                    if (BCrypt.Net.BCrypt.Verify(oldPassword, user.Password))
                     {
-                        success = true,
-                        message = "Password changed successfully"
-                    });
+                        user.Password = BCrypt.Net.BCrypt.HashPassword(newPassword);
+                        await _context.SaveChangesAsync();
+
+                        _logger.LogInformation("Password changed successfully for user with ID {UserId}", userId);
+
+                        return new JsonResult(new
+                        {
+                            success = true,
+                            message = "Password changed successfully"
+                        });
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Old password is incorrect for user with ID {UserId}", userId);
+
+                        return new JsonResult(new
+                        {
+                            success = false,
+                            message = "Old password is incorrect"
+                        });
+                    }
                 }
                 else
                 {
+                    _logger.LogWarning("User with ID {UserId} not found", userId);
+
                     return new JsonResult(new
                     {
                         success = false,
-                        message = "Old password is incorrect"
+                        message = "User not found"
                     });
                 }
             }
-            else
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred while changing the password for user with ID {UserId}", userId);
+
                 return new JsonResult(new
                 {
                     success = false,
-                    message = "User not found"
+                    message = "An error occurred while changing the password",
+                    error = ex.Message
                 });
             }
         }

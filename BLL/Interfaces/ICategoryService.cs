@@ -16,9 +16,7 @@ namespace BLL.Interfaces
         public Task<List<ModifierModifiergroupMapping>> GetModifierModifierGroupMappingsAsync(List<int> modifierGroupIds);
         public Task<JsonResult> AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, int userId);
         public Task<MenuViewModel> GetCategoryDetailsAsync(int categoryId);
-        public Task<JsonResult> UpdateCategoryAsync(int categoryId, string categoryName, string categoryDescription, int userId);
         public Task<JsonResult> DeleteCategoryAsync(int categoryId, int userId);
-        public Task UpdateItemAvailabilityAsync(int itemId, bool isAvailable, int userId);
         public Task<IActionResult> DeleteItemAsync(int itemId, int userId);
         public Task<string> AddItemAsync(AddItemViewModel addItemViewModel, int userId);
         public Task<IActionResult> UpdateItemModifierGroupAsync(AddItemViewModel addItemViewModel, string itemName, int userId);

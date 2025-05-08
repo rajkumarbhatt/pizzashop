@@ -40,7 +40,8 @@ namespace Presentaion.Controllers
         [Route("UserList/DeleteUser/{userId}")]
         public async Task<IActionResult> DeleteUserAsync(int userId)
         {
-            return await _userListService.DeleteUserAsync(userId);
+            var userIdLoggedIn = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
+            return await _userListService.DeleteUserAsync(userId, userIdLoggedIn);
         }
 
         [HttpGet]
@@ -60,7 +61,7 @@ namespace Presentaion.Controllers
             return View(userViewModel);
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("UserList/EditUser/{userId}")]
         public async Task<IActionResult> EditUserAsync(EditUserViewModel userViewModel)
         {

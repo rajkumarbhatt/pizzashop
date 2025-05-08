@@ -1,4 +1,16 @@
 var lastSelected = "All Time";
+var isCustomTimeSelected = false;
+
+$("#CustomersTimeSelect").on("blur", function() {
+	if ($(this).val() === null) {
+        if (isCustomTimeSelected) {
+            $(this).val("Custom Date");
+        } else {
+            $(this).val(lastSelected);
+        }
+	}
+});	
+
 $(document).ready(function () {
     $('.datepicker').datepicker({
         format: 'dd-mm-yyyy',
@@ -28,6 +40,7 @@ $(".closeDatePickerModalButton").click(function () {
 
 function FilerOrdersBasedOnTime(value) {
     if (value == "Custom Date") {
+        isCustomTimeSelected = true;
         $("#errorMessageFromDate").text("");
         $("#errorMessageToDate").text("");  
         $("#CustomDatepickerModal").modal("show");
@@ -61,6 +74,7 @@ function FilerOrdersBasedOnTime(value) {
         return;
     }
     lastSelected = value;
+    isCustomTimeSelected = false;
     var pageIndex = 1;
     var pageSize = $("#pageSizeSelectOrders").val();
     var searchValue = $("#searchInputCustomers").val().toLowerCase();

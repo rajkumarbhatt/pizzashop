@@ -41,13 +41,6 @@ namespace Presentaion.Controllers
             return PartialView("_ModalPartial", menuViewModel);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateCategory(int categoryId, string categoryName, string categoryDescription)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _categoryService.UpdateCategoryAsync(categoryId, categoryName, categoryDescription, userId);
-        }
-
         [HttpDelete]
         public async Task<IActionResult> DeleteCategory(int categoryId)
         {
@@ -60,14 +53,6 @@ namespace Presentaion.Controllers
         {
             MenuViewModel menuViewModel = await _categoryService.GetMenuViewModelBasedOnFilterAsync(categoryId, pageIndex, pageSize, searchValue ?? "");
             return PartialView("_ItemTable", menuViewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateItemAvailability(int itemId, bool isAvailable)
-        {
-            int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            await _categoryService.UpdateItemAvailabilityAsync(itemId, isAvailable, userId);
-            return Ok();
         }
 
         [HttpDelete]

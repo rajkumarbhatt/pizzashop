@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\images.zip"
     },
     {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\.png",
+      "PackagePath": "staticwebassets\\images\\.png"
+    },
+    {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\default-profile.png",
       "PackagePath": "staticwebassets\\images\\default-profile.png"
     },
@@ -211,6 +215,10 @@
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\order-value.svg",
       "PackagePath": "staticwebassets\\images\\icons\\order-value.svg"
+    },
+    {
+      "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\pdf-icon-disabled.svg",
+      "PackagePath": "staticwebassets\\images\\icons\\pdf-icon-disabled.svg"
     },
     {
       "Id": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\icons\\pdf-icon.svg",

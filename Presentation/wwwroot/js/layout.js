@@ -16,15 +16,19 @@ $(document).ready(function () {
 
     $(".sidebar-icons").each(function () {
         var src = $(this).attr("src");
-        src = src.replace("-active.svg", ".svg");
-    });
+        if (typeof src !== 'undefined') {
+            src = src.replace("-active.svg", ".svg");
+        }});
     var src = $("#" + controllerName + "-svg").attr("src");
-    src = src.replace(".svg", "-active.svg"); 
+    if (typeof src !== 'undefined') {
+        src = src.replace(".svg", "-active.svg");
+    } 
     $("#" + controllerName + "-svg").attr("src", src);
 
     var srcMobile = $("#" + controllerName + "-svg-mobile").attr("src");
-    srcMobile = srcMobile.replace(".svg", "-active.svg");
-    $("#" + controllerName + "-svg-mobile").attr("src", srcMobile);
+    if (typeof srcMobile !== 'undefined') {
+        srcMobile = srcMobile.replace(".svg", "-active.svg");
+    }$("#" + controllerName + "-svg-mobile").attr("src", srcMobile);
 });
 
 $("#redirectToOrderApp").click(function () {

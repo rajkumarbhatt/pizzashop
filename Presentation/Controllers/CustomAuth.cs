@@ -49,7 +49,8 @@ namespace Presentaion.Controllers
 
             int roleId = int.Parse(user.Claims.ElementAt(4).Value);
             int userId = int.Parse(user.Claims.ElementAt(0).Value);
-            INavBarService _navBarService = new NavBarService(db);
+            ILogger<NavBarService> logger = new LoggerFactory().CreateLogger<NavBarService>();
+            INavBarService _navBarService = new NavBarService(db, logger);
             bool isUserAuthenticated = await _navBarService.IsFirstTimeLoginAsync(userId);
             IHttpContextAccessor _httpContextAccessor = new HttpContextAccessor();
             var permissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
