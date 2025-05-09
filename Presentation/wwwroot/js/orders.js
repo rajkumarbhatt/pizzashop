@@ -1,3 +1,5 @@
+var isSearchClicked = false;
+
 function FilerOrdersBasedOnStatus(status) {
     var searchValue = $("#searchInputOrders").val();
     var pageSize = $("#pageSizeSelectOrders").val();
@@ -38,6 +40,10 @@ document.getElementById("exportOrdersBtn").addEventListener("click", function ()
     const searchValue = encodeURIComponent($("#searchInputOrders").val());
     var fromDate = $("#fromDate").val();
     var toDate = $("#toDate").val();
+    if (!isSearchClicked) {
+        fromDate = "dd-mm-yyyy";
+        toDate = "dd-mm-yyyy";
+    }
     const url = `/Order/ExportOrders?status=${status}&time=${time}&searchValue=${searchValue}&fromDate=${fromDate}&toDate=${toDate}`;
 
     $('.loader-container').removeClass('d-none');
@@ -82,6 +88,7 @@ $(document).ready(function () {
 });
 
 $("#SearchDate").click(function () {
+    isSearchClicked = true;
     var fromDate = $("#fromDate").val();
     var toDate = $("#toDate").val();
     var searchValue = $("#searchInputOrders").val();
@@ -100,6 +107,7 @@ $("#SearchDate").click(function () {
 });
 
 $("#ClearFilters").click(function () {
+    isSearchClicked = false;
     $("#fromDate").val("dd-mm-yyyy");
     $("#toDate").val("dd-mm-yyyy");
     $("#searchInputOrders").val("");

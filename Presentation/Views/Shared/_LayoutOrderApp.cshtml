@@ -37,7 +37,7 @@
             <!-- navbar -->
             <nav class="navbar d-flex justify-content-md-between align-items-center">
                 <div class="ms-3 d-flex justify-content-center gap-1 align-items-center">
-                    <a asp-controller="OrderApp" asp-action="Index" class="navbar-brand bg-white w-auto">
+                    <a class="navbar-brand bg-white w-auto">
                         <img src="~/images/logos/pizzashop_logo.png" class="logo navbar-image" alt="">
                     </a>
                     <h3 class="text-white">PIZZASHOP</h3>
@@ -107,11 +107,16 @@
                                         class="small-image" alt="">
                                     <p style="margin-left: 16px;">Change Password</p>
                                 </a></li>
+                            <li><a asp-controller="Dashboard" asp-action="Index"
+                                    class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
+                                    <img src="~/images/icons/kot-navbar-logout.svg" class="small-image" alt="" style="margin-left: -9px;">
+                                    <p style="margin-right: 37px;">Dashboard</p>
+                                </a></li>
                             <li><a data-bs-toggle="modal" data-bs-target="#logoutModal"
                                     class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
-                                    <img src="~/images/icons/logout.svg" class="small-image" style="margin-left: -8px;"
+                                    <img src="~/images/icons/logout.svg" class="small-image" style="margin-left: -4px;"
                                         alt="">
-                                    <p style="margin-right: 58px;">Logout</p>
+                                    <p style="margin-right: 62px;">Logout</p>
                                 </a></li>
                         </ul>
                     </div>
@@ -173,6 +178,11 @@
                     <img src="~/images/icons/kot-navbar-menu-black.svg" class="small-image" alt="">
                     <p class="text-blue-custom text-black">Menu</p>
                 </div>
+                <div class="d-flex justify-content-start gap-1 align-items-center custom-border-kot-navbar w-100"
+                    id="kotNavbarBackToDashboard">
+                    <img src="~/images/icons/kot-navbar-logout.svg" class="small-image" alt="">
+                    <p class="text-blue-custom text-black">Dashboard</p>
+                </div>
             </div>
         </div>
     </div>
@@ -189,7 +199,10 @@
 </html>
 
 <script>
-
+    $("#kotNavbarBackToDashboard").click(function () {
+        makeThisTabActiveMobile("kotNavbarBackToDashboard");
+        window.location.href = "/Dashboard";
+    });
     $("#kotWaitingList").click(function () {
         window.location.href = "/WaitingList";
     });

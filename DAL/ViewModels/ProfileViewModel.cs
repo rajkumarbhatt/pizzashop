@@ -8,11 +8,14 @@ namespace DAL.ViewModels
         public int Id { get; set; }
         [Required(ErrorMessage = "First Name is required")]
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "First Name should contain only alphabets")]
+        [StringLength(50, ErrorMessage = "First Name cannot be longer than 50 characters")]
         public string? FirstName { get; set; }
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Last Name should contain only alphabets")]
+        [StringLength(50, ErrorMessage = "Last Name cannot be longer than 50 characters")]
         public string? LastName { get; set; }
         [Required(ErrorMessage = "Username is required")]
         [RegularExpression(@"^[a-zA-Z0-9_-]+$", ErrorMessage = "Username should contain only alphabets, numbers, underscore and hyphen")]
+        [StringLength(50, ErrorMessage = "Username cannot be longer than 50 characters")]
         public string? Username { get; set; }
         public int? RoleId { get; set; }
         public string? Email { get; set; }
@@ -20,6 +23,7 @@ namespace DAL.ViewModels
         [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Phone Number should contain only 10 digits")]
         public string? PhoneNumber { get; set; }
         [RegularExpression(@"^[a-zA-Z0-9\s,-/]+$", ErrorMessage = "Address should contain only alphabets, numbers, comma, space, hyphen, and front slash")]
+        [StringLength(150, ErrorMessage = "Address cannot be longer than 150 characters")]
         public string? Address { get; set; }
         [RegularExpression(@"^[0-9]{6}$", ErrorMessage = "Zip Code should contain only 6 digits")]
         public string? ZipCode { get; set; }

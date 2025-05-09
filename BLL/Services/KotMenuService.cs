@@ -894,6 +894,34 @@ namespace BLL.Services
                         }
                         await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
                         await transaction.CommitAsync();
+                        List<OrderItem> orderItems1 = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
+                        bool isServed = true;
+                        foreach (var orderItem in orderItems1)
+                        {
+                            if (orderItem.ReadyItemsCount < orderItem.Quantity)
+                            {
+                                isServed = false;
+                                break;
+                            }
+                        }
+                        if (!isServed)
+                        {
+                            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new Order();
+                            order.Status = "In Progress";
+                            order.UpdatedAt = DateTime.Now;
+                            order.UpdatedBy = userId;
+                            _context.Orders.Update(order);
+                            await _context.SaveChangesAsync();
+                        } 
+                        else
+                        {
+                            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new Order();
+                            order.Status = "Served";
+                            order.UpdatedAt = DateTime.Now;
+                            order.UpdatedBy = userId;
+                            _context.Orders.Update(order);
+                            await _context.SaveChangesAsync();
+                        }
                         _logger.LogInformation("Order saved successfully for order ID {OrderId} by user with ID {UserId}", saveOrderViewModel.OrderId, userId);
                         return new JsonResult(new
                         {

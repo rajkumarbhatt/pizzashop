@@ -253,6 +253,10 @@ public class CustomersService : ICustomerService
             {
                 return null;
             }
+            if (time == "Custom Date")
+            {
+                time = fromDate + " to " + toDate;
+            }
             using (var workbook = new XLWorkbook())
             {
                 var worksheet = workbook.Worksheets.Add("Orders");

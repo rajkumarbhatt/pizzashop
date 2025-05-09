@@ -313,6 +313,24 @@ namespace BLL.Services
                                 await _context.SaveChangesAsync();
                             }
                         }
+                        bool isServed = true;
+                        List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
+                        foreach (var orderItem in orderItems)
+                        {
+                            if (orderItem.Quantity > orderItem.ReadyItemsCount)
+                            {
+                                isServed = false;
+                                break;
+                            }
+                        }
+                        if (isServed)
+                        {
+                            order.Status = "Served";
+                            order.UpdatedAt = DateTime.Now;
+                            order.UpdatedBy = userId;
+                            _context.Orders.Update(order);
+                            await _context.SaveChangesAsync();
+                        }
                         await transaction.CommitAsync();
                     }
                     catch
@@ -413,7 +431,7 @@ namespace BLL.Services
                 }
                 else
                 {
-                    orders = await _context.Orders.Where(o => o.IsDeleted == false && o.Status != "Completed").ToListAsync();
+                    orders = await _context.Orders.Where(o => o.IsDeleted == false && o.Status != "Completed" && o.Status != "Served").ToListAsync();
                 }
                 foreach (var order in orders)
                 {

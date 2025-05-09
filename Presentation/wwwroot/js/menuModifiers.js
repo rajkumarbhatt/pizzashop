@@ -6,23 +6,26 @@ function openAddModifierGroupModal() {
   addModifierGroupFunc();
   selectedModifiers = [];
 }
-$("#addMGName").on("input", function () {
-  if ($(this).val().length > 0) {
-    $(this).text("");
-  } else {
-    $(this).text("Modifier Group's name is required.");
-  }
-});
+// $("#addMGName").on("input", function () {
+//   if ($(this).val().length > 0) {
+//     $(this).text("");
+//   } else {
+//     $(this).text("Modifier Group's name is required.");
+//   }
+// });
 function addModifierGroupFunc() {
   $("#AddModifierButton2")
     .off("click")
     .click(function () {
       try {
-        var name = $("#AddModifierName").val();
-        if (name.length <= 0) {
-          $("#addMGName").text("Modifier Group's name is required.");
+        if(!$("#addModifierGroupModalForm").valid()) {
           return;
         }
+        var name = $("#AddModifierName").val();
+        // if (name.length <= 0) {
+        //   $("#addMGName").text("Modifier Group's name is required.");
+        //   return;
+        // }
         var description = $("#AddModifierDescription").val();
         var modifierIds = selectedModifiers.map((x) => x.id);
         var modifierGroupId = $("#ModifierGroupId").val();

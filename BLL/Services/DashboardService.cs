@@ -59,6 +59,20 @@ public class DashboardService : IDashboardService
                 }
             }
 
+            List<string> labelsForGraph = (toDate - fromDate).TotalDays switch
+            {
+                <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
+                    .Select(offset => fromDate.AddDays(offset).ToString("dd MMM"))
+                    .ToList(),
+                > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
+                    .Select(offset => fromDate.AddMonths(offset).ToString("MMMM yyyy"))
+                    .ToList(),
+                > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
+                    .Select(offset => new DateTime(fromDate.Year + offset, 1, 1).ToString("yyyy"))
+                    .ToList(),
+                _ => new List<string>(),
+            };
+
             DashboardViewModel dashboardData = new DashboardViewModel
             {
                 TotalOrders = await _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled").CountAsync(),
@@ -109,172 +123,73 @@ public class DashboardService : IDashboardService
                     .ToListAsync(),
                 RevenueData = new RevenueData
                 {
-                    Labels = TimePeriod
-                        switch
+                    Labels = labelsForGraph,
+                    Values = (toDate - fromDate).TotalDays switch
                     {
-                        "Current Month" => Enumerable.Range(1, daysInMonth)
-                            .Select(day => new DateTime(DateTime.Now.Year, DateTime.Now.Month, day).ToString("dd MMM"))
-                            .ToList(),
-                        "Last 7 Days" => Enumerable.Range(0, 7)
-                        .Select(day => fromDate.AddDays(day).ToString("dd MMM"))
-                        .ToList(),
-                        "This Year" => Enumerable.Range(1, 12)
-                        .Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM"))
-                        .ToList(),
-                        "Last 30 Days" => Enumerable.Range(0, 30)
-                        .Select(day => fromDate.AddDays(day).ToString("dd MMM"))
-                        .ToList(),
-                        "Today" => Enumerable.Range(0, 12)
-                        .Select(hour => $"{fromDate.AddHours(8 + hour):hh tt} - {fromDate.AddHours(8 + hour + 1):hh tt}")
-                        .ToList(),
-                        "Custom Date" => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                        .Select(offset => fromDate.AddDays(offset).ToString("dd MMM"))
-                        .ToList(),
-                        _ => new List<string>(),
-                    },
-                    Values = TimePeriod
-                        switch
-                    {
-                        "Current Month" => Enumerable.Range(1, daysInMonth)
-                            .Select(day => fromDate.AddDays(day - 1))
+                        <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
+                            .Select(offset => fromDate.AddDays(offset))
                             .GroupJoin(
                                 _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
                                 date => date.Date,
                                 order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                                (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
+                                (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
                             )
                             .ToList(),
-                        "Last 7 Days" => Enumerable.Range(0, 7)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
-                            date => date.Date,
-                            order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
-                        )
-                        .ToList(),
-                        "This Year" => Enumerable.Range(1, 12)
-                        .Select(month => new DateTime(DateTime.Now.Year, month, 1))
-                        .GroupJoin(
-                            _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
-                            date => date.Month,
-                            order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Month : 0,
-                            (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
-                        )
-                        .ToList(),
-                        "Today" => Enumerable.Range(0, 12)
-                        .Select(hour => fromDate.AddHours(8 + hour))
-                        .GroupJoin(
-                            _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
-                            date => date.Hour,
-                            order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Hour : 0,
-                            (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
-                        )
-                        .ToList(),
-                        "Last 30 Days" => Enumerable.Range(0, 30)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
-                            date => date.Date,
-                            order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
-                        )
-                        .ToList(),
-                        "Custom Date" => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
-                            date => date.Date,
-                            order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, orders) => (decimal)Math.Round((double)orders.Sum(o => o.TotalAmount), 2)
-                        )
-                        .ToList(),
-                        _ => new List<decimal>()
+                        > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
+                            .Select(offset => fromDate.AddMonths(offset))
+                            .GroupJoin(
+                                _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                                date => date.Month,
+                                order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Month : 0,
+                                (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
+                            )
+                            .ToList(),
+                        > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
+                            .Select(offset => new DateTime(fromDate.Year + offset, 1, 1))
+                            .GroupJoin(
+                                _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                                date => date.Year,
+                                order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Year : 0,
+                                (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
+                            )
+                            .ToList(),
+                        _ => new List<decimal>(),
                     }
                 },
                 CustomerGrowthData = new RevenueData
                 {
-                    Labels = TimePeriod
-                        switch
+                    Labels = labelsForGraph,
+                    Values = (toDate - fromDate).TotalDays switch
                     {
-                        "Current Month" => Enumerable.Range(1, daysInMonth)
-                            .Select(day => new DateTime(DateTime.Now.Year, DateTime.Now.Month, day).ToString("dd MMM"))
-                            .ToList(),
-                        "Last 7 Days" => Enumerable.Range(0, 7)
-                        .Select(day => fromDate.AddDays(day).ToString("dd MMM"))
-                        .ToList(),
-                        "This Year" => Enumerable.Range(1, 12)
-                        .Select(month => new DateTime(DateTime.Now.Year, month, 1).ToString("MMMM"))
-                        .ToList(),
-                        "Last 30 Days" => Enumerable.Range(0, 30)
-                        .Select(day => fromDate.AddDays(day).ToString("dd MMM"))
-                        .ToList(),
-                        "Today" => Enumerable.Range(0, 12)
-                        .Select(hour => $"{fromDate.AddHours(8 + hour):hh tt} - {fromDate.AddHours(8 + hour + 1):hh tt}")
-                        .ToList(),
-                        "Custom Date" => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                        .Select(offset => fromDate.AddDays(offset).ToString("dd MMM"))
-                        .ToList(),
-                        _ => new List<string>(),
-                    },
-                    Values = TimePeriod
-                        switch
-                    {
-                        "Current Month" => Enumerable.Range(1, daysInMonth)
-                            .Select(day => fromDate.AddDays(day - 1))
+                        <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
+                            .Select(offset => fromDate.AddDays(offset))
                             .GroupJoin(
                                 _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
                                 date => date.Date,
                                 customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                                (date, customers) => (decimal)customers.Count()
+                                (date, customers) => Convert.ToDecimal(customers.Count())
                             )
                             .ToList(),
-                        "Last 7 Days" => Enumerable.Range(0, 7)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
-                            date => date.Date,
-                            customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, customers) => (decimal)customers.Count()
-                        )
-                        .ToList(),
-                        "This Year" => Enumerable.Range(1, 12)
-                        .Select(month => new DateTime(DateTime.Now.Year, month, 1))
-                        .GroupJoin(
-                            _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
-                            date => date.Month,
-                            customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Month : 0,
-                            (date, customers) => (decimal)customers.Count()
-                        )
-                        .ToList(),
-                        "Today" => Enumerable.Range(0, 12)
-                        .Select(hour => fromDate.AddHours(8 + hour))
-                        .GroupJoin(
-                            _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
-                            date => date.Hour,
-                            customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Hour : 0,
-                            (date, customers) => (decimal)customers.Count()
-                        )
-                        .ToList(),
-                        "Last 30 Days" => Enumerable.Range(0, 30)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
-                            date => date.Date,
-                            customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, customers) => (decimal)customers.Count()
-                        )
-                        .ToList(),
-                        "Custom Date" => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                        .Select(day => fromDate.AddDays(day))
-                        .GroupJoin(
-                            _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
-                            date => date.Date,
-                            customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Date : DateTime.MinValue.Date,
-                            (date, customers) => (decimal)customers.Count()
-                        )
-                        .ToList(),
-                        _ => new List<decimal>()
+                        > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
+                            .Select(offset => fromDate.AddMonths(offset))
+                            .GroupJoin(
+                                _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                                date => date.Month,
+                                customer => customer.CreatedAt?.Month ?? 0,
+                                (date, customers) => Convert.ToDecimal(customers.Count())
+                            )
+                            .ToList(),
+                        > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
+                            .Select(offset => new DateTime(fromDate.Year + offset, 1, 1))
+                            .GroupJoin(
+                                _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                                date => date.Year,
+                                customer => customer.CreatedAt?.Year ?? 0,
+                                (date, customers) => Convert.ToDecimal(customers.Count())
+                            )
+                            .ToList(),
+                        _ => new List<int>().Select(i => Convert.ToDecimal(i)).ToList(),
+
                     }
                 }
             };

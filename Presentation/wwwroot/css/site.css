@@ -710,7 +710,7 @@ td {
   color: black;
 }
 .dropdown-menu {
-  max-height: 200px;
+  max-height: 205px;
   overflow-y: auto;
   background-color: white;
   color: black;

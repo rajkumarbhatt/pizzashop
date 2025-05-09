@@ -14,7 +14,7 @@
             <div class="custom-order-border">@Model.OrderStatus</div>
         </div>
         <div>
-            <button id="downloadInvoice" onclick="downloadPdfInvoice(@Model.Id)" class="d-none d-md-block button-styles" style="height: 44px; width: 120px;">
+            <button id="downloadInvoice" onclick="downloadPdfInvoice('@Model.Id', '@Model.OrderStatus')" class="d-none d-md-block button-styles" style="height: 44px; width: 120px;">
                 <a class="text-decoration-none text-white add-user-link">
                     <img src="~/images/icons/export.svg" class="p-1" style="width: 40px;" alt="">
                     <span class="text-white fw-bold">Export</span>

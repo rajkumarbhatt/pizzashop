@@ -979,6 +979,9 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.ProfileImage)
                 .HasMaxLength(500)
                 .HasColumnName("profile_image");
+            entity.Property(e => e.ResetPasswordLink)
+                .HasMaxLength(500)
+                .HasColumnName("reset_password_link");
             entity.Property(e => e.RoleId).HasColumnName("role_id");
             entity.Property(e => e.StateId).HasColumnName("state_id");
             entity.Property(e => e.Status)

@@ -36,6 +36,61 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
+// builder.Host.UseSerilog((context, services, configuration) =>
+// {
+//     configuration
+//         .WriteTo.File("logs/log.txt")
+//         .Filter.ByIncludingOnly(logEvent =>
+//             logEvent.Level == Serilog.Events.LogEventLevel.Information || 
+//             logEvent.Level == Serilog.Events.LogEventLevel.Warning)
+//         .Filter.ByIncludingOnly(logEvent =>
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ChangePasswordService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CategoryService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.DashboardService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.EmailService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.JwtService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotMenuService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.LoginService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.NavBarService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderAppService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ProfileService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ResetPasswordService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.RoleAndPermissionService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TableAndSectionService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TaxAndFeeService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.UserListService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.WaitingListService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotService") ||
+//             logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CustomersService"));
+
+
+//     configuration
+//         .WriteTo.File("logs/error-log.txt")
+//         .Filter.ByIncludingOnly(logEvent =>
+//             logEvent.Level == Serilog.Events.LogEventLevel.Error &&
+//             (
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ChangePasswordService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CategoryService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.DashboardService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.EmailService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.JwtService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotMenuService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.LoginService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.NavBarService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderAppService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.OrderService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ProfileService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.ResetPasswordService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.RoleAndPermissionService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TableAndSectionService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.TaxAndFeeService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.UserListService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.WaitingListService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.KotService") ||
+//                 logEvent.Properties["SourceContext"].ToString().Contains("BLL.Services.CustomersService")));
+// });
+
 builder.Host.UseSerilog((context, services, configuration) =>
 {
     configuration

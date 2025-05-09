@@ -387,6 +387,7 @@ public class OrderService : IOrderService
             if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
             {
                 orders = orders.Where(o => DateTime.Parse(o.Date) >= DateTime.Parse(fromDate) && DateTime.Parse(o.Date) <= DateTime.Parse(toDate)).ToList();
+                time = fromDate + " to " + toDate;
             }
             if (orders.Count == 0)
             {

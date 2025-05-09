@@ -326,6 +326,14 @@
               "target": "Package",
               "version": "[9.0.0, )"
             },
+            "Serilog.Filters.Expressions": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "Serilog.Sinks.File": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "iText7": {
               "target": "Package",
               "version": "[9.1.0, )"

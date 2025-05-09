@@ -216,7 +216,7 @@
                     <button onclick="clearSelectedModifiersList()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="">
+                    <form id="addModifierGroupModalForm" action="">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-floating my-auto">
@@ -235,8 +235,9 @@
                                         asp-for="@Model.CreateModifierGroupViewModel.ModifierGroupDescription"
                                         class="form-control"
                                         name="CreateModifierGroupViewModel.ModifierGroupDescription"
-                                        id="AddModifierDescription" required placeholder="Description*">
+                                        id="AddModifierDescription" placeholder="Description*">
                                     <label for="category-description" class="">Description*</label>
+                                    <span id="addMGDescription" asp-validation-for="@Model.CreateModifierGroupViewModel.ModifierGroupDescription" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

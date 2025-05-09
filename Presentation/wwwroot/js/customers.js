@@ -68,6 +68,7 @@ function FilerOrdersBasedOnTime(value) {
                     $("#CustomDatepickerModal").modal("hide");
                     $("#errorMessageFromDate").text("");
                     $("#errorMessageToDate").text("");
+                    lastSelected = value;
                 }
             });
         });

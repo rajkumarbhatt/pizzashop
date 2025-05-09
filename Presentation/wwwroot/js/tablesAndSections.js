@@ -1,9 +1,51 @@
-function addSection() {
+$("#SectionName").on("input", function () {
+    if (this.value.length <= 0) {
+        $("#SectionNameError").text("Section Name is required.");
+    } else if (this.value.length > 50) {
+        $("#SectionNameError").text("Section Name must be less than 50 characters.");
+    } else {
+        $("#SectionNameError").text("");
+    }
+});
+
+$("#SectionDescription").on("input", function () {
+    if (this.value.length > 150) {
+        $("#SectionDescriptionError").text("Section Description must be less than 150 characters.");
+    } else {
+        $("#SectionDescriptionError").text("");
+    }
+});
+
+function validateSectionForm () {
     var sectionName = document.getElementById("SectionName").value;
-    if (sectionName == "") {
-        document.getElementById("SectionNameError").innerText = "Section Name is required.";
+    var sectionDescription = document.getElementById("SectionDescription").value;
+
+    if (sectionName.length <= 0) {
+        $("#SectionNameError").text("Section Name is required.");
+        return false;
+    } else if (sectionName.length > 50) {
+        $("#SectionNameError").text("Section Name must be less than 50 characters.");
+        return false;
+    } else {
+        $("#SectionNameError").text("");
+    }
+
+    if (sectionDescription.length > 150) {
+        $("#SectionDescriptionError").text("Section Description must be less than 150 characters.");
+        return false;
+    } else {
+        $("#SectionDescriptionError").text("");
+    }
+
+    return true;
+}
+
+
+function addSection() {
+    if (!validateSectionForm()) {
         return;
     }
+    var sectionName = document.getElementById("SectionName").value;
     var sectionId = document.getElementById("SectionIdModal").value;
     var sectionDescription = document.getElementById("SectionDescription").value;
     $.ajax({
@@ -30,6 +72,7 @@ function addSection() {
             } else {
                 toastr.error(response.message);
             }
+            $(".text-danger").text("");
         },
         error: function (response) {
             toastr.error("Unauthorized Access");
@@ -47,6 +90,7 @@ function editSection(sectionId) {
             document.getElementById("SectionDescription").value = response.description;
             document.getElementById("SectionIdModal").value = sectionId;
             $("#addSectionModalTitle").text("Edit Section");
+            $(".text-danger").text("");
             $("#addSectionModal").modal("show");
         },
         error: function (response) {

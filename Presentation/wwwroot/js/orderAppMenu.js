@@ -1000,8 +1000,9 @@ function saveOrder() {
 }
 
 function downloadPdfInvoice() {
-  const url = "/OrderAppMenu/DownloadInvoice?orderId=" + orderIdTemp;
-  $(".loader-container").removeClass("d-none");
+  console.log("downloadPdfInvoice called with orderIdTemp:", orderIdTemp);
+  debugger
+  const url = "/Order/DownloadInvoice?orderId=" + orderIdTemp;
   fetch(url, { method: "GET" })
     .then((response) => response.blob())
     .then((blob) => {
@@ -1030,6 +1031,7 @@ function completeOrder() {
           if (response.success) {
             toastr.success(response.message);
             $("#CompleteOrderModal").modal("hide");
+            downloadPdfInvoice();
             $("#CustomerRatingModal").modal("show");
           } else {
             toastr.error(response.message);
@@ -1146,23 +1148,36 @@ function removeFromFavourites(id, event) {
 
 if (typeof orderId !== "undefined") {
   if (orderId == "Menu") {
-    document.getElementById("thisDivIsImportant").style.width ="100% !important";
+    document.getElementById("thisDivIsImportant").style.width =
+      "100% !important";
     var secondImpDev = document.getElementById("thisIsSecondImportant");
     if (secondImpDev) {
       document.getElementById("thisIsSecondImportant").classList.add("d-none");
     }
-    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-md-none");
-    document.getElementById("orderAppNavbarButtonsToHide").classList.add("d-none");
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.remove("d-md-none");
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.add("d-none");
   } else if (orderId == 0) {
     document.getElementById("thisDivIsImportant").style.width = "100%";
-    document.getElementById("orderAppNavbarButtonsToHide").classList.add("d-md-none");
-    document.getElementById("orderAppNavbarHamburgerToHide").classList.add("d-none");
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.add("d-md-none");
+    document
+      .getElementById("orderAppNavbarHamburgerToHide")
+      .classList.add("d-none");
   } else {
     document.getElementById("thisDivIsImportant").style.width = "66%";
     document.getElementById("thisIsSecondImportant").classList.remove("d-none");
     document.getElementById("thisIsSecondImportant").style.width = "34%";
-    document.getElementById("orderAppNavbarButtonsToHide").classList.remove("d-md-none");
-    document.getElementById("orderAppNavbarHamburgerToHide").classList.remove("d-none");
+    document
+      .getElementById("orderAppNavbarButtonsToHide")
+      .classList.remove("d-md-none");
+    document
+      .getElementById("orderAppNavbarHamburgerToHide")
+      .classList.remove("d-none");
   }
 }
 
@@ -1300,8 +1315,9 @@ function hideOrderDetailsTab() {
 if (typeof orderId !== "undefined") {
   if (orderId != "Menu") {
     $(window).on("resize", function () {
-        document.getElementById("thisDivIsImportant").style.width = "64%";
-        document.getElementById("thisDivIsImportant").style.display = "block !important";
+      document.getElementById("thisDivIsImportant").style.width = "64%";
+      document.getElementById("thisDivIsImportant").style.display =
+        "block !important";
     });
   }
 }
