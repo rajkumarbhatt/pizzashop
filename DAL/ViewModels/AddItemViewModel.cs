@@ -33,7 +33,6 @@ namespace DAL.ViewModels
         [RegularExpression(@"^[a-zA-Z0-9]*$", ErrorMessage = "Only alphabets and numbers are allowed")]
         [StringLength (5, ErrorMessage = "Short code cannot be longer than 5 characters")]
         public string? ShortCode { get; set; }
-        [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Only alphabets and numbers are allowed")]
         [StringLength (150, ErrorMessage = "Description cannot be longer than 150 characters")]
         public string? Description { get; set; }
         public IFormFile? Image { get; set; }

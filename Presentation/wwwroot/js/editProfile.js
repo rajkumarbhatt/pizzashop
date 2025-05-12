@@ -75,3 +75,14 @@ $(document).ready(function () {
     });
 
 });    
+
+document.getElementById('file-upload').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file && !file.type.startsWith('image/')) {
+        toastr.error('Please select an image file.');
+        return;
+    }
+    if (file) {
+        document.getElementById('profile-pic').src = URL.createObjectURL(file);
+    }
+});

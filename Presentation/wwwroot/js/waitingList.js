@@ -194,6 +194,10 @@ function changeSection(sectionId) {
 function assignTableModalOpen(tokenNumber) {
     $('#AssignTableModal').modal('show');
     $("#assgnTableToCustomerButton").off("click").click(function () {
+        if (selectedTables.length <= 0) {
+            toastr.error("Please select tables to assign");
+            return;
+        }
         var tableId = $('#selectTable').val();
         $.ajax({
             type: "POST",
@@ -248,7 +252,6 @@ function getTables(sectionId) {
         data: { sectionId: sectionId },
         success: function (response) {
             $('#selectTableUl').empty();
-            console.log(response);
             $.each(response, function (key, value) {
                 $('#selectTableUl').append('<li><input type="checkbox" style="height:1em;" class="form-check-input multi-checkbox" value="' + value.id + '"><label class="form-check-label">' + value.name + '</label></li>');
             });

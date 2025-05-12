@@ -9,10 +9,13 @@ namespace Presentation.Controllers
     {
         private readonly IKotMenuService _kotMenuService;
         private readonly IJwtService _jwtService;
-        public OrderAppMenu(IKotMenuService kotMenuService, IJwtService jwtService)
+        private readonly IOrderService _orderService;
+
+        public OrderAppMenu(IKotMenuService kotMenuService, IJwtService jwtService, IOrderService orderService)
         {
             _kotMenuService = kotMenuService;
             _jwtService = jwtService;
+            _orderService = orderService;
         }
         [Route("/OrderApp/Menu")]
         [Route("/OrderApp/Menu/{orderId}")]
@@ -21,7 +24,8 @@ namespace Presentation.Controllers
             string orderStatus = await _kotMenuService.GetOrderStatusAsync(orderId ?? 0);
             if (orderStatus == "Completed" || orderStatus == "Cancelled")
             {
-                return RedirectToAction("Index", "PageNotFound");
+                string encryptedOrderId = await _orderService.EncryptOrderIdAsync(orderId ?? 0);
+                return RedirectToAction("OrderDetails", "Order", new { id = encryptedOrderId });
             }
             KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetKotMenuAsync(orderId);
             return View(kotMenuViewModel);
@@ -139,5 +143,11 @@ namespace Presentation.Controllers
         {
             return await _kotMenuService.AreModifiersSelectedAsync(itemId);
         }
+        // [HttpPost]
+        // public async Task<ActionResult> CreateOrder(int orderId)
+        // {
+        //     PaymentViewModal paymentViewModal = _kotMenuService.GetPaymentViewModalAsync(orderId);
+        //     return await View("PaymentPage", orderModel);
+        // }
     }
 }

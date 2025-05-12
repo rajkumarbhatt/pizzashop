@@ -29,6 +29,7 @@ function changeCategoryKot(id) {
     success: function (response) {
       $("#kotMenuItemsListPartialStart").html(response);
       currentCategory = categoryId;
+      $("#categoriesKotMenuOffCanvas").offcanvas("hide");
     },
   });
 }
@@ -1031,7 +1032,6 @@ function completeOrder() {
           if (response.success) {
             toastr.success(response.message);
             $("#CompleteOrderModal").modal("hide");
-            downloadPdfInvoice();
             $("#CustomerRatingModal").modal("show");
           } else {
             toastr.error(response.message);
@@ -1171,7 +1171,11 @@ if (typeof orderId !== "undefined") {
   } else {
     document.getElementById("thisDivIsImportant").style.width = "66%";
     document.getElementById("thisIsSecondImportant").classList.remove("d-none");
-    document.getElementById("thisIsSecondImportant").style.width = "34%";
+    if (window.innerWidth > 1600) {
+      document.getElementById("thisIsSecondImportant").style.width = "34%";
+    } else {
+      document.getElementById("thisIsSecondImportant").style.width = "100%";
+    }
     document
       .getElementById("orderAppNavbarButtonsToHide")
       .classList.remove("d-md-none");
@@ -1255,6 +1259,18 @@ function addOrderWiseComment() {
       if (response.success) {
         toastr.success(response.message);
         $("#OrderCommentModal").modal("hide");
+        $.ajax({
+          url: "/OrderAppMenu/GetOrderDetails",
+          method: "GET",
+          data: { orderId: orderIdTemp },
+          success: function (response) {
+            itemList = [];
+            $("#orderItemDetailsPartial").html(response);
+          },
+          error: function () {
+            toastr.error("Failed to load order details.");
+          },
+        });
       } else {
         toastr.error(response.message);
       }
@@ -1319,7 +1335,9 @@ if (typeof orderId !== "undefined") {
       document.getElementById("thisDivIsImportant").style.display =
         "block !important";
     });
-  }
+  } else {
+      document.getElementById("thisDivIsImportant").style.width = "100%";
+    }
 }
 
 function showErrorToastr() {

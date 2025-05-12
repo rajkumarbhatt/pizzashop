@@ -1,11 +1,15 @@
+using System.IdentityModel.Tokens.Jwt;
 using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Razorpay.Api;
 
 namespace BLL.Services
 {
@@ -13,10 +17,12 @@ namespace BLL.Services
     {
         private readonly PizzaShopContext _context;
         private readonly ILogger<KotMenuService> _logger;
-        public KotMenuService(PizzaShopContext context, ILogger<KotMenuService> logger)
+        private readonly IConfiguration _configuration;
+        public KotMenuService(PizzaShopContext context, ILogger<KotMenuService> logger, IConfiguration configuration)
         {
             _context = context;
             _logger = logger;
+            _configuration = configuration;
         }
         public async Task<string> GetOrderStatusAsync(int orderId)
         {
@@ -156,6 +162,7 @@ namespace BLL.Services
                     TaxesFees = orderDetailsCard.Taxes,
                     AreItemsAdded = areItemsAdded,
                     ItemTaxes = itemTaxes,
+                    OrderInstruction = await _context.Orders.Where(o => o.Id == orderId).Select(o => o.Comment).FirstOrDefaultAsync() ?? "",
                 };
 
                 return kotMenuViewModel;
@@ -1229,5 +1236,39 @@ namespace BLL.Services
                 });
             }
         }
+        // public async Task<PaymentViewModal> GetPaymentViewModalAsync (int orderId)
+        // {
+        //     Random randomObj = new Random();
+        //     string transactionId = randomObj.Next(10000000, 100000000).ToString();
+
+        //     string razorpayKey = _configuration["Razorpay:Key"] ?? "";
+        //     string razorpaySecret = _configuration["Razorpay:Secret"] ?? "";
+
+        //     Razorpay.Api.RazorpayClient client = new Razorpay.Api.RazorpayClient(razorpayKey, razorpaySecret);
+
+        //     Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+        //     Customer customer = order.Customer;
+
+        //     Dictionary<string, object> options = new Dictionary<string, object>();
+        //     options.Add("amount", order.TotalAmount);
+        //     options.Add("receipt", transactionId);
+        //     options.Add("currency", "INR");
+        //     options.Add("payment_capture", "0"); // 0 for authorization only, 1 for automatic capture
+        //     Razorpay.Api.Order orderResponse = client.Orders.Create(options);
+        //     string orderId2 = orderResponse["id"].ToString();
+
+        //     PaymentViewModal orderModel = new PaymentViewModal
+        //     {
+        //         OrderId = orderResponse.Attributes["id"],
+        //         RazorpayKey = razorpayKey,
+        //         Amount = order.TotalAmount,
+        //         Currency = "INR",
+        //         Name = customer.Name,
+        //         Email = customer.Email,
+        //         PhoneNumber = customer.Phone,
+        //         Address = "Test Address",
+        //         Description = "Testing description"
+        //     };
+        // }
     }
 }

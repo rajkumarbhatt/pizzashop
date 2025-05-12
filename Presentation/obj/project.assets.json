@@ -4039,6 +4039,32 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {}
         }
       },
+      "Portable.BouncyCastle/1.9.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/BouncyCastle.Crypto.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Razorpay/3.1.4": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "Portable.BouncyCastle": "1.9.0"
+        },
+        "compile": {
+          "lib/net45/Razorpay.dll": {}
+        },
+        "runtime": {
+          "lib/net45/Razorpay.dll": {}
+        }
+      },
       "RBush/4.0.0": {
         "type": "package",
         "compile": {
@@ -6235,6 +6261,7 @@
           "MimeKit": "4.10.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.1.0",
+          "Razorpay": "1.0.0",
           "iText7": "9.1.0",
           "itext7.bouncy-castle-adapter": "9.1.0",
           "itext7.pdfhtml": "6.1.0"
@@ -11180,6 +11207,36 @@
         "lib/netstandard2.0/NuGet.Versioning.dll",
         "nuget.versioning.6.11.0.nupkg.sha512",
         "nuget.versioning.nuspec"
+      ]
+    },
+    "Portable.BouncyCastle/1.9.0": {
+      "sha512": "eZZBCABzVOek+id9Xy04HhmgykF0wZg9wpByzrWN7q8qEI0Qen9b7tfd7w8VA3dOeesumMG7C5ZPy0jk7PSRHw==",
+      "type": "package",
+      "path": "portable.bouncycastle/1.9.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/BouncyCastle.Crypto.dll",
+        "lib/net40/BouncyCastle.Crypto.xml",
+        "lib/netstandard2.0/BouncyCastle.Crypto.dll",
+        "lib/netstandard2.0/BouncyCastle.Crypto.xml",
+        "portable.bouncycastle.1.9.0.nupkg.sha512",
+        "portable.bouncycastle.nuspec"
+      ]
+    },
+    "Razorpay/3.1.4": {
+      "sha512": "nj+w9NGt0vuoNbRuxJ3/8CsD7F1P1nOYhFbZucqp/8jg/EC19EcPvtUHAumEnZx8l9hnBNSl/27hg9PziqB4ag==",
+      "type": "package",
+      "path": "razorpay/3.1.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/Razorpay.dll",
+        "lib/net45/Razorpay.dll",
+        "lib/net47/Razorpay.dll",
+        "lib/net48/Razorpay.dll",
+        "razorpay.3.1.4.nupkg.sha512",
+        "razorpay.nuspec"
       ]
     },
     "RBush/4.0.0": {
@@ -16141,6 +16198,7 @@
       "MimeKit >= 4.10.0",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 9.0.3",
       "Npgsql.EntityFrameworkCore.PostgreSQL.Design >= 1.1.0",
+      "Razorpay >= 3.1.4",
       "Serilog.AspNetCore >= 9.0.0",
       "Serilog.Filters.Expressions >= 2.1.0",
       "Serilog.Sinks.File >= 7.0.0",
@@ -16253,6 +16311,10 @@
             "target": "Package",
             "version": "[1.1.0, )"
           },
+          "Razorpay": {
+            "target": "Package",
+            "version": "[3.1.4, )"
+          },
           "Serilog.AspNetCore": {
             "target": "Package",
             "version": "[9.0.0, )"
@@ -16296,5 +16358,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Razorpay 3.1.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Razorpay",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    }
+  ]
 }

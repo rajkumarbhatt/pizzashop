@@ -1253,7 +1253,7 @@ td {
     display: block !important;
   }
   #thisDivIsImportant {
-    /* width: 66% ; */
+    width: 66% ;
     display: block !important;
   }
 }
@@ -1336,4 +1336,14 @@ td {
     width: 90% !important;
     margin-top: 10px;
   }
+}
+@media (max-width: 768px) {
+  .custom-select-waiting-list {
+    width: 98% !important;
+    height: 53px;
+  }
+}
+#modifiersCustomMultiSelectSpan {
+  width: 95%;
+  overflow-x: auto;
 }

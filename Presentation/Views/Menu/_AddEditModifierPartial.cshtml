@@ -3,12 +3,19 @@
 {
     <script>
         var selectedModifiersGroupsAddModifier2 = @Html.Raw(Json.Serialize(Model.AddModifierViewModel.ModifierGroupIds));
+        var selectedModifierGroupLabels = []
         selectedModifiersGroupsAddModifier2 = selectedModifiersGroupsAddModifier2.map(x => parseInt(x));
         $("#AddModifierModifierGroupIds").val(selectedModifiersGroupsAddModifier2);
         selectedModifiersGroupsAddModifier2.forEach(x => {
             var customId = "AddModifier" + x;
             $("#" + customId).prop("checked", true);
+            selectedModifierGroupLabels.push($("#" + customId).next("label").text());
         });
+        if (selectedModifiersGroupsAddModifier2.length > 0) {
+            $("#custom-multiselect span:first-child").text(selectedModifierGroupLabels.join(", "));
+        } else {
+            $("#custom-multiselect span:first-child").text("Select Modifier Group(s)");
+        }
     </script>
 }
 @* add new modifier modal *@
@@ -32,7 +39,7 @@
                                     class="btn btn-outline-primary dropdown-toggle d-flex justify-content-between align-items-center"
                                     type="button" id="custom-multiselect" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <span>Select Modifier Group(s)</span>
+                                    <span id="modifiersCustomMultiSelectSpan">Select Modifier Group(s)</span>
                                     <span class="ms-auto dropdown-arrow"></span>
                                 </button>
                                 <ul class="dropdown-menu p-2" aria-labelledby="custom-multiselect" style="width: 98%;">

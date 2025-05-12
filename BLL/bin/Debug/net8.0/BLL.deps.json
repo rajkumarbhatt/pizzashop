@@ -21,6 +21,7 @@
           "MimeKit": "4.10.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.3",
           "Npgsql.EntityFrameworkCore.PostgreSQL.Design": "1.1.0",
+          "Razorpay": "1.0.0",
           "itext7": "9.1.0",
           "itext7.bouncy-castle-adapter": "9.1.0",
           "itext7.pdfhtml": "6.1.0"
@@ -2233,6 +2234,17 @@
           }
         }
       },
+      "Razorpay/1.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net45/Razorpay.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "RBush/4.0.0": {
         "runtime": {
           "lib/net8.0/RBush.dll": {
@@ -4222,6 +4234,13 @@
       "sha512": "sha512-v/GGlIj2dd7svplFmASWEueu62veKW0MrMtBaZ7QG8aJTSGv2yE+pgUGhXRcQ4nxNOEq/wLBrz1vkth/1SND7A==",
       "path": "nuget.versioning/6.11.0",
       "hashPath": "nuget.versioning.6.11.0.nupkg.sha512"
+    },
+    "Razorpay/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+6l19JGPtBor7eAFBBAwKZj2Qn8U62uzCZ0JALc+wA3E+Ges0TUd70Fd2law7HcZRszKgqf2eTqQpXp5A37MxA==",
+      "path": "razorpay/1.0.0",
+      "hashPath": "razorpay.1.0.0.nupkg.sha512"
     },
     "RBush/4.0.0": {
       "type": "package",

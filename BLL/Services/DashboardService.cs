@@ -1,5 +1,6 @@
 using BLL.Interfaces;
 using DAL.DBContext;
+using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -58,31 +59,39 @@ public class DashboardService : IDashboardService
                     toDate = fromDate.AddDays(1);
                 }
             }
+            if (TimePeriod == "Custom Date")
+            {
+                toDate = toDate.AddDays(1).AddTicks(-1); 
+            }
 
             List<string> labelsForGraph = (toDate - fromDate).TotalDays switch
             {
                 <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                    .Select(offset => fromDate.AddDays(offset).ToString("dd MMM"))
+                    .Select(day => fromDate.AddDays(day).ToString("dd MMM"))
                     .ToList(),
                 > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
-                    .Select(offset => fromDate.AddMonths(offset).ToString("MMMM yyyy"))
+                    .Select(day => fromDate.AddMonths(day).ToString("MMMM yyyy"))
                     .ToList(),
                 > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
-                    .Select(offset => new DateTime(fromDate.Year + offset, 1, 1).ToString("yyyy"))
+                    .Select(day => new DateTime(fromDate.Year + day, 1, 1).ToString("yyyy"))
                     .ToList(),
                 _ => new List<string>(),
             };
 
+            List<Order> orders = await _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled").ToListAsync();
+            List<Customer> customers = _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate).ToList();
+
+
             DashboardViewModel dashboardData = new DashboardViewModel
             {
-                TotalOrders = await _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled").CountAsync(),
-                TotalSales = Math.Round((double)await _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled").SumAsync(o => o.TotalAmount), 2),
-                AverageOrderValue = Math.Round((double)await _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled").AverageAsync(o => o.TotalAmount), 2),
-                AverageWaitingTime = Math.Round((double)(await _context.Orders
+                TotalOrders = orders.Count,
+                TotalSales = orders.Count() > 0  ? Math.Round((double)orders.Sum(o => o.TotalAmount), 2) : 0,
+                AverageOrderValue = orders.Count() > 0 ? Math.Round((double)orders.Average(o => o.TotalAmount), 2) : 0,
+                AverageWaitingTime = orders.Count() > 0  ? Math.Round((double)(await _context.Orders
                             .Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled")
                             .ToListAsync())
                         .Where(o => o.UpdatedAt != null)
-                        .Average(o => (o.UpdatedAt - o.CreatedAt)?.TotalMinutes ?? 0), 2),
+                        .Average(o => (o.UpdatedAt - o.CreatedAt)?.TotalMinutes ?? 0), 2) : 0,
                 WaitingListCount = await _context.WaitingLists.CountAsync(w => w.CreatedAt >= fromDate && w.CreatedAt <= toDate && w.IsDeleted == false),
                 NewCustomerCount = await _context.Customers.CountAsync(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
                 TopSellingItems = await _context.OrderItems
@@ -127,27 +136,27 @@ public class DashboardService : IDashboardService
                     Values = (toDate - fromDate).TotalDays switch
                     {
                         <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                            .Select(offset => fromDate.AddDays(offset))
+                            .Select(day => fromDate.AddDays(day))
                             .GroupJoin(
-                                _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                                orders,
                                 date => date.Date,
                                 order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Date : DateTime.MinValue.Date,
                                 (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
                             )
                             .ToList(),
                         > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
-                            .Select(offset => fromDate.AddMonths(offset))
+                            .Select(day => fromDate.AddMonths(day))
                             .GroupJoin(
-                                _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                                orders,
                                 date => date.Month,
                                 order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Month : 0,
                                 (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
                             )
                             .ToList(),
                         > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
-                            .Select(offset => new DateTime(fromDate.Year + offset, 1, 1))
+                            .Select(day => new DateTime(fromDate.Year + day, 1, 1))
                             .GroupJoin(
-                                _context.Orders.Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled"),
+                                orders,
                                 date => date.Year,
                                 order => order.CreatedAt.HasValue ? order.CreatedAt.Value.Year : 0,
                                 (date, orders) => Convert.ToDecimal(Math.Round((double)orders.Sum(o => o.TotalAmount), 2))
@@ -162,27 +171,27 @@ public class DashboardService : IDashboardService
                     Values = (toDate - fromDate).TotalDays switch
                     {
                         <= 31 => Enumerable.Range(0, (toDate - fromDate).Days + 1)
-                            .Select(offset => fromDate.AddDays(offset))
+                            .Select(day => fromDate.AddDays(day))
                             .GroupJoin(
-                                _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                                customers,
                                 date => date.Date,
                                 customer => customer.CreatedAt.HasValue ? customer.CreatedAt.Value.Date : DateTime.MinValue.Date,
                                 (date, customers) => Convert.ToDecimal(customers.Count())
                             )
                             .ToList(),
                         > 31 and <= 365 => Enumerable.Range(0, ((toDate.Year - fromDate.Year) * 12 + toDate.Month - fromDate.Month) + 1)
-                            .Select(offset => fromDate.AddMonths(offset))
+                            .Select(day => fromDate.AddMonths(day))
                             .GroupJoin(
-                                _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                                customers,
                                 date => date.Month,
                                 customer => customer.CreatedAt?.Month ?? 0,
                                 (date, customers) => Convert.ToDecimal(customers.Count())
                             )
                             .ToList(),
                         > 365 => Enumerable.Range(0, toDate.Year - fromDate.Year + 1)
-                            .Select(offset => new DateTime(fromDate.Year + offset, 1, 1))
+                            .Select(day => new DateTime(fromDate.Year + day, 1, 1))
                             .GroupJoin(
-                                _context.Customers.Where(c => c.CreatedAt >= fromDate && c.CreatedAt <= toDate),
+                                customers,
                                 date => date.Year,
                                 customer => customer.CreatedAt?.Year ?? 0,
                                 (date, customers) => Convert.ToDecimal(customers.Count())

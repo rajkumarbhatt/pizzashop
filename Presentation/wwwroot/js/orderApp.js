@@ -1,17 +1,3 @@
-function openWaitingTokenModal(id) {
-    var sectionId = id.split("section")[1].split("name")[0];
-    var sectioName = id.split("section")[1].split("name")[1];
-    var accordianButtonId = "button" + sectionId;
-    $("#WaitingListSection").empty();
-    $("#WaitingListSection").append(
-        `<option value="${sectionId}" selected>${sectioName}</option>`
-    );
-    $("#WaitingListSection").val(sectionId);
-    $("#waitingTokenModal").modal("show");
-    $.validator.unobtrusive.parse("#waitingTokenModal");
-    AddToWaitingListFormSubmit();
-}
-
 function AddToWaitingListFormSubmit() {
     $("#waitingTokenForm").off("submit").submit(function (e) {
         e.preventDefault();

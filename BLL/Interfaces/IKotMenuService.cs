@@ -27,5 +27,6 @@ namespace BLL.Interfaces
         public Task<JsonResult> CanDeleteFromOrderAsync (int orderItemId);
         public Task<JsonResult> CanReduceFromOrderAsync (int orderItemId, int currentQuantity);
         public Task<JsonResult> AreModifiersSelectedAsync (int itemId);
+        // public Task<PaymentViewModal> GetPaymentViewModalAsync (int orderId);
     }
 }

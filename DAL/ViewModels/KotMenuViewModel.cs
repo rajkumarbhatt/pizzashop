@@ -12,5 +12,6 @@ namespace DAL.ViewModels
         public List<InvoiceTax>? TaxesFees { get; set; }
         public List<ItemTaxes>? ItemTaxes { get; set; }
         public bool? AreItemsAdded { get; set; }
+        public string? OrderInstruction { get; set; }
     }
 }
