@@ -1,10 +1,12 @@
 using BLL.Interfaces;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Presentaion.Controllers;
 
 namespace Presentation.Controllers
 {
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [CustomAuth]
     public class WaitingListController : Controller
     {
         private readonly IWaitingListService _waitingListService;

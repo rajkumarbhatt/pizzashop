@@ -1,0 +1,59 @@
+@model DAL.ViewModels.KotMenuViewModel
+@{
+    Layout = null;
+}
+
+<button id="rzp-button1" hidden>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "@Model.PaymentViewModal.RazorpayKey",
+    "amount": "@Model.PaymentViewModal.Amount", 
+    "currency": "INR",
+    "name": "@Model.PaymentViewModal.Name",
+    "description": "@Model.PaymentViewModal.Description",
+    "image": "https://dotnettec.com/wp-content/uploads/2019/10/cropped-dotnettec_header_logo.png", 
+    "order_id": "@Model.PaymentViewModal.OrderId",
+    "handler": function (response){
+        // After payment successfully made response will come here
+        // Set the data in hidden form
+        document.getElementById('rzp_paymentid').value = response.razorpay_payment_id;
+        document.getElementById('rzp_orderid').value = response.razorpay_order_id;
+
+        // // Let's submit the form automatically
+        document.getElementById('rzp-paymentresponse').click();
+    },
+    "prefill": {
+        "name": "@Model.PaymentViewModal.Name",
+        "email": "@Model.PaymentViewModal.Email",
+        "contact": "@Model.PaymentViewModal.PhoneNumber",
+    },
+    "notes": {
+        "address": "@Model.PaymentViewModal.Address",
+    },
+    "theme": {
+        "color": "#F37254"
+    }
+};
+var rzp1 = new Razorpay(options);
+
+//<!-- onload function -->
+window.onload = function(){
+    document.getElementById('rzp-button1').click();
+};
+
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+
+
+@using (Html.BeginForm("Complete", "Payment"))
+{
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("rzp_paymentid")
+    @Html.Hidden("rzp_orderid")
+    <button type="submit" id="rzp-paymentresponse" class="btn btn-primary" hidden>Submit</button>
+}

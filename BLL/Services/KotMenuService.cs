@@ -84,6 +84,7 @@ namespace BLL.Services
                             ItemId = oi.ItemId,
                             ItemName = oi.Item.Name,
                             ItemQuantity = oi.Quantity,
+                            ReadyItemQuantity = oi.ReadyItemsCount,
                             ItemTotalPrice = (decimal?)(oi.Price * oi.Quantity) ?? 0,
                             Modifiers = _context.OrderModifiers.Where(om => om.OrderItemId == oi.Id && om.IsDeleted == false).Select(om => new ModifierDetails
                             {
@@ -142,7 +143,7 @@ namespace BLL.Services
                     areItemsAdded = true;
                 }
                 List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
-                List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+                List<DAL.Models.Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
                 foreach (var item in itemList)
                 {
                     ItemTaxes itemTaxes1 = new ItemTaxes
@@ -282,7 +283,7 @@ namespace BLL.Services
                         }).ToListAsync();
                 }
                 List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
-                List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+                List<DAL.Models.Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
                 foreach (var item in itemList)
                 {
                     ItemTaxes itemTaxes1 = new ItemTaxes
@@ -386,7 +387,7 @@ namespace BLL.Services
         {
             try
             {
-                Customer customerDetails = await _context.Orders.Where(o => o.Id == orderId).OrderBy(o => o.Id).Select(o => o.Customer).LastOrDefaultAsync() ?? new Customer();
+                DAL.Models.Customer customerDetails = await _context.Orders.Where(o => o.Id == orderId).OrderBy(o => o.Id).Select(o => o.Customer).LastOrDefaultAsync() ?? new DAL.Models.Customer();
                 WaitingListModal waitingListModalViewModel = new WaitingListModal
                 {
                     Name = customerDetails.Name,
@@ -411,8 +412,8 @@ namespace BLL.Services
         {
             try
             {
-                Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
-                Order order = await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync(o => o.CustomerId == customer1.Id) ?? new Order();
+                DAL.Models.Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new DAL.Models.Customer();
+                DAL.Models.Order order = await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync(o => o.CustomerId == customer1.Id) ?? new DAL.Models.Order();
                 List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == order.Id).ToListAsync();
                 int tableCapacity = 0;
                 if (orderTableMappings.Count > 1)
@@ -446,7 +447,7 @@ namespace BLL.Services
                         message = "Number of people exceeds table capacity"
                     });
                 }
-                Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
+                DAL.Models.Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new DAL.Models.Customer();
                 {
                     customer.Name = waitingListModal.Name;
                     customer.Phone = waitingListModal.MobileNumber;
@@ -472,8 +473,8 @@ namespace BLL.Services
             }
             catch (Exception ex)
             {
-                Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new Customer();
-                Order order = await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync(o => o.CustomerId == customer1.Id) ?? new Order();
+                DAL.Models.Customer customer1 = await _context.Customers.FirstOrDefaultAsync(c => c.Email == waitingListModal.Email) ?? new DAL.Models.Customer();
+                DAL.Models.Order order = await _context.Orders.OrderByDescending(o => o.Id).FirstOrDefaultAsync(o => o.CustomerId == customer1.Id) ?? new DAL.Models.Order();
                 _logger.LogError(ex, "An error occurred while updating customer details for order ID {OrderId} by user with ID {UserId}", order.Id, userId);
                 Console.WriteLine(ex.Message);
                 return new JsonResult(new
@@ -518,7 +519,7 @@ namespace BLL.Services
                 }
                 addModifiersModal.ModifierGroups = modifierGroups;
                 List<ItemTaxes> itemTaxes = new List<ItemTaxes>();
-                List<Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
+                List<DAL.Models.Item> itemList = await _context.Items.Where(i => i.IsDeleted == false && i.IsAvailable == true).ToListAsync();
                 foreach (var item2 in itemList)
                 {
                     ItemTaxes itemTaxes1 = new ItemTaxes
@@ -548,7 +549,7 @@ namespace BLL.Services
         {
             try
             {
-                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                 order.SubTotal = (decimal?)subTotal;
                 order.TotalAmount = (decimal)total;
                 order.UpdatedAt = DateTime.Now;
@@ -577,7 +578,7 @@ namespace BLL.Services
         {
             try
             {
-                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                 if (order != null)
                 {
                     return new JsonResult(new
@@ -643,7 +644,7 @@ namespace BLL.Services
         {
             try
             {
-                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                 if (order != null)
                 {
                     order.Comment = comment;
@@ -765,6 +766,12 @@ namespace BLL.Services
                                     await _context.SaveChangesAsync();
                                 }
                             }
+                            DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new DAL.Models.Order();
+                            order.Status = "Pending";
+                            order.UpdatedAt = DateTime.Now;
+                            order.UpdatedBy = userId;
+                            _context.Orders.Update(order);
+                            await _context.SaveChangesAsync();
                             await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
                             await transaction.CommitAsync();
                             _logger.LogInformation("Order saved successfully for order ID {OrderId} by user with ID {UserId}", saveOrderViewModel.OrderId, userId);
@@ -913,7 +920,7 @@ namespace BLL.Services
                         }
                         if (!isServed)
                         {
-                            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new Order();
+                            DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new DAL.Models.Order();
                             order.Status = "In Progress";
                             order.UpdatedAt = DateTime.Now;
                             order.UpdatedBy = userId;
@@ -922,7 +929,7 @@ namespace BLL.Services
                         } 
                         else
                         {
-                            Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new Order();
+                            DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new DAL.Models.Order();
                             order.Status = "Served";
                             order.UpdatedAt = DateTime.Now;
                             order.UpdatedBy = userId;
@@ -989,7 +996,7 @@ namespace BLL.Services
                             await _context.SaveChangesAsync();
                         }
                     }
-                    Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                    DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                     order.Status = "Completed";
                     order.PaymentMode = "Cash";
                     order.UpdatedAt = DateTime.Now;
@@ -1005,7 +1012,7 @@ namespace BLL.Services
                         _context.OrderTableMappings.Update(orderTableMapping);
                         await _context.SaveChangesAsync();
                     }
-                    Invoice invoice = new Invoice
+                    DAL.Models.Invoice invoice = new DAL.Models.Invoice
                     {
                         OrderId = orderId,
                         InvoiceNo = "INV" + orderId.ToString()
@@ -1191,7 +1198,7 @@ namespace BLL.Services
                         message = "Order cannot be cancelled as items are already added"
                     });
                 }
-                Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
+                DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                 order.Status = "Cancelled";
                 order.UpdatedAt = DateTime.Now;
                 order.UpdatedBy = userId;
@@ -1236,39 +1243,44 @@ namespace BLL.Services
                 });
             }
         }
-        // public async Task<PaymentViewModal> GetPaymentViewModalAsync (int orderId)
-        // {
-        //     Random randomObj = new Random();
-        //     string transactionId = randomObj.Next(10000000, 100000000).ToString();
+        public async Task<KotMenuViewModel> GetPaymentViewModalAsync(int orderId)
+        {
+            Random randomObj = new Random();
+            string transactionId = randomObj.Next(10000000, 100000000).ToString();
 
-        //     string razorpayKey = _configuration["Razorpay:Key"] ?? "";
-        //     string razorpaySecret = _configuration["Razorpay:Secret"] ?? "";
+            string razorpayKey = _configuration["Razorpay:Key"] ?? "";
+            string razorpaySecret = _configuration["Razorpay:Secret"] ?? "";
 
-        //     Razorpay.Api.RazorpayClient client = new Razorpay.Api.RazorpayClient(razorpayKey, razorpaySecret);
+            Razorpay.Api.RazorpayClient client = new Razorpay.Api.RazorpayClient(razorpayKey, razorpaySecret);
 
-        //     Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new Order();
-        //     Customer customer = order.Customer;
+            DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
+            DAL.Models.Customer customer = await _context.Customers.FirstOrDefaultAsync(c => c.Id == order.CustomerId) ?? new DAL.Models.Customer();
 
-        //     Dictionary<string, object> options = new Dictionary<string, object>();
-        //     options.Add("amount", order.TotalAmount);
-        //     options.Add("receipt", transactionId);
-        //     options.Add("currency", "INR");
-        //     options.Add("payment_capture", "0"); // 0 for authorization only, 1 for automatic capture
-        //     Razorpay.Api.Order orderResponse = client.Orders.Create(options);
-        //     string orderId2 = orderResponse["id"].ToString();
+            Dictionary<string, object> options = new Dictionary<string, object>();
+            options.Add("amount", (int)(order.TotalAmount * 100));
+            options.Add("receipt", transactionId);
+            options.Add("currency", "INR");
+            options.Add("payment_capture", "0"); // 0 for authorization only, 1 for automatic capture
+            Razorpay.Api.Order orderResponse = client.Order.Create(options);
+            string orderId2 = orderResponse["id"].ToString();
 
-        //     PaymentViewModal orderModel = new PaymentViewModal
-        //     {
-        //         OrderId = orderResponse.Attributes["id"],
-        //         RazorpayKey = razorpayKey,
-        //         Amount = order.TotalAmount,
-        //         Currency = "INR",
-        //         Name = customer.Name,
-        //         Email = customer.Email,
-        //         PhoneNumber = customer.Phone,
-        //         Address = "Test Address",
-        //         Description = "Testing description"
-        //     };
-        // }
+            PaymentViewModal orderModel = new PaymentViewModal
+            {
+                OrderId = orderResponse.Attributes["id"],
+                RazorpayKey = razorpayKey,
+                Amount = order.TotalAmount,
+                Currency = "INR",
+                Name = customer.Name,
+                Email = customer.Email,
+                PhoneNumber = customer.Phone,
+                Address = "Test Address",
+                Description = "Testing description"
+            };
+            KotMenuViewModel kotMenuViewModel = new KotMenuViewModel
+            {
+                PaymentViewModal = orderModel
+            };
+            return kotMenuViewModel;
+        }
     }
 }

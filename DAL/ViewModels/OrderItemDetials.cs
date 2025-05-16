@@ -9,4 +9,5 @@ public class OrderItemDetials
     public decimal? ModifiersTotalPrice { get; set; }
     public int? ItemId { get; set; }
     public List<ModifierDetails>? Modifiers { get; set; }
+    public int? ReadyItemQuantity { get; set; }
 }

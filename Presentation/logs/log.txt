@@ -1059,3 +1059,242 @@ System.InvalidOperationException: An exception was thrown while attempting to ev
 2025-05-12 17:31:44.055 +05:30 [INF] Session parameters set successfully for user with ID 25
 2025-05-12 17:32:01.940 +05:30 [INF] Session parameters set successfully for user with ID 25
 2025-05-12 17:36:36.779 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:50:10.973 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-13 08:50:10.995 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-13 08:50:11.776 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:51:01.446 +05:30 [INF] Tables assigned successfully to customer with email shubham@yopmail.com by user 25
+2025-05-13 08:51:31.160 +05:30 [INF] Item with ID 21 added to favourites by user with ID 25
+2025-05-13 08:51:36.899 +05:30 [INF] Order total updated successfully for order ID 260 by user with ID 25
+2025-05-13 08:51:36.907 +05:30 [INF] Order saved successfully for order ID 260 by user with ID 25
+2025-05-13 08:51:39.377 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:51:58.191 +05:30 [INF] Items marked as ready successfully
+2025-05-13 08:52:04.932 +05:30 [INF] Items marked as ready successfully
+2025-05-13 08:52:12.754 +05:30 [INF] Order completed successfully for order ID 260 by user with ID 25
+2025-05-13 08:52:16.079 +05:30 [INF] Customer review saved successfully for order ID 260 by user with ID 25
+2025-05-13 08:52:21.324 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:52:47.723 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:52:49.045 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 08:53:53.837 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 09:25:05.158 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 09:25:33.836 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 11:54:31.193 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 11:55:08.344 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 11:56:18.025 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 12:17:24.477 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 13:20:19.878 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 13:57:36.009 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 13:57:44.470 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-13 17:17:40.690 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 09:26:34.371 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 09:26:47.897 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 09:27:00.982 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 09:27:21.359 +05:30 [INF] Invoice generated successfully for order ID 55
+2025-05-14 09:27:45.396 +05:30 [INF] Tables assigned successfully to customer with email meet@yopmail.com by user 25
+2025-05-14 09:28:11.480 +05:30 [INF] Order total updated successfully for order ID 261 by user with ID 25
+2025-05-14 09:28:11.490 +05:30 [INF] Order saved successfully for order ID 261 by user with ID 25
+2025-05-14 09:28:16.829 +05:30 [INF] Items marked as ready successfully
+2025-05-14 09:28:23.642 +05:30 [INF] Order completed successfully for order ID 261 by user with ID 25
+2025-05-14 09:28:25.890 +05:30 [INF] Customer review saved successfully for order ID 261 by user with ID 25
+2025-05-14 09:28:29.464 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 09:29:03.111 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-14 11:08:57.833 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-14 11:08:57.857 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-14 11:08:58.664 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 10:30:02.848 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-16 10:30:02.870 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-16 10:30:03.681 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:30:18.431 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:30:20.329 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:30:20.473 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:30:20.637 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:37:39.522 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:42:19.238 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:52.666 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:52.733 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:52.910 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:53.080 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:53.258 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:53.482 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:53.763 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 10:45:53.990 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 11:14:51.307 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-16 11:14:51.307 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-16 11:14:51.450 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 11:16:38.620 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-16 11:16:38.643 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-16 11:16:39.503 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-16 11:16:54.619 +05:30 [WRN] User with email manager@yop.mail does not exist
+2025-05-16 11:16:57.100 +05:30 [WRN] User with email manager@yop.mail does not exist
+2025-05-16 11:17:00.028 +05:30 [WRN] User with email kartik@yop.mail does not exist
+2025-05-16 11:17:06.110 +05:30 [WRN] User with email manager@yop.mail does not exist
+2025-05-16 11:17:17.161 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 11:17:17.161 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 11:17:17.315 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:17:35.221 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-16 11:17:43.101 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:17:43.111 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:24:31.902 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:25:11.466 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:25:11.467 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:25:29.694 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-16 11:25:33.974 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:03.485 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:09.970 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:16.611 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:19.294 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:21.260 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:27.118 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:27.302 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:27.511 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:27.683 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:27.852 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:28.010 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:28.368 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:26:30.951 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:26:30.952 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:26:35.973 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:26:35.976 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:26:39.458 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:26:39.459 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:27:59.165 +05:30 [INF] Order total updated successfully for order ID 262 by user with ID 25
+2025-05-16 11:27:59.168 +05:30 [INF] Order saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:28:18.453 +05:30 [INF] Items marked as ready successfully
+2025-05-16 11:28:25.652 +05:30 [INF] Order completed successfully for order ID 262 by user with ID 25
+2025-05-16 11:28:28.544 +05:30 [INF] Customer review saved successfully for order ID 262 by user with ID 25
+2025-05-16 11:28:50.306 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:28:50.308 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:34:50.283 +05:30 [INF] Items marked as ready successfully
+2025-05-16 11:36:49.390 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 11:36:57.661 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:36:57.669 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:00.345 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:00.348 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:04.070 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:04.073 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:07.219 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:07.222 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:12.575 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:12.577 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:16.940 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:16.943 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:22.415 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:22.417 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:32.871 +05:30 [INF] Items marked as ready successfully
+2025-05-16 11:37:37.346 +05:30 [INF] Order total updated successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:37.349 +05:30 [INF] Order saved successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:41.510 +05:30 [INF] Items marked as ready successfully
+2025-05-16 11:37:49.882 +05:30 [INF] Order completed successfully for order ID 263 by user with ID 25
+2025-05-16 11:37:52.866 +05:30 [INF] Customer review saved successfully for order ID 263 by user with ID 25
+2025-05-16 13:29:30.293 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 13:29:30.317 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 13:29:31.177 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 13:29:47.230 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-16 13:34:03.532 +05:30 [INF] Order total updated successfully for order ID 264 by user with ID 25
+2025-05-16 13:34:03.559 +05:30 [INF] Order saved successfully for order ID 264 by user with ID 25
+2025-05-16 13:47:35.893 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 13:47:35.917 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 13:47:36.707 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 14:35:05.631 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 14:35:05.631 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 14:35:06.003 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:18:42.357 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 15:18:42.393 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 15:18:43.327 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:27:08.192 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:30:17.630 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 15:30:17.673 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 15:30:17.970 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:31:16.579 +05:30 [ERR] An error occurred while extracting the user ID from the JWT token
+System.ArgumentNullException: IDX10000: The parameter 'token' cannot be a 'null' or an empty object.  (Parameter 'token')
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ReadJwtToken(String token)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.ReadToken(String token)
+   at BLL.Services.JwtService.<>c__DisplayClass5_0.<GetUserIdFromJwtTokenAsync>b__0() in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\JwtService.cs:line 65
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at BLL.Services.JwtService.GetUserIdFromJwtTokenAsync(String token) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\JwtService.cs:line 62
+2025-05-16 15:32:52.176 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 15:32:52.210 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 15:32:53.063 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:33:04.148 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:36:52.901 +05:30 [INF] Order total updated successfully for order ID 264 by user with ID 25
+2025-05-16 15:36:52.930 +05:30 [INF] Order saved successfully for order ID 264 by user with ID 25
+2025-05-16 15:38:14.117 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 15:56:15.772 +05:30 [WRN] Invalid password for user with email john@yopmail.com
+2025-05-16 15:56:18.078 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-16 15:56:18.092 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-16 15:56:18.801 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:00:11.957 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-16 16:00:17.426 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-16 16:00:17.426 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-16 16:00:17.573 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:01:10.594 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-16 16:01:17.608 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-16 16:01:17.617 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-16 16:01:24.007 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:02:12.722 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:03:38.464 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:03:49.064 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-16 16:03:49.070 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-16 16:03:49.246 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-16 16:04:28.773 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 16:04:28.773 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 16:04:28.940 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:05:01.305 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 16:05:01.305 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 16:05:01.474 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:07:20.546 +05:30 [INF] Items marked as ready successfully
+2025-05-16 16:07:30.298 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:07:39.570 +05:30 [INF] Order completed successfully for order ID 264 by user with ID 25
+2025-05-16 16:07:41.787 +05:30 [INF] Customer review saved successfully for order ID 264 by user with ID 25
+2025-05-16 16:07:49.643 +05:30 [INF] Tables assigned successfully to customer with email kartik2@yopmail.com by user 25
+2025-05-16 16:08:02.746 +05:30 [INF] Order total updated successfully for order ID 265 by user with ID 25
+2025-05-16 16:08:02.756 +05:30 [INF] Order saved successfully for order ID 265 by user with ID 25
+2025-05-16 16:08:08.690 +05:30 [INF] Items marked as ready successfully
+2025-05-16 16:08:37.634 +05:30 [INF] Order total updated successfully for order ID 265 by user with ID 25
+2025-05-16 16:08:37.640 +05:30 [INF] Order saved successfully for order ID 265 by user with ID 25
+2025-05-16 16:08:45.678 +05:30 [INF] Items marked as ready successfully
+2025-05-16 16:08:51.093 +05:30 [INF] Order completed successfully for order ID 265 by user with ID 25
+2025-05-16 16:08:53.815 +05:30 [INF] Customer review saved successfully for order ID 265 by user with ID 25
+2025-05-16 16:18:30.354 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 16:18:30.387 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 16:18:31.270 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:18:48.869 +05:30 [INF] Tables assigned successfully to customer with email raj2@yopmail.com by user 25
+2025-05-16 16:19:39.823 +05:30 [INF] Order total updated successfully for order ID 266 by user with ID 25
+2025-05-16 16:19:39.834 +05:30 [INF] Order saved successfully for order ID 266 by user with ID 25
+2025-05-16 16:26:17.527 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:29:57.841 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:30:03.117 +05:30 [INF] Items marked as ready successfully
+2025-05-16 16:30:06.974 +05:30 [INF] Order completed successfully for order ID 266 by user with ID 25
+2025-05-16 16:30:09.343 +05:30 [INF] Customer review saved successfully for order ID 266 by user with ID 25
+2025-05-16 16:45:07.157 +05:30 [WRN] Invalid password for user with email raj@yopmail.com
+2025-05-16 16:45:16.302 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-16 16:45:19.765 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-16 16:45:22.747 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 16:45:22.761 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 16:45:23.499 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 16:45:39.722 +05:30 [INF] Tables assigned successfully to customer with email tilak@yopmail.com by user 25
+2025-05-16 16:45:52.496 +05:30 [INF] Order total updated successfully for order ID 267 by user with ID 25
+2025-05-16 16:45:52.504 +05:30 [INF] Order saved successfully for order ID 267 by user with ID 25
+2025-05-16 16:51:42.778 +05:30 [INF] Items marked as ready successfully
+2025-05-16 17:06:52.307 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 17:06:52.330 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 17:06:53.112 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 17:07:13.467 +05:30 [INF] Order total updated successfully for order ID 267 by user with ID 25
+2025-05-16 17:07:13.482 +05:30 [INF] Order saved successfully for order ID 267 by user with ID 25
+2025-05-16 17:07:26.226 +05:30 [INF] Items marked as ready successfully
+2025-05-16 17:07:31.984 +05:30 [INF] Order completed successfully for order ID 267 by user with ID 25
+2025-05-16 17:07:34.811 +05:30 [INF] Customer review saved successfully for order ID 267 by user with ID 25
+2025-05-16 18:19:28.789 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-16 18:19:34.765 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-16 18:19:34.779 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-16 18:19:35.579 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-16 18:19:46.773 +05:30 [INF] Tables assigned successfully to customer with email tilak@yopmail.com by user 25
+2025-05-16 18:19:54.383 +05:30 [INF] Order total updated successfully for order ID 268 by user with ID 25
+2025-05-16 18:19:54.390 +05:30 [INF] Order saved successfully for order ID 268 by user with ID 25
+2025-05-16 18:20:06.829 +05:30 [INF] Items marked as ready successfully
+2025-05-16 18:20:19.457 +05:30 [INF] Order completed successfully for order ID 268 by user with ID 25
+2025-05-16 18:20:22.953 +05:30 [INF] Customer review saved successfully for order ID 268 by user with ID 25

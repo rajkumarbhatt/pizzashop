@@ -5,7 +5,7 @@
         <div class="w-100 bg-white d-flex justify-content-start align-items-center px-3 py-2">
             <p class="font-weight-bold color-head-order font-size-thead text-start w-50" style="margin-left: 6%;">Item
             </p>
-            <p class="font-weight-bold color-head-order font-size-thead" style="width: 15%; margin-left: 6.5%;">Quantity
+            <p class="font-weight-bold color-head-order font-size-thead" style="width: 15%; margin-left: 6.5%;" id="razorPayTestElement">Quantity
             </p>
             <p class="font-weight-bold color-head-order font-size-thead ps-4" style="width: 15%;">Amount</p>
         </div>
@@ -52,7 +52,9 @@
                             taxList += customTaxId + ",";
                             <div class="d-flex justify-content-between align-items-center w-100 font-accordian">
                                 <p>
-                                    <input id="serviceTaxCheckBox" checked class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                    <input id="serviceTaxCheckBox" checked
+                                        class="form-check-input permission-checkbox item-name-checkbox" type="checkbox"
+                                        style="height: 1em;">
                                     @tax.TaxName
                                 </p>
                                 <p id="@customTaxId" class="service-tax-value">@tax.TaxAmount</p>
@@ -91,11 +93,14 @@
                                 <p>
                                     @if (@tax.TaxAmount > 0)
                                     {
-                                        <input id="serviceTaxCheckBox" checked class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                        <input id="serviceTaxCheckBox" checked
+                                            class="form-check-input permission-checkbox item-name-checkbox" type="checkbox"
+                                            style="height: 1em;">
                                     }
                                     else
                                     {
-                                        <input id="serviceTaxCheckBox" class="form-check-input permission-checkbox item-name-checkbox" type="checkbox" style="height: 1em;">
+                                        <input id="serviceTaxCheckBox" class="form-check-input permission-checkbox item-name-checkbox"
+                                            type="checkbox" style="height: 1em;">
                                     }
                                     @tax.TaxName
                                 </p>
@@ -137,23 +142,43 @@
         <div class="buttons d-flex flex-wrap gap-2 justify-content-end align-items-center w-100 mt-4 ">
             <button onclick="saveOrder()" class="order-item-details button btn btn-primary"
                 style="width: 30%;">Save</button>
-            <button onclick="completeOrder()" class="order-item-details button btn btn-contrast"
-                style="width: 30%;">Complete</button>
-            @if(Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderStatus != null && Model.OrderDetailsCard.OrderStatus == "Completed")
+            @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderStatus != null &&
+                        (Model.OrderDetailsCard.OrderStatus == "Served"))
             {
-                <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
-                style="width: 30%;">Generate Invoice</button>
+                <button onclick="completeOrder()" class="order-item-details button btn btn-contrast"
+                style="width: 30%;">Complete</button>
             }
             else
             {
-                <button onclick="showErrorToastr()" class="order-item-details button btn btn-contrast"
-                style="width: 30%;">Generate Invoice</button>
+                <button disabled onclick="completeOrder()" class="order-item-details button btn btn-contrast"
+                    style="width: 30%;">Complete</button>
             }
-            <button onclick="cancelOrder()" class="order-item-details button btn btn-contrast"
-                style="width: 30%;">Cancel</button>
+            @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderStatus != null &&
+                        Model.OrderDetailsCard.OrderStatus == "Completed")
+            {
+                <button onclick="downloadPdfInvoice()" class="order-item-details button btn btn-contrast"
+                    style="width: 30%;">Generate Invoice</button>
+            }
+            else
+            {
+                <button disabled onclick="showErrorToastr()" class="order-item-details button btn btn-contrast"
+                    style="width: 30%;">Generate Invoice</button>
+            }
+            @if (Model.OrderDetailsCard != null && Model.OrderDetailsCard.OrderStatus != null &&
+                        (Model.OrderDetailsCard.OrderStatus == "In Progress" || Model.OrderDetailsCard.OrderStatus == "Served"))
+            {
+                <button onclick="cancelOrder()" disabled class="order-item-details button btn btn-contrast"
+                    style="width: 30%;">Cancel</button>
+            }
+            else
+            {
+                <button onclick="cancelOrder()" class="order-item-details button btn btn-contrast"
+                    style="width: 30%;">Cancel</button>
+            }
         </div>
     </div>
 </div>
+
 
 
 <script>

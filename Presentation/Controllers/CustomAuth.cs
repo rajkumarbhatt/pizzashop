@@ -13,6 +13,15 @@ namespace Presentaion.Controllers
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var requestedUrl = context.HttpContext.Request.Path.Value;
+            if (context.HttpContext.User.Identity?.IsAuthenticated == false)
+            {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary
+                {
+                    { "controller", "Home" },
+                    { "action", "Index" }
+                });
+                return;
+            }
             if (requestedUrl == null || !IsAuthorizedAsync(context.HttpContext.User, requestedUrl).Result)
             {
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary
@@ -38,7 +47,6 @@ namespace Presentaion.Controllers
                 { "Order", "Order" },
                 { "Customer", "Customers" },
                 { "account", "Dashboard"},
-                { "OrderApp", "OrderApp" }
             };
 
             PizzaShopContext db = new PizzaShopContext();
@@ -58,6 +66,18 @@ namespace Presentaion.Controllers
             _httpContextAccessor.HttpContext?.Session.Set("permissions", permissionsBytes);
 
             var controller = requestedUrl.Split('/')[1];
+            if (controller == "KOT")
+            {
+                return true;
+            }
+            if (controller == "OrderApp" || controller == "OrderAppMenu" || controller == "WaitingList")
+            {
+                if (roleId == 1 || roleId == 2)
+                {
+                    return true;
+                }
+                return false;
+            }
             if (!permissionNameObj.TryGetValue(controller, out var permissionName))
             {
                 return false;

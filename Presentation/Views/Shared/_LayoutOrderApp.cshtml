@@ -212,7 +212,7 @@
     });
 
     $("#kotKotMobile").click(function () {
-        window.location.href = "/OrderApp/Kot";
+        window.location.href = "/KOT";
     });
 
     $("#kotTablesMobile").click(function () {
@@ -230,7 +230,7 @@
         window.location.href = "/OrderApp/Menu";
     });
     $("#kotKot").click(function () {
-        window.location.href = "/OrderApp/Kot";
+        window.location.href = "/KOT";
     });
 
     $(document).ready(function () {
@@ -240,7 +240,7 @@
         } else if (window.location.href.indexOf("WaitingList") > -1) {
             makeThisTabActive("kotWaitingList");
             makeThisTabActiveMobile("kotWaitingListMobile");
-        } else if (window.location.href.indexOf("/OrderApp/Kot") > -1) {
+        } else if (window.location.href.indexOf("KOT") > -1) {
             makeThisTabActive("kotKot");
             makeThisTabActiveMobile("kotKotMobile");
         } else if (window.location.href.indexOf("OrderApp") > -1) {

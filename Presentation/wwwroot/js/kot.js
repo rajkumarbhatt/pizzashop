@@ -169,7 +169,7 @@ function markItemAsReady() {
   }
   $.ajax({
     type: "POST",
-    url: "/Kot/MarkItemsAsReady",
+    url: "/KOT/MarkItemsAsReady",
     data: {
       pageIndex: pageIndexOfModal,
       readyItems: listToSend,
@@ -198,7 +198,7 @@ function showReadyItems() {
   $("#ReadyButton").removeClass("btn-contrast").addClass("btn-primary");
   $.ajax({
     type: "GET",
-    url: "/Kot/GetReadyItems",
+    url: "/KOT/GetReadyItems",
     data: { categoryId: currentCategoryId },
     success: function (data) {
       $("#kotCardsPartialStart").html(data);
@@ -212,7 +212,7 @@ function showNotReadyItems() {
   $("#ReadyButton").removeClass("btn-primary").addClass("btn-contrast");
   $.ajax({
     type: "GET",
-    url: "/Kot/GetKotByCategory",
+    url: "/KOT/GetKotByCategory",
     data: { categoryId: currentCategoryId },
     success: function (data) {
       $("#kotCardsPartialStart").html(data);
@@ -225,7 +225,7 @@ $("#nextKotCards").click(function () {
   if (inReady) {
     $.ajax({
       type: "GET",
-      url: "/Kot/GetReadyItems",
+      url: "/KOT/GetReadyItems",
       data: { categoryId: currentCategoryId, pageIndex: pageIndexOfModal3 + 1 },
       success: function (data) {
         $("#kotCardsPartialStart").html(data);
@@ -237,7 +237,7 @@ $("#nextKotCards").click(function () {
   } else {
     $.ajax({
       type: "GET",
-      url: "/Kot/GetKotByCategory",
+      url: "/KOT/GetKotByCategory",
       data: { categoryId: currentCategoryId, pageIndex: pageIndexOfModal3 + 1 },
       success: function (data) {
         $("#kotCardsPartialStart").html(data);
@@ -253,7 +253,7 @@ $("#prevKotCards").click(function () {
   if (inReady) {
     $.ajax({
       type: "GET",
-      url: "/Kot/GetKotByCategory",
+      url: "/KOT/GetKotByCategory",
       data: { categoryId: currentCategoryId, pageIndex: pageIndexOfModal3 - 1 },
       success: function (data) {
         $("#kotCardsPartialStart").html(data);
@@ -265,7 +265,7 @@ $("#prevKotCards").click(function () {
   } else {
     $.ajax({
       type: "GET",
-      url: "/Kot/GetKotByCategory",
+      url: "/KOT/GetKotByCategory",
       data: { categoryId: currentCategoryId, pageIndex: pageIndexOfModal3 - 1 },
       success: function (data) {
         $("#kotCardsPartialStart").html(data);
@@ -280,7 +280,7 @@ $("#prevKotCards").click(function () {
 function openMarkedAsPreparedModal(orderId) {
   $.ajax({
     type: "GET",
-    url: "/Kot/GetMarkedAsPreparedModal",
+    url: "/KOT/GetMarkedAsPreparedModal",
     data: {
       pageIndex: pageIndexOfModal2,
       orderId: orderId,

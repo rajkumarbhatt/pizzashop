@@ -2,7 +2,7 @@ namespace DAL.ViewModels;
 
 public class PaymentViewModal
 {
-    public int OrderId { get; set; }
+    public string? OrderId { get; set; }
     public string? RazorpayKey { get; set; }
     public decimal? Amount { get; set; }
     public string? Currency { get; set; }

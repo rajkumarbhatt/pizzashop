@@ -1,10 +1,12 @@
 using BLL.Interfaces;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Presentaion.Controllers;
 
 namespace Presentation.Controllers
 {
     [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+    [CustomAuth]
     public class OrderAppMenu : Controller
     {
         private readonly IKotMenuService _kotMenuService;
@@ -143,11 +145,12 @@ namespace Presentation.Controllers
         {
             return await _kotMenuService.AreModifiersSelectedAsync(itemId);
         }
-        // [HttpPost]
-        // public async Task<ActionResult> CreateOrder(int orderId)
-        // {
-        //     PaymentViewModal paymentViewModal = _kotMenuService.GetPaymentViewModalAsync(orderId);
-        //     return await View("PaymentPage", orderModel);
-        // }
+        [HttpGet]
+        [Route("/OrderAppMenu/CreateOrder/{orderId}")]
+        public async Task<ActionResult> CreateOrder(int orderId)
+        {
+            KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetPaymentViewModalAsync(orderId);
+            return View("PaymentPagePartial", kotMenuViewModel);
+        }
     }
 }

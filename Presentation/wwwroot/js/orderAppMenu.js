@@ -864,9 +864,13 @@ function syncItemsList() {
                                 <p id="${orderItemTotalPriceValueCustomId}">${item.itemTotalPrice}</p>
                                 <p id="${orderModifiersTotalPriceValueCustomId}" class="font-accordian">${item.modifiersTotalPrice}</p>
                             </div>
-                            <div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
-                                <img src="/images/icons/delete.svg" class="small-image">
-                            </div>
+                        ${
+                          item.readyItemQuantity == 0
+                            ? `<div id="${trashIconCustomId}" onclick="deleteItemFromOrder(id, event)">
+                                 <img src="/images/icons/delete.svg" class="small-image" />
+                               </div>`
+                            : ""
+                        }
                         </div>
                     </button>
                 </h2>
@@ -1349,3 +1353,7 @@ function redirectToOrderApp() {
     window.location.href = "/OrderApp";
   }, 500);
 }
+
+$("#razorPayTestElement").off("click").click( function () {
+  window.location.href = "/OrderAppMenu/CreateOrder/" + orderIdTemp;
+});

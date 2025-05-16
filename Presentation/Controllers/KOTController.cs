@@ -1,10 +1,12 @@
 using BLL.Interfaces;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Presentaion.Controllers;
 
 namespace Presentation.Controllers;
 
 [ResponseCache(NoStore = true, Location = ResponseCacheLocation.None)]
+[CustomAuth]
 public class KOTController : Controller
 {
     private readonly IKotService _kotService;
@@ -14,7 +16,6 @@ public class KOTController : Controller
         _kotService = kotService;
         _jwtService = jwtService;
     }
-    [Route("OrderApp/Kot")]
     public async Task<IActionResult> Index()
     {
         KotViewModel kotViewModel = await _kotService.GetKotViewModelAsync(1, 4);
