@@ -240,6 +240,7 @@ public class OrderService : IOrderService
                 CustomerName = o.Customer.Name ?? "N/A",
                 CustomerEmail = o.Customer.Email ?? "N/A",
                 CustomerPhone = o.Customer.Phone ?? "N/A",
+                PaymentMethod = o.PaymentMode ?? "N/A",
                 NumberOfPeople = 0,
                 Tables = o.OrderTableMappings.Select(otm => otm.Table).ToList(),
                 Section = o.OrderTableMappings.Select(otm => otm.Table.Section.Name).FirstOrDefault() ?? "N/A",
@@ -358,7 +359,7 @@ public class OrderService : IOrderService
                 }
                 invoiceTaxes += "<tr><td></td><td>Total Amount Due</td><td></td><td></td><td style='text-align: right;'>" + orderDetailsViewModel.Total + "</td></tr>";
                 htmlContent = htmlContent.Replace("{{invoiceTaxes}}", invoiceTaxes);
-                htmlContent = htmlContent.Replace("{{paymentType}}", orderDetailsViewModel.OrderStatus == "Completed" ? "Cash" : "N/A");
+                htmlContent = htmlContent.Replace("{{paymentType}}", orderDetailsViewModel.PaymentMethod);
                 PdfWriter writer = new PdfWriter(ms);
                 PdfDocument pdf = new PdfDocument(writer);
                 ConverterProperties converterProperties = new ConverterProperties();

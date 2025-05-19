@@ -5,7 +5,8 @@
     {
         @foreach (var order in Model.KotOrderCards)
         {
-            <div onclick="openMarkedAsPreparedModal(@order.OrderId)" class=" ms-4 mb-4 box-kot-card-custom-border cursor-pointer" style="width: 350px; height: 320px;">
+            <div onclick="openMarkedAsPreparedModal(@order.OrderId)"
+                class=" ms-4 mb-4 box-kot-card-custom-border cursor-pointer" style="width: 350px; height: 320px;">
                 <div class=" w-100 text-dark bg-kot-card-top" style="height: 70px;">
                     <div class="d-flex justify-content-between py-1 px-2 align-items-center">
                         <h5 class=" kot-card-header-font">#@order.OrderId</h5>
@@ -69,14 +70,15 @@
         <div id="markedAsPreparedModalDiv">
             <partial name="_MarkedAsPreparedModal" model="@Model" />
         </div>
-    } else {
+    }
+    else
+    {
         <div class="d-flex justify-content-center align-items-center w-100 h-100">
             <p class="text-gray">No Orders</p>
         </div>
     }
 </div>
-
 <script>
-    var pageIndexOfModal2 = @Model.PageIndex;    
+    var pageIndexOfModal2 = @Model.PageIndex;
 </script>
 <script src="~/js/kot.js" asp-append-version="true"></script>

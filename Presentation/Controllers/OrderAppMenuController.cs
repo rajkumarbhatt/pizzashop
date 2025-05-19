@@ -12,9 +12,10 @@ namespace Presentation.Controllers
         private readonly IKotMenuService _kotMenuService;
         private readonly IJwtService _jwtService;
         private readonly IOrderService _orderService;
-
-        public OrderAppMenu(IKotMenuService kotMenuService, IJwtService jwtService, IOrderService orderService)
+        private readonly ILogger<OrderAppMenu> _logger;
+        public OrderAppMenu(ILogger<OrderAppMenu> logger, IKotMenuService kotMenuService, IJwtService jwtService, IOrderService orderService)
         {
+            _logger = logger;
             _kotMenuService = kotMenuService;
             _jwtService = jwtService;
             _orderService = orderService;
@@ -107,10 +108,10 @@ namespace Presentation.Controllers
             return await _kotMenuService.SaveOrderAsync(saveOrderViewModel, userId);
         }
         [HttpPost]
-        public async Task<IActionResult> CompleteOrder(int orderId)
+        public async Task<IActionResult> CompleteOrder(int orderId, string paymentMode)
         {
             int userId = await _jwtService.GetUserIdFromJwtTokenAsync(Request.Cookies["token"] ?? "");
-            return await _kotMenuService.CompleteOrderAsync(orderId, userId);
+            return await _kotMenuService.CompleteOrderAsync(orderId, userId, paymentMode);
         }
         [HttpPost]
         public async Task<IActionResult> CancelOrder(int orderId)
@@ -151,6 +152,17 @@ namespace Presentation.Controllers
         {
             KotMenuViewModel kotMenuViewModel = await _kotMenuService.GetPaymentViewModalAsync(orderId);
             return View("PaymentPagePartial", kotMenuViewModel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Complete(string rzp_paymentid, string rzp_orderid)
+        {
+            if (string.IsNullOrEmpty(rzp_paymentid) || string.IsNullOrEmpty(rzp_orderid))
+            {
+                return BadRequest("Invalid payment details.");
+            }
+            _logger.LogInformation($"Payment successful. Payment ID: {rzp_paymentid}, Order ID: {rzp_orderid}");
+            return Ok("Payment processed successfully.");
         }
     }
 }

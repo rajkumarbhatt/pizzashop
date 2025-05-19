@@ -1298,3 +1298,783 @@ System.ArgumentNullException: IDX10000: The parameter 'token' cannot be a 'null'
 2025-05-16 18:20:06.829 +05:30 [INF] Items marked as ready successfully
 2025-05-16 18:20:19.457 +05:30 [INF] Order completed successfully for order ID 268 by user with ID 25
 2025-05-16 18:20:22.953 +05:30 [INF] Customer review saved successfully for order ID 268 by user with ID 25
+2025-05-19 09:10:44.077 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-19 09:10:44.099 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-19 09:10:44.925 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-19 09:11:04.299 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 09:11:04.300 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 09:11:04.459 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:11:17.460 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:11:47.237 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:12:08.297 +05:30 [INF] Order total updated successfully for order ID 269 by user with ID 25
+2025-05-19 09:12:08.304 +05:30 [INF] Order saved successfully for order ID 269 by user with ID 25
+2025-05-19 09:12:25.338 +05:30 [INF] Comment added successfully for order ID 269 by user with ID 25
+2025-05-19 09:12:33.563 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:12:54.838 +05:30 [INF] Order completed successfully for order ID 269 by user with ID 25
+2025-05-19 09:12:58.425 +05:30 [INF] Customer review saved successfully for order ID 269 by user with ID 25
+2025-05-19 09:14:47.735 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:15:07.190 +05:30 [INF] Order total updated successfully for order ID 270 by user with ID 25
+2025-05-19 09:15:07.199 +05:30 [INF] Order saved successfully for order ID 270 by user with ID 25
+2025-05-19 09:15:17.300 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:15:24.500 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:15:28.937 +05:30 [INF] Order completed successfully for order ID 270 by user with ID 25
+2025-05-19 09:17:14.924 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:17:22.649 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:17:48.429 +05:30 [INF] Invoice generated successfully for order ID 270
+2025-05-19 09:18:54.979 +05:30 [INF] Forgot password email sent to raj@yopmail.com
+2025-05-19 09:19:38.512 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 09:19:38.512 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 09:19:38.657 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:19:55.414 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:20:06.713 +05:30 [INF] Order total updated successfully for order ID 271 by user with ID 25
+2025-05-19 09:20:06.715 +05:30 [INF] Order saved successfully for order ID 271 by user with ID 25
+2025-05-19 09:20:12.836 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:20:26.408 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:20:55.868 +05:30 [INF] Order completed successfully for order ID 271 by user with ID 25
+2025-05-19 09:21:41.903 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:22:08.705 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:22:38.769 +05:30 [INF] Order total updated successfully for order ID 272 by user with ID 25
+2025-05-19 09:22:38.774 +05:30 [INF] Order saved successfully for order ID 272 by user with ID 25
+2025-05-19 09:22:43.538 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:22:48.034 +05:30 [INF] Order completed successfully for order ID 272 by user with ID 25
+2025-05-19 09:27:17.022 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:27:25.525 +05:30 [INF] Order total updated successfully for order ID 273 by user with ID 25
+2025-05-19 09:27:25.528 +05:30 [INF] Order saved successfully for order ID 273 by user with ID 25
+2025-05-19 09:27:28.780 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:27:33.591 +05:30 [INF] Order completed successfully for order ID 273 by user with ID 25
+2025-05-19 09:29:56.180 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:30:02.085 +05:30 [INF] Order total updated successfully for order ID 274 by user with ID 25
+2025-05-19 09:30:02.087 +05:30 [INF] Order saved successfully for order ID 274 by user with ID 25
+2025-05-19 09:30:06.053 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:30:10.840 +05:30 [INF] Order completed successfully for order ID 274 by user with ID 25
+2025-05-19 09:31:01.783 +05:30 [INF] Customer review saved successfully for order ID 274 by user with ID 25
+2025-05-19 09:35:53.614 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:36:00.700 +05:30 [INF] Order total updated successfully for order ID 275 by user with ID 25
+2025-05-19 09:36:00.703 +05:30 [INF] Order saved successfully for order ID 275 by user with ID 25
+2025-05-19 09:36:04.629 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:36:08.624 +05:30 [INF] Order completed successfully for order ID 275 by user with ID 25
+2025-05-19 09:42:46.606 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:43:41.926 +05:30 [INF] Order total updated successfully for order ID 276 by user with ID 25
+2025-05-19 09:43:41.950 +05:30 [INF] Order saved successfully for order ID 276 by user with ID 25
+2025-05-19 09:43:45.692 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:43:51.431 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:43:56.381 +05:30 [INF] Order completed successfully for order ID 276 by user with ID 25
+2025-05-19 09:45:42.030 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:45:45.559 +05:30 [INF] Order total updated successfully for order ID 277 by user with ID 25
+2025-05-19 09:45:45.562 +05:30 [INF] Order saved successfully for order ID 277 by user with ID 25
+2025-05-19 09:45:50.314 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:45:54.586 +05:30 [INF] Order completed successfully for order ID 277 by user with ID 25
+2025-05-19 09:46:32.407 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:46:36.718 +05:30 [INF] Order total updated successfully for order ID 278 by user with ID 25
+2025-05-19 09:46:36.720 +05:30 [INF] Order saved successfully for order ID 278 by user with ID 25
+2025-05-19 09:46:39.783 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:46:43.974 +05:30 [INF] Order completed successfully for order ID 278 by user with ID 25
+2025-05-19 09:47:10.005 +05:30 [INF] Customer review saved successfully for order ID 278 by user with ID 25
+2025-05-19 09:47:34.536 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:47:43.483 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:48:32.317 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:48:35.722 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:48:48.061 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:49:52.837 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:49:58.504 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:13.365 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:15.030 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:15.252 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:15.481 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:15.587 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:15.727 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:18.994 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:50:26.763 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:12.773 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:13.074 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:13.345 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:13.446 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:16.057 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:16.260 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:16.492 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:16.584 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:37.990 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:37.991 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:37.991 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:37.994 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:37.994 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.165 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.212 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.240 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.241 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.419 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.420 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.426 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.428 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.432 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:38.502 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:51:39.656 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:52:55.410 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:19.021 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:19.195 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:20.053 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:20.440 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:20.794 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:53:21.061 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:54:37.448 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 09:57:24.030 +05:30 [INF] Tables assigned successfully to customer with email kishan@yopmail.com by user 25
+2025-05-19 09:57:30.296 +05:30 [INF] Order total updated successfully for order ID 279 by user with ID 25
+2025-05-19 09:57:30.303 +05:30 [INF] Order saved successfully for order ID 279 by user with ID 25
+2025-05-19 09:57:33.343 +05:30 [INF] Items marked as ready successfully
+2025-05-19 09:57:37.271 +05:30 [INF] Order completed successfully for order ID 279 by user with ID 25
+2025-05-19 09:58:00.050 +05:30 [INF] Customer review saved successfully for order ID 279 by user with ID 25
+2025-05-19 10:30:28.306 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 10:30:28.313 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 10:30:28.457 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:30:42.540 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-19 10:30:56.627 +05:30 [INF] Order total updated successfully for order ID 280 by user with ID 25
+2025-05-19 10:30:56.630 +05:30 [INF] Order saved successfully for order ID 280 by user with ID 25
+2025-05-19 10:31:03.569 +05:30 [INF] Items marked as ready successfully
+2025-05-19 10:31:08.007 +05:30 [INF] Order completed successfully for order ID 280 by user with ID 25
+2025-05-19 10:31:33.598 +05:30 [INF] Customer review saved successfully for order ID 280 by user with ID 25
+2025-05-19 10:31:39.018 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:33:07.062 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:33:11.828 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:33:49.779 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:34:03.855 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:34:38.686 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 10:34:49.675 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:22:27.295 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:22:31.341 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:22:31.539 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:22:31.707 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:28:11.673 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:49:10.130 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 11:49:10.155 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 11:49:10.965 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:49:52.752 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-19 11:49:57.277 +05:30 [INF] Order total updated successfully for order ID 281 by user with ID 25
+2025-05-19 11:49:57.285 +05:30 [INF] Order saved successfully for order ID 281 by user with ID 25
+2025-05-19 11:50:00.722 +05:30 [ERR] An error occurred while calling the stored procedure 'mark_items_as_ready'.
+Npgsql.PostgresException (0x80004005): 42P01: relation "order_table_mappings" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at BLL.Services.KotService.CallMarkItemsAsReadyProcedureWithNpgsqlAsync(List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "order_table_mappings" does not exist
+    InternalPosition: 29
+    InternalQuery: SELECT t.*
+            FROM order_table_mappings otm
+            JOIN tables t ON otm.table_id = t.id
+            WHERE otm.order_id = p_order_id AND otm.is_deleted = FALSE
+    Where: PL/pgSQL function mark_items_as_ready(jsonb,integer,integer,integer) line 26 at FOR over SELECT rows
+    File: parse_relation.c
+    Line: 1452
+    Routine: parserOpenTable
+2025-05-19 11:50:00.731 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42P01: relation "order_table_mappings" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at BLL.Services.KotService.CallMarkItemsAsReadyProcedureWithNpgsqlAsync(List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "order_table_mappings" does not exist
+    InternalPosition: 29
+    InternalQuery: SELECT t.*
+            FROM order_table_mappings otm
+            JOIN tables t ON otm.table_id = t.id
+            WHERE otm.order_id = p_order_id AND otm.is_deleted = FALSE
+    Where: PL/pgSQL function mark_items_as_ready(jsonb,integer,integer,integer) line 26 at FOR over SELECT rows
+    File: parse_relation.c
+    Line: 1452
+    Routine: parserOpenTable
+2025-05-19 11:57:07.195 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 11:57:07.229 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 11:57:08.098 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:58:22.432 +05:30 [INF] Items marked as ready successfully
+2025-05-19 11:58:27.260 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 11:58:37.113 +05:30 [INF] Order total updated successfully for order ID 281 by user with ID 25
+2025-05-19 11:58:37.124 +05:30 [INF] Order saved successfully for order ID 281 by user with ID 25
+2025-05-19 11:58:42.426 +05:30 [INF] Order total updated successfully for order ID 281 by user with ID 25
+2025-05-19 11:58:42.433 +05:30 [INF] Order saved successfully for order ID 281 by user with ID 25
+2025-05-19 11:58:47.678 +05:30 [INF] Items marked as ready successfully
+2025-05-19 11:58:58.000 +05:30 [INF] Items marked as ready successfully
+2025-05-19 11:59:04.553 +05:30 [INF] Order completed successfully for order ID 281 by user with ID 25
+2025-05-19 11:59:31.495 +05:30 [INF] Customer review saved successfully for order ID 281 by user with ID 25
+2025-05-19 11:59:34.870 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:00:29.505 +05:30 [INF] Invoice generated successfully for order ID 281
+2025-05-19 12:01:56.095 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:02:04.989 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:47.006 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:47.289 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:47.574 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:48.027 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:48.097 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:08:48.184 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:09:15.801 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:09:25.045 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:09:29.923 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:13:25.063 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:13:25.255 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:13:25.460 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:13:25.649 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:18:45.192 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:18:45.533 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:18:45.868 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:05.406 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:07.938 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:08.699 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:09.017 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:09.489 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:09.840 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:10.208 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:10.490 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:10.746 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:10.933 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:11.147 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:11.351 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:11.774 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:12.285 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:12.746 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:13.247 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:13.796 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:14.311 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:14.569 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:14.842 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:20:15.076 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:03.364 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:03.648 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:04.007 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:04.249 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:04.443 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:04.631 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:04.831 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:05.004 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:05.181 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:05.371 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:05.603 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:05.800 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:06.007 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:06.196 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:06.399 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:06.598 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:07.398 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:07.605 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:07.821 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:22:08.144 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:23:30.541 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:23:37.582 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:26:03.381 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:47:33.469 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:47:36.031 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:47:40.802 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:47:44.604 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:47:46.940 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:48:56.770 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:49:00.169 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:49:00.370 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:49:00.612 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:49:05.376 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:51:12.743 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:51:12.749 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:51:12.931 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:51:21.796 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:51:21.796 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:51:21.946 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:52:30.913 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:52:30.913 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:52:31.073 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:54:57.664 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:54:57.664 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:54:57.802 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:23.389 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:55:23.389 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:55:23.532 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:45.670 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:46.065 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:47.337 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:49.250 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:55:59.410 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:55:59.410 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:55:59.550 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:56:20.690 +05:30 [INF] Tables assigned successfully to customer with email kevin@yopmail.com by user 25
+2025-05-19 12:56:27.666 +05:30 [INF] Order total updated successfully for order ID 282 by user with ID 25
+2025-05-19 12:56:27.674 +05:30 [INF] Order saved successfully for order ID 282 by user with ID 25
+2025-05-19 12:56:28.036 +05:30 [INF] Order total updated successfully for order ID 282 by user with ID 25
+2025-05-19 12:56:28.039 +05:30 [INF] Order saved successfully for order ID 282 by user with ID 25
+2025-05-19 12:56:32.084 +05:30 [INF] Items marked as ready successfully
+2025-05-19 12:56:41.613 +05:30 [INF] Order completed successfully for order ID 282 by user with ID 25
+2025-05-19 12:57:10.522 +05:30 [INF] Customer review saved successfully for order ID 282 by user with ID 25
+2025-05-19 12:57:43.950 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:57:43.950 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:57:44.108 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:58:48.431 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:58:48.431 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:58:48.616 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 12:59:21.498 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 12:59:21.498 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 12:59:21.648 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:02:59.636 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:02:59.636 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:02:59.792 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:03:09.203 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:03:09.203 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:03:09.340 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:03:11.603 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:03:16.267 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:05:56.233 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:05:56.233 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:05:56.372 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:12:39.629 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:44.804 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:46.619 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:47.168 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:47.548 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:47.857 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-19 13:12:55.060 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:12:55.060 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:12:55.214 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:15:40.770 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:15:40.770 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:15:40.910 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:16:37.048 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:16:37.048 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:16:37.186 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:03.391 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:03.691 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:03.942 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:04.504 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:04.788 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:05.087 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:17:05.246 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:22:08.405 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:22:13.050 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:22:30.593 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:24:25.183 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:25:25.056 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:25:27.058 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:25:27.413 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:25:27.679 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:25:27.900 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:55:15.825 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 13:55:15.825 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 13:55:15.970 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:59:09.222 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 13:59:30.226 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 14:09:48.256 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-19 14:10:01.660 +05:30 [INF] Order total updated successfully for order ID 283 by user with ID 25
+2025-05-19 14:10:01.663 +05:30 [INF] Order saved successfully for order ID 283 by user with ID 25
+2025-05-19 14:10:08.082 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:10:14.031 +05:30 [INF] Order completed successfully for order ID 283 by user with ID 25
+2025-05-19 14:10:43.113 +05:30 [INF] Customer review saved successfully for order ID 283 by user with ID 25
+2025-05-19 14:10:46.358 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 14:10:56.436 +05:30 [INF] Invoice generated successfully for order ID 283
+2025-05-19 14:17:53.544 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-19 14:17:57.870 +05:30 [INF] Order total updated successfully for order ID 284 by user with ID 25
+2025-05-19 14:17:57.873 +05:30 [INF] Order saved successfully for order ID 284 by user with ID 25
+2025-05-19 14:18:01.576 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.NpgsqlException (0x80004005): No password has been provided but the backend requires one (in SASL/SCRAM-SHA-256)
+   at Npgsql.Internal.NpgsqlConnector.AuthenticateSASL(List`1 mechanisms, String username, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.Authenticate(String username, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.<Open>g__OpenCore|214_1(NpgsqlConnector conn, SslMode sslMode, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.Internal.NpgsqlConnector.Open(NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.OpenNewConnector(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.PoolingDataSource.<Get>g__RentAsync|33_0(NpgsqlConnection conn, NpgsqlTimeout timeout, Boolean async, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlConnection.<Open>g__OpenAsync|42_0(Boolean async, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+2025-05-19 14:25:06.758 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42883: procedure mark_items_as_ready(integer, text, integer) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure mark_items_as_ready(integer, text, integer) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2025-05-19 14:26:20.308 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42883: procedure mark_items_as_ready(integer, text, integer) does not exist
+
+POSITION: 6
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: procedure mark_items_as_ready(integer, text, integer) does not exist
+    Hint: No procedure matches the given name and argument types. You might need to add explicit type casts.
+    Position: 6
+    File: parse_func.c
+    Line: 627
+    Routine: ParseFuncOrColumn
+2025-05-19 14:27:40.834 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42P01: relation "order_table_mappings" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "order_table_mappings" does not exist
+    InternalPosition: 25
+    InternalQuery: SELECT t.*
+        FROM order_table_mappings otm
+        JOIN tables t ON otm.table_id = t.id
+        WHERE otm.order_id = p_order_id AND otm.is_deleted = FALSE
+    Where: PL/pgSQL function mark_items_as_ready(integer,jsonb,integer) line 24 at FOR over SELECT rows
+    File: parse_relation.c
+    Line: 1452
+    Routine: parserOpenTable
+2025-05-19 14:31:15.881 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42883: operator does not exist: record ->> unknown
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotService.cs:line 281
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: operator does not exist: record ->> unknown
+    Hint: No operator matches the given name and argument types. You might need to add explicit type casts.
+    InternalPosition: 205
+    InternalQuery: UPDATE order_items
+        SET ready_items_count = ready_items_count + (v_order_item->>'quantity')::INT,
+            updated_at = NOW(),
+            updated_by = p_user_id
+        WHERE id = (v_order_item->>'order_item_id')::INT AND is_deleted = FALSE
+    Where: PL/pgSQL function mark_items_as_ready(integer,jsonb,integer) line 43 at SQL statement
+    File: parse_oper.c
+    Line: 644
+    Routine: op_error
+2025-05-19 14:32:59.538 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42P01: missing FROM-clause entry for table "v_order_item"
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotService.cs:line 281
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: missing FROM-clause entry for table "v_order_item"
+    InternalPosition: 1
+    InternalQuery: v_order_item.quantity > COALESCE(v_order_item.ready_items_count, 0)
+    Where: PL/pgSQL function mark_items_as_ready(integer,jsonb,integer) line 55 at IF
+    File: parse_relation.c
+    Line: 3655
+    Routine: errorMissingRTE
+2025-05-19 14:35:42.713 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:36:45.997 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:38:19.722 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:42:23.225 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 2D000: invalid transaction termination
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 2D000
+    MessageText: invalid transaction termination
+    Where: PL/pgSQL function mark_items_as_ready(integer,jsonb,integer) line 72 at COMMIT
+    File: spi.c
+    Line: 241
+    Routine: _SPI_commit
+2025-05-19 14:43:54.801 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:44:36.330 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:49:20.938 +05:30 [ERR] An error occurred while marking items as ready
+Npgsql.PostgresException (0x80004005): 42703: column "OrderItemId" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.MarkItemsAsReadyAsync(Int32 pageIndex, List`1 readyItems, Int32 orderId, Int32 categoryId, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "OrderItemId" does not exist
+    InternalPosition: 208
+    InternalQuery: UPDATE order_items
+        SET ready_items_count = ready_items_count + (v_ready_item->>"Quantity")::INT,
+            updated_at = NOW(),
+            updated_by = p_user_id
+        WHERE id = (v_ready_item->>"OrderItemId")::INT AND is_deleted = FALSE
+    Where: PL/pgSQL function mark_items_as_ready(integer,jsonb,integer) line 44 at SQL statement
+    File: parse_relation.c
+    Line: 3721
+    Routine: errorMissingColumn
+2025-05-19 14:51:18.819 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:53:35.331 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 14:53:45.525 +05:30 [INF] Order total updated successfully for order ID 284 by user with ID 25
+2025-05-19 14:53:45.533 +05:30 [INF] Order saved successfully for order ID 284 by user with ID 25
+2025-05-19 14:53:50.745 +05:30 [INF] Items marked as in prepared successfully
+2025-05-19 14:53:56.117 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:53:58.532 +05:30 [INF] Items marked as ready successfully
+2025-05-19 14:54:05.295 +05:30 [INF] Order completed successfully for order ID 284 by user with ID 25
+2025-05-19 14:54:30.754 +05:30 [INF] Customer review saved successfully for order ID 284 by user with ID 25
+2025-05-19 15:25:17.276 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:25:41.093 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-19 15:25:41.098 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-19 15:25:41.267 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-19 15:25:51.228 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 15:25:51.228 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 15:25:51.371 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:26:00.359 +05:30 [INF] Tables assigned successfully to customer with email raj2@yopmail.com by user 25
+2025-05-19 15:26:06.183 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:26:06.191 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:27:38.531 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:27:38.534 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:33:08.921 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:33:08.925 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:33:43.169 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:33:48.670 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:33:48.684 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:35:42.863 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:35:42.868 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:35:53.599 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:35:53.602 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:37:50.725 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:37:50.729 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:37:56.119 +05:30 [INF] Items marked as ready successfully
+2025-05-19 15:38:05.251 +05:30 [INF] Items marked as ready successfully
+2025-05-19 15:38:12.184 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 15:38:12.187 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 15:38:18.834 +05:30 [INF] Items marked as ready successfully
+2025-05-19 15:38:28.072 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:38:48.685 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:38:52.213 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:55:48.158 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 15:55:51.601 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 16:52:25.715 +05:30 [INF] Order total updated successfully for order ID 285 by user with ID 25
+2025-05-19 16:52:25.718 +05:30 [INF] Order saved successfully for order ID 285 by user with ID 25
+2025-05-19 16:52:28.959 +05:30 [INF] Items marked as ready successfully
+2025-05-19 16:52:36.395 +05:30 [INF] Order completed successfully for order ID 285 by user with ID 25
+2025-05-19 16:53:10.351 +05:30 [INF] Customer review saved successfully for order ID 285 by user with ID 25
+2025-05-19 16:57:38.271 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 16:58:49.309 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-19 16:58:53.591 +05:30 [INF] Order total updated successfully for order ID 286 by user with ID 25
+2025-05-19 16:58:53.595 +05:30 [INF] Order saved successfully for order ID 286 by user with ID 25
+2025-05-19 16:58:56.524 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:13:21.278 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:13:41.962 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:13:56.553 +05:30 [INF] Tables assigned successfully to customer with email raj2@yopmail.com by user 25
+2025-05-19 17:14:12.459 +05:30 [INF] Order total updated successfully for order ID 287 by user with ID 25
+2025-05-19 17:14:12.462 +05:30 [INF] Order saved successfully for order ID 287 by user with ID 25
+2025-05-19 17:14:16.586 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:14:20.925 +05:30 [INF] Order completed successfully for order ID 287 by user with ID 25
+2025-05-19 17:14:45.317 +05:30 [INF] Customer review saved successfully for order ID 287 by user with ID 25
+2025-05-19 17:14:49.550 +05:30 [INF] Order completed successfully for order ID 286 by user with ID 25
+2025-05-19 17:15:11.751 +05:30 [INF] Customer review saved successfully for order ID 286 by user with ID 25
+2025-05-19 17:15:14.842 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:17:19.675 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 17:17:19.681 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 17:17:19.832 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:17:27.821 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-19 17:17:41.952 +05:30 [INF] Order total updated successfully for order ID 288 by user with ID 25
+2025-05-19 17:17:41.955 +05:30 [INF] Order saved successfully for order ID 288 by user with ID 25
+2025-05-19 17:17:45.932 +05:30 [INF] Comment added successfully for order ID 288 by user with ID 25
+2025-05-19 17:17:51.414 +05:30 [INF] Comment added successfully for order item ID 731 by user with ID 25
+2025-05-19 17:17:55.657 +05:30 [INF] Comment added successfully for order item ID 732 by user with ID 25
+2025-05-19 17:18:04.584 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:18:10.370 +05:30 [INF] Order completed successfully for order ID 288 by user with ID 25
+2025-05-19 17:18:33.307 +05:30 [INF] Customer review saved successfully for order ID 288 by user with ID 25
+2025-05-19 17:18:35.845 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:18:43.795 +05:30 [INF] Excel file generated successfully for orders
+2025-05-19 17:20:09.505 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:20:16.431 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:20:44.492 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:45:40.328 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 17:45:40.352 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 17:45:41.113 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:45:50.851 +05:30 [INF] Tables assigned successfully to customer with email kevin@yopmail.com by user 25
+2025-05-19 17:47:25.150 +05:30 [INF] Order total updated successfully for order ID 289 by user with ID 25
+2025-05-19 17:47:25.158 +05:30 [INF] Order saved successfully for order ID 289 by user with ID 25
+2025-05-19 17:47:29.045 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:48:48.283 +05:30 [INF] Order total updated successfully for order ID 289 by user with ID 25
+2025-05-19 17:48:48.288 +05:30 [INF] Order saved successfully for order ID 289 by user with ID 25
+2025-05-19 17:48:51.219 +05:30 [INF] Order completed successfully for order ID 289 by user with ID 25
+2025-05-19 17:48:54.309 +05:30 [INF] Customer review saved successfully for order ID 289 by user with ID 25
+2025-05-19 17:49:02.786 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-19 17:49:08.423 +05:30 [INF] Order total updated successfully for order ID 290 by user with ID 25
+2025-05-19 17:49:08.425 +05:30 [INF] Order saved successfully for order ID 290 by user with ID 25
+2025-05-19 17:49:16.342 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:49:20.525 +05:30 [INF] Order completed successfully for order ID 290 by user with ID 25
+2025-05-19 17:50:01.911 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-19 17:50:06.921 +05:30 [INF] Order total updated successfully for order ID 291 by user with ID 25
+2025-05-19 17:50:06.924 +05:30 [INF] Order saved successfully for order ID 291 by user with ID 25
+2025-05-19 17:50:14.710 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:50:42.425 +05:30 [INF] Order completed successfully for order ID 291 by user with ID 25
+2025-05-19 17:50:48.959 +05:30 [INF] Customer review saved successfully for order ID 291 by user with ID 25
+2025-05-19 17:51:38.302 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-19 17:51:55.749 +05:30 [INF] Order total updated successfully for order ID 292 by user with ID 25
+2025-05-19 17:51:55.753 +05:30 [INF] Order saved successfully for order ID 292 by user with ID 25
+2025-05-19 17:52:03.760 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:52:16.283 +05:30 [INF] Order total updated successfully for order ID 292 by user with ID 25
+2025-05-19 17:52:16.285 +05:30 [INF] Order saved successfully for order ID 292 by user with ID 25
+2025-05-19 17:53:17.685 +05:30 [INF] Order completed successfully for order ID 292 by user with ID 25
+2025-05-19 17:53:55.603 +05:30 [INF] Tables assigned successfully to customer with email kartik@yopmail.com by user 25
+2025-05-19 17:54:00.394 +05:30 [INF] Order total updated successfully for order ID 293 by user with ID 25
+2025-05-19 17:54:00.397 +05:30 [INF] Order saved successfully for order ID 293 by user with ID 25
+2025-05-19 17:54:04.033 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:54:08.598 +05:30 [INF] Order completed successfully for order ID 293 by user with ID 25
+2025-05-19 17:54:11.596 +05:30 [INF] Customer review saved successfully for order ID 293 by user with ID 25
+2025-05-19 17:54:18.795 +05:30 [INF] Tables assigned successfully to customer with email kartik2@yopmail.com by user 25
+2025-05-19 17:54:25.482 +05:30 [INF] Order total updated successfully for order ID 294 by user with ID 25
+2025-05-19 17:54:25.484 +05:30 [INF] Order saved successfully for order ID 294 by user with ID 25
+2025-05-19 17:54:29.397 +05:30 [INF] Items marked as ready successfully
+2025-05-19 17:54:37.308 +05:30 [INF] Order completed successfully for order ID 294 by user with ID 25
+2025-05-19 17:55:14.008 +05:30 [INF] Customer review saved successfully for order ID 294 by user with ID 25
+2025-05-19 17:55:19.330 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 17:55:28.575 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 18:01:18.746 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 18:01:18.770 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 18:01:19.572 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 18:01:34.590 +05:30 [INF] Tables assigned successfully to customer with email sahaj@yopmail.com by user 25
+2025-05-19 18:01:43.887 +05:30 [INF] Order total updated successfully for order ID 295 by user with ID 25
+2025-05-19 18:01:43.895 +05:30 [INF] Order saved successfully for order ID 295 by user with ID 25
+2025-05-19 18:01:49.865 +05:30 [INF] Items marked as ready successfully
+2025-05-19 18:01:56.303 +05:30 [ERR] An error occurred while completing the order for order ID 295 by user with ID 25
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 23514: new row for relation "orders" violates check constraint "payment_check"
+
+DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 23514
+    MessageText: new row for relation "orders" violates check constraint "payment_check"
+    Detail: Detail redacted as it may contain sensitive data. Specify 'Include Error Detail' in the connection string to include this information.
+    SchemaName: public
+    TableName: orders
+    ConstraintName: payment_check
+    File: execMain.c
+    Line: 2039
+    Routine: ExecConstraints
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at BLL.Services.KotMenuService.CompleteOrderAsync(Int32 orderId, Int32 userId, String paymentMode) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotMenuService.cs:line 1011
+2025-05-19 18:04:08.843 +05:30 [INF] Order total updated successfully for order ID 295 by user with ID 25
+2025-05-19 18:04:08.847 +05:30 [INF] Order saved successfully for order ID 295 by user with ID 25
+2025-05-19 18:04:11.127 +05:30 [INF] Order completed successfully for order ID 295 by user with ID 25
+2025-05-19 18:04:19.063 +05:30 [INF] Customer review saved successfully for order ID 295 by user with ID 25
+2025-05-19 18:04:37.813 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-19 18:04:43.663 +05:30 [INF] Order total updated successfully for order ID 296 by user with ID 25
+2025-05-19 18:04:43.666 +05:30 [INF] Order saved successfully for order ID 296 by user with ID 25
+2025-05-19 18:04:47.537 +05:30 [INF] Items marked as ready successfully
+2025-05-19 18:04:54.990 +05:30 [INF] Order completed successfully for order ID 296 by user with ID 25
+2025-05-19 18:05:43.850 +05:30 [INF] Tables assigned successfully to customer with email sahaj@yopmail.com by user 25
+2025-05-19 18:05:48.221 +05:30 [INF] Order total updated successfully for order ID 297 by user with ID 25
+2025-05-19 18:05:48.224 +05:30 [INF] Order saved successfully for order ID 297 by user with ID 25
+2025-05-19 18:05:51.249 +05:30 [INF] Items marked as ready successfully
+2025-05-19 18:05:56.819 +05:30 [INF] Order completed successfully for order ID 297 by user with ID 25
+2025-05-19 18:06:19.260 +05:30 [INF] Customer review saved successfully for order ID 297 by user with ID 25
+2025-05-19 18:06:29.032 +05:30 [INF] Tables assigned successfully to customer with email sahaj@yopmail.com by user 25
+2025-05-19 18:06:35.762 +05:30 [INF] Order total updated successfully for order ID 298 by user with ID 25
+2025-05-19 18:06:35.765 +05:30 [INF] Order saved successfully for order ID 298 by user with ID 25
+2025-05-19 18:06:39.425 +05:30 [INF] Items marked as ready successfully
+2025-05-19 18:06:44.991 +05:30 [INF] Order completed successfully for order ID 298 by user with ID 25
+2025-05-19 18:07:08.270 +05:30 [INF] Customer review saved successfully for order ID 298 by user with ID 25
+2025-05-19 18:07:13.580 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 18:07:30.347 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 18:07:30.347 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 18:07:30.483 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 18:07:47.557 +05:30 [INF] Invoice generated successfully for order ID 54
+2025-05-19 18:07:55.489 +05:30 [INF] Invoice generated successfully for order ID 298
+2025-05-19 18:07:57.969 +05:30 [INF] Invoice generated successfully for order ID 297
+2025-05-19 18:10:04.139 +05:30 [INF] Invoice generated successfully for order ID 254
+2025-05-19 18:10:13.379 +05:30 [INF] Invoice generated successfully for order ID 298
+2025-05-19 18:11:02.476 +05:30 [INF] Invoice generated successfully for order ID 298
+2025-05-19 18:11:09.041 +05:30 [INF] Invoice generated successfully for order ID 297
+2025-05-19 18:11:16.843 +05:30 [INF] Invoice generated successfully for order ID 297
+2025-05-19 18:11:28.996 +05:30 [INF] Session parameters set successfully for user with ID 25

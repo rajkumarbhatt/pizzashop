@@ -34,3 +34,10 @@ $(document).ready(function () {
 $("#redirectToOrderApp").click(function () {
     window.location.href = "/OrderApp";
 });
+
+$(window).off("click").on("click", function (event) {
+    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
+    if (!token) {
+        window.location.href = "/";
+    }
+});

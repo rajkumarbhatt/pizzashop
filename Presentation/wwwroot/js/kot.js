@@ -295,3 +295,37 @@ function openMarkedAsPreparedModal(orderId) {
     },
   });
 }
+
+if (typeof connection === "undefined") {
+  const connection = new signalR.HubConnectionBuilder()
+      .withUrl("/orderHub")
+      .build();
+
+  connection
+      .start()
+      .then(() => {
+      })
+      .catch((err) => console.error(err.toString()));
+
+  connection.on("ReceiveNewOrder", function () {
+      if (inReady) {
+          $.ajax({
+              type: "GET",
+              url: "/KOT/GetReadyItems",
+              data: { categoryId: currentCategoryId },
+              success: function (data) {
+                  $("#kotCardsPartialStart").html(data);
+              },
+          });
+      } else {
+          $.ajax({
+              type: "GET",
+              url: "/KOT/GetKotByCategory",
+              data: { categoryId: currentCategoryId },
+              success: function (data) {
+                  $("#kotCardsPartialStart").html(data);
+              },
+          });
+      }
+  });
+}

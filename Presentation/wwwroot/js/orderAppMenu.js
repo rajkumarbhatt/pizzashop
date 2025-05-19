@@ -1028,14 +1028,22 @@ function completeOrder() {
   $("#completeOrderButton")
     .off("click")
     .on("click", function () {
+      var paymentMode = $("input[name='paymentMode']:checked").val();
       $.ajax({
         type: "POST",
         url: "/OrderAppMenu/CompleteOrder",
-        data: { orderId: orderIdTemp },
+        data: { orderId: orderIdTemp, paymentMode: paymentMode },
         success: function (response) {
           if (response.success) {
             toastr.success(response.message);
             $("#CompleteOrderModal").modal("hide");
+            // radio btn value
+            var radioValue = $("input[name='paymentMode']:checked").val();
+            console.log("radioValue", radioValue);
+            if (radioValue == "Card" || radioValue == "Online") 
+            {
+              window.open("/OrderAppMenu/CreateOrder/" + orderIdTemp, "_blank", "width=600,height=900,top=" + (screen.height - 900) / 2 + ",left=" + (screen.width - 600) / 2);
+            }
             $("#CustomerRatingModal").modal("show");
           } else {
             toastr.error(response.message);
@@ -1353,7 +1361,3 @@ function redirectToOrderApp() {
     window.location.href = "/OrderApp";
   }, 500);
 }
-
-$("#razorPayTestElement").off("click").click( function () {
-  window.location.href = "/OrderAppMenu/CreateOrder/" + orderIdTemp;
-});

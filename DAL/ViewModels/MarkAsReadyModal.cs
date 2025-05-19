@@ -1,8 +1,11 @@
-namespace DAL.ViewModels;
+using System.Text.Json.Serialization;
 
 public class MarkAsReadyModal
 {
-    public int Id { get; set; }
+    [JsonPropertyName("order_item_id")]
+    public int OrderItemId { get; set; }
+    [JsonPropertyName("quantity")]
     public int Quantity { get; set; }
-    public int OrderItemId { get; set; } 
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
 }

@@ -4573,3 +4573,9 @@ C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Superpower.dll
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\BouncyCastle.Crypto.dll
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Razorpay.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.Owin.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.Owin.Security.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Owin.dll

@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using BLL.Interfaces;
+using BLL.Hubs;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Razorpay.Api;
+using Microsoft.AspNetCore.SignalR;
 
 namespace BLL.Services
 {
@@ -18,8 +20,10 @@ namespace BLL.Services
         private readonly PizzaShopContext _context;
         private readonly ILogger<KotMenuService> _logger;
         private readonly IConfiguration _configuration;
-        public KotMenuService(PizzaShopContext context, ILogger<KotMenuService> logger, IConfiguration configuration)
+        private readonly IHubContext<OrderHub> _hubContext;
+        public KotMenuService(PizzaShopContext context, ILogger<KotMenuService> logger, IConfiguration configuration, IHubContext<OrderHub> hubContext)
         {
+            _hubContext = hubContext;
             _context = context;
             _logger = logger;
             _configuration = configuration;
@@ -774,6 +778,7 @@ namespace BLL.Services
                             await _context.SaveChangesAsync();
                             await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
                             await transaction.CommitAsync();
+                            await _hubContext.Clients.All.SendAsync("ReceiveNewOrder");
                             _logger.LogInformation("Order saved successfully for order ID {OrderId} by user with ID {UserId}", saveOrderViewModel.OrderId, userId);
                             return new JsonResult(new
                             {
@@ -936,6 +941,7 @@ namespace BLL.Services
                             _context.Orders.Update(order);
                             await _context.SaveChangesAsync();
                         }
+                        await _hubContext.Clients.All.SendAsync("ReceiveNewOrder");
                         _logger.LogInformation("Order saved successfully for order ID {OrderId} by user with ID {UserId}", saveOrderViewModel.OrderId, userId);
                         return new JsonResult(new
                         {
@@ -967,7 +973,7 @@ namespace BLL.Services
                 });
             }
         }
-        public async Task<IActionResult> CompleteOrderAsync(int orderId, int userId)
+        public async Task<IActionResult> CompleteOrderAsync(int orderId, int userId, string paymentMode)
         {
             try
             {
@@ -998,7 +1004,7 @@ namespace BLL.Services
                     }
                     DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                     order.Status = "Completed";
-                    order.PaymentMode = "Cash";
+                    order.PaymentMode = paymentMode;
                     order.UpdatedAt = DateTime.Now;
                     order.UpdatedBy = userId;
                     _context.Orders.Update(order);

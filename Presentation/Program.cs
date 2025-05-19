@@ -6,9 +6,11 @@ using System.Text;
 using BLL.Interfaces;
 using DAL.DBContext;
 using Serilog;
+using BLL.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSignalR();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
@@ -93,6 +95,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 var app = builder.Build();
 
+app.MapHub<OrderHub>("/orderHub");
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/PageNotFound/Index");
@@ -102,9 +106,9 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

@@ -21,5 +21,6 @@ namespace DAL.ViewModels
         public double? SubTotal { get; set; }
         public List<InvoiceTax>? InvoiceTaxes { get; set; }
         public double? Total { get; set; }
+        public string? PaymentMethod { get; set; }
     }
 }

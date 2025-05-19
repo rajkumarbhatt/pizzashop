@@ -21,7 +21,7 @@ namespace BLL.Interfaces
         public Task<IActionResult> AddOrderWiseCommentAsync (int orderId, string comment, int userId);
         public Task<IActionResult> AddItemWiseCommentAsync (int orderItemId, string comment, int userId);
         public Task<IActionResult> SaveOrderAsync (SaveOrderViewModel saveOrderViewModel, int userId);
-        public Task<IActionResult> CompleteOrderAsync (int orderId, int userId);
+        public Task<IActionResult> CompleteOrderAsync (int orderId, int userId, string paymentMethod);
         public Task<IActionResult> CancelOrderAsync (int orderId, int userId);
         public Task<IActionResult> SaveCustomerReviewAsync (SaveCustomerReviewViewModel saveCustomerReviewViewModel, int userId);
         public Task<JsonResult> CanDeleteFromOrderAsync (int orderItemId);

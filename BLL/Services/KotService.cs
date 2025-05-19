@@ -1,12 +1,13 @@
 namespace BLL.Services
 {
+    using System.Text.Json;
     using BLL.Interfaces;
     using DAL.DBContext;
     using DAL.Models;
     using DAL.ViewModels;
-    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
+    using Npgsql;
 
     public class KotService : IKotService
     {
@@ -274,71 +275,17 @@ namespace BLL.Services
         }
         public async Task<KotViewModel> MarkItemsAsReadyAsync(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                using (var transaction = await _context.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.IsDeleted == false) ?? new Order();
-                        if (order.Status == "Pending")
-                        {
-                            order.Status = "In Progress";
-                            order.UpdatedAt = DateTime.Now;
-                            order.UpdatedBy = userId;
-                            _context.Orders.Update(order);
-                            await _context.SaveChangesAsync();
-                        }
-                        List<Table> tables = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).ToListAsync() ?? new List<Table>();
-                        foreach (var table1 in tables)
-                        {
-                            if (table1.Status == "Assigned")
-                            {
-                                table1.Status = "Running";
-                                table1.UpdatedAt = DateTime.Now;
-                                table1.UpdatedBy = userId;
-                                _context.Tables.Update(table1);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        foreach (var item in readyItems)
-                        {
-                            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == item.OrderItemId && oi.IsDeleted == false);
-                            if (orderItem != null)
-                            {
-                                orderItem.ReadyItemsCount = orderItem.ReadyItemsCount + item.Quantity;
-                                orderItem.UpdatedAt = DateTime.Now;
-                                orderItem.UpdatedBy = userId;
-                                _context.OrderItems.Update(orderItem);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                        bool isServed = true;
-                        List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
-                        foreach (var orderItem in orderItems)
-                        {
-                            if (orderItem.Quantity > orderItem.ReadyItemsCount)
-                            {
-                                isServed = false;
-                                break;
-                            }
-                        }
-                        if (isServed)
-                        {
-                            order.Status = "Served";
-                            order.UpdatedAt = DateTime.Now;
-                            order.UpdatedBy = userId;
-                            _context.Orders.Update(order);
-                            await _context.SaveChangesAsync();
-                        }
-                        await transaction.CommitAsync();
-                    }
-                    catch
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
+                string readyItemsJson = JsonSerializer.Serialize(readyItems);
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL mark_items_as_ready({0}, {1}::jsonb, {2})",
+                    orderId,
+                    readyItemsJson,
+                    userId
+                );
+                await transaction.CommitAsync();
                 _logger.LogInformation("Items marked as ready successfully");
                 KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId, pageIndex, 4);
                 return kotViewModel;
@@ -347,66 +294,32 @@ namespace BLL.Services
             {
                 _logger.LogError(ex, "An error occurred while marking items as ready");
                 Console.WriteLine(ex.Message);
+                await transaction.RollbackAsync();
                 throw new Exception("An error occurred while marking items as ready", ex);
+
             }
         }
 
         public async Task<KotViewModel> MarkItemsAsInPreparedAsync(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
         {
+            using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                foreach (var item in readyItems)
-                {
-                    OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == item.OrderItemId && oi.IsDeleted == false);
-                    if (orderItem != null)
-                    {
-                        orderItem.ReadyItemsCount = orderItem.ReadyItemsCount - item.Quantity;
-                        orderItem.UpdatedAt = DateTime.Now;
-                        orderItem.UpdatedBy = userId;
-                        _context.OrderItems.Update(orderItem);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-                List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == orderId && oi.IsDeleted == false).ToListAsync();
-                bool isRunning = false;
-                foreach (var orderItem in orderItems)
-                {
-                    if (orderItem.ReadyItemsCount > 0)
-                    {
-                        isRunning = true;
-                        break;
-                    }
-                }
-                if (isRunning == false)
-                {
-                    Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId && o.IsDeleted == false) ?? new Order();
-                    if (order.Status == "In Progress")
-                    {
-                        order.Status = "Pending";
-                        order.UpdatedAt = DateTime.Now;
-                        order.UpdatedBy = userId;
-                        _context.Orders.Update(order);
-                        await _context.SaveChangesAsync();
-                    }
-                    List<Table> tables = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId && otm.IsDeleted == false).Select(otm => otm.Table).ToListAsync() ?? new List<Table>();
-                    foreach (var table1 in tables)
-                    {
-                        if (table1.Status == "Running")
-                        {
-                            table1.Status = "Assigned";
-                            table1.UpdatedAt = DateTime.Now;
-                            table1.UpdatedBy = userId;
-                            _context.Tables.Update(table1);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                }
+                string readyItemsJson = JsonSerializer.Serialize(readyItems);
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL mark_items_as_in_prepared({0}, {1}::jsonb, {2})",
+                    orderId,
+                    readyItemsJson,
+                    userId
+                );
+                await transaction.CommitAsync();
                 KotViewModel kotViewModel = await GetReadyItemsAsync(categoryId, pageIndex);
                 _logger.LogInformation("Items marked as in prepared successfully");
                 return kotViewModel;
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 _logger.LogError(ex, "An error occurred while marking items as in prepared");
                 Console.WriteLine(ex.Message);
                 throw new Exception("An error occurred while marking items as in prepared", ex);
