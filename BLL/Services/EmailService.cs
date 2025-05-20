@@ -17,14 +17,12 @@ namespace BLL.Services
         private readonly IConfiguration _configuration;
         private readonly PizzaShopContext _context;
         private readonly ILogger<EmailService> _logger;
-
         public EmailService(IConfiguration configuration, PizzaShopContext context, ILogger<EmailService> logger)
         {
             _logger = logger;
             _context = context;
             _configuration = configuration;
         }
-
         public async Task SendEmailAsync(string toEmail, User user, string resetLink)
         {
             try
@@ -55,7 +53,6 @@ namespace BLL.Services
                 Console.WriteLine(ex.Message);
             }
         }
-
         public async Task SendCreateUserEmailAsync(string email, string password)
         {
             try
@@ -89,7 +86,6 @@ namespace BLL.Services
                 Console.WriteLine(ex.Message);
             }
         }
-
         public async Task<IActionResult> SendForgotPasswordEmailAsync(string email)
         {
             try

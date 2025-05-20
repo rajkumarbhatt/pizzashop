@@ -16,7 +16,6 @@ namespace BLL.Services
         private readonly INavBarService _navBarService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<UserListService> _logger;
-
         public UserListService(ILogger<UserListService> logger, PizzaShopContext context, IJwtService jwtService, INavBarService navBarService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
@@ -25,7 +24,6 @@ namespace BLL.Services
             _navBarService = navBarService;
             _httpContextAccessor = httpContextAccessor;
         }
-
         public async Task<List<User>> GetUsersAsync()
         {
             try
@@ -39,7 +37,6 @@ namespace BLL.Services
                 return new List<User>();
             }
         }
-
         public async Task<JsonResult> DeleteUserAsync(int userId, int userIdLoggedIn)
         {
             try
@@ -77,7 +74,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<User> GetUserDataByIdAsync(int userId)
         {
             try
@@ -91,7 +87,6 @@ namespace BLL.Services
                 return new User();
             }
         }
-
         public async Task<string> GetRoleByIdAsync(int roleId)
         {
             try
@@ -106,7 +101,6 @@ namespace BLL.Services
                 return "";
             }
         }
-
         public async Task<List<Role>> GetRolesAsync(int userId)
         {
             try
@@ -125,7 +119,6 @@ namespace BLL.Services
                 return new List<Role>();
             }
         }
-
         public async Task<EditUserViewModel> GetUserDataFromUserIdAsync(int userId, int userIdLoggedIn)
         {
             try
@@ -169,7 +162,6 @@ namespace BLL.Services
                 };
             }
         }
-
         public async Task<JsonResult> UpdateUserDataFromUserIdAsync(int userIdLoggedIn, EditUserViewModel userViewModel)
         {
             try
@@ -259,7 +251,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<JsonResult> CreateUserAsync(int userIdLoggedIn, CreateUserViewModel createUserViewModel)
         {
             try
@@ -340,7 +331,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<int> GetTotalUsersAsync()
         {
             try
@@ -354,7 +344,6 @@ namespace BLL.Services
                 return 0;
             }
         }
-
         public async Task<(List<User>, int totalRecords)> GetUsersAsync(int pageIndex, int pageSize, int userId)
         {
             try
@@ -376,7 +365,6 @@ namespace BLL.Services
                 return (new List<User>(), 0);
             }
         }
-
         public async Task<(List<User>, int totalRecords)> GetUsersWithSearchAsync(int pageIndex, int pageSize, string searchValue, string sortColumn, string sortColumnDirection)
         {
             try
@@ -430,7 +418,6 @@ namespace BLL.Services
                 return (new List<User>(), 0);
             }
         }
-
         public async Task<UserListViewModel> GetUsersListViewModelAsync(int pageIndex, int pageSize, int userId)
         {
             try
@@ -465,7 +452,6 @@ namespace BLL.Services
                 };
             }
         }
-
         public async Task<UserListViewModel> GetUsersListViewModelSearchAsync(int pageIndex, int pageSize, string sortColumn, string sortColumnDirection, string searchValue)
         {
             try
@@ -511,7 +497,6 @@ namespace BLL.Services
                 };
             }
         }
-
         public async Task<CreateUserViewModel> GetCreateUserViewModelAsync()
         {
             try

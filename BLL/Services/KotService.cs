@@ -1,10 +1,12 @@
 namespace BLL.Services
 {
     using System.Text.Json;
+    using BLL.Hubs;
     using BLL.Interfaces;
     using DAL.DBContext;
     using DAL.Models;
     using DAL.ViewModels;
+    using Microsoft.AspNetCore.SignalR;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Logging;
     using Npgsql;
@@ -13,8 +15,10 @@ namespace BLL.Services
     {
         private readonly PizzaShopContext _context;
         private readonly ILogger<KotService> _logger;
-        public KotService(PizzaShopContext context, ILogger<KotService> logger)
+        private readonly IHubContext<KOTHub> _hubContext;
+        public KotService(PizzaShopContext context, ILogger<KotService> logger, IHubContext<KOTHub> hubContext)
         {
+            _hubContext = hubContext;
             _logger = logger;
             _context = context;
         }
@@ -286,6 +290,7 @@ namespace BLL.Services
                     userId
                 );
                 await transaction.CommitAsync();
+                await _hubContext.Clients.All.SendAsync("UpdateKOT", orderId);
                 _logger.LogInformation("Items marked as ready successfully");
                 KotViewModel kotViewModel = await GetKotByCategoryAsync(categoryId, pageIndex, 4);
                 return kotViewModel;
@@ -299,7 +304,6 @@ namespace BLL.Services
 
             }
         }
-
         public async Task<KotViewModel> MarkItemsAsInPreparedAsync(int pageIndex, List<MarkAsReadyModal> readyItems, int orderId, int categoryId, int userId)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
@@ -314,6 +318,7 @@ namespace BLL.Services
                 );
                 await transaction.CommitAsync();
                 KotViewModel kotViewModel = await GetReadyItemsAsync(categoryId, pageIndex);
+                await _hubContext.Clients.All.SendAsync("UpdateKOT", orderId);
                 _logger.LogInformation("Items marked as in prepared successfully");
                 return kotViewModel;
             }

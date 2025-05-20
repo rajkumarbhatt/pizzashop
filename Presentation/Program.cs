@@ -96,6 +96,7 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 app.MapHub<OrderHub>("/orderHub");
+app.MapHub<KOTHub>("/kotHub");
 
 if (!app.Environment.IsDevelopment())
 {

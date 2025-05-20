@@ -14,13 +14,11 @@ public class OrderAppService : IOrderAppService
 {
     private readonly PizzaShopContext _context;
     private readonly ILogger<OrderAppService> _logger;
-
     public OrderAppService(PizzaShopContext context, ILogger<OrderAppService> logger)
     {
         _logger = logger;
         _context = context;
     }
-
     public async Task<OrderAppViewModel> GetOrderAppViewModelAsync()
     {
         try
@@ -103,7 +101,6 @@ public class OrderAppService : IOrderAppService
             };
         }
     }
-
     public async Task<IActionResult> AddToWaitingListAsync(WaitingListModal waitingListModal, int userId)
     {
         try
@@ -231,7 +228,6 @@ public class OrderAppService : IOrderAppService
             });
         }
     }
-
     public async Task<JsonResult> GetWaitingListForCurrentSectionAsync(int sectionId)
     {
         try
@@ -273,7 +269,6 @@ public class OrderAppService : IOrderAppService
             });
         }
     }
-
     public async Task<IActionResult> AssignTablesToCustomerAsync(WaitingListModal waitingListModal, List<int> tableIds, int userId)
     {
         try

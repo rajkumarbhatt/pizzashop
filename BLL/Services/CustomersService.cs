@@ -16,7 +16,6 @@ public class CustomersService : ICustomerService
         _context = context;
         _logger = logger;
     }
-
     public async Task<List<CustomerTable>> GetCustomersAsync()
     {
         try
@@ -55,7 +54,6 @@ public class CustomersService : ICustomerService
             return new List<CustomerTable>();
         }
     }
-
     public async Task<CustomerViewModel> GetCustomerDetailsTableAsync()
     {
         try
@@ -81,7 +79,6 @@ public class CustomersService : ICustomerService
             };
         }
     }
-
     public async Task<CustomerViewModel> FilterCustomersAsync(int pageIndex, int pageSize, string searchValue, string time, string sort, string order, string fromDate, string toDate)
     {
         try
@@ -155,7 +152,6 @@ public class CustomersService : ICustomerService
             };
         }
     }
-
     public async Task<List<CustomerTable>> GetCustomersBasedOnFiltersAsync(string time, string searchValue, string fromDate, string toDate)
     {
         try
@@ -201,7 +197,6 @@ public class CustomersService : ICustomerService
             return new List<CustomerTable>();
         }
     }
-
     public async Task<CustomerHistory> GetCustomerDetailsAsync(int customerId)
     {
         try
@@ -243,7 +238,6 @@ public class CustomersService : ICustomerService
             return new CustomerHistory();
         }
     }
-
     public async Task<byte[]> ExportCustomersAsync(string time, string searchValue, string fromDate, string toDate)
     {
         try

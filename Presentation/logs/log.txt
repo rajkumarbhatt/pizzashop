@@ -2078,3 +2078,196 @@ DETAIL: Detail redacted as it may contain sensitive data. Specify 'Include Error
 2025-05-19 18:11:09.041 +05:30 [INF] Invoice generated successfully for order ID 297
 2025-05-19 18:11:16.843 +05:30 [INF] Invoice generated successfully for order ID 297
 2025-05-19 18:11:28.996 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-19 18:37:55.724 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-19 18:37:55.747 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-19 18:37:56.618 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:16:19.308 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 09:16:19.334 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 09:16:20.129 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:16:40.564 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 09:16:40.564 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 09:16:40.776 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:16:53.788 +05:30 [WRN] Invalid password for user with email john@yopmail.com
+2025-05-20 09:16:58.590 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-20 09:16:58.590 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-20 09:16:58.725 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-20 09:17:14.965 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-20 09:17:27.118 +05:30 [INF] Order total updated successfully for order ID 299 by user with ID 25
+2025-05-20 09:17:27.126 +05:30 [INF] Order saved successfully for order ID 299 by user with ID 25
+2025-05-20 09:17:36.053 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:17:42.390 +05:30 [INF] Order total updated successfully for order ID 299 by user with ID 25
+2025-05-20 09:17:42.394 +05:30 [INF] Order saved successfully for order ID 299 by user with ID 25
+2025-05-20 09:17:50.354 +05:30 [INF] Items marked as in prepared successfully
+2025-05-20 09:18:02.800 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:18:10.176 +05:30 [INF] Order completed successfully for order ID 299 by user with ID 25
+2025-05-20 09:18:15.977 +05:30 [INF] Customer review saved successfully for order ID 299 by user with ID 25
+2025-05-20 09:18:28.547 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-20 09:18:37.915 +05:30 [INF] Order total updated successfully for order ID 300 by user with ID 25
+2025-05-20 09:18:37.918 +05:30 [INF] Order saved successfully for order ID 300 by user with ID 25
+2025-05-20 09:18:40.840 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:18:54.875 +05:30 [INF] Order completed successfully for order ID 300 by user with ID 25
+2025-05-20 09:19:20.014 +05:30 [INF] Customer review saved successfully for order ID 300 by user with ID 25
+2025-05-20 09:19:33.996 +05:30 [INF] Tables assigned successfully to customer with email rajat@yopmail.com by user 25
+2025-05-20 09:19:45.489 +05:30 [INF] Order total updated successfully for order ID 301 by user with ID 25
+2025-05-20 09:19:45.492 +05:30 [INF] Order saved successfully for order ID 301 by user with ID 25
+2025-05-20 09:19:53.658 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:19:57.275 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:20:04.746 +05:30 [INF] Order completed successfully for order ID 301 by user with ID 25
+2025-05-20 09:20:07.557 +05:30 [INF] Customer review saved successfully for order ID 301 by user with ID 25
+2025-05-20 09:24:30.415 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:26:18.077 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-20 09:26:59.914 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-20 09:26:59.919 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-20 09:27:00.059 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-20 09:27:07.754 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:27:07.763 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:27:13.776 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:27:31.908 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:27:31.911 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:27:40.577 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:33:24.442 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:24.463 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:31.736 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:31.739 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:37.323 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:33:47.695 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:33:52.035 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:52.038 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:33:55.396 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:34:27.170 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:34:27.173 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:34:30.831 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:35:02.010 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:35:02.014 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:35:05.355 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:37:47.912 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:37:47.917 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:37:51.637 +05:30 [INF] Items marked as ready successfully
+2025-05-20 09:38:02.421 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:38:02.424 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:38:04.741 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 09:38:04.744 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 09:52:49.136 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:54:14.478 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:54:15.222 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:54:16.532 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 09:54:20.824 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 12:07:37.513 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 12:07:37.534 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 12:07:38.293 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 12:08:08.162 +05:30 [WRN] Invalid password for user with email john@yopmail.com
+2025-05-20 12:08:33.106 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-20 12:08:33.106 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-20 12:08:33.261 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-20 12:09:10.454 +05:30 [INF] Order total updated successfully for order ID 302 by user with ID 25
+2025-05-20 12:09:10.489 +05:30 [INF] Order saved successfully for order ID 302 by user with ID 25
+2025-05-20 12:09:23.935 +05:30 [INF] Items marked as ready successfully
+2025-05-20 12:09:39.109 +05:30 [INF] Order completed successfully for order ID 302 by user with ID 25
+2025-05-20 12:10:25.019 +05:30 [INF] Customer review saved successfully for order ID 302 by user with ID 25
+2025-05-20 12:10:40.855 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-20 12:10:49.513 +05:30 [INF] Order total updated successfully for order ID 303 by user with ID 25
+2025-05-20 12:10:49.516 +05:30 [INF] Order saved successfully for order ID 303 by user with ID 25
+2025-05-20 12:10:55.743 +05:30 [INF] Items marked as ready successfully
+2025-05-20 12:11:21.456 +05:30 [INF] Order completed successfully for order ID 303 by user with ID 25
+2025-05-20 12:13:51.183 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 12:32:59.469 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:21:21.448 +05:30 [ERR] An error occurred while validating the user with email manager@yopmail.com
+System.ArgumentException: Format of the initialization string does not conform to specification starting at index 0.
+   at System.Data.Common.DbConnectionOptions.GetKeyValuePair(String connectionString, Int32 currentPosition, StringBuilder buffer, Boolean useOdbcRules, String& keyname, String& keyvalue)
+   at System.Data.Common.DbConnectionOptions.ParseInternal(Dictionary`2 parsetable, String connectionString, Boolean buildChain, Dictionary`2 synonyms, Boolean firstKey)
+   at System.Data.Common.DbConnectionOptions..ctor(String connectionString, Dictionary`2 synonyms, Boolean useOdbcRules)
+   at System.Data.Common.DbConnectionStringBuilder.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnectionStringBuilder..ctor(String connectionString)
+   at Npgsql.NpgsqlConnection.SetupDataSource()
+   at Npgsql.NpgsqlConnection.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnection..ctor(String connectionString)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlRelationalConnection.CreateDbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.get_DbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BLL.Services.LoginService.ValidateAsync(String email, String password) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\LoginService.cs:line 28
+2025-05-20 14:21:24.249 +05:30 [ERR] An error occurred while validating the user with email manager@yopmail.com
+System.ArgumentException: Format of the initialization string does not conform to specification starting at index 0.
+   at System.Data.Common.DbConnectionOptions.GetKeyValuePair(String connectionString, Int32 currentPosition, StringBuilder buffer, Boolean useOdbcRules, String& keyname, String& keyvalue)
+   at System.Data.Common.DbConnectionOptions.ParseInternal(Dictionary`2 parsetable, String connectionString, Boolean buildChain, Dictionary`2 synonyms, Boolean firstKey)
+   at System.Data.Common.DbConnectionOptions..ctor(String connectionString, Dictionary`2 synonyms, Boolean useOdbcRules)
+   at System.Data.Common.DbConnectionStringBuilder.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnectionStringBuilder..ctor(String connectionString)
+   at Npgsql.NpgsqlConnection.SetupDataSource()
+   at Npgsql.NpgsqlConnection.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnection..ctor(String connectionString)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlRelationalConnection.CreateDbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.get_DbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BLL.Services.LoginService.ValidateAsync(String email, String password) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\LoginService.cs:line 28
+2025-05-20 14:21:25.791 +05:30 [ERR] An error occurred while validating the user with email manager@yopmail.com
+System.ArgumentException: Format of the initialization string does not conform to specification starting at index 0.
+   at System.Data.Common.DbConnectionOptions.GetKeyValuePair(String connectionString, Int32 currentPosition, StringBuilder buffer, Boolean useOdbcRules, String& keyname, String& keyvalue)
+   at System.Data.Common.DbConnectionOptions.ParseInternal(Dictionary`2 parsetable, String connectionString, Boolean buildChain, Dictionary`2 synonyms, Boolean firstKey)
+   at System.Data.Common.DbConnectionOptions..ctor(String connectionString, Dictionary`2 synonyms, Boolean useOdbcRules)
+   at System.Data.Common.DbConnectionStringBuilder.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnectionStringBuilder..ctor(String connectionString)
+   at Npgsql.NpgsqlConnection.SetupDataSource()
+   at Npgsql.NpgsqlConnection.set_ConnectionString(String value)
+   at Npgsql.NpgsqlConnection..ctor(String connectionString)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlRelationalConnection.CreateDbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.get_DbConnection()
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleOrDefaultAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at BLL.Services.LoginService.ValidateAsync(String email, String password) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\LoginService.cs:line 28
+2025-05-20 14:23:51.537 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 14:23:51.562 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 14:24:00.116 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:26:08.495 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:33:07.328 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:39:12.352 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 14:39:12.374 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 14:39:13.155 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:40:19.224 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:40:19.451 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:40:19.565 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:40:19.734 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:41:28.389 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:41:35.946 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 14:43:07.729 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 17:25:09.583 +05:30 [INF] JWT token generated successfully for user with ID 31
+2025-05-20 17:25:09.605 +05:30 [INF] User with email mr.bhatt2348@gmail.com logged in successfully
+2025-05-20 17:25:10.398 +05:30 [INF] Session parameters set successfully for user with ID 31
+2025-05-20 17:25:20.672 +05:30 [INF] Password reset successfully for user with ID 31
+2025-05-20 17:25:21.567 +05:30 [INF] Password reset successfully for user with ID 31
+2025-05-20 17:25:22.550 +05:30 [INF] Password reset successfully for user with ID 31
+2025-05-20 17:25:22.820 +05:30 [INF] Session parameters set successfully for user with ID 31
+2025-05-20 17:25:22.912 +05:30 [INF] Password reset successfully for user with ID 31
+2025-05-20 17:25:23.265 +05:30 [INF] Password reset successfully for user with ID 31
+2025-05-20 17:25:33.385 +05:30 [INF] Session parameters set successfully for user with ID 31
+2025-05-20 17:25:48.134 +05:30 [INF] Attempting to change password for user with ID 31
+2025-05-20 17:25:48.477 +05:30 [INF] Password changed successfully for user with ID 31
+2025-05-20 17:25:49.514 +05:30 [INF] Session parameters set successfully for user with ID 31
+2025-05-20 17:26:07.057 +05:30 [INF] User data updated successfully for user ID 31
+2025-05-20 17:26:08.895 +05:30 [INF] Session parameters set successfully for user with ID 31
+2025-05-20 17:26:43.889 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-20 17:26:43.889 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-20 17:26:44.041 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 17:28:50.141 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 17:33:56.873 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 17:34:31.919 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-20 17:41:24.732 +05:30 [INF] Invoice generated successfully for order ID 58
+2025-05-20 17:41:41.233 +05:30 [INF] Invoice generated successfully for order ID 303
+2025-05-20 17:41:47.937 +05:30 [INF] Invoice generated successfully for order ID 302
+2025-05-20 17:55:39.634 +05:30 [INF] Session parameters set successfully for user with ID 25

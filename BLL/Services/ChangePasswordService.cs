@@ -10,13 +10,11 @@ namespace BLL.Services
     {
         private readonly PizzaShopContext _context;
         private readonly ILogger<ChangePasswordService> _logger;
-
         public ChangePasswordService(PizzaShopContext context, ILogger<ChangePasswordService> logger)
         {
             _context = context;
             _logger = logger;
         }
-
         public async Task<IActionResult> ChangePasswordAsync(int userId, string newPassword, string oldPassword)
         {
             try

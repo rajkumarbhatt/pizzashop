@@ -17,7 +17,6 @@ namespace BLL.Services
             _logger = logger;
             _context = context;
         }
-
         public async Task<List<TaxesFee>> GetTaxesAsync()
         {
             try
@@ -31,7 +30,6 @@ namespace BLL.Services
                 return new List<TaxesFee>();
             }
         }
-
         public async Task<IActionResult> SaveChangesOfIsDefaultAsync(bool isDefault, int id, int userId)
         {
             try
@@ -57,7 +55,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> SaveChangesOfIsEnabledAsync(bool isEnabled, int id, int userId)
         {
             try
@@ -83,7 +80,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> DeleteAsync(int id, int userId)
         {
             try
@@ -112,7 +108,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<TaxAndFeeViewModel> SearchAsync(string searchValue)
         {
             try
@@ -154,7 +149,6 @@ namespace BLL.Services
             }
 
         }
-
         public async Task<IActionResult> AddTaxAsync(AddTaxViewModal addTaxViewModal, int userId)
         {
             try
@@ -230,7 +224,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> EditAsync(int taxId)
         {
             try

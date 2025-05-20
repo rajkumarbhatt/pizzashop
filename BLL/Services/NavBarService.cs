@@ -34,7 +34,6 @@ namespace BLL.Services
                 return "";
             }
         }
-
         public async Task<string> GetProfileImageUrlFromUserIdAsync(int userId)
         {
             try
@@ -53,7 +52,6 @@ namespace BLL.Services
                 return "";
             }
         }
-
         public async Task<int> GetRoleIdFromUserIdAsync(int userId)
         {
             try
@@ -72,7 +70,6 @@ namespace BLL.Services
                 return 0;
             }
         }
-
         public async Task<bool> IsFirstTimeLoginAsync(int userId)
         {
             try
@@ -91,7 +88,6 @@ namespace BLL.Services
                 return false;
             }
         }
-
         public async Task<List<PermissionModel>> GetRolePermissionsFromRoleIdAsync(int roleId)
         {
             try

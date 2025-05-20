@@ -18,7 +18,6 @@ namespace BLL.Services
             _logger = logger;
             _context = context;
         }
-
         public async Task<User> GetUserDataByIdAsync(int userId)
         {
             try
@@ -32,7 +31,6 @@ namespace BLL.Services
                 return new User();
             }
         }
-
         public async Task<JsonResult> ResetPasswordAsync(int userId, string newPassword)
         {
             try
@@ -75,7 +73,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<bool> IsLinkPresentAsync(string token)
         {
             try
@@ -89,7 +86,6 @@ namespace BLL.Services
                 return false;
             }
         }
-
         public async Task<ResetPasswordViewModel> GetResetPasswordViewModelAsync(string token)
         {
             try
@@ -118,7 +114,6 @@ namespace BLL.Services
                 };
             }
         }
-
         public async Task<bool> IsTokenValidAsync(string token)
         {
             try
@@ -136,7 +131,6 @@ namespace BLL.Services
                 return false;
             }
         }
-
         public async Task<JsonResult> ResetPassword2Async(int userId, string newPassword, string token)
         {
             try

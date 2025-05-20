@@ -1361,3 +1361,32 @@ function redirectToOrderApp() {
     window.location.href = "/OrderApp";
   }, 500);
 }
+
+if (typeof connection === "undefined") {
+  const connection = new signalR.HubConnectionBuilder()
+      .withUrl("/kotHub")
+      .build();
+
+  connection
+      .start()
+      .then(() => {
+      })
+      .catch((err) => console.error(err.toString()));
+  connection.on("UpdateKOT", function (orderId) {
+    console.log("UpdateKOT called with orderId:", orderId);
+    if (orderId == orderIdTemp) {
+      $.ajax({
+        url: "/OrderAppMenu/GetOrderDetails",
+        method: "GET",
+        data: { orderId: orderIdTemp },
+        success: function (response) {
+          itemList = [];
+          $("#orderItemDetailsPartial").html(response);
+        },
+        error: function () {
+          toastr.error("Failed to load order details.");
+        },
+      });
+    }
+  });
+}

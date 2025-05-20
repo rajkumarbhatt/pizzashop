@@ -13,14 +13,12 @@ namespace BLL.Services
         private readonly PizzaShopContext _context;
         private readonly ILogger<LoginService> _logger;
         private readonly IJwtService _jwtService;
-
         public LoginService(PizzaShopContext context, IJwtService jwtService, ILogger<LoginService> logger)
         {
             _logger = logger;
             _context = context;
             _jwtService = jwtService;
         }
-
         public async Task<IActionResult> ValidateAsync(string email, string password)
         {
             try

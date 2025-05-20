@@ -13,7 +13,6 @@ namespace BLL.Services
     {
         private readonly PizzaShopContext _context;
         private readonly ILogger<CategoryService> _logger;
-
         public CategoryService(PizzaShopContext context, ILogger<CategoryService> logger)
         {
             _context = context;
@@ -43,7 +42,6 @@ namespace BLL.Services
                 return new List<ModifierGroup>();
             }
         }
-
         public async Task<ModifierGroup> GetModifierGroupAsync(int modifierGroupId)
         {
             try
@@ -56,7 +54,6 @@ namespace BLL.Services
                 return new ModifierGroup();
             }
         }
-
         public async Task<List<ModifierGroup>> GetModifierGroupsFromListAsync(List<int> modifierGroupIds)
         {
             try
@@ -69,7 +66,6 @@ namespace BLL.Services
                 return new List<ModifierGroup>();
             }
         }
-
         public async Task<List<Modifier>> GetModifiersFromListAsync(List<int> modifierGroupIds)
         {
             try
@@ -87,7 +83,6 @@ namespace BLL.Services
                 return new List<Modifier>();
             }
         }
-
         public async Task<List<ModifierModifiergroupMapping>> GetModifierModifierGroupMappingsAsync(List<int> modifierGroupIds)
         {
             try
@@ -100,7 +95,6 @@ namespace BLL.Services
                 return new List<ModifierModifiergroupMapping>();
             }
         }
-
         public async Task<JsonResult> AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, int userId)
         {
             try
@@ -201,7 +195,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<JsonResult> DeleteCategoryAsync(int categoryId, int userId)
         {
             try
@@ -247,7 +240,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<List<Item>> GetItemsBasedOnSearchAsync(int categoryId, string searchValue)
         {
             try
@@ -265,7 +257,6 @@ namespace BLL.Services
                 return new List<Item>();
             }
         }
-
         public async Task<IActionResult> DeleteItemAsync(int itemId, int userId)
         {
             try
@@ -412,7 +403,6 @@ namespace BLL.Services
                 return "error";
             }
         }
-
         public async Task<IActionResult> UpdateItemModifierGroupAsync(AddItemViewModel addItemViewModel, string itemName, int userId)
         {
             try
@@ -601,7 +591,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<List<Modifier>> GetModifiersBasedOnSearchAsync(int modifierGroupId, string searchValue)
         {
             try
@@ -627,7 +616,6 @@ namespace BLL.Services
                 return new List<Modifier>();
             }
         }
-
         public async Task<int> GetModifierGroupIdAsync(int modifierId)
         {
             try
@@ -643,7 +631,6 @@ namespace BLL.Services
                 return 0;
             }
         }
-
         public async Task<IActionResult> DeleteModifierAsync(int modifierId, int userId, int modifierGroupId)
         {
             try
@@ -682,7 +669,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> DeleteModifierGroupAsync(int modifierGroupId, int userId)
         {
             try
@@ -725,7 +711,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<List<Modifier>> GetAllModifiersAsync(string searchValue)
         {
             try
@@ -745,7 +730,6 @@ namespace BLL.Services
                 return new List<Modifier>();
             }
         }
-
         public async Task<JsonResult> AddModifierGroupAsync(CreateModifierGroupViewModel createModifierGroupViewModel, int userId)
         {
             try
@@ -859,7 +843,6 @@ namespace BLL.Services
             });
             }
         }
-
         public async Task<IActionResult> DeleteSelectedModifiersAsync(List<int> modifierIds, int modifierGroupId, int userId)
         {
             try
@@ -922,7 +905,6 @@ namespace BLL.Services
             });
             }
         }
-
         public async Task<IActionResult> DeleteSelectedItemsAsync(List<int> itemIds, int userId)
         {
             try
@@ -1015,7 +997,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> GetMenuViewModelBasedOnFilterAsync(int categoryId, int pageIndex = 1, int pageSize = 5, string searchValue = "")
         {
             try
@@ -1077,7 +1058,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> ModifiersFilterAsync(int pageIndex, int pageSize, int modifierGroupId, string? searchValue = null)
         {
             try
@@ -1223,7 +1203,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> ResetAddItemForm()
         {
             try
@@ -1244,7 +1223,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> GetModifierGroupDetailsAsync(int modifierGroupId, int pageIndex = 1, int pageSize = 5)
         {
             try
@@ -1302,7 +1280,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> GetModifierDataAsync(int modifierId, int modifierGroupId)
         {
             try
@@ -1347,7 +1324,6 @@ namespace BLL.Services
                 return new MenuViewModel();
             }
         }
-
         public async Task<MenuViewModel> ResetAddItemFormAsync()
         {
             try

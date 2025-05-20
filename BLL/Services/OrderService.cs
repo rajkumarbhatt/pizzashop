@@ -314,7 +314,6 @@ public class OrderService : IOrderService
             return new OrderDetailsViewModel();
         }
     }
-
     public async Task<byte[]> GenerateInvoiceAsync(int orderId)
     {
         try

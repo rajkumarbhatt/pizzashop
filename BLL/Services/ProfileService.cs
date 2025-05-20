@@ -14,14 +14,12 @@ namespace BLL.Services
         private readonly PizzaShopContext _context;
         private readonly IHttpContextAccessor _httpContentAccessor;
         private readonly ILogger<ProfileService> _logger;
-
         public ProfileService(PizzaShopContext context, IHttpContextAccessor httpContentAccessor, ILogger<ProfileService> logger)
         {
             _logger = logger;
             _context = context;
             _httpContentAccessor = httpContentAccessor;
         }
-
         public async Task<ProfileViewModel?> GetUserDataFromUserIdAsync(int userId)
         {
             try
@@ -66,7 +64,6 @@ namespace BLL.Services
                 return null;
             }
         }
-
         public async Task<IActionResult> UpdateUserDataFromUserIdAsync(int userId, ProfileViewModel ProfileViewModel)
         {
             try
@@ -151,7 +148,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<string> GetCountryByIdAsync(int countryId)
         {
             try
@@ -166,7 +162,6 @@ namespace BLL.Services
                 return string.Empty;
             }
         }
-
         public async Task<string> GetStateByIdAsync(int stateId)
         {
             try
@@ -185,7 +180,6 @@ namespace BLL.Services
                 return string.Empty;
             }
         }
-
         public async Task<string> GetCityByIdAsync(int cityId)
         {
             try
@@ -204,7 +198,6 @@ namespace BLL.Services
                 return string.Empty;
             }
         }
-
         public async Task<List<Country>> GetCountriesAsync()
         {
             try
@@ -218,7 +211,6 @@ namespace BLL.Services
                 return new List<Country>();
             }
         }
-
         public async Task<List<State>> GetStatesAsync(int countryId)
         {
             try
@@ -232,7 +224,6 @@ namespace BLL.Services
                 return new List<State>();
             }
         }
-
         public async Task<List<City>> GetCitiesAsync(int stateId)
         {
             try
@@ -246,7 +237,6 @@ namespace BLL.Services
                 return new List<City>();
             }
         }
-
         public async Task<(List<Country> countries, List<State> states, List<City> cities)> SetCountriesStatesCitiesToViewBagAsync(ProfileViewModel profileViewModel)
         {
             try

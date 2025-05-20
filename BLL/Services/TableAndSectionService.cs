@@ -29,7 +29,6 @@ namespace BLL.Services
                 return new List<Section>();
             }
         }
-
         public async Task<List<Table>> GetTablesAsync()
         {
             try
@@ -42,7 +41,6 @@ namespace BLL.Services
                 return new List<Table>();
             }
         }
-
         public async Task<List<Table>> GetTablesBySectionIdAsync(int sectionId)
         {
             try
@@ -55,7 +53,6 @@ namespace BLL.Services
                 return new List<Table>();
             }
         }
-
         public async Task<TableAndSectionViewModel> TablesFilterAsync(int sectionId, string searchValue, int pageIndex, int pageSize)
         {
             try
@@ -109,7 +106,6 @@ namespace BLL.Services
                 };
             }
         }
-
         public async Task<IActionResult> AddSectionAsync(string sectionName, string sectionDescription, int sectionId, int userId)
         {
             try
@@ -167,7 +163,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<Section> GetSectionByIdAsync(int sectionId)
         {
             try
@@ -182,7 +177,6 @@ namespace BLL.Services
                 return new Section();
             }
         }
-
         public async Task<IActionResult> DeleteSectionAsync(int sectionId, int userId)
         {
             try
@@ -226,7 +220,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> DeleteTablesAsync(List<int> tableIds, int userId)
         {
             try
@@ -277,7 +270,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> DeleteTableAsync(int tableId, int userId)
         {
             try
@@ -313,7 +305,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<IActionResult> AddTableAsync(AddTableViewModal addTableViewModal, int userId)
         {
             try
@@ -399,7 +390,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<Table> GetTableByIdAsync(int tableId)
         {
             try
@@ -414,7 +404,6 @@ namespace BLL.Services
                 return new Table();
             }
         }
-
         public async Task<TableAndSectionViewModel> GetTableAndSectionViewModelAsync()
         {
             try

@@ -17,7 +17,6 @@ namespace BLL.Services
         private readonly IJwtService _jwtService;
         private readonly INavBarService _navBarService;
         private readonly ILogger<RoleAndPermissionService> _logger;
-
         public RoleAndPermissionService(PizzaShopContext context, IHttpContextAccessor httpContextAccessor, IJwtService jwtService, INavBarService navBarService, ILogger<RoleAndPermissionService> logger)
         {
             _logger = logger;
@@ -26,7 +25,6 @@ namespace BLL.Services
             _context = context;
             _httpContextAccessor = httpContextAccessor;
         }
-
         public async Task<List<Permission>> GetPermissionsAsync()
         {
             try
@@ -43,7 +41,6 @@ namespace BLL.Services
                 return new List<Permission>();
             }
         }
-
         public async Task<List<RolePermission>> GetRolePermissionsAsync(int roleId)
         {
             try
@@ -57,7 +54,6 @@ namespace BLL.Services
                 return new List<RolePermission>();
             }
         }
-
         public async Task<Role> GetRoleAsync(int roleId)
         {
             try
@@ -71,7 +67,6 @@ namespace BLL.Services
                 return new Role();
             }
         }
-
         public async Task<List<Role>> GetRolesAsync()
         {
             try
@@ -85,7 +80,6 @@ namespace BLL.Services
                 return new List<Role>();
             }
         }
-
         public async Task<IActionResult> UpdateRolePermissionsAsync(List<PermissionChangeModel> changedPermissions)
         {
             try
@@ -169,7 +163,6 @@ namespace BLL.Services
                 });
             }
         }
-
         public async Task<RoleAndPermissionViewModel> GetRoleAndPermissionViewModelAsync()
         {
             try
@@ -198,7 +191,6 @@ namespace BLL.Services
                 return new RoleAndPermissionViewModel();
             }
         }
-
         public async Task<EditPermissionsViewModel> GetEditPermissionsViewModelAsync(int roleIdRequested)
         {
             try

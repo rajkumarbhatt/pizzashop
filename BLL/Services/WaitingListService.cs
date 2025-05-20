@@ -80,7 +80,6 @@ namespace BLL.Services
                 return new WaitingListViewModel();
             }
         }
-
         public async Task<IActionResult> DeleteWaitingListAsync(int id, int userId)
         {
             try
@@ -105,7 +104,6 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "An error occurred while deleting the waiting list" });
             }
         }
-
         public async Task<WaitingListViewModel> GetWaitingListDetailsAsync(int id)
         {
             try
@@ -140,7 +138,6 @@ namespace BLL.Services
                 return new WaitingListViewModel();
             }
         }
-
         public async Task<IActionResult> GetCustomerSuggestionsAsync(string email)
         {
             try
@@ -168,7 +165,6 @@ namespace BLL.Services
                 return new JsonResult(new { success = false, message = "An error occurred while fetching customer suggestions" });
             }
         }
-
         public async Task<WaitingListViewModel> GetWaitingListBasedOnSectionAsync(int sectionId)
         {
             try
@@ -221,7 +217,6 @@ namespace BLL.Services
                 return new WaitingListViewModel();
             }
         }
-
         public async Task<JsonResult> GetAvailableTablesAsync(int sectionId)
         {
             try
@@ -243,7 +238,6 @@ namespace BLL.Services
                 return new JsonResult(new List<Table>());
             }
         }
-
         public async Task<IActionResult> AssignTableAsync(int waitingListId, List<int> tableIds, int userId, int sectionId)
         {
             try
