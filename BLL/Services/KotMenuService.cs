@@ -1,16 +1,12 @@
-using System.IdentityModel.Tokens.Jwt;
 using BLL.Interfaces;
 using BLL.Hubs;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Build.Framework;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Razorpay.Api;
 using Microsoft.AspNetCore.SignalR;
 
 namespace BLL.Services
@@ -651,11 +647,12 @@ namespace BLL.Services
                 DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
                 if (order != null)
                 {
-                    order.Comment = comment;
-                    order.UpdatedAt = DateTime.Now;
-                    order.UpdatedBy = userId;
-                    _context.Orders.Update(order);
-                    await _context.SaveChangesAsync();
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "CALL update_order_comment({0}, {1}, {2})",
+                        orderId,
+                        comment,
+                        userId
+                    );
                     _logger.LogInformation("Comment added successfully for order ID {OrderId} by user with ID {UserId}", orderId, userId);
                     return new JsonResult(new
                     {
@@ -690,12 +687,13 @@ namespace BLL.Services
             {
                 OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
                 if (orderItem != null)
-                {
-                    orderItem.Comment = comment;
-                    orderItem.UpdatedAt = DateTime.Now;
-                    orderItem.UpdatedBy = userId;
-                    _context.OrderItems.Update(orderItem);
-                    await _context.SaveChangesAsync();
+                {   
+                   await _context.Database.ExecuteSqlRawAsync(
+                        "CALL update_order_item_comment({0}, {1}, {2})",
+                        orderItemId,
+                        comment,
+                        userId
+                    );
                     _logger.LogInformation("Comment added successfully for order item ID {OrderItemId} by user with ID {UserId}", orderItemId, userId);
                     return new JsonResult(new
                     {
@@ -931,7 +929,7 @@ namespace BLL.Services
                             order.UpdatedBy = userId;
                             _context.Orders.Update(order);
                             await _context.SaveChangesAsync();
-                        } 
+                        }
                         else
                         {
                             DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new DAL.Models.Order();

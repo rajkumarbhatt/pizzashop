@@ -1,13 +1,10 @@
 using BLL.Interfaces;
-using BLL.Hubs;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.SignalR;
-
 namespace BLL.Services;
 
 public class OrderAppService : IOrderAppService

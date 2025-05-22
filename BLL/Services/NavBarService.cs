@@ -1,4 +1,3 @@
-using DAL.Models;
 using DAL.ViewModels;
 using BLL.Interfaces;
 using DAL.DBContext;

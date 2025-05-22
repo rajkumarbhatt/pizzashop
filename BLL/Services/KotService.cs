@@ -1,16 +1,15 @@
+using System.Text.Json;
+using BLL.Hubs;
+using BLL.Interfaces;
+using DAL.DBContext;
+using DAL.Models;
+using DAL.ViewModels;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
 namespace BLL.Services
 {
-    using System.Text.Json;
-    using BLL.Hubs;
-    using BLL.Interfaces;
-    using DAL.DBContext;
-    using DAL.Models;
-    using DAL.ViewModels;
-    using Microsoft.AspNetCore.SignalR;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Logging;
-    using Npgsql;
-
     public class KotService : IKotService
     {
         private readonly PizzaShopContext _context;

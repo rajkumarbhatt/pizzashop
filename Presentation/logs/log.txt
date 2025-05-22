@@ -2537,3 +2537,297 @@ Npgsql.PostgresException (0x80004005): 42P01: relation "waiting_lists" does not 
 2025-05-22 09:51:14.611 +05:30 [INF] JWT token generated successfully for user with ID 25
 2025-05-22 09:51:14.611 +05:30 [INF] User with email manager@yopmail.com logged in successfully
 2025-05-22 09:51:14.750 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:44:00.484 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.484 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.715 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.716 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:00.716 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:00.717 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:00.718 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.718 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:00.746 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.746 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:00.747 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:00.747 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:02.538 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:44:08.653 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:08.654 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:08.820 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:44:25.392 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:44:25.393 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:44:25.608 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:45:05.592 +05:30 [ERR] An error occurred while adding the category.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 22001: value too long for type character varying(50)
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 22001
+    MessageText: value too long for type character varying(50)
+    File: varchar.c
+    Line: 640
+    Routine: varchar
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at BLL.Services.CategoryService.AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\CategoryService.cs:line 152
+2025-05-22 11:45:07.073 +05:30 [ERR] An error occurred while adding the category.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 22001: value too long for type character varying(50)
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 22001
+    MessageText: value too long for type character varying(50)
+    File: varchar.c
+    Line: 640
+    Routine: varchar
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at BLL.Services.CategoryService.AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\CategoryService.cs:line 152
+2025-05-22 11:45:11.023 +05:30 [ERR] An error occurred while adding the category.
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while saving the entity changes. See the inner exception for details.
+ ---> Npgsql.PostgresException (0x80004005): 22001: value too long for type character varying(50)
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+  Exception data:
+    Severity: ERROR
+    SqlState: 22001
+    MessageText: value too long for type character varying(50)
+    File: varchar.c
+    Line: 640
+    Routine: varchar
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalDatabase.SaveChangesAsync(IList`1 entries, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal.NpgsqlExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at BLL.Services.CategoryService.AddCategoryAsync(AddEditCategoryViewModel addEditCategoryViewModel, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\CategoryService.cs:line 152
+2025-05-22 11:45:15.547 +05:30 [INF] Category added successfully. Category Name: test
+2025-05-22 11:45:54.536 +05:30 [INF] Item added successfully. Item Name: test
+2025-05-22 11:45:54.611 +05:30 [INF] Item added successfully with modifier groups. Item Name: test
+2025-05-22 11:46:09.016 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 11:46:26.784 +05:30 [INF] Order total updated successfully for order ID 311 by user with ID 25
+2025-05-22 11:46:26.899 +05:30 [INF] Order saved successfully for order ID 311 by user with ID 25
+2025-05-22 11:46:41.315 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 11:46:41.315 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 11:46:41.500 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:47:29.620 +05:30 [INF] Item with ID 186 deleted successfully.
+2025-05-22 11:47:32.642 +05:30 [INF] Category with ID 99 and its items were deleted successfully.
+2025-05-22 11:49:47.312 +05:30 [INF] Items marked as ready successfully
+2025-05-22 11:49:54.916 +05:30 [INF] Order completed successfully for order ID 311 by user with ID 25
+2025-05-22 11:49:57.830 +05:30 [INF] Customer review saved successfully for order ID 311 by user with ID 25
+2025-05-22 11:50:03.839 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:50:08.622 +05:30 [INF] Category with ID 99 and its items were deleted successfully.
+2025-05-22 11:52:19.851 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:52:31.151 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:52:31.837 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:52:39.331 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:53:05.065 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 11:54:07.703 +05:30 [WRN] Invalid password for user with email john@yopmail.com
+2025-05-22 11:54:08.874 +05:30 [WRN] Invalid password for user with email john@yopmail.com
+2025-05-22 11:54:10.876 +05:30 [INF] JWT token generated successfully for user with ID 11
+2025-05-22 11:54:10.876 +05:30 [INF] User with email john@yopmail.com logged in successfully
+2025-05-22 11:54:11.011 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-22 11:54:25.725 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-22 11:54:38.520 +05:30 [INF] Session parameters set successfully for user with ID 11
+2025-05-22 14:15:01.344 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 14:15:01.368 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 14:15:02.133 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:16:32.765 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-22 14:16:32.766 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-22 14:16:32.921 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 14:17:12.444 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:17:15.245 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 14:17:30.771 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:17:40.368 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:19:43.813 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 14:21:02.480 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:21:24.157 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:22:19.069 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:22:36.335 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:22:52.776 +05:30 [INF] Permissions updated successfully for role ID 1
+2025-05-22 14:23:38.393 +05:30 [INF] Exported customers successfully.
+2025-05-22 14:23:55.519 +05:30 [INF] Exported customers successfully.
+2025-05-22 14:24:15.120 +05:30 [INF] Exported customers successfully.
+2025-05-22 14:24:30.311 +05:30 [INF] Exported customers successfully.
+2025-05-22 14:24:40.837 +05:30 [INF] Excel file generated successfully for orders
+2025-05-22 14:25:11.342 +05:30 [INF] Excel file generated successfully for orders
+2025-05-22 14:29:59.744 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 14:34:02.162 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-22 14:34:05.148 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 14:34:05.162 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 14:34:05.987 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:34:18.289 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 14:34:27.979 +05:30 [INF] Order total updated successfully for order ID 312 by user with ID 25
+2025-05-22 14:34:27.987 +05:30 [INF] Order saved successfully for order ID 312 by user with ID 25
+2025-05-22 14:34:37.243 +05:30 [INF] Comment added successfully for order ID 312 by user with ID 25
+2025-05-22 14:34:47.066 +05:30 [INF] Comment added successfully for order ID 312 by user with ID 25
+2025-05-22 14:36:57.405 +05:30 [INF] Comment added successfully for order item ID 773 by user with ID 25
+2025-05-22 14:37:10.230 +05:30 [INF] Comment added successfully for order item ID 773 by user with ID 25
+2025-05-22 14:37:21.191 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:37:28.786 +05:30 [INF] Items marked as ready successfully
+2025-05-22 14:37:36.550 +05:30 [INF] Order completed successfully for order ID 312 by user with ID 25
+2025-05-22 14:37:44.961 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:38:09.605 +05:30 [INF] Invoice generated successfully for order ID 312
+2025-05-22 14:44:02.568 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:44:46.817 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:46:48.499 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:46:58.987 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 14:47:15.075 +05:30 [INF] Order total updated successfully for order ID 313 by user with ID 25
+2025-05-22 14:47:15.083 +05:30 [INF] Order saved successfully for order ID 313 by user with ID 25
+2025-05-22 14:47:25.647 +05:30 [INF] Items marked as ready successfully
+2025-05-22 14:47:37.024 +05:30 [INF] Items marked as ready successfully
+2025-05-22 14:47:45.542 +05:30 [INF] Order completed successfully for order ID 313 by user with ID 25
+2025-05-22 14:48:51.690 +05:30 [INF] Customer review saved successfully for order ID 313 by user with ID 25
+2025-05-22 14:48:54.326 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:49:25.618 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:51:42.725 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 14:56:36.780 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:00:14.421 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:00:21.389 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:00:23.871 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:00:40.889 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:01:24.724 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 15:01:37.061 +05:30 [INF] Order total updated successfully for order ID 314 by user with ID 25
+2025-05-22 15:01:37.070 +05:30 [INF] Order saved successfully for order ID 314 by user with ID 25
+2025-05-22 15:01:40.689 +05:30 [INF] Items marked as ready successfully
+2025-05-22 15:01:46.094 +05:30 [INF] Order completed successfully for order ID 314 by user with ID 25
+2025-05-22 15:01:49.737 +05:30 [INF] Customer review saved successfully for order ID 314 by user with ID 25
+2025-05-22 15:01:53.003 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:02:18.936 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:03:00.035 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:17:25.711 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:26:56.150 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:27:03.199 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:27:29.579 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:12.247 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:18.716 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:19.433 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:23.567 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:30.606 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:31.695 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:33.882 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:33.916 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:33.965 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:43.770 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:44.541 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:29:50.694 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:31:23.705 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:31:25.786 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:31:41.395 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:31:55.021 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:32:02.499 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:32:02.546 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:32:06.278 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:37:25.324 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:38:00.771 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:44:21.725 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:44:48.303 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-22 15:45:26.336 +05:30 [INF] Order total updated successfully for order ID 315 by user with ID 25
+2025-05-22 15:45:26.345 +05:30 [INF] Order saved successfully for order ID 315 by user with ID 25
+2025-05-22 15:45:31.357 +05:30 [INF] Items marked as ready successfully
+2025-05-22 15:45:38.305 +05:30 [INF] Order completed successfully for order ID 315 by user with ID 25
+2025-05-22 15:47:20.303 +05:30 [INF] Customer review saved successfully for order ID 315 by user with ID 25
+2025-05-22 15:47:24.937 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 15:47:31.542 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 17:08:34.606 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-22 17:08:37.478 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-22 17:08:41.246 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-22 17:08:44.883 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 17:08:44.887 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 17:08:45.037 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 17:54:03.100 +05:30 [WRN] Invalid password for user with email manager@yopmail.com
+2025-05-22 17:54:04.763 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 17:54:04.763 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 17:54:04.915 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 17:54:14.801 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 17:59:57.322 +05:30 [INF] Item updated successfully. Item Name: Spinach Pizza
+2025-05-22 17:59:57.341 +05:30 [INF] Item updated successfully without modifier groups. Item ID: 40
+2025-05-22 18:00:14.419 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 18:00:29.829 +05:30 [INF] Order total updated successfully for order ID 316 by user with ID 25
+2025-05-22 18:00:29.832 +05:30 [INF] Order saved successfully for order ID 316 by user with ID 25
+2025-05-22 18:00:35.334 +05:30 [INF] Items marked as ready successfully
+2025-05-22 18:00:43.887 +05:30 [INF] Order completed successfully for order ID 316 by user with ID 25
+2025-05-22 18:01:31.147 +05:30 [INF] Customer review saved successfully for order ID 316 by user with ID 25
+2025-05-22 18:01:34.161 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:02:10.099 +05:30 [INF] Item updated successfully. Item Name: Spinach Pizza
+2025-05-22 18:02:10.110 +05:30 [INF] Item updated successfully with modifier groups. Item ID: 40
+2025-05-22 18:02:27.619 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-22 18:02:43.540 +05:30 [INF] Order total updated successfully for order ID 317 by user with ID 25
+2025-05-22 18:02:43.542 +05:30 [INF] Order saved successfully for order ID 317 by user with ID 25
+2025-05-22 18:02:48.574 +05:30 [INF] Comment added successfully for order ID 317 by user with ID 25
+2025-05-22 18:02:54.845 +05:30 [INF] Comment added successfully for order item ID 780 by user with ID 25
+2025-05-22 18:03:00.268 +05:30 [INF] Items marked as ready successfully
+2025-05-22 18:03:06.842 +05:30 [INF] Order completed successfully for order ID 317 by user with ID 25
+2025-05-22 18:04:41.915 +05:30 [INF] Customer review saved successfully for order ID 317 by user with ID 25
+2025-05-22 18:04:45.261 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:05:00.633 +05:30 [INF] Invoice generated successfully for order ID 317
+2025-05-22 18:05:13.233 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:40.151 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:40.434 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:40.718 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:41.009 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:41.401 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:41.703 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:41.921 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:42.088 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:42.266 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:42.438 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:42.582 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:42.720 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:43.120 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:43.300 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:43.792 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:12:44.038 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:19:32.525 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 18:24:10.514 +05:30 [INF] Session parameters set successfully for user with ID 25

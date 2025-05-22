@@ -1,0 +1,15 @@
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\bin\Release\net8.0\DAL.deps.json
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\bin\Release\net8.0\DAL.runtimeconfig.json
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\bin\Release\net8.0\DAL.dll
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\bin\Release\net8.0\DAL.pdb
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.csproj.AssemblyReference.cache
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.AssemblyInfoInputs.cache
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.AssemblyInfo.cs
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.csproj.CoreCompileInputs.cache
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.sourcelink.json
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.dll
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\refint\DAL.dll
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.pdb
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\DAL.genruntimeconfig.cache
+c:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\DAL\obj\Release\net8.0\ref\DAL.dll
