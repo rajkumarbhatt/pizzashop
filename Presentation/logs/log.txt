@@ -2271,3 +2271,269 @@ System.ArgumentException: Format of the initialization string does not conform t
 2025-05-20 17:41:41.233 +05:30 [INF] Invoice generated successfully for order ID 303
 2025-05-20 17:41:47.937 +05:30 [INF] Invoice generated successfully for order ID 302
 2025-05-20 17:55:39.634 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 09:28:55.672 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-21 09:28:55.697 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-21 09:28:56.515 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:19:40.638 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:31:44.490 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:34:15.009 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:34:50.517 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-21 10:35:14.351 +05:30 [INF] Order total updated successfully for order ID 304 by user with ID 25
+2025-05-21 10:35:14.361 +05:30 [INF] Order saved successfully for order ID 304 by user with ID 25
+2025-05-21 10:35:22.893 +05:30 [INF] Items marked as ready successfully
+2025-05-21 10:38:59.979 +05:30 [INF] Items marked as ready successfully
+2025-05-21 10:39:03.719 +05:30 [INF] Items marked as in prepared successfully
+2025-05-21 10:39:07.773 +05:30 [INF] Items marked as ready successfully
+2025-05-21 10:39:13.636 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:39:29.596 +05:30 [INF] Customer details updated successfully for order ID 304 by user with ID 25
+2025-05-21 10:39:35.415 +05:30 [INF] Order completed successfully for order ID 304 by user with ID 25
+2025-05-21 10:40:50.572 +05:30 [INF] Customer review saved successfully for order ID 304 by user with ID 25
+2025-05-21 10:48:25.881 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:48:35.724 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-21 10:48:45.154 +05:30 [INF] Order total updated successfully for order ID 305 by user with ID 25
+2025-05-21 10:48:45.164 +05:30 [INF] Order saved successfully for order ID 305 by user with ID 25
+2025-05-21 10:48:49.969 +05:30 [INF] Items marked as ready successfully
+2025-05-21 10:51:07.891 +05:30 [INF] Items marked as in prepared successfully
+2025-05-21 10:51:12.885 +05:30 [INF] Items marked as ready successfully
+2025-05-21 10:51:24.059 +05:30 [INF] Order completed successfully for order ID 305 by user with ID 25
+2025-05-21 10:51:27.742 +05:30 [INF] Customer review saved successfully for order ID 305 by user with ID 25
+2025-05-21 10:51:31.666 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:26.847 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:27.145 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:27.434 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:27.713 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:27.982 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:28.210 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:28.450 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:28.691 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:28.890 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:52:29.069 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 10:55:32.422 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 11:01:13.112 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-21 11:01:13.149 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-21 11:01:14.106 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 11:01:24.108 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-21 11:01:30.540 +05:30 [INF] Order total updated successfully for order ID 306 by user with ID 25
+2025-05-21 11:01:30.550 +05:30 [INF] Order saved successfully for order ID 306 by user with ID 25
+2025-05-21 11:01:50.018 +05:30 [ERR] An error occurred while fetching the KOT view model
+Npgsql.PostgresException (0x80004005): 42P01: relation "order_table_mappings" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotService.GetKotViewModelAsync(Int32 pageIndex, Int32 pageSize, Nullable`1 orderId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotService.cs:line 29
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "order_table_mappings" does not exist
+    InternalPosition: 1527
+    InternalQuery: (
+        SELECT jsonb_agg(order_data) FROM (
+            SELECT
+                o.id AS order_id,
+                o.comment AS order_instruction,
+                EXTRACT(EPOCH FROM (now() - o.created_at)) AS duration_seconds,
+                s.name AS section,
+                string_agg(t.name, ', ') AS tables,
+                (
+                    SELECT jsonb_agg(jsonb_build_object(
+                        'order_item_id', oi.id,
+                        'item_id', i.id,
+                        'item_name', i.name,
+                        'quantity', oi.quantity - COALESCE(oi.ready_items_count, 0),
+                        'ready_count', COALESCE(oi.ready_items_count, 0),
+                        'instruction', oi.comment,
+                        'modifiers', (
+                            SELECT jsonb_agg(jsonb_build_object(
+                                'modifier_id', m.id,
+                                'modifier_name', m.name
+                            ))
+                            FROM order_modifiers om
+                            JOIN modifiers m ON m.id = om.modifier_id
+                            WHERE om.order_item_id = oi.id AND om.is_deleted = false
+                        )
+                    ))
+                    FROM order_items oi
+                    JOIN items i ON i.id = oi.item_id
+                    WHERE oi.order_id = o.id AND oi.is_deleted = false AND (oi.quantity - COALESCE(oi.ready_items_count, 0)) > 0
+                ) AS items
+            FROM orders o
+            JOIN order_table_mappings otm ON otm.order_id = o.id AND otm.is_deleted = false
+            JOIN tables t ON t.id = otm.table_id
+            JOIN sections s ON s.id = t.section_id
+            WHERE o.is_deleted = false
+                AND o.status != 'Completed'
+                AND (p_order_id IS NULL OR o.id = p_order_id)
+            GROUP BY o.id, o.comment, o.created_at, s.name
+            ORDER BY o.id
+            OFFSET (p_page_index - 1) * p_page_size
+            LIMIT p_page_size
+        ) AS order_data
+    )
+    Where: PL/pgSQL function get_kot_order_cards(integer,integer,integer) line 3 at RETURN
+    File: parse_relation.c
+    Line: 1452
+    Routine: parserOpenTable
+2025-05-21 11:01:53.870 +05:30 [ERR] An error occurred while fetching the KOT view model
+System.Text.Json.JsonException: The JSON value could not be converted to DAL.ViewModels.KotViewModel. Path: $ | LineNumber: 0 | BytePositionInLine: 2.
+   at System.Text.Json.ThrowHelper.ThrowJsonException_DeserializeUnableToConvertValue(Type propertyType)
+   at System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1.OnTryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value)
+   at System.Text.Json.Serialization.JsonConverter`1.TryRead(Utf8JsonReader& reader, Type typeToConvert, JsonSerializerOptions options, ReadStack& state, T& value, Boolean& isPopulatedValue)
+   at System.Text.Json.Serialization.JsonConverter`1.ReadCore(Utf8JsonReader& reader, T& value, JsonSerializerOptions options, ReadStack& state)
+   at System.Text.Json.Serialization.Metadata.JsonTypeInfo`1.Deserialize(Utf8JsonReader& reader, ReadStack& state)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 utf8Json, JsonTypeInfo`1 jsonTypeInfo, Nullable`1 actualByteCount)
+   at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 json, JsonTypeInfo`1 jsonTypeInfo)
+   at System.Text.Json.JsonSerializer.Deserialize[TValue](String json, JsonSerializerOptions options)
+   at BLL.Services.KotService.GetKotViewModelAsync(Int32 pageIndex, Int32 pageSize, Nullable`1 orderId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotService.cs:line 30
+2025-05-21 11:02:31.772 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 11:06:31.873 +05:30 [INF] Items marked as ready successfully
+2025-05-21 11:06:37.414 +05:30 [INF] Items marked as ready successfully
+2025-05-21 11:06:44.924 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 11:06:54.499 +05:30 [INF] Order completed successfully for order ID 306 by user with ID 25
+2025-05-21 11:07:19.419 +05:30 [INF] Customer review saved successfully for order ID 306 by user with ID 25
+2025-05-21 13:10:25.001 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-21 13:10:25.022 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-21 13:10:25.822 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 13:10:32.039 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 13:10:36.599 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 13:11:00.727 +05:30 [INF] Customer with email rajat@yopmail.com added to waiting list by user 25
+2025-05-21 13:11:04.872 +05:30 [ERR] An error occurred while deleting the waiting list with ID 97
+Npgsql.PostgresException (0x80004005): 42P01: relation "waiting_lists" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.WaitingListService.DeleteWaitingListAsync(Int32 id, Int32 userId) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\WaitingListService.cs:line 87
+  Exception data:
+    Severity: ERROR
+    SqlState: 42P01
+    MessageText: relation "waiting_lists" does not exist
+    InternalPosition: 8
+    InternalQuery: UPDATE waiting_lists
+    SET is_deleted = TRUE,
+        updated_by = p_user_id,
+        updated_at = NOW()
+    WHERE id = p_waiting_list_id
+    Where: PL/pgSQL function delete_waiting_list_entry(integer,integer) line 3 at SQL statement
+    File: parse_relation.c
+    Line: 1452
+    Routine: parserOpenTable
+2025-05-21 13:11:30.058 +05:30 [INF] Waiting list with ID 97 deleted successfully by user 25
+2025-05-21 14:41:11.226 +05:30 [ERR] An error occurred while adding to waiting list by user 25
+2025-05-21 14:41:30.248 +05:30 [ERR] An error occurred while adding to waiting list by user 25
+2025-05-21 14:42:49.809 +05:30 [ERR] An error occurred while adding to waiting list by user 25
+2025-05-21 14:43:22.519 +05:30 [ERR] An error occurred while adding to waiting list by user 25
+2025-05-21 14:45:28.863 +05:30 [INF] Customer with email rajiv@yopmail.com added to waiting list by user 25
+2025-05-21 14:45:38.918 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:45:43.535 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:46:01.335 +05:30 [WRN] Customer with email rajiv@yopmail.com who is already in waiting list wad added again to waiting list by user 25
+2025-05-21 14:49:05.720 +05:30 [ERR] An error occurred while adding to waiting list by user 25
+2025-05-21 14:49:08.687 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:49:15.144 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:49:24.270 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:49:30.616 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:49:41.541 +05:30 [INF] Customer with email raj@yopmail.com added to waiting list by user 25
+2025-05-21 14:49:45.603 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 14:50:09.103 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:50:13.219 +05:30 [INF] Waiting list updated successfully by user 25
+2025-05-21 14:50:17.878 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 14:50:26.457 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-21 14:50:37.853 +05:30 [INF] Order total updated successfully for order ID 307 by user with ID 25
+2025-05-21 14:50:37.863 +05:30 [INF] Order saved successfully for order ID 307 by user with ID 25
+2025-05-21 14:50:42.144 +05:30 [INF] Items marked as ready successfully
+2025-05-21 14:50:46.515 +05:30 [INF] Order completed successfully for order ID 307 by user with ID 25
+2025-05-21 14:50:49.956 +05:30 [INF] Customer review saved successfully for order ID 307 by user with ID 25
+2025-05-21 14:50:59.690 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-21 14:51:08.186 +05:30 [INF] Order total updated successfully for order ID 308 by user with ID 25
+2025-05-21 14:51:08.192 +05:30 [INF] Order saved successfully for order ID 308 by user with ID 25
+2025-05-21 14:51:12.865 +05:30 [INF] Items marked as ready successfully
+2025-05-21 14:51:19.512 +05:30 [INF] Order completed successfully for order ID 308 by user with ID 25
+2025-05-21 14:51:45.727 +05:30 [INF] Customer review saved successfully for order ID 308 by user with ID 25
+2025-05-21 14:55:41.283 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 14:56:01.089 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 17:17:53.170 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-21 17:17:53.195 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-21 17:17:53.984 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 17:18:24.463 +05:30 [INF] Tables assigned successfully to customer with email tulsi@yopmail.com by user 25
+2025-05-21 17:18:45.099 +05:30 [INF] Order total updated successfully for order ID 309 by user with ID 25
+2025-05-21 17:18:45.106 +05:30 [INF] Order saved successfully for order ID 309 by user with ID 25
+2025-05-21 17:18:51.470 +05:30 [INF] Comment added successfully for order ID 309 by user with ID 25
+2025-05-21 17:19:08.016 +05:30 [INF] Order total updated successfully for order ID 309 by user with ID 25
+2025-05-21 17:19:08.018 +05:30 [INF] Order saved successfully for order ID 309 by user with ID 25
+2025-05-21 17:19:17.339 +05:30 [INF] Items marked as ready successfully
+2025-05-21 17:19:26.460 +05:30 [INF] Items marked as ready successfully
+2025-05-21 17:20:08.860 +05:30 [INF] Order total updated successfully for order ID 309 by user with ID 25
+2025-05-21 17:20:08.863 +05:30 [INF] Order saved successfully for order ID 309 by user with ID 25
+2025-05-21 17:20:13.534 +05:30 [INF] Items marked as ready successfully
+2025-05-21 17:20:20.254 +05:30 [INF] Order completed successfully for order ID 309 by user with ID 25
+2025-05-21 17:20:59.388 +05:30 [INF] Customer review saved successfully for order ID 309 by user with ID 25
+2025-05-21 17:21:05.620 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 17:21:13.516 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-21 17:21:19.042 +05:30 [INF] Invoice generated successfully for order ID 309
+2025-05-21 17:21:33.188 +05:30 [INF] Excel file generated successfully for orders
+2025-05-21 17:21:37.736 +05:30 [INF] Excel file generated successfully for orders
+2025-05-21 17:22:26.020 +05:30 [INF] Excel file generated successfully for orders
+2025-05-22 09:31:27.568 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:31:27.592 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:31:28.397 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:31:41.872 +05:30 [INF] Tables assigned successfully to customer with email rajiv@yopmail.com by user 25
+2025-05-22 09:32:17.916 +05:30 [INF] Order total updated successfully for order ID 310 by user with ID 25
+2025-05-22 09:32:17.925 +05:30 [INF] Order saved successfully for order ID 310 by user with ID 25
+2025-05-22 09:32:25.498 +05:30 [INF] Comment added successfully for order ID 310 by user with ID 25
+2025-05-22 09:32:30.384 +05:30 [INF] Comment added successfully for order item ID 770 by user with ID 25
+2025-05-22 09:32:35.063 +05:30 [INF] Comment added successfully for order item ID 771 by user with ID 25
+2025-05-22 09:32:45.768 +05:30 [INF] Items marked as ready successfully
+2025-05-22 09:32:52.292 +05:30 [INF] Items marked as ready successfully
+2025-05-22 09:33:07.642 +05:30 [INF] Order total updated successfully for order ID 310 by user with ID 25
+2025-05-22 09:33:07.645 +05:30 [INF] Order saved successfully for order ID 310 by user with ID 25
+2025-05-22 09:33:16.147 +05:30 [INF] Items marked as in prepared successfully
+2025-05-22 09:33:24.495 +05:30 [INF] Items marked as ready successfully
+2025-05-22 09:33:33.496 +05:30 [INF] Order completed successfully for order ID 310 by user with ID 25
+2025-05-22 09:33:59.745 +05:30 [INF] Customer review saved successfully for order ID 310 by user with ID 25
+2025-05-22 09:34:04.305 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:34:29.522 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:34:32.463 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:34:38.231 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:44:01.688 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:44:01.688 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:44:01.848 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-22 09:44:02.377 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:44:02.377 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:44:02.381 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:44:02.381 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:44:02.398 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:44:02.399 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:44:29.548 +05:30 [INF] JWT token generated successfully for user with ID 3
+2025-05-22 09:44:29.549 +05:30 [INF] User with email raj@yopmail.com logged in successfully
+2025-05-22 09:44:29.698 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:45:33.719 +05:30 [INF] Email sent successfully to hithere@yopmail.com
+2025-05-22 09:45:33.940 +05:30 [INF] User with ID 63 created successfully by user with ID 3
+2025-05-22 09:47:05.355 +05:30 [INF] User with ID 63 updated successfully by user with ID 3
+2025-05-22 09:47:17.924 +05:30 [INF] User with ID 63 deleted successfully by user with ID 3
+2025-05-22 09:50:31.934 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:38.962 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:42.086 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:49.592 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:50.829 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:51.382 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:52.055 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:52.869 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:53.339 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:50:54.180 +05:30 [INF] Session parameters set successfully for user with ID 3
+2025-05-22 09:51:14.611 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-22 09:51:14.611 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-22 09:51:14.750 +05:30 [INF] Session parameters set successfully for user with ID 25

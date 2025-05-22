@@ -84,16 +84,7 @@ namespace BLL.Services
         {
             try
             {
-                WaitingList waitingList = await _context.WaitingLists.FindAsync(id);
-                if (waitingList == null)
-                {
-                    return new JsonResult(new { success = false, message = "Waiting list not found" });
-                }
-                waitingList.IsDeleted = true;
-                waitingList.UpdatedBy = userId;
-                waitingList.UpdatedAt = DateTime.Now;
-                _context.WaitingLists.Update(waitingList);
-                await _context.SaveChangesAsync();
+                await _context.Database.ExecuteSqlRawAsync("CALL delete_waiting_list_entry({0}, {1})", id, userId);
                 _logger.LogInformation("Waiting list with ID {Id} deleted successfully by user {UserId}", id, userId);
                 return new JsonResult(new { success = true, message = "Waiting list deleted successfully" });
             }

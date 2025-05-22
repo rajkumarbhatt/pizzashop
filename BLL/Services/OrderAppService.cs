@@ -138,32 +138,15 @@ public class OrderAppService : IOrderAppService
                             });
                         }
 
-                        if (customer == null)
-                        {
-                            customer = new Customer
-                            {
-                                Name = name,
-                                Email = email,
-                                Phone = mobileNumber,
-                                CreatedAt = DateTime.Now,
-                                CreatedBy = userId,
-                                UpdatedBy = userId
-                            };
-                            await _context.Customers.AddAsync(customer);
-                            await _context.SaveChangesAsync();
-                        }
-
-                        WaitingList waitingList = new WaitingList
-                        {
-                            CustomerId = customer.Id,
-                            SectionId = int.Parse(sectionId),
-                            NoOfPersons = (short)int.Parse(numberOfPeople),
-                            CreatedAt = DateTime.Now,
-                            CreatedBy = userId,
-                            UpdatedBy = userId,
-                        };
-                        await _context.WaitingLists.AddAsync(waitingList);
-                        await _context.SaveChangesAsync();
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "CALL add_to_waiting_list({0}, {1}, {2}, {3}, {4}, {5})",
+                            waitingListModal.Name,
+                            waitingListModal.Email,
+                            waitingListModal.MobileNumber,
+                            waitingListModal.SectionId,
+                            waitingListModal.NumberOfPeople,
+                            userId
+                        );
                         await transaction.CommitAsync();
                         _logger.LogInformation("Customer with email {Email} added to waiting list by user {UserId}", email, userId);
                         return new JsonResult(new
@@ -184,18 +167,16 @@ public class OrderAppService : IOrderAppService
                             });
                         }
 
-                        Customer customer = await _context.Customers.FindAsync(waitingList.CustomerId);
-                        customer.Name = waitingListModal.Name;
-                        customer.Email = waitingListModal.Email;
-                        customer.Phone = waitingListModal.MobileNumber;
-                        customer.UpdatedBy = userId;
-
-                        waitingList.NoOfPersons = (short)waitingListModal.NumberOfPeople;
-                        waitingList.SectionId = waitingListModal.SectionId;
-                        waitingList.UpdatedAt = DateTime.Now;
-                        waitingList.UpdatedBy = userId;
-
-                        await _context.SaveChangesAsync();
+                        await _context.Database.ExecuteSqlRawAsync(
+                            "CALL update_customer_and_waiting_list({0}, {1}, {2}, {3}, {4}, {5}, {6})",
+                            waitingListModal.Id,
+                            waitingListModal.Name,
+                            waitingListModal.Email,
+                            waitingListModal.MobileNumber,
+                            waitingListModal.SectionId,
+                            waitingListModal.NumberOfPeople,
+                            userId
+                        );
                         await transaction.CommitAsync();
                         _logger.LogInformation("Waiting list updated successfully by user {UserId}", userId);
                         return new JsonResult(new

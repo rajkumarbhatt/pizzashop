@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sJQsFbTHdbP7OoFEDmVgHq4OvhVw6cLsCNS8W025E1A=",
+  "Hash": "YH7sKxX3TyCAA2X0Jynqx/7jzUwfmMcQ0rFNret9rJA=",
   "Source": "Presentation",
   "BasePath": "_content/Presentation",
   "Mode": "Default",
@@ -4214,6 +4214,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\profile-images\\3bdb0afb-7dc7-4331-8007-a249abd40b94.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\3c54bbb7-2d64-4837-b9b9-80cb725bad10.png",
+      "SourceId": "Presentation",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\",
+      "BasePath": "_content/Presentation",
+      "RelativePath": "images/profile-images/3c54bbb7-2d64-4837-b9b9-80cb725bad10.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\profile-images\\3c54bbb7-2d64-4837-b9b9-80cb725bad10.png"
     },
     {
       "Identity": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\wwwroot\\images\\profile-images\\3dfdefac-9ec9-4f8b-a1e6-4d98370ac465.jpg",
