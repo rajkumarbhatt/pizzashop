@@ -4579,3 +4579,7 @@ C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\obj\Debug\net8.0\
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\obj\Debug\net8.0\Presentation.pdb
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\obj\Debug\net8.0\Presentation.genruntimeconfig.cache
 C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\obj\Debug\net8.0\ref\Presentation.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\Microsoft.Extensions.WebEncoders.dll
+C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\Presentation\bin\Debug\net8.0\System.Security.Cryptography.Xml.dll

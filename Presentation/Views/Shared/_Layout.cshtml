@@ -263,6 +263,12 @@
                                     class="small-image" alt="">
                                 <p style="margin-left: 16px;">Change Password</p>
                             </a></li>
+                        <li><a id="enable2faBtn"
+                                class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex  align-items-center gap-1">
+                                <img src="~/images/icons/enable-2fa.svg" style="margin-right: 2px;"
+                                    class="small-image" alt="">
+                                <p style="margin-left: 16px;">Enable 2FA</p>
+                            </a></li>
                         <li><a data-bs-toggle="modal" data-bs-target="#logoutModal"
                                 class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
                                 <img src="~/images/icons/logout.svg" class="small-image" style="margin-left: -8px;"
@@ -288,6 +294,48 @@
                     <div class="modal-footer">
                         <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
                         <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* enable 2fa modal *@
+        <div class="modal fade" id="enable2faModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="enable2faModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="enable2faModalLabel">Enable Two-Factor Authentication</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to enable two-factor authentication (2FA)?</p>
+                        <p>This will add an extra layer of security to your account.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmEnable2faBtn" type="button" class="btn btn-primary">Enable</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* disable 2fa modal *@
+        <div class="modal fade" id="disable2faModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="disable2faModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="disable2faModalLabel">Disable Two-Factor Authentication</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to disable two-factor authentication (2FA)?</p>
+                        <p>Disabling 2FA will reduce the security of your account.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirmDisable2faBtn" type="button" class="btn btn-danger">Disable</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
             </div>

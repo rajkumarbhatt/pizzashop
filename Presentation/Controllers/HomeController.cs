@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.Models;
 using DAL.ViewModels;
 using BLL.Interfaces;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Presentaion.Controllers;
 

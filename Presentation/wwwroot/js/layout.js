@@ -35,9 +35,11 @@ $("#redirectToOrderApp").click(function () {
     window.location.href = "/OrderApp";
 });
 
-$(window).off("click").on("click", function (event) {
-    const token = document.cookie.split('; ').find(row => row.startsWith('token='));
-    if (!token) {
-        window.location.href = "/";
+$("#enable2faBtn").click(function () {
+    var isEnabled = $(this).data("enabled");
+    if (isEnabled) {
+        $("#disable2faModal").modal("show");
+    } else {
+        $("#enable2faModal").modal("show");
     }
-});
+})

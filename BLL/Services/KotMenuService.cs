@@ -687,13 +687,13 @@ namespace BLL.Services
             {
                 OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.Id == orderItemId && oi.IsDeleted == false) ?? new OrderItem();
                 if (orderItem != null)
-                {   
-                   await _context.Database.ExecuteSqlRawAsync(
-                        "CALL update_order_item_comment({0}, {1}, {2})",
-                        orderItemId,
-                        comment,
-                        userId
-                    );
+                {
+                    await _context.Database.ExecuteSqlRawAsync(
+                         "CALL update_order_item_comment({0}, {1}, {2})",
+                         orderItemId,
+                         comment,
+                         userId
+                     );
                     _logger.LogInformation("Comment added successfully for order item ID {OrderItemId} by user with ID {UserId}", orderItemId, userId);
                     return new JsonResult(new
                     {
@@ -733,47 +733,11 @@ namespace BLL.Services
                         List<OrderItem> orderItems = await _context.OrderItems.Where(oi => oi.OrderId == saveOrderViewModel.OrderId && oi.IsDeleted == false).ToListAsync();
                         if (saveOrderViewModel.OrderItems == null || saveOrderViewModel.OrderItems.Count == 0)
                         {
-                            foreach (var orderItem in orderItems)
-                            {
-                                orderItem.IsDeleted = true;
-                                orderItem.UpdatedAt = DateTime.Now;
-                                orderItem.UpdatedBy = userId;
-                                _context.OrderItems.Update(orderItem);
-                                await _context.SaveChangesAsync();
-
-                                List<OrderModifier> orderModifiers = await _context.OrderModifiers.Where(om => om.OrderItemId == orderItem.Id && om.IsDeleted == false).ToListAsync();
-
-                                if (orderModifiers != null && orderModifiers.Count > 0)
-                                {
-                                    foreach (var orderModifier in orderModifiers)
-                                    {
-                                        orderModifier.IsDeleted = true;
-                                        orderModifier.UpdatedAt = DateTime.Now;
-                                        orderModifier.UpdatedBy = userId;
-                                        _context.OrderModifiers.Update(orderModifier);
-                                        await _context.SaveChangesAsync();
-                                    }
-                                }
-                            }
-
-                            List<OrderTaxis> orderTaxes2 = await _context.OrderTaxes.Where(ot => ot.OrderId == saveOrderViewModel.OrderId).ToListAsync();
-                            if (orderTaxes2 != null && orderTaxes2.Count > 0)
-                            {
-                                foreach (var orderTax in orderTaxes2)
-                                {
-                                    orderTax.TaxAmount = 0;
-                                    orderTax.UpdatedAt = DateTime.Now;
-                                    orderTax.UpdatedBy = userId;
-                                    _context.OrderTaxes.Update(orderTax);
-                                    await _context.SaveChangesAsync();
-                                }
-                            }
-                            DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == saveOrderViewModel.OrderId) ?? new DAL.Models.Order();
-                            order.Status = "Pending";
-                            order.UpdatedAt = DateTime.Now;
-                            order.UpdatedBy = userId;
-                            _context.Orders.Update(order);
-                            await _context.SaveChangesAsync();
+                            await _context.Database.ExecuteSqlRawAsync(
+                                "CALL save_order_with_zero_items({0}, {1})",
+                                saveOrderViewModel.OrderId,
+                                userId
+                            );
                             await UpdateOrderAmountAsync(saveOrderViewModel.OrderId, userId, saveOrderViewModel.SubTotal, saveOrderViewModel.Total);
                             await transaction.CommitAsync();
                             await _hubContext.Clients.All.SendAsync("ReceiveNewOrder");
@@ -987,42 +951,12 @@ namespace BLL.Services
                             message = "No items found in the order, kindly cancel the order"
                         });
                     }
-                    List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
-                    foreach (OrderTableMapping orderTableMapping in orderTableMappings)
-                    {
-                        Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false) ?? new Table();
-                        if (table != null)
-                        {
-                            table.Status = "Available";
-                            table.UpdatedAt = DateTime.Now;
-                            table.UpdatedBy = userId;
-                            _context.Tables.Update(table);
-                            await _context.SaveChangesAsync();
-                        }
-                    }
-                    DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
-                    order.Status = "Completed";
-                    order.PaymentMode = paymentMode;
-                    order.UpdatedAt = DateTime.Now;
-                    order.UpdatedBy = userId;
-                    _context.Orders.Update(order);
-                    await _context.SaveChangesAsync();
-                    List<OrderTableMapping> orderTableMappings1 = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
-                    foreach (OrderTableMapping orderTableMapping in orderTableMappings1)
-                    {
-                        orderTableMapping.IsDeleted = true;
-                        orderTableMapping.UpdatedAt = DateTime.Now;
-                        orderTableMapping.UpdatedBy = userId;
-                        _context.OrderTableMappings.Update(orderTableMapping);
-                        await _context.SaveChangesAsync();
-                    }
-                    DAL.Models.Invoice invoice = new DAL.Models.Invoice
-                    {
-                        OrderId = orderId,
-                        InvoiceNo = "INV" + orderId.ToString()
-                    };
-                    await _context.Invoices.AddAsync(invoice);
-                    await _context.SaveChangesAsync();
+                    await _context.Database.ExecuteSqlRawAsync(
+                        "CALL complete_order({0}, {1}, {2})",
+                        orderId,
+                        paymentMode,
+                        userId
+                    );
                     _logger.LogInformation("Order completed successfully for order ID {OrderId} by user with ID {UserId}", orderId, userId);
                     return new JsonResult(new
                     {
@@ -1055,20 +989,18 @@ namespace BLL.Services
         {
             try
             {
-                CustomerReview customerReview = new CustomerReview
-                {
-                    OrderId = saveCustomerReviewViewModel.OrderId,
-                    CustomerId = await _context.Orders.Where(o => o.Id == saveCustomerReviewViewModel.OrderId).Select(o => o.CustomerId).FirstOrDefaultAsync(),
-                    Food = (short)saveCustomerReviewViewModel.FoodRating,
-                    Ambience = (short)saveCustomerReviewViewModel.AmbienceRating,
-                    Service = (short)saveCustomerReviewViewModel.ServiceRating,
-                    AverageRating = (decimal)Math.Round((double)(saveCustomerReviewViewModel.FoodRating + saveCustomerReviewViewModel.AmbienceRating + saveCustomerReviewViewModel.ServiceRating) / 3, 1),
-                    Comment = saveCustomerReviewViewModel.OrderReviewByCustomer,
-                    CreatedBy = userId,
-                    UpdatedBy = userId,
-                };
-                await _context.CustomerReviews.AddAsync(customerReview);
-                await _context.SaveChangesAsync();
+                decimal averageRating = (decimal)Math.Round((double)(saveCustomerReviewViewModel.FoodRating + saveCustomerReviewViewModel.AmbienceRating + saveCustomerReviewViewModel.ServiceRating) / 3, 1);
+
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL add_customer_review({0}, {1}, {2}, {3}, {4}, {5}, {6})",
+                    saveCustomerReviewViewModel.OrderId,
+                    (short)saveCustomerReviewViewModel.FoodRating,
+                    (short)saveCustomerReviewViewModel.AmbienceRating,
+                    (short)saveCustomerReviewViewModel.ServiceRating,
+                    averageRating,
+                    saveCustomerReviewViewModel.OrderReviewByCustomer ?? "",
+                    userId
+                );
                 _logger.LogInformation("Customer review saved successfully for order ID {OrderId} by user with ID {UserId}", saveCustomerReviewViewModel.OrderId, userId);
                 return new JsonResult(new
                 {
@@ -1202,33 +1134,11 @@ namespace BLL.Services
                         message = "Order cannot be cancelled as items are already added"
                     });
                 }
-                DAL.Models.Order order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == orderId) ?? new DAL.Models.Order();
-                order.Status = "Cancelled";
-                order.UpdatedAt = DateTime.Now;
-                order.UpdatedBy = userId;
-                _context.Orders.Update(order);
-                await _context.SaveChangesAsync();
-                List<OrderTableMapping> orderTableMappings = await _context.OrderTableMappings.Where(otm => otm.OrderId == orderId).ToListAsync();
-                foreach (OrderTableMapping orderTableMapping in orderTableMappings)
-                {
-                    Table table = await _context.Tables.FirstOrDefaultAsync(t => t.Id == orderTableMapping.TableId && t.IsDeleted == false) ?? new Table();
-                    if (table != null)
-                    {
-                        table.Status = "Available";
-                        table.UpdatedAt = DateTime.Now;
-                        table.UpdatedBy = userId;
-                        _context.Tables.Update(table);
-                        await _context.SaveChangesAsync();
-                    }
-                }
-                foreach (OrderTableMapping orderTableMapping in orderTableMappings)
-                {
-                    orderTableMapping.IsDeleted = true;
-                    orderTableMapping.UpdatedAt = DateTime.Now;
-                    orderTableMapping.UpdatedBy = userId;
-                    _context.OrderTableMappings.Update(orderTableMapping);
-                    await _context.SaveChangesAsync();
-                }
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL cancel_order({0}, {1})",
+                    orderId,
+                    userId
+                );
                 _logger.LogInformation("Order cancelled successfully for order ID {OrderId} by user with ID {UserId}", orderId, userId);
                 return new JsonResult(new
                 {
