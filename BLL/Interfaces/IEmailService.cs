@@ -9,5 +9,6 @@ namespace BLL.Interfaces
         public Task SendEmailAsync(string toEmail, User user, string resetLink);
         public Task SendCreateUserEmailAsync(string email, string password);
         public Task<IActionResult> SendForgotPasswordEmailAsync(string email);
+        public Task SendTwoFactorAuthEmailAsync(int userId);
     }
 }

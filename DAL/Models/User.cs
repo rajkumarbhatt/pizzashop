@@ -49,6 +49,10 @@ public partial class User
 
     public string? ResetPasswordLink { get; set; }
 
+    public bool? TwoFactorEnabled { get; set; }
+
+    public string? TwoFactorAuthCode { get; set; }
+
     public virtual ICollection<Category> CategoryCreatedByNavigations { get; set; } = new List<Category>();
 
     public virtual ICollection<Category> CategoryUpdatedByNavigations { get; set; } = new List<Category>();

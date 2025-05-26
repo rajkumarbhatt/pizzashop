@@ -105,7 +105,7 @@ $(document).ready(function () {
                   toastr.success(response.message);
 
                   setTimeout(function () {
-                      window.location.href = '/Dashboard';
+                      window.location.href = '/Dashboard?redirect=true';
                       $('.loader-container').addClass('d-none');
                   }, 100);
                  

@@ -9,6 +9,7 @@ namespace BLL.Interfaces
         public Task<string> GetProfileImageUrlFromUserIdAsync(int userId);
         public Task<int> GetRoleIdFromUserIdAsync(int userId);
         public Task<bool> IsFirstTimeLoginAsync(int userId);
+        public Task<bool> IsTwoFactorAuthenticationEnabledAsync(int userId);
         public Task<List<PermissionModel>> GetRolePermissionsFromRoleIdAsync(int roleId);
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using DAL.DBContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 
 namespace BLL.Services
 {
@@ -12,11 +13,13 @@ namespace BLL.Services
         private readonly PizzaShopContext _context;
         private readonly ILogger<LoginService> _logger;
         private readonly IJwtService _jwtService;
-        public LoginService(PizzaShopContext context, IJwtService jwtService, ILogger<LoginService> logger)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public LoginService(PizzaShopContext context, IJwtService jwtService, IHttpContextAccessor httpContextAccessor, ILogger<LoginService> logger)
         {
             _logger = logger;
             _context = context;
             _jwtService = jwtService;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<IActionResult> ValidateAsync(string email, string password)
         {
@@ -96,6 +99,54 @@ namespace BLL.Services
                 {
                     success = false,
                     message = "An error occurred while validating the user",
+                    error = ex.Message
+                });
+            }
+        }
+
+        public async Task<IActionResult> Validate2FAAsync(string code)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(code))
+                {
+                    _logger.LogWarning("2FA code cannot be null or empty");
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "2FA code cannot be null or empty"
+                    });
+                }
+
+                string token = _httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? "";
+                string userId = _jwtService.GetUserIdFromJwtTokenAsync(token).Result.ToString();
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == int.Parse(userId)) ?? throw new Exception("User not found");
+                if (user.TwoFactorAuthCode == code)
+                {
+                    return new JsonResult(new
+                    {
+                        success = true,
+                        message = "2FA code validated successfully"
+                    });
+                }
+                else
+                {
+                    _logger.LogWarning("Invalid 2FA code for user with ID {UserId}", user.Id);
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Invalid 2FA code"
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while validating the 2FA code {Code}", code);
+                Console.WriteLine(ex.Message);
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "An error occurred while validating the 2FA code",
                     error = ex.Message
                 });
             }

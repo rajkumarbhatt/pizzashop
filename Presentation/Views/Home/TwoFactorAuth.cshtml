@@ -1,0 +1,124 @@
+@{
+    Layout = null;
+}
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PizzaShop</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+
+<div class="sma container-fluid row bg-color main-container position-absolute h-100">
+    @* toaster *@
+    <div class="loader-container d-none">
+        <div class="loader"></div>
+    </div>
+
+    <!-- left container -->
+    <div class="d-none d-md-block col-sm-12 col-md-6 img-container">
+        <img class="img-fluid object-fit-cover h-100" src="~/images/dominos_background.jpg" alt="">
+    </div>
+
+    <!-- right container -->
+    <div class="h-100 col-sm-12 col-md-6 right-part d-flex flex-column align-items-center justify-content-center">
+
+        <!-- logo and heading -->
+        <div
+            class="container-fluid d-flex gap-md-1 gap-lg-2 gap-xl-4 align-items-center justify-content-center heading-container">
+            <img class="logo-img" src="~/images/logos/pizzashop_logo.png" alt="">
+            <h1 class="right-heading">PIZZASHOP</h1>
+        </div>
+
+        <!-- welcome message -->
+        <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
+            <p class="welcome-message margin-left align-self-center align-self-md-start mb-3 mt-3">Please enter the code sent to your email address to verify your identity.</p>
+
+            <!-- OTP input fields -->
+            <div class="d-flex gap-2 mb-3">
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+                <input type="text" maxlength="1" class="form-control otp-input text-center" style="width: 50px; height: 50px; font-size: 1.5rem;" />
+            </div>
+
+            <!-- Verify button -->
+            <button id="verifyOtpBtn" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.2rem;">Verify</button>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const otpInputs = document.querySelectorAll(".otp-input");
+
+        otpInputs.forEach((input, index) => {
+            input.addEventListener("input", function () {
+                if (this.value.length === 1 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+            });
+
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Backspace" && this.value === "" && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener("paste", function (e) {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData("text").slice(0, otpInputs.length);
+                pasteData.split("").forEach((char, i) => {
+                    if (otpInputs[i]) {
+                        otpInputs[i].value = char;
+                    }
+                });
+                const nextEmptyIndex = pasteData.length < otpInputs.length ? pasteData.length : otpInputs.length - 1;
+                otpInputs[nextEmptyIndex].focus();
+            });
+        });
+    });
+
+    $("#verifyOtpBtn").off("click").click(function () {
+        const otp = Array.from(document.querySelectorAll(".otp-input")).map(input => input.value).join("");
+        
+        if (otp.length < 6) {
+            toastr.error("Please enter a valid OTP.");
+            return;
+        }
+
+        $(".loader-container").removeClass("d-none");
+
+        $.ajax({
+            url: "/api/validate-2fa",
+            type: "POST",
+            data: { code: otp },
+            success: function (response) {
+                $(".loader-container").addClass("d-none");
+                if (response.success) {
+                    toastr.success(response.message);
+                    setTimeout(function () {
+                        window.location.href = "/Dashboard?redirect=false";
+                    }, 1500); 
+                } else {
+                    $(".loader-container").addClass("d-none");
+                    toastr.error(response.message);
+                }
+            },
+            error: function () {
+                $(".loader-container").addClass("d-none");
+                toastr.error("An error occurred while verifying the OTP.");
+            }
+        });
+    });
+</script>

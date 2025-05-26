@@ -47,4 +47,17 @@ public class HomeController : Controller
 
         return await _loginService.ValidateAsync(loginModel.Email, loginModel.Password);
     }
+
+    [HttpGet]
+    public IActionResult TwoFactorAuth()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("api/validate-2fa")]
+    public async Task<IActionResult> Validate2FA(string code)
+    {
+        return await _loginService.Validate2FAAsync(code);
+    }
 }

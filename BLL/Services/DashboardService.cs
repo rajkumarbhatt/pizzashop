@@ -2,16 +2,24 @@ using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
 using DAL.ViewModels;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 namespace BLL.Services;
 
 public class DashboardService : IDashboardService
 {
     private readonly PizzaShopContext _context;
+    private IHttpContextAccessor _httpContextAccessor;
     private readonly ILogger<DashboardService> _logger;
-    public DashboardService(PizzaShopContext context, ILogger<DashboardService> logger)
+    private readonly IJwtService _jwtService;
+    public DashboardService(PizzaShopContext context, ILogger<DashboardService> logger, IHttpContextAccessor httpContextAccessor, IJwtService jwtService)
     {
+        _jwtService = jwtService;
+        _httpContextAccessor = httpContextAccessor;
         _logger = logger;
         _context = context;
     }
@@ -61,7 +69,7 @@ public class DashboardService : IDashboardService
             }
             if (TimePeriod == "Custom Date")
             {
-                toDate = toDate.AddDays(1).AddTicks(-1); 
+                toDate = toDate.AddDays(1).AddTicks(-1);
             }
 
             List<string> labelsForGraph = (toDate - fromDate).TotalDays switch
@@ -85,9 +93,9 @@ public class DashboardService : IDashboardService
             DashboardViewModel dashboardData = new DashboardViewModel
             {
                 TotalOrders = orders.Count,
-                TotalSales = orders.Count() > 0  ? Math.Round((double)orders.Sum(o => o.TotalAmount), 2) : 0,
+                TotalSales = orders.Count() > 0 ? Math.Round((double)orders.Sum(o => o.TotalAmount), 2) : 0,
                 AverageOrderValue = orders.Count() > 0 ? Math.Round((double)orders.Average(o => o.TotalAmount), 2) : 0,
-                AverageWaitingTime = orders.Count() > 0  ? Math.Round((double)(await _context.Orders
+                AverageWaitingTime = orders.Count() > 0 ? Math.Round((double)(await _context.Orders
                             .Where(o => o.CreatedAt >= fromDate && o.CreatedAt <= toDate && o.Status != "Cancelled")
                             .ToListAsync())
                         .Where(o => o.UpdatedAt != null)
@@ -209,6 +217,56 @@ public class DashboardService : IDashboardService
             _logger.LogError(ex, "An error occurred while fetching dashboard data: {Message}", ex.Message);
             Console.WriteLine($"An error occurred: {ex.Message}");
             throw;
+        }
+    }
+    public async Task<IActionResult> EnableTwoFactorAuthenticationAsync()
+    {
+        string token = _httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? string.Empty;
+        int userId = _jwtService.GetUserIdFromJwtTokenAsync(token).Result;
+        try
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                user.TwoFactorEnabled = true;
+                user.UpdatedAt = DateTime.Now;
+                user.UpdatedBy = userId;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                await _jwtService.SetSessionParametersAsync(userId, user.Username, user.RoleId);
+                return new JsonResult(new { success = true, message = "Two-factor authentication enabled successfully." });
+            }
+            return new JsonResult(new { success = false, message = "User not found." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while enabling two-factor authentication: {Message}", ex.Message);
+            return new JsonResult(new { success = false, message = "An error occurred while enabling two-factor authentication." });
+        }
+    }
+    public async Task<IActionResult> DisableTwoFactorAuthenticationAsync()
+    {
+        string token = _httpContextAccessor.HttpContext?.Request.Cookies["token"] ?? string.Empty;
+        int userId = _jwtService.GetUserIdFromJwtTokenAsync(token).Result;
+        try
+        {
+            var user = _context.Users.FirstOrDefault(u => u.Id == userId);
+            if (user != null)
+            {
+                user.TwoFactorEnabled = false;
+                user.UpdatedAt = DateTime.Now;
+                user.UpdatedBy = userId;
+                _context.Users.Update(user);
+                await _context.SaveChangesAsync();
+                await _jwtService.SetSessionParametersAsync(userId, user.Username, user.RoleId);
+                return new JsonResult(new { success = true, message = "Two-factor authentication disabled successfully." });
+            }
+            return new JsonResult(new { success = false, message = "User not found." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while disabling two-factor authentication: {Message}", ex.Message);
+            return new JsonResult(new { success = false, message = "An error occurred while disabling two-factor authentication." });
         }
     }
 }

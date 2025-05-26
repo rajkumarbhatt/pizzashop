@@ -125,12 +125,14 @@ namespace BLL.Services
             {
                 var profileImageURL = await _navBarService.GetProfileImageUrlFromUserIdAsync(userId);
                 var permissions = await _navBarService.GetRolePermissionsFromRoleIdAsync(roleId);
+                var Is2faEnabled = await _navBarService.IsTwoFactorAuthenticationEnabledAsync(userId);
                 var permissionsBytes = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes(permissions);
                 _httpContextAccessor.HttpContext?.Session.Set("permissions", permissionsBytes);
                 _httpContextAccessor.HttpContext?.Session.SetString("Username", username);
                 _httpContextAccessor.HttpContext?.Session.SetString("ProfileImageURL", profileImageURL);
                 _httpContextAccessor.HttpContext?.Session.SetInt32("RoleId", roleId);
                 _httpContextAccessor.HttpContext?.Session.SetInt32("UserId", userId);
+                _httpContextAccessor.HttpContext?.Session.SetString("Is2faEnabled", Is2faEnabled.ToString());
                 _logger.LogInformation("Session parameters set successfully for user with ID {UserId}", userId);
             }
             catch (Exception ex)

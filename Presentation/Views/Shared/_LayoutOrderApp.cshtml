@@ -22,6 +22,7 @@
 </head>
 @{
     var RoleId = Context.Session.GetInt32("RoleId");
+    var Is2faEnabled = Context.Session.GetString("Is2faEnabled");
 }
 
 <body>
@@ -43,7 +44,8 @@
                     </a>
                     <h3 class="text-white">PIZZASHOP</h3>
                 </div>
-                <div id="orderAppNavbarButtonsToHide" class="justify-content-center gap-1 align-items-center d-none d-md-flex">
+                <div id="orderAppNavbarButtonsToHide"
+                    class="justify-content-center gap-1 align-items-center d-none d-md-flex">
                     <div class="d-flex justify-content-center gap-2 align-items-center">
                         @if (@RoleId == 2)
                         {
@@ -108,9 +110,28 @@
                                         class="small-image" alt="">
                                     <p style="margin-left: 16px;">Change Password</p>
                                 </a></li>
+                            @if (Is2faEnabled == "True")
+                            {
+                                <li><a id="disable2faBtn"
+                                        class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex  align-items-center gap-1">
+                                        <img src="~/images/icons/enable-2fa.svg" style="margin-right: 2px;"
+                                            class="small-image" alt="">
+                                        <p style="margin-left: 16px;">Disable 2FA</p>
+                                    </a></li>
+                            }
+                            else
+                            {
+                                <li><a id="enable2faBtn"
+                                        class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex  align-items-center gap-1">
+                                        <img src="~/images/icons/enable-2fa.svg" style="margin-right: 2px;"
+                                            class="small-image" alt="">
+                                        <p style="margin-left: 16px;">Enable 2FA</p>
+                                    </a></li>
+                            }
                             <li><a asp-controller="Dashboard" asp-action="Index"
                                     class="dropdown-item dropdown-item text-decoration-none link-body-emphasis cursor-pointer d-flex justify-content-around align-items-center gap-1">
-                                    <img src="~/images/icons/kot-navbar-logout.svg" class="small-image" alt="" style="margin-left: -9px;">
+                                    <img src="~/images/icons/kot-navbar-logout.svg" class="small-image" alt=""
+                                        style="margin-left: -9px;">
                                     <p style="margin-right: 37px;">Dashboard</p>
                                 </a></li>
                             <li><a data-bs-toggle="modal" data-bs-target="#logoutModal"
@@ -122,7 +143,8 @@
                         </ul>
                     </div>
                 </div>
-                <div id="orderAppNavbarHamburgerToHide" class="d-block d-md-none me-2" data-bs-toggle="offcanvas" data-bs-target="#navbarOrderApp">
+                <div id="orderAppNavbarHamburgerToHide" class="d-block d-md-none me-2" data-bs-toggle="offcanvas"
+                    data-bs-target="#navbarOrderApp">
                     <img src="~/images/icons/hamburger.svg" class="navbar-image" alt="">
                 </div>
             </nav>
@@ -145,6 +167,48 @@
                 <div class="modal-footer">
                     <button id="logoutBtn" type="button" class="btn btn-primary px-3">Yes</button>
                     <a data-bs-dismiss="modal"><button type="button" class="btn btn-contrast px-3">No</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* enable 2fa modal *@
+    <div class="modal fade" id="enable2faModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="enable2faModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enable2faModalLabel">Enable Two-Factor Authentication</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to enable two-factor authentication (2FA)?</p>
+                    <p>This will add an extra layer of security to your account.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmEnable2faBtn" type="button" class="btn btn-primary">Enable</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* disable 2fa modal *@
+    <div class="modal fade" id="disable2faModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="disable2faModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="disable2faModalLabel">Disable Two-Factor Authentication</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to disable two-factor authentication (2FA)?</p>
+                    <p>Disabling 2FA will reduce the security of your account.</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmDisable2faBtn" type="button" class="btn btn-danger">Disable</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>
         </div>
@@ -264,5 +328,55 @@
         if (document.cookie.indexOf("token") === -1) {
             window.location.href = "/";
         }
+    });
+
+    $("#enable2faBtn").click(function () {
+        $("#enable2faModal").modal("show");
+    })
+
+    $("#disable2faBtn").click(function () {
+        $("#disable2faModal").modal("show");
+    })
+
+    $("#confirmEnable2faBtn").off("click").click(function () {
+        $.ajax({
+            url: '/Dashboard/EnableTwoFactorAuthentication',
+            type: 'POST',
+            success: function (response) {
+                if (response.success) {
+                    toastr.success("Two-factor authentication has been enabled successfully.");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000); 
+                } else {
+                    toastr.error("Failed to enable two-factor authentication.");
+                }
+                $("#enable2faModal").modal("hide");
+            },
+            error: function () {
+                toastr.error("An error occurred while enabling two-factor authentication.");
+            }
+        });
+    });
+
+    $("#confirmDisable2faBtn").off("click").click(function () {
+        $.ajax({
+            url: '/Dashboard/DisableTwoFactorAuthentication',
+            type: 'POST',
+            success: function (response) {
+                if (response.success) {
+                    toastr.success("Two-factor authentication has been disabled successfully.");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    toastr.error("Failed to disable two-factor authentication.");
+                }
+                $("#disable2faModal").modal("hide");
+            },
+            error: function () {
+                toastr.error("An error occurred while disabling two-factor authentication.");
+            }
+        });
     });
 </script>

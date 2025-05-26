@@ -987,6 +987,8 @@ public partial class PizzaShopContext : DbContext
             entity.Property(e => e.Status)
                 .HasDefaultValue(true)
                 .HasColumnName("status");
+            entity.Property(e => e.TwoFactorAuthCode).HasMaxLength(6);
+            entity.Property(e => e.TwoFactorEnabled).HasDefaultValue(false);
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")

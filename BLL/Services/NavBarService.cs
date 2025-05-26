@@ -122,5 +122,23 @@ namespace BLL.Services
                 return new List<PermissionModel>();
             }
         }
+        public async Task<bool> IsTwoFactorAuthenticationEnabledAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
+                {
+                    return user.TwoFactorEnabled ?? false;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while checking if two-factor authentication is enabled for user ID {UserId}", userId);
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

@@ -125,5 +125,46 @@ namespace BLL.Services
                 });
             }
         }
+        public async Task SendTwoFactorAuthEmailAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (user != null)
+                {
+                    var emailMessage = new MimeMessage();
+                    emailMessage.From.Add(new MailboxAddress(_configuration["SmtpSettings:SenderName"], _configuration["SmtpSettings:SenderEmail"]));
+                    emailMessage.To.Add(new MailboxAddress("", user.Email));
+                    emailMessage.Subject = "Two-Factor Authentication Code";
+
+                    var code = new Random().Next(100000, 999999).ToString(); 
+                    user.TwoFactorAuthCode = code;
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Two-factor authentication code {Code} generated for user ID {UserId}", code, userId);
+                    var emailTemplate = await System.IO.File.ReadAllTextAsync("Views/EmailTemplate/twoFactorAuthEmail.html");
+                    emailTemplate = emailTemplate.Replace("{{code}}", code);
+
+                    emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+                    {
+                        Text = emailTemplate
+                    };
+
+                    using (var client = new SmtpClient())
+                    {
+                        await client.ConnectAsync(_configuration["SmtpSettings:Server"], int.Parse(_configuration["SmtpSettings:Port"] ?? ""), MailKit.Security.SecureSocketOptions.StartTls);
+                        await client.AuthenticateAsync(_configuration["SmtpSettings:Username"], _configuration["SmtpSettings:Password"]);
+                        await client.SendAsync(emailMessage);
+                        await client.DisconnectAsync(true);
+                    }
+                    _logger.LogInformation("Two-factor authentication email sent to {Email}", user.Email);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error sending two-factor authentication email to user ID {UserId}", userId);
+                Console.WriteLine(ex.Message);
+            }
+        }
     }
 }

@@ -36,10 +36,51 @@ $("#redirectToOrderApp").click(function () {
 });
 
 $("#enable2faBtn").click(function () {
-    var isEnabled = $(this).data("enabled");
-    if (isEnabled) {
-        $("#disable2faModal").modal("show");
-    } else {
-        $("#enable2faModal").modal("show");
-    }
+    $("#enable2faModal").modal("show");
 })
+
+$("#disable2faBtn").click(function () {
+    $("#disable2faModal").modal("show");
+})
+
+$("#confirmEnable2faBtn").off("click").click(function () {
+    $.ajax({
+        url: '/Dashboard/EnableTwoFactorAuthentication',
+        type: 'POST',
+        success: function (response) {
+            if (response.success) {
+                toastr.success("Two-factor authentication has been enabled successfully.");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error("Failed to enable two-factor authentication.");
+            }
+            $("#enable2faModal").modal("hide");
+        },
+        error: function () {
+            toastr.error("An error occurred while enabling two-factor authentication.");
+        }
+    });
+});
+
+$("#confirmDisable2faBtn").off("click").click(function () {
+    $.ajax({
+        url: '/Dashboard/DisableTwoFactorAuthentication',
+        type: 'POST',
+        success: function (response) {
+            if (response.success) {
+                toastr.success("Two-factor authentication has been disabled successfully.");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            } else {
+                toastr.error("Failed to disable two-factor authentication.");
+            }
+            $("#disable2faModal").modal("hide");
+        },
+        error: function () {
+            toastr.error("An error occurred while disabling two-factor authentication.");
+        }
+    });
+});
