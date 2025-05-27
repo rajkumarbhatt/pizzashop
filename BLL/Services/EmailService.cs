@@ -89,7 +89,7 @@ namespace BLL.Services
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
                 if (user != null)
                 {
                     var userId = user.Id;

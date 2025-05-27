@@ -25,7 +25,7 @@ namespace BLL.Services
         {
             try
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
                 if (user == null)
                 {
                     _logger.LogWarning("User with email {Email} does not exist", email);
