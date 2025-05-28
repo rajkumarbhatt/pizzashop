@@ -1,3 +1,5 @@
+using System.Data;
+using System.Text.Json;
 using BLL.Interfaces;
 using DAL.DBContext;
 using DAL.Models;
@@ -5,71 +7,50 @@ using DAL.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace BLL.Services
 {
     public class WaitingListService : IWaitingListService
     {
         private readonly PizzaShopContext _context;
-        private readonly IJwtService _jwtService;
         private readonly IOrderAppService _orderAppService;
         private readonly ILogger<WaitingListService> _logger;
-        public WaitingListService(PizzaShopContext context, IJwtService jwtService, IOrderAppService orderAppService, ILogger<WaitingListService> logger)
+        public WaitingListService(PizzaShopContext context, IOrderAppService orderAppService, ILogger<WaitingListService> logger)
         {
             _logger = logger;
             _context = context;
-            _jwtService = jwtService;
             _orderAppService = orderAppService;
         }
         public async Task<WaitingListViewModel> GetWaitingListViewModelAsync()
         {
             try
             {
-                List<SectionAndNumberOfWaitingList> sectionAndNumberOfWaitingLists = new List<SectionAndNumberOfWaitingList>();
-                int totalCountOfWaitingList = await _context.WaitingLists.Where(w => w.IsDeleted == false).CountAsync();
-                SectionAndNumberOfWaitingList sectionAndNumberOfWaitingList = new SectionAndNumberOfWaitingList
+                using (var command = _context.Database.GetDbConnection().CreateCommand())
                 {
-                    SectionId = 0,
-                    SectionName = "All",
-                    NumberOfWaitingList = totalCountOfWaitingList
-                };
-                sectionAndNumberOfWaitingLists.Add(sectionAndNumberOfWaitingList);
-                List<Section> sections = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
-                foreach (var section in sections)
-                {
-                    int numberOfWaitingList = await _context.WaitingLists.Where(w => w.SectionId == section.Id && w.IsDeleted == false).CountAsync();
-                    sectionAndNumberOfWaitingList = new SectionAndNumberOfWaitingList
+                    command.CommandText = "SELECT get_waiting_list_data()";
+                    command.CommandType = CommandType.Text;
+
+                    await _context.Database.OpenConnectionAsync();
+
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        SectionId = section.Id,
-                        SectionName = section.Name,
-                        NumberOfWaitingList = numberOfWaitingList
-                    };
-                    sectionAndNumberOfWaitingLists.Add(sectionAndNumberOfWaitingList);
+                        if (await reader.ReadAsync())
+                        {
+                            var jsonString = reader.GetString(0);
+
+                            var waitingListViewModel = JsonSerializer.Deserialize<WaitingListViewModel>(
+                                jsonString,
+                                new JsonSerializerOptions
+                                {
+                                    PropertyNameCaseInsensitive = true
+                                });
+
+                            return waitingListViewModel;
+                        }
+                    }
                 }
-                List<WaitingListTable> waitingList = await _context.WaitingLists
-                .Where(w => w.IsDeleted == false)
-                .Select(w => new WaitingListTable
-                {
-                    TokenNumber = w.Id,
-                    CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                    PhoneNumber = w.Customer.Phone,
-                    WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                    Name = w.Customer.Name,
-                    NumberOfPersons = w.NoOfPersons,
-                    Email = w.Customer.Email
-                }).ToListAsync();
-                foreach (WaitingListTable waiting in waitingList)
-                {
-                    waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
-                }
-                List<Section> sections2 = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
-                WaitingListViewModel waitingListViewModel = new WaitingListViewModel
-                {
-                    SectionAndNumberOfWaitingLists = sectionAndNumberOfWaitingLists,
-                    WaitingList = waitingList,
-                    Sections = sections2
-                };
-                return waitingListViewModel;
+                return new WaitingListViewModel();
             }
             catch (Exception ex)
             {
@@ -97,28 +78,19 @@ namespace BLL.Services
         {
             try
             {
-                WaitingList waitingList = await _context.WaitingLists.FindAsync(id);
-                if (waitingList == null)
-                {
-                    return new WaitingListViewModel();
-                }
-                Customer customer = await _context.Customers.FindAsync(waitingList.CustomerId);
-                WaitingListModal waitingListModal = new WaitingListModal
-                {
-                    Id = waitingList.Id,
-                    Name = customer.Name,
-                    Email = customer.Email,
-                    MobileNumber = customer.Phone,
-                    NumberOfPeople = waitingList.NoOfPersons,
-                    SectionId = (int)waitingList.SectionId
-                };
-                WaitingListViewModel waitingListViewModel = new WaitingListViewModel
-                {
-                    waitingListModal = waitingListModal
-                };
-                List<Section> sections = await _context.Sections.Where(s => s.IsDeleted == false).OrderBy(s => s.Id).ToListAsync();
-                waitingListViewModel.Sections = sections;
+                using var conn = (Npgsql.NpgsqlConnection)_context.Database.GetDbConnection();
+                await conn.OpenAsync();
+
+                using var cmd = new Npgsql.NpgsqlCommand("SELECT get_waiting_list_details(@p_id)", conn);
+                cmd.Parameters.AddWithValue("p_id", id);
+
+                var jsonResult = (string)await cmd.ExecuteScalarAsync();
+
+                await conn.CloseAsync();
+
+                var waitingListViewModel = JsonSerializer.Deserialize<WaitingListViewModel>(jsonResult);
                 return waitingListViewModel;
+
             }
             catch (Exception ex)
             {
@@ -131,26 +103,22 @@ namespace BLL.Services
         {
             try
             {
-                List<Customer> customers = await _context.Customers.Where(c => c.Email.ToLower().Contains(email.ToLower())).ToListAsync();
-                customers.RemoveAll(c => _context.WaitingLists.Any(w => w.CustomerId == c.Id && w.IsDeleted == false));
-                customers.RemoveAll(c => _context.Orders.Any(o => o.CustomerId == c.Id && o.Status != "Completed" && o.Status != "Cancelled"));
-                List<CustomerDetailsSuggestions> customerSuggetions = new List<CustomerDetailsSuggestions>();
-                foreach (Customer customer in customers)
-                {
-                    CustomerDetailsSuggestions customerDetailsSuggestions = new CustomerDetailsSuggestions
-                    {
-                        Name = customer.Name,
-                        Email = customer.Email,
-                        MobileNumber = customer.Phone
-                    };
-                    customerSuggetions.Add(customerDetailsSuggestions);
-                }
-                return new JsonResult(new { success = true, customerSuggetions });
+                using var conn = (Npgsql.NpgsqlConnection)_context.Database.GetDbConnection();
+                await conn.OpenAsync();
+
+                await using var cmd = new NpgsqlCommand("SELECT get_customer_suggestions(@email)", conn);
+                cmd.Parameters.AddWithValue("email", email);
+
+                var result = await cmd.ExecuteScalarAsync();
+                var json = result?.ToString() ?? "[]";
+
+                var suggestions = JsonSerializer.Deserialize<List<CustomerDetailsSuggestions>>(json);
+
+                return new JsonResult(new { success = true, customerSuggetions = suggestions });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching customer suggestions for email {Email}", email);
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, "Error while fetching customer suggestions for email {Email}", email);
                 return new JsonResult(new { success = false, message = "An error occurred while fetching customer suggestions" });
             }
         }
@@ -158,45 +126,17 @@ namespace BLL.Services
         {
             try
             {
-                List<WaitingListTable> waitingList = new List<WaitingListTable>();
-                if (sectionId == 0)
-                {
-                    waitingList = await _context.WaitingLists
-                        .Where(w => w.IsDeleted == false)
-                        .Select(w => new WaitingListTable
-                        {
-                            TokenNumber = w.Id,
-                            CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                            PhoneNumber = w.Customer.Phone,
-                            WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                            Name = w.Customer.Name,
-                            NumberOfPersons = w.NoOfPersons,
-                            Email = w.Customer.Email
-                        }).ToListAsync();
-                }
-                else
-                {
-                    waitingList = await _context.WaitingLists
-                        .Where(w => w.SectionId == sectionId && w.IsDeleted == false)
-                        .Select(w => new WaitingListTable
-                        {
-                            TokenNumber = w.Id,
-                            CreatedAt = w.CreatedAt.HasValue ? w.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm tt") : "",
-                            PhoneNumber = w.Customer.Phone,
-                            WaitingTime = w.CreatedAt.HasValue ? DateTime.Now.Subtract(w.CreatedAt.Value).ToString(@"hh\:mm") : "N/A",
-                            Name = w.Customer.Name,
-                            NumberOfPersons = w.NoOfPersons,
-                            Email = w.Customer.Email
-                        }).ToListAsync();
-                }
-                foreach (WaitingListTable waiting in waitingList)
-                {
-                    waiting.WaitingTime = waiting.WaitingTime.Substring(0, waiting.WaitingTime.Length - 3) + " hrs " + waiting.WaitingTime.Substring(waiting.WaitingTime.Length - 2) + " mins";
-                }
-                WaitingListViewModel waitingListViewModel = new WaitingListViewModel
-                {
-                    WaitingList = waitingList
-                };
+                using var conn = (Npgsql.NpgsqlConnection)_context.Database.GetDbConnection();
+                await conn.OpenAsync();
+
+                using var cmd = new Npgsql.NpgsqlCommand("SELECT get_waiting_list_by_section(@p_section_id)", conn);
+                cmd.Parameters.AddWithValue("p_section_id", sectionId);
+                var jsonResult = (string)await cmd.ExecuteScalarAsync();
+
+                await conn.CloseAsync();
+
+                var waitingListViewModel = JsonSerializer.Deserialize<WaitingListViewModel>(jsonResult);
+
                 return waitingListViewModel;
             }
             catch (Exception ex)
@@ -210,14 +150,16 @@ namespace BLL.Services
         {
             try
             {
-                List<Table> availableTables = await _context.Tables
-            .Where(t => t.SectionId == sectionId && t.IsDeleted == false && t.Status == "Available")
-            .OrderBy(t => t.Id)
-            .Select(t => new Table
-            {
-                Id = t.Id,
-                Name = t.Name
-            }).ToListAsync();
+                using var conn = (Npgsql.NpgsqlConnection)_context.Database.GetDbConnection();
+                await conn.OpenAsync();
+
+                await using var cmd = new NpgsqlCommand("SELECT get_available_tables(@section_id)", conn);
+                cmd.Parameters.AddWithValue("section_id", sectionId);
+
+                var result = await cmd.ExecuteScalarAsync();
+                var json = string.IsNullOrWhiteSpace(result?.ToString()) ? "[]" : result.ToString();
+
+                var availableTables = JsonSerializer.Deserialize<List<Table>>(json);
                 return new JsonResult(availableTables);
             }
             catch (Exception ex)

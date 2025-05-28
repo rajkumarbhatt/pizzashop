@@ -1,5 +1,6 @@
 function openWaitingTokenModal() {
     $("#waitingTokenModal").modal("show");
+    $.validator.unobtrusive.parse('#waitingTokenModal');
     AddToWaitingListFormSubmit();
 }
 function AddToWaitingListFormSubmit() {
@@ -221,6 +222,7 @@ function assignTableModalOpen(tokenNumber) {
                                     var paraId = "para" + $("#currentSection").val();
                                     $('.text-gray').removeClass('active-waiting-list');
                                     $('#' + paraId).addClass('active-waiting-list');
+                                    selectedTables = []; 
                                 },
                                 error: function (response) {
                                     console.log(response);

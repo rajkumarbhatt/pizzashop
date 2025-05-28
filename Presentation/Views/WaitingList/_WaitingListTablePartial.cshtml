@@ -13,25 +13,34 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var waitingList in Model.WaitingList)
+        @if (Model.WaitingList != null && Model.WaitingList.Count > 0)
         {
-                    <tr>
-                        <td>@waitingList.TokenNumber</td>
-                        <td>@waitingList.CreatedAt</td>
-                        <td>@waitingList.WaitingTime</td>
-                        <td>@waitingList.Name</td>
-                        <td>@waitingList.NumberOfPersons</td>
-                        <td>@waitingList.PhoneNumber</td>
-                        <td>@waitingList.Email</td>
-                        <td>
-                            <button class="delete-btn" onclick="editWaitingList(@waitingList.TokenNumber)"> <img
-                                    src="~/images/icons/edit-waiting-list.svg" class="small-image" alt=""></button>
-                            <button class="delete-btn" onclick="deleteFromList(@waitingList.TokenNumber)"> <img
-                                    src="~/images/icons/delete-waiting-list.svg" class="small-image" alt=""></button>
-                            <button class="delete-btn" onclick="assignTableModalOpen(@waitingList.TokenNumber)"> <img src="~/images/icons/assign-waiting-list.svg" class="small-image"
-                                    alt=""></button>
-                        </td>
-                    </tr>
+            @foreach (var waitingList in Model.WaitingList)
+            {
+                <tr>
+                    <td>@waitingList.TokenNumber</td>
+                    <td>@waitingList.CreatedAt</td>
+                    <td>@waitingList.WaitingTime</td>
+                    <td>@waitingList.Name</td>
+                    <td>@waitingList.NumberOfPersons</td>
+                    <td>@waitingList.PhoneNumber</td>
+                    <td>@waitingList.Email</td>
+                    <td>
+                        <button class="delete-btn" onclick="editWaitingList(@waitingList.TokenNumber)"> <img
+                                src="~/images/icons/edit-waiting-list.svg" class="small-image" alt=""></button>
+                        <button class="delete-btn" onclick="deleteFromList(@waitingList.TokenNumber)"> <img
+                                src="~/images/icons/delete-waiting-list.svg" class="small-image" alt=""></button>
+                        <button class="delete-btn" onclick="assignTableModalOpen(@waitingList.TokenNumber)"> <img src="~/images/icons/assign-waiting-list.svg" class="small-image"
+                                alt=""></button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="text-center font-weight-bold-slight">No waiting list entries found.</td>
+            </tr>
         }
 
         
