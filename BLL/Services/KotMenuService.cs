@@ -313,31 +313,11 @@ namespace BLL.Services
         {
             try
             {
-                CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite
-                {
-                    ItemId = -2348
-                };
-                if (customerFavourite.ItemId == -2348)
-                {
-                    CustomerFavourite customerFavourite2 = new CustomerFavourite
-                    {
-                        ItemId = itemId,
-                        CreatedAt = DateTime.Now,
-                        CreatedBy = userId,
-                        UpdatedAt = DateTime.Now,
-                        UpdatedBy = userId,
-                        IsDeleted = false
-                    };
-                    await _context.CustomerFavourites.AddAsync(customerFavourite2);
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    customerFavourite.IsDeleted = false;
-                    customerFavourite.UpdatedAt = DateTime.Now;
-                    customerFavourite.UpdatedBy = userId;
-                    await _context.SaveChangesAsync();
-                }
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL upsert_customer_favourite({0}, {1});",
+                    itemId,
+                    userId
+                );
                 _logger.LogInformation("Item with ID {ItemId} added to favourites by user with ID {UserId}", itemId, userId);
                 return new JsonResult(new
                 {
@@ -360,11 +340,11 @@ namespace BLL.Services
         {
             try
             {
-                CustomerFavourite customerFavourite = await _context.CustomerFavourites.FirstOrDefaultAsync(cf => cf.ItemId == itemId && cf.IsDeleted == false) ?? new CustomerFavourite();
-                customerFavourite.IsDeleted = true;
-                customerFavourite.UpdatedAt = DateTime.Now;
-                customerFavourite.UpdatedBy = userId;
-                await _context.SaveChangesAsync();
+                await _context.Database.ExecuteSqlRawAsync(
+                    "CALL soft_delete_customer_favourite({0}, {1});",
+                    itemId,
+                    userId
+                );
                 _logger.LogInformation("Item with ID {ItemId} removed from favourites by user with ID {UserId}", itemId, userId);
                 return new JsonResult(new
                 {
