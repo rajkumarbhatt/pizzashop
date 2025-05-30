@@ -5552,3 +5552,300 @@ System.InvalidOperationException: The entity type 'ProcessWaitingListResult' req
 2025-05-29 16:18:52.946 +05:30 [INF] Order saved successfully for order ID 353 by user with ID 25
 2025-05-29 16:18:55.956 +05:30 [INF] Order cancelled successfully for order ID 353 by user with ID 25
 2025-05-29 16:18:56.045 +05:30 [INF] Order cancelled successfully for order ID 353 by user with ID 25
+2025-05-30 09:18:43.277 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 09:18:43.301 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 09:18:44.074 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 09:19:00.606 +05:30 [INF] Tables assigned successfully to customer with email raj@yopmail.com by user 25
+2025-05-30 09:19:11.750 +05:30 [INF] Order total updated successfully for order ID 354 by user with ID 25
+2025-05-30 09:19:11.758 +05:30 [INF] Order saved successfully for order ID 354 by user with ID 25
+2025-05-30 09:19:27.925 +05:30 [INF] Comment added successfully for order item ID 841 by user with ID 25
+2025-05-30 09:19:32.486 +05:30 [INF] Comment added successfully for order ID 354 by user with ID 25
+2025-05-30 09:19:38.112 +05:30 [INF] Items marked as ready successfully
+2025-05-30 09:19:44.604 +05:30 [INF] Order completed successfully for order ID 354 by user with ID 25
+2025-05-30 09:19:47.341 +05:30 [INF] Customer review saved successfully for order ID 354 by user with ID 25
+2025-05-30 09:19:50.640 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 09:20:59.813 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 09:21:06.294 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 10:48:49.249 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 10:48:49.249 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 10:48:49.411 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 10:48:56.381 +05:30 [ERR] Failed to assign tables via SP
+Npgsql.PostgresException (0x80004005): 42883: function assign_tables_to_customer(integer, text, text, text, integer, integer, integer[], integer) does not exist
+
+POSITION: 8
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteScalar(Boolean async, CancellationToken cancellationToken)
+   at BLL.Services.OrderAppService.AssignTablesToCustomerAsync(WaitingListModal modal, List`1 tableIds, Int32 userId)
+  Exception data:
+    Severity: ERROR
+    SqlState: 42883
+    MessageText: function assign_tables_to_customer(integer, text, text, text, integer, integer, integer[], integer) does not exist
+    Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+    Position: 8
+    File: parse_func.c
+    Line: 636
+    Routine: ParseFuncOrColumn
+2025-05-30 10:50:48.173 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 10:51:47.621 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 10:51:58.428 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 10:51:58.433 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 10:51:58.592 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 11:05:31.856 +05:30 [INF] Order total updated successfully for order ID 356 by user with ID 25
+2025-05-30 11:05:31.869 +05:30 [INF] Order saved successfully for order ID 356 by user with ID 25
+2025-05-30 11:05:41.399 +05:30 [INF] Items marked as ready successfully
+2025-05-30 11:05:47.591 +05:30 [INF] Order completed successfully for order ID 356 by user with ID 25
+2025-05-30 11:06:18.650 +05:30 [INF] Order total updated successfully for order ID 357 by user with ID 25
+2025-05-30 11:06:18.654 +05:30 [INF] Order saved successfully for order ID 357 by user with ID 25
+2025-05-30 11:06:22.653 +05:30 [INF] Items marked as ready successfully
+2025-05-30 11:06:26.300 +05:30 [INF] Order completed successfully for order ID 357 by user with ID 25
+2025-05-30 11:06:29.594 +05:30 [INF] Customer review saved successfully for order ID 357 by user with ID 25
+2025-05-30 11:10:30.285 +05:30 [ERR] An error occurred while updating order total for order ID 358 by user with ID 25
+Npgsql.PostgresException (0x80004005): 42703: column "subtotal" of relation "orders" does not exist
+   at Npgsql.Internal.NpgsqlConnector.ReadMessageLong(Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteReader(Boolean async, CommandBehavior behavior, CancellationToken cancellationToken)
+   at Npgsql.NpgsqlCommand.ExecuteNonQuery(Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteNonQueryAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.ExecuteSqlRawAsync(DatabaseFacade databaseFacade, String sql, IEnumerable`1 parameters, CancellationToken cancellationToken)
+   at BLL.Services.KotMenuService.UpdateOrderAmountAsync(Int32 orderId, Int32 userId, Single subTotal, Single total) in C:\Users\pci88\Desktop\Internship_Tasks\PizzaShop\BLL\Services\KotMenuService.cs:line 532
+  Exception data:
+    Severity: ERROR
+    SqlState: 42703
+    MessageText: column "subtotal" of relation "orders" does not exist
+    InternalPosition: 23
+    InternalQuery: UPDATE orders
+    SET subtotal = in_sub_total,
+        totalamount = in_total,
+        updatedat = NOW(),
+        updatedby = in_user_id
+    WHERE id = in_order_id
+    Where: PL/pgSQL function update_order_amount(integer,integer,numeric,numeric) line 3 at SQL statement
+    File: analyze.c
+    Line: 2536
+    Routine: transformUpdateTargetList
+2025-05-30 11:10:30.368 +05:30 [INF] Order saved successfully for order ID 358 by user with ID 25
+2025-05-30 11:11:21.553 +05:30 [INF] Order total updated successfully for order ID 358 by user with ID 25
+2025-05-30 11:11:21.579 +05:30 [INF] Order saved successfully for order ID 358 by user with ID 25
+2025-05-30 11:11:29.946 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 11:11:35.183 +05:30 [INF] Items marked as ready successfully
+2025-05-30 11:11:39.271 +05:30 [INF] Order completed successfully for order ID 358 by user with ID 25
+2025-05-30 11:11:42.793 +05:30 [INF] Customer review saved successfully for order ID 358 by user with ID 25
+2025-05-30 14:27:21.016 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:21.016 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:21.040 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:21.040 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:21.069 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:21.069 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:21.070 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:21.070 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:22.183 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:22.183 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:22.206 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:22.206 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:22.233 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:22.233 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:22.252 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:22.252 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:23.754 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:23.899 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:23.899 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:23.978 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:23.983 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:24.037 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:24.038 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:24.127 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:24.139 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:24.140 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:24.140 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:24.140 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:24.260 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:24.260 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:24.382 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:25.726 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.727 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.893 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.893 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.894 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.894 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.894 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.894 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.894 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.894 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.936 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:25.937 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:25.943 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:27.098 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:27.099 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:27.100 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:27.181 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:27.181 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:27.208 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:27.208 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:27.231 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:27.231 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:27.232 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:28.846 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:28.850 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:28.893 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:28.933 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:28.933 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:28.979 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:28.979 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:28.995 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:28.995 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:29.034 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:29.034 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:29.041 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:29.071 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:29.072 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:30.861 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:30.861 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:30.861 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:30.861 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:30.865 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:30.865 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:30.941 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:30.941 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:31.029 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:31.029 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:31.177 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:31.177 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:32.341 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:32.341 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:32.342 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:32.342 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:32.389 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:32.390 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:32.390 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:32.390 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:32.511 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:32.511 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:33.447 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:33.448 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:33.448 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:33.448 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:33.449 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:33.449 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:33.617 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:33.618 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.466 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.467 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.474 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.475 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.482 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.482 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.495 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:27:34.580 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.581 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.660 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.660 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:34.703 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:34.703 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.183 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.183 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.189 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.189 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.233 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.233 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.235 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.236 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.323 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.323 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.335 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.335 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.740 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.740 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.795 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.795 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.825 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.825 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.868 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.868 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.952 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.952 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:35.980 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:35.981 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.275 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.275 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.354 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.354 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.374 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.374 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.438 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.438 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.513 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.513 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.538 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.538 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.934 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.934 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.935 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.935 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:36.944 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:36.944 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.123 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.123 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.124 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.124 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.124 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.124 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.360 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.360 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.373 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.373 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.386 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.386 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.513 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.514 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.762 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.762 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.784 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.784 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.793 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.793 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:37.990 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:37.990 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.298 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.298 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.306 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.306 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.330 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.330 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.331 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.331 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.362 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.362 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.509 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.509 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.709 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.709 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:27:38.710 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:27:38.710 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:28:08.409 +05:30 [INF] Order total updated successfully for order ID 359 by user with ID 25
+2025-05-30 14:28:08.424 +05:30 [INF] Order saved successfully for order ID 359 by user with ID 25
+2025-05-30 14:28:17.892 +05:30 [INF] Items marked as ready successfully
+2025-05-30 14:28:27.293 +05:30 [INF] Items marked as ready successfully
+2025-05-30 14:28:34.489 +05:30 [INF] Order completed successfully for order ID 359 by user with ID 25
+2025-05-30 14:28:39.506 +05:30 [INF] Customer review saved successfully for order ID 359 by user with ID 25
+2025-05-30 14:28:45.020 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:28:50.058 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:28:51.091 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:29:30.789 +05:30 [INF] JWT token generated successfully for user with ID 25
+2025-05-30 14:29:30.789 +05:30 [INF] User with email manager@yopmail.com logged in successfully
+2025-05-30 14:29:30.943 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:29:30.998 +05:30 [INF] Two-factor authentication code 285273 generated for user ID 25
+2025-05-30 14:29:33.736 +05:30 [INF] Two-factor authentication email sent to manager@yopmail.com
+2025-05-30 14:29:56.482 +05:30 [WRN] Invalid 2FA code for user with ID 25
+2025-05-30 14:30:02.578 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:30:10.814 +05:30 [INF] Session parameters set successfully for user with ID 25
+2025-05-30 14:30:11.847 +05:30 [INF] Session parameters set successfully for user with ID 25
