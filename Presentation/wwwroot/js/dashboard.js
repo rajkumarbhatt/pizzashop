@@ -114,7 +114,7 @@ $(".closeDatePickerModalButton").click(function () {
 
 window.ChatWidgetConfig = {
 	webhook: {
-		url: 'https://rajat2348.app.n8n.cloud/webhook/f406671e-c954-4691-b39a-66c90aa2f103/chat',
+		url: 'https://kishan2348.app.n8n.cloud/webhook/f406671e-c954-4691-b39a-66c90aa2f103/chat',
 		route: 'general'
 	},
 	branding: {
