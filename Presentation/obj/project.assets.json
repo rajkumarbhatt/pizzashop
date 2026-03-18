@@ -2158,7 +2158,7 @@
           "Microsoft.AspNetCore.App"
         ]
       },
-      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.16": {
+      "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.25": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "7.1.2"
@@ -8513,10 +8513,10 @@
         "microsoft.aspnetcore.authentication.google.nuspec"
       ]
     },
-    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.16": {
-      "sha512": "WtKPOmlqzwWGQZCOixnOE+3bIYzxmUw7zjfs7VRWDhZlxfcmw5Qw2c4r87XWPk+kkurntzvE0sWyruI6KDpTiA==",
+    "Microsoft.AspNetCore.Authentication.JwtBearer/8.0.25": {
+      "sha512": "nb6jCyxh5eP9bsXkHmGcDxUiVIl5wJSombl3LN2L+sjGEVXzcMKbdRe0fp8LQtuBM2hKXcXFxMAYdnohdYJF8Q==",
       "type": "package",
-      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.16",
+      "path": "microsoft.aspnetcore.authentication.jwtbearer/8.0.25",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -8524,7 +8524,7 @@
         "THIRD-PARTY-NOTICES.TXT",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll",
         "lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.xml",
-        "microsoft.aspnetcore.authentication.jwtbearer.8.0.16.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.jwtbearer.8.0.25.nupkg.sha512",
         "microsoft.aspnetcore.authentication.jwtbearer.nuspec"
       ]
     },
@@ -17067,35 +17067,38 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pci88\\.nuget\\packages\\": {}
+    "C:\\Users\\Raj\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\Presentation.csproj",
+      "projectUniqueName": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\Presentation\\Presentation.csproj",
       "projectName": "Presentation",
-      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\Presentation.csproj",
-      "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\Presentation\\obj\\",
+      "projectPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\Presentation\\Presentation.csproj",
+      "packagesPath": "C:\\Users\\Raj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\Presentation\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Raj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\BLL\\BLL.csproj": {
-              "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\BLL\\BLL.csproj"
+            "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\BLL\\BLL.csproj": {
+              "projectPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\BLL\\BLL.csproj"
             },
-            "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj": {
-              "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj"
+            "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\DAL\\DAL.csproj": {
+              "projectPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\DAL\\DAL.csproj"
             }
           }
         }
@@ -17223,11 +17226,21 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'MimeKit' 4.10.0 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-g7hc-96xr-gvvx",
+      "libraryId": "MimeKit",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
     {
       "code": "NU1701",
       "level": "Warning",

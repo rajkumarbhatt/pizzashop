@@ -9081,24 +9081,27 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\pci88\\.nuget\\packages\\": {}
+    "C:\\Users\\Raj\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj",
+      "projectUniqueName": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\DAL\\DAL.csproj",
       "projectName": "DAL",
-      "projectPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\DAL.csproj",
-      "packagesPath": "C:\\Users\\pci88\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\pci88\\Desktop\\Internship_Tasks\\PizzaShop\\DAL\\obj\\",
+      "projectPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\DAL\\DAL.csproj",
+      "packagesPath": "C:\\Users\\Raj\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Raj\\Desktop\\PizzaShop\\pizzashop\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\pci88\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Raj\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -9167,7 +9170,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

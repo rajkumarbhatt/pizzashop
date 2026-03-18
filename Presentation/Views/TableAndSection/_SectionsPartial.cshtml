@@ -29,7 +29,7 @@
                 var blueDotId = "blueDotTable" + @Section.Id;
                 var grayDotId = "grayDotTable" + @Section.Id;
 
-                @if (@Model.Sections[0].Id == @Section.Id)
+                if (@Model.Sections[0].Id == @Section.Id)
                 {
                     <div onmouseenter="showDiv(@divCustomIdTable)" onmouseleave="hideDiv(@divCustomIdTable)"
                         onclick="changeTables(@Section.Id)" id="@divCustomIdTable2"
